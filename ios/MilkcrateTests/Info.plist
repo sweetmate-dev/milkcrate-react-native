@@ -18,12 +18,6 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>OpenSans-Regular.ttf</string>
-		<string>BLANCH_CAPS.otf</string>
-		<string>OpenSans-Semibold.ttf</string>
-	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 </dict>

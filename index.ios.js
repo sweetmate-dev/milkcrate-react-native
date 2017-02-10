@@ -1,7 +1,10 @@
-import { AppRegistry, Text} from 'react-native';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
 
-import MilkcrateNavigator from './MilkcrateNavigator';
+import React, { AppRegistry } from 'react-native';
+import App from './app/js/app';
 
-Text.defaultProps.allowFontScaling = false;
-
-AppRegistry.registerComponent('Milkcrate', () => MilkcrateNavigator);
+AppRegistry.registerComponent('Milkcrate', () => App);
