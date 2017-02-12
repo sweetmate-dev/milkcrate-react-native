@@ -39,7 +39,7 @@ export default class AlertForm extends Component {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
-        <Text style={ styles.text }>Alert is comming...</Text>
+        <Text style={ styles.text }>Alerts is coming soon...</Text>
       </View>
     );
   }

@@ -39,7 +39,7 @@ export default class YouForm extends Component {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
-        <Text style={ styles.text }>You is comming...</Text>
+        <Text style={ styles.text }>Profile is coming soon...</Text>
       </View>
     );
   }

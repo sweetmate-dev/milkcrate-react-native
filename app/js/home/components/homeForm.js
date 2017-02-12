@@ -39,7 +39,7 @@ export default class HomeForm extends Component {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
-        <Text style={ styles.text }>Home is comming...</Text>
+        <Text style={ styles.text }>Home is coming soon...</Text>
       </View>
     );
   }
