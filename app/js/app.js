@@ -13,12 +13,17 @@ const store = createStoreWithMiddleware(reducer);
 import Introduce from './introduce/containers/introduce';
 import Login from './login/containers/login';
 import Main from './main/containers/main';
+import Search from './search/containers/search';
+import SearchView from './search/containers/searchView';
 
 const scenes = Actions.create(
     <Scene key="root">
-      <Scene key="Introduce" component={ Introduce } title="Introduce"/>
+      <Scene key="Introduce" component={ Introduce } title="Introduce" initial={ true }/>
       <Scene key="Login" component={ Login } title="Login"/>
-      <Scene key="Main" component={ Main }/>
+      <Scene key="Main" component={ Main } />
+      <Scene key="Search" component={ Search } />
+      <Scene key="SearchView" component={ SearchView }  />
+
     </Scene>
 );
 

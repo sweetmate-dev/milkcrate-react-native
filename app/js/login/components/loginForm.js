@@ -7,7 +7,6 @@ import {
   Image,
   Dimensions,
   TextInput,
-  Navigator,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -156,12 +155,14 @@ const styles = StyleSheet.create({
     color: '#5e8aa3',
     fontFamily: 'Blanch',
     fontSize: 48,
+    backgroundColor: 'transparent',
   },
   description: {
     color: '#5e8aa3',
     fontFamily: 'Open Sans',
     fontSize: 12,
     paddingVertical: 5,
+    backgroundColor: 'transparent',
   },
   input: {
     fontSize: 16,
@@ -190,11 +191,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 14,
+    backgroundColor: 'transparent',
   },
   buttonUnderText: {
     color: '#5e8aa3',
     fontFamily: 'Open Sans',
     fontSize: 14,
     textDecorationLine: 'underline',
+    backgroundColor: 'transparent',
   },
 });

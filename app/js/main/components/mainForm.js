@@ -10,6 +10,10 @@ import {
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
+import Home from '../../home/containers/home';
+import Search from '../../search/containers/search';
+import Alert from '../../alert/containers/alert';
+import You from '../../you/containers/you';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,7 +31,7 @@ export default class MainForm extends Component {
     super(props);
 
     this.state = {
-      selectedTab: '',//home
+      selectedTab: 'search',
       badge: 0,
     };
   }
@@ -37,35 +41,49 @@ export default class MainForm extends Component {
 
     return (
       <View style={ styles.container }>
-        <TabNavigator>
+        <TabNavigator
+          tabBarStyle = { styles.tab }
+        >
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'home' }
             title="Home"
+            selectedTitleStyle={ styles.selectedText }
+            titleStyle={ styles.text }
             renderIcon={ () => <Image source={ homeIcon } style={ styles.iconTabbar1 }/> }
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.setState({ selectedTab: 'home' }) }>
+            <Home/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'search' }
             title="Search"
+            selectedTitleStyle={ styles.selectedText }
+            titleStyle={ styles.text }
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.setState({selectedTab: 'search' }) }>
+            <Search/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'alert' }
             title="Alert"
+            selectedTitleStyle={ styles.selectedText }
+            titleStyle={ styles.text }
             renderIcon={ () => <Image source={ alertIcon } style={ styles.iconTabbar3 }/> }
-            renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar1 }/> }
+            renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.setState({selectedTab: 'alert' }) }>
+            <Alert/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'you' }
             title="You"
+            selectedTitleStyle={ styles.selectedText }
+            titleStyle={ styles.text }
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
-            renderSelectedIcon={ () => <Image source={ youelectedIcon } style={ styles.iconTabbar3 }/> }
+            renderSelectedIcon={ () => <Image source={ youelectedIcon } style={ styles.iconTabbar4 }/> }
             onPress={ () => this.setState({selectedTab: 'you' }) }>
+            <You/>
           </TabNavigator.Item>
         </TabNavigator>
       </View>
@@ -96,6 +114,20 @@ const styles = StyleSheet.create({
   iconTabbar4: {
     width: 15,
     height: 18,
+  },
+  text:{
+    fontFamily: 'Open Sans',
+    fontSize: 10,
+  },
+  selectedText:{
+    color: '#82ccbe',
+    fontFamily: 'Open Sans',
+    fontSize: 10,
+  },
+  tab:{
+    borderStyle: 'solid',
+    borderTopWidth: 1,
+    borderTopColor: '#82ccbe',
   },
 
 });
