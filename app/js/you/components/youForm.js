@@ -41,7 +41,7 @@ export default class YouForm extends Component {
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
         </View>
-        <Text style={ styles.text }>You is comming...</Text>
+        <Text style={ styles.text }>Profile is coming soon...</Text>
       </View>
     );
   }

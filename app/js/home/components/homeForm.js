@@ -42,7 +42,7 @@ export default class HomeForm extends Component {
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
         </View>
-        <Text style={ styles.text }>Home is comming...</Text>
+        <Text style={ styles.text }>Home is coming soon...</Text>
       </View>
     );
   }

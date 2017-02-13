@@ -96,7 +96,7 @@ export default class SearchForm extends Component {
           </View>
           <View style={ styles.activityWrap }>
             <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Actions" icon={ actions } onClickButton={ this.onSelectActivity }/>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Volenteer" icon={ volunteer } onClickButton={ this.onSelectActivity }/>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Volunteer" icon={ volunteer } onClickButton={ this.onSelectActivity }/>
             <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Events" icon={ events } onClickButton={ this.onSelectActivity }/>
           </View>
           <View style={ styles.line }/>

@@ -49,7 +49,7 @@ export default class SearchViewForm extends Component {
   }
 
   onFilter () {
-    alert("Clicked Finter button!");
+    alert("Tapped filter button!");
   }
 
   setSelectedOption(selectedOption){

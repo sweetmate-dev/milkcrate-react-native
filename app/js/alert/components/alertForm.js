@@ -41,7 +41,7 @@ export default class AlertForm extends Component {
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
         </View>
-        <Text style={ styles.text }>Alert is comming...</Text>
+        <Text style={ styles.text }>Alerts is coming soon...</Text>
       </View>
     );
   }
