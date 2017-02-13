@@ -19,24 +19,25 @@ const { width, height } = Dimensions.get('window');
 const activityCellSize = width * 0.22;
 const categoryCellSize = width * 0.2;
 
+
 const recent = require('../../../assets/imgs/recent.png');
 const businesses = require('../../../assets/imgs/businesses.png');
 const services = require('../../../assets/imgs/services.png');
 const actions = require('../../../assets/imgs/actions.png');
 const volunteer = require('../../../assets/imgs/volunteer.png');
 const events = require('../../../assets/imgs/events.png');
-const categories_fashion = require('../../../assets/imgs/categories_fashion.png');
-const categories_books = require('../../../assets/imgs/categories_books.png');
-const categories_business = require('../../../assets/imgs/categories_business.png');
-const categories_cleaning = require('../../../assets/imgs/categories_cleaning.png');
-const categories_animals = require('../../../assets/imgs/categories_animals.png');
-const categories_baby = require('../../../assets/imgs/categories_baby.png');
-const categories_beauty = require('../../../assets/imgs/categories_beauty.png');
-const categories_bicycle = require('../../../assets/imgs/categories_bicycle.png');
-const categories_civic = require('../../../assets/imgs/categories_civic.png');
-const categories_coffee = require('../../../assets/imgs/categories_coffee.png');
-const categories_construction = require('../../../assets/imgs/categories_construction.png');
-const categories_community = require('../../../assets/imgs/categories_community.png');
+const categories_fashion = require('../../../assets/imgs/categories/fashion1.png');
+const categories_books = require('../../../assets/imgs/categories/books.png');
+const categories_business = require('../../../assets/imgs/categories/business.png');
+const categories_cleaning = require('../../../assets/imgs/categories/cleaning.png');
+const categories_animals = require('../../../assets/imgs/categories/animals.png');
+const categories_baby = require('../../../assets/imgs/categories/baby.png');
+const categories_beauty = require('../../../assets/imgs/categories/beauty.png');
+const categories_bicycles = require('../../../assets/imgs/categories/bicycles.png');
+const categories_civic = require('../../../assets/imgs/categories/civic.png');
+const categories_coffee = require('../../../assets/imgs/categories/coffee.png');
+const categories_construction = require('../../../assets/imgs/categories/construction.png');
+const categories_community = require('../../../assets/imgs/categories/community.png');
 
 export default class SearchForm extends Component {
   constructor(props) {
@@ -88,19 +89,19 @@ export default class SearchForm extends Component {
           </View>
           <View style={ styles.searchBarPadding }/>
         </View>
-        <View style={ styles.activityWrap }>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Recent" icon={ recent } onClickButton={ this.onSelectActivity }/>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Businesses" icon={ businesses } onClickButton={ this.onSelectActivity }/>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Services" icon={ services } onClickButton={ this.onSelectActivity }/>
-        </View>
-        <View style={ styles.activityWrap }>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Actions" icon={ actions } onClickButton={ this.onSelectActivity }/>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Volenteer" icon={ volunteer } onClickButton={ this.onSelectActivity }/>
-          <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Events" icon={ events } onClickButton={ this.onSelectActivity }/>
-        </View>
-        <View style={ styles.line }/>
-        <Text style={ styles.text }>Categories</Text>
         <ScrollView>
+          <View style={ styles.activityWrap }>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Recent" icon={ recent } onClickButton={ this.onSelectActivity }/>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Businesses" icon={ businesses } onClickButton={ this.onSelectActivity }/>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Services" icon={ services } onClickButton={ this.onSelectActivity }/>
+          </View>
+          <View style={ styles.activityWrap }>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Actions" icon={ actions } onClickButton={ this.onSelectActivity }/>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Volenteer" icon={ volunteer } onClickButton={ this.onSelectActivity }/>
+            <CategoryButton height={ activityCellSize } width={ activityCellSize } text="Events" icon={ events } onClickButton={ this.onSelectActivity }/>
+          </View>
+          <View style={ styles.line }/>
+          <Text style={ styles.text }>Categories</Text>
           <View style={ styles.activityWrap }>
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Fashion" icon={ categories_fashion } onClickButton={ this.onSelectCategory }/>
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Books" icon={ categories_books } onClickButton={ this.onSelectCategory }/>
@@ -111,7 +112,7 @@ export default class SearchForm extends Component {
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Animals" icon={ categories_animals } onClickButton={ this.onSelectCategory }/>
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Baby" icon={ categories_baby } onClickButton={ this.onSelectCategory }/>
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Beauty" icon={ categories_beauty } onClickButton={ this.onSelectCategory }/>
-            <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Bicycles" icon={ categories_bicycle } onClickButton={ this.onSelectCategory }/>
+            <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Bicycles" icon={ categories_bicycles } onClickButton={ this.onSelectCategory }/>
           </View>
           <View style={ styles.activityWrap }>
             <CategoryButton height={ categoryCellSize } width={ categoryCellSize } text="Civic" icon={ categories_civic } onClickButton={ this.onSelectCategory }/>

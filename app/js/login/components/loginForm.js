@@ -82,6 +82,7 @@ export default class LoginForm extends Component {
           </View>
           <View style={ styles.inputWrap }>
             <TextInput
+              autoCapitalize="none"
               placeholder="Email"
               placeholderTextColor="#9b9b9b"
               textAlign="center"
@@ -97,6 +98,7 @@ export default class LoginForm extends Component {
               onChangeText={ (text) => this.setState({ password: text }) }
             />
             <TextInput
+              autoCapitalize="none"
               placeholder="Community Code"
               placeholderTextColor="#9b9b9b"
               textAlign="center"

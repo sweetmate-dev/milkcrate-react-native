@@ -158,6 +158,7 @@ export default class SearchBar extends React.Component {
             />
           }
           <TextInput
+            autoCapitalize="none"
             autoCorrect={ autoCorrect === true }
             ref={ (c) => (this._textInput = c) }
             returnKeyType={ returnKeyType }

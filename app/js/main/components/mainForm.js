@@ -7,6 +7,8 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  StatusBar,
+  Platform,
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -34,6 +36,12 @@ export default class MainForm extends Component {
       selectedTab: 'search',
       badge: 0,
     };
+
+    StatusBar.setHidden(false);
+
+    if (Platform.OS === 'ios') {
+      StatusBar.setBarStyle('light-content', false);
+    }
   }
 
   render() {

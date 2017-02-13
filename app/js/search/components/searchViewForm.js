@@ -63,9 +63,11 @@ export default class SearchViewForm extends Component {
     return (
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
-          <View style={ styles.button }>
+          <View style={ styles.buttonWrap }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
-              <Image source={ back_arrow } style={ styles.image }/>
+              <View style={ styles.button }>
+                <Image source={ back_arrow } style={ styles.image }/>
+              </View>
             </TouchableOpacity>
           </View>
           <View style={ styles.searchBarWrap }>
@@ -79,9 +81,11 @@ export default class SearchViewForm extends Component {
                 paddingTop={20}
               />
           </View>
-          <View style={ styles.button }>
+          <View style={ styles.buttonWrap }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
-              <Image source={ filter } style={ styles.image }/>
+              <View style={ styles.button }>
+                <Image source={ filter } style={ styles.image }/>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -132,16 +136,22 @@ const styles = StyleSheet.create({
     width,
     height,
   },
-  button: {
+  buttonWrap: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    paddingTop: 15,
+  },
+  button: {
+    width: width * 0.12,
+    height: width * 0.12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     width: 14,
     height: 14,
+    marginTop: 10,
   },
   segmentedWrap:{
     flexDirection: 'row',

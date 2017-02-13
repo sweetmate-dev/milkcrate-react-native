@@ -18,7 +18,7 @@ import CategoryButton from './categoryButton';
 
 const { width, height } = Dimensions.get('window');
 
-const avatar = require('../../../assets/imgs/coffee_avatar.png');
+const coffee = require('../../../assets/imgs/stickers/coffee.png');
 const star = require('../../../assets/imgs/star.png');
 
 const items = [
@@ -66,7 +66,7 @@ export default class SearchListForm extends Component {
                           underlayColor='#dddddd'>
         <View style={ styles.cellContainer }>
           <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ avatar } />
+            <Image style={ styles.avatar } source={ coffee } />
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   star: {
     width: 12,
     height: 11,
-    paddingLeft: 5,
+    marginLeft: 3,
   },
   title: {
     color: '#5e8aa3',

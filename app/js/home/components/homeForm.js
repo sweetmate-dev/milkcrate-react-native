@@ -21,6 +21,7 @@ export default class HomeForm extends Component {
 
     this.state = {
     };
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -39,6 +40,8 @@ export default class HomeForm extends Component {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
+        <View style={ styles.navigationBarWrap }>
+        </View>
         <Text style={ styles.text }>Home is comming...</Text>
       </View>
     );
@@ -49,8 +52,15 @@ const styles = StyleSheet.create({
   container: {
     flex : 1,
   },
+  navigationBarWrap:{
+    flexDirection: 'row',
+    backgroundColor: '#82ccbe',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#00000021',
+    height:64,
+  },
   text: {
-
     marginTop: 50,
     color: '#82ccbe',
     fontFamily: 'Open Sans',

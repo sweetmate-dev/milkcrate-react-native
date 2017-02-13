@@ -6,6 +6,7 @@ import {
   View,
   Image,
   Dimensions,
+  StatusBar,
   Alert,
 } from 'react-native';
 
@@ -25,6 +26,8 @@ export default class IntroduceForm extends Component {
   constructor(props) {
     super(props);
 
+    StatusBar.setHidden(true);
+
     this.state = {
       defaultIndex: 0,
     };
@@ -37,7 +40,6 @@ export default class IntroduceForm extends Component {
   onGoLogin = (index) => {
 
     this.setState({ defaultIndex : 6 });
-
   }
 
   render() {

@@ -18,8 +18,8 @@ import SearchView from './search/containers/searchView';
 
 const scenes = Actions.create(
     <Scene key="root">
-      <Scene key="Introduce" component={ Introduce } title="Introduce" initial={ true }/>
-      <Scene key="Login" component={ Login } title="Login"/>
+      <Scene key="Introduce" component={ Introduce } initial={ true } />
+      <Scene key="Login" component={ Login }/>
       <Scene key="Main" component={ Main } />
       <Scene key="Search" component={ Search } />
       <Scene key="SearchView" component={ SearchView }  />

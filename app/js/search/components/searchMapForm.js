@@ -16,8 +16,8 @@ import {Actions} from 'react-native-router-flux';
 
 const { width, height } = Dimensions.get('window');
 
-const map_pin = require('../../../assets/imgs/map_pin.png');
-const avatar = require('../../../assets/imgs/coffee_avatar.png');
+const map_pin = require('../../../assets/imgs/map_marker.png');
+const avatar = require('../../../assets/imgs/stickers/coffee.png');
 const star = require('../../../assets/imgs/star.png');
 
 export default class SearchMapForm extends Component {
