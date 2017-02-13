@@ -19,7 +19,6 @@ const { width, height } = Dimensions.get('window');
 const activityCellSize = width * 0.22;
 const categoryCellSize = width * 0.2;
 
-
 const recent = require('../../../assets/imgs/recent.png');
 const businesses = require('../../../assets/imgs/businesses.png');
 const services = require('../../../assets/imgs/services.png');
