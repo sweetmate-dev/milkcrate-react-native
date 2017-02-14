@@ -21,6 +21,42 @@ const { width, height } = Dimensions.get('window');
 const coffee = require('../../../assets/imgs/stickers/coffee.png');
 const star = require('../../../assets/imgs/star.png');
 
+
+const stickerImages = [
+  require('../../../assets/imgs/stickers/fashion1.png'),
+  require('../../../assets/imgs/stickers/books.png'),
+  require('../../../assets/imgs/stickers/business.png'),
+  require('../../../assets/imgs/stickers/cleaning.png'),
+  require('../../../assets/imgs/stickers/animals.png'),
+  require('../../../assets/imgs/stickers/baby.png'),
+  require('../../../assets/imgs/stickers/beauty.png'),
+  require('../../../assets/imgs/stickers/bicycles.png'),
+  require('../../../assets/imgs/stickers/civic.png'),
+  require('../../../assets/imgs/stickers/coffee.png'),
+  require('../../../assets/imgs/stickers/construction.png'),
+  require('../../../assets/imgs/stickers/community.png'),
+  require('../../../assets/imgs/stickers/dining.png'),
+  require('../../../assets/imgs/stickers/drinks.png'),
+  require('../../../assets/imgs/stickers/education.png'),
+  require('../../../assets/imgs/stickers/energy.png'),
+  require('../../../assets/imgs/stickers/fashion2.png'),
+  require('../../../assets/imgs/stickers/finance.png'),
+  require('../../../assets/imgs/stickers/food.png'),
+  require('../../../assets/imgs/stickers/garden.png'),
+  require('../../../assets/imgs/stickers/green_space.png'),
+  require('../../../assets/imgs/stickers/health_wellness.png'),
+  require('../../../assets/imgs/stickers/home.png'),
+  require('../../../assets/imgs/stickers/media_communications.png'),
+  require('../../../assets/imgs/stickers/special_events.png'),
+  require('../../../assets/imgs/stickers/tourism_hospitality.png'),
+  require('../../../assets/imgs/stickers/transit.png'),
+  require('../../../assets/imgs/stickers/waste.png'),
+  require('../../../assets/imgs/stickers/service.png'),
+  require('../../../assets/imgs/stickers/vet.png'),
+  require('../../../assets/imgs/stickers/groups.png'),
+  require('../../../assets/imgs/stickers/wares.png'),
+];
+
 const items = [
   "0",
   "1",
@@ -39,7 +75,7 @@ export default class SearchListForm extends Component {
     super(props);
 
       var dataSource = new ListView.DataSource(
-          {rowHasChanged: (r1, r2) => r1.lister_url !== r2.lister_url});
+          {rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
           dataSource: dataSource.cloneWithRows(items)
       };
@@ -92,8 +128,8 @@ export default class SearchListForm extends Component {
     const { status } = this.props;
     return (
       <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this.renderRow.bind(this)}/>
+        dataSource={ this.state.dataSource }
+        renderRow={ this.renderRow.bind(this) }/>
     );
   }
 }

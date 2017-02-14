@@ -58,8 +58,10 @@ export default class SearchViewForm extends Component {
     });
   }
 
-    render() {
+  render() {
     const { status } = this.props;
+    const title = this.props.title;
+    const  index = this.props.index;
     return (
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>

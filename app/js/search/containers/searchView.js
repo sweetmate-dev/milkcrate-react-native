@@ -12,9 +12,8 @@ class SearchView extends Component {
   }
 
   render() {
-    const { actions, status } = this.props;
     return (
-      <SearchViewForm { ...actions } status/>
+      <SearchViewForm { ...this.props } />
     );
   }
 }

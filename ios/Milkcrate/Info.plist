@@ -54,8 +54,8 @@
     <key>UIAppFonts</key>
     <array>
       <string>Blanch-Caps.ttf</string>
-      <string>OpenSans-Semibold.ttf</string>
       <string>OpenSans-Regular.ttf</string>
+      <string>OpenSans-Semibold.ttf</string>
       <string>Entypo.ttf</string>
       <string>EvilIcons.ttf</string>
       <string>FontAwesome.ttf</string>
