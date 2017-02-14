@@ -9,11 +9,14 @@ import {
   ScrollView,
   ListView,
   TouchableOpacity,
+  NetInfo,
   Alert,
 } from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 import SearchBar from './searchBar';
+import ImageButton from './imageButton';
+
 import CategoryButton from './categoryButton';
 
 const { width, height } = Dimensions.get('window');
@@ -106,6 +109,40 @@ const categoryImages = [
   require('../../../assets/imgs/categories/wares.png'),
 ];
 
+const categoryActiveImages = [
+  require('../../../assets/imgs/categories/fashion1_active.png'),
+  require('../../../assets/imgs/categories/books_active.png'),
+  require('../../../assets/imgs/categories/business_active.png'),
+  require('../../../assets/imgs/categories/cleaning_active.png'),
+  require('../../../assets/imgs/categories/animals_active.png'),
+  require('../../../assets/imgs/categories/baby_active.png'),
+  require('../../../assets/imgs/categories/beauty_active.png'),
+  require('../../../assets/imgs/categories/bicycles_active.png'),
+  require('../../../assets/imgs/categories/civic_active.png'),
+  require('../../../assets/imgs/categories/coffee_active.png'),
+  require('../../../assets/imgs/categories/construction_active.png'),
+  require('../../../assets/imgs/categories/community_active.png'),
+  require('../../../assets/imgs/categories/dining_active.png'),
+  require('../../../assets/imgs/categories/drinks_active.png'),
+  require('../../../assets/imgs/categories/education_active.png'),
+  require('../../../assets/imgs/categories/energy_active.png'),
+  require('../../../assets/imgs/categories/fashion2_active.png'),
+  require('../../../assets/imgs/categories/finance_active.png'),
+  require('../../../assets/imgs/categories/food_active.png'),
+  require('../../../assets/imgs/categories/garden_active.png'),
+  require('../../../assets/imgs/categories/green_space_active.png'),
+  require('../../../assets/imgs/categories/health_wellness_active.png'),
+  require('../../../assets/imgs/categories/home_active.png'),
+  require('../../../assets/imgs/categories/media_communications_active.png'),
+  require('../../../assets/imgs/categories/special_events_active.png'),
+  require('../../../assets/imgs/categories/tourism_hospitality_active.png'),
+  require('../../../assets/imgs/categories/transit_active.png'),
+  require('../../../assets/imgs/categories/waste_active.png'),
+  require('../../../assets/imgs/categories/service_active.png'),
+  require('../../../assets/imgs/categories/vet_active.png'),
+  require('../../../assets/imgs/categories/groups_active.png'),
+  require('../../../assets/imgs/categories/wares_active.png'),
+];
 export default class SearchForm extends Component {
   constructor(props) {
     super(props);
@@ -144,16 +181,20 @@ export default class SearchForm extends Component {
 
     return (
       <View style={ styles.cellWrap }>
-        <TouchableOpacity
-          style={ styles.button }
-          onPress={ () => this.onSelectCategory(rowID) }>
-          <Image source={ categoryImages[rowID] } style={ styles.cellImage }/>
+        <View style={ styles.button }>
+          <ImageButton
+            style={ styles.cellImage }
+            appearance={{
+              normal: categoryImages[rowID],
+              highlight: categoryActiveImages[rowID]
+            }}
+            onPress={ () => this.onSelectCategory(rowID) }
+          />
           <Text style={ styles.cellText }>
             { categoryTitles[rowID] }
           </Text>
-        </TouchableOpacity>
+        </View>
       </View>
-
     );
   }
 

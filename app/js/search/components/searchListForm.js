@@ -21,42 +21,6 @@ const { width, height } = Dimensions.get('window');
 const coffee = require('../../../assets/imgs/stickers/coffee.png');
 const star = require('../../../assets/imgs/star.png');
 
-
-const stickerImages = [
-  require('../../../assets/imgs/stickers/fashion1.png'),
-  require('../../../assets/imgs/stickers/books.png'),
-  require('../../../assets/imgs/stickers/business.png'),
-  require('../../../assets/imgs/stickers/cleaning.png'),
-  require('../../../assets/imgs/stickers/animals.png'),
-  require('../../../assets/imgs/stickers/baby.png'),
-  require('../../../assets/imgs/stickers/beauty.png'),
-  require('../../../assets/imgs/stickers/bicycles.png'),
-  require('../../../assets/imgs/stickers/civic.png'),
-  require('../../../assets/imgs/stickers/coffee.png'),
-  require('../../../assets/imgs/stickers/construction.png'),
-  require('../../../assets/imgs/stickers/community.png'),
-  require('../../../assets/imgs/stickers/dining.png'),
-  require('../../../assets/imgs/stickers/drinks.png'),
-  require('../../../assets/imgs/stickers/education.png'),
-  require('../../../assets/imgs/stickers/energy.png'),
-  require('../../../assets/imgs/stickers/fashion2.png'),
-  require('../../../assets/imgs/stickers/finance.png'),
-  require('../../../assets/imgs/stickers/food.png'),
-  require('../../../assets/imgs/stickers/garden.png'),
-  require('../../../assets/imgs/stickers/green_space.png'),
-  require('../../../assets/imgs/stickers/health_wellness.png'),
-  require('../../../assets/imgs/stickers/home.png'),
-  require('../../../assets/imgs/stickers/media_communications.png'),
-  require('../../../assets/imgs/stickers/special_events.png'),
-  require('../../../assets/imgs/stickers/tourism_hospitality.png'),
-  require('../../../assets/imgs/stickers/transit.png'),
-  require('../../../assets/imgs/stickers/waste.png'),
-  require('../../../assets/imgs/stickers/service.png'),
-  require('../../../assets/imgs/stickers/vet.png'),
-  require('../../../assets/imgs/stickers/groups.png'),
-  require('../../../assets/imgs/stickers/wares.png'),
-];
-
 const items = [
   "0",
   "1",
@@ -93,20 +57,24 @@ export default class SearchListForm extends Component {
   }
 
   onCellPressed () {
+
     alert("onCellPressed");
   }
 
   renderRow(rowData, sectionID, rowID) {
+
+    const title = this.props.title;
+    const avatar = this.props.avatar;
     return (
       <TouchableHighlight onPress={() => this.onCellPressed()}
                           underlayColor='#dddddd'>
         <View style={ styles.cellContainer }>
           <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ coffee } />
+            <Image style={ styles.avatar } source={ avatar } />
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
-                  <Text style={ styles.title }>Elixr Coffee Roasters</Text>
+                  <Text style={ styles.title }> { title }</Text>
                 </View>
                 <View style={ styles.cellTopRatingContainer }>
                   <Text style={ styles.text }>4.8</Text>
@@ -117,7 +85,7 @@ export default class SearchListForm extends Component {
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>
-            <Text style={ styles.dscription }>Great Coffee, Great People, Great Service</Text>
+            <Text style={ styles.dscription }>Great { title }, Great People, Great Service</Text>
           </View>
         </View>
       </TouchableHighlight>

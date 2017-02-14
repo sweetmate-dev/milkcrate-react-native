@@ -12,9 +12,8 @@ class SearchList extends Component {
   }
 
   render() {
-    const { actions, status } = this.props;
     return (
-      <SearchListForm { ...actions } status/>
+      <SearchListForm { ...this.props } />
     );
   }
 }

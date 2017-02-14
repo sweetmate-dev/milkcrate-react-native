@@ -83,6 +83,7 @@ export default class LoginForm extends Component {
           <View style={ styles.inputWrap }>
             <TextInput
               autoCapitalize="none"
+              autoCorrect={false}
               placeholder="Email"
               placeholderTextColor="#9b9b9b"
               textAlign="center"
@@ -99,6 +100,7 @@ export default class LoginForm extends Component {
             />
             <TextInput
               autoCapitalize="none"
+              autoCorrect={false}
               placeholder="Community Code"
               placeholderTextColor="#9b9b9b"
               textAlign="center"

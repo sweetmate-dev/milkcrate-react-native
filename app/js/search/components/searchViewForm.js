@@ -24,6 +24,41 @@ const { width, height } = Dimensions.get('window');
 const back_arrow = require('../../../assets/imgs/back_arrow.png');
 const filter = require('../../../assets/imgs/filter.png');
 
+const stickerImages = [
+  require('../../../assets/imgs/stickers/fashion1.png'),
+  require('../../../assets/imgs/stickers/books.png'),
+  require('../../../assets/imgs/stickers/business.png'),
+  require('../../../assets/imgs/stickers/cleaning.png'),
+  require('../../../assets/imgs/stickers/animals.png'),
+  require('../../../assets/imgs/stickers/baby.png'),
+  require('../../../assets/imgs/stickers/beauty.png'),
+  require('../../../assets/imgs/stickers/bicycles.png'),
+  require('../../../assets/imgs/stickers/civic.png'),
+  require('../../../assets/imgs/stickers/coffee.png'),
+  require('../../../assets/imgs/stickers/construction.png'),
+  require('../../../assets/imgs/stickers/community.png'),
+  require('../../../assets/imgs/stickers/dining.png'),
+  require('../../../assets/imgs/stickers/drinks.png'),
+  require('../../../assets/imgs/stickers/education.png'),
+  require('../../../assets/imgs/stickers/energy.png'),
+  require('../../../assets/imgs/stickers/fashion2.png'),
+  require('../../../assets/imgs/stickers/finance.png'),
+  require('../../../assets/imgs/stickers/food.png'),
+  require('../../../assets/imgs/stickers/garden.png'),
+  require('../../../assets/imgs/stickers/green_space.png'),
+  require('../../../assets/imgs/stickers/health_wellness.png'),
+  require('../../../assets/imgs/stickers/home.png'),
+  require('../../../assets/imgs/stickers/media_communications.png'),
+  require('../../../assets/imgs/stickers/special_events.png'),
+  require('../../../assets/imgs/stickers/tourism_hospitality.png'),
+  require('../../../assets/imgs/stickers/transit.png'),
+  require('../../../assets/imgs/stickers/waste.png'),
+  require('../../../assets/imgs/stickers/service.png'),
+  require('../../../assets/imgs/stickers/vet.png'),
+  require('../../../assets/imgs/stickers/groups.png'),
+  require('../../../assets/imgs/stickers/wares.png'),
+];
+
 export default class SearchViewForm extends Component {
   constructor(props) {
     super(props);
@@ -50,12 +85,6 @@ export default class SearchViewForm extends Component {
 
   onFilter () {
     alert("Tapped filter button!");
-  }
-
-  setSelectedOption(selectedOption){
-    this.setState({
-      selectedIndex:selectedOption
-    });
   }
 
   render() {
@@ -108,9 +137,9 @@ export default class SearchViewForm extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-          <SearchList/>
+          <SearchList title={ title } avatar={ stickerImages[index] } />
           :
-          <SearchMap/>
+          <SearchMap title={ title } avatar={ stickerImages[index] } />
         }
       </View>
     );
