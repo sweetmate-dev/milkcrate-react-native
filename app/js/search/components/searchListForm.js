@@ -58,7 +58,7 @@ export default class SearchListForm extends Component {
 
   onCellPressed () {
 
-    alert("onCellPressed");
+    alert("Tapped cell!");
   }
 
   renderRow(rowData, sectionID, rowID) {
@@ -66,7 +66,7 @@ export default class SearchListForm extends Component {
     const title = this.props.title;
     const avatar = this.props.avatar;
     return (
-      <TouchableHighlight onPress={() => this.onCellPressed()}
+      <TouchableHighlight onPress={ () => this.onCellPressed() }
                           underlayColor='#dddddd'>
         <View style={ styles.cellContainer }>
           <View style={ styles.cellTopContainer }>

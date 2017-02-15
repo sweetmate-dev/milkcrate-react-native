@@ -12,9 +12,8 @@ class SearchMap extends Component {
   }
 
   render() {
-    const { actions, status } = this.props;
     return (
-      <SearchMapForm { ...actions } status/>
+      <SearchMapForm { ...this.props }/>
     );
   }
 }

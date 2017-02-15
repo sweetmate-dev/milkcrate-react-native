@@ -8,16 +8,15 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
-  MapView,
   Alert,
 } from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
+import MapView from 'react-native-maps';
 
 const { width, height } = Dimensions.get('window');
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
-const avatar = require('../../../assets/imgs/stickers/coffee.png');
 const star = require('../../../assets/imgs/star.png');
 
 export default class SearchMapForm extends Component {
@@ -52,27 +51,43 @@ export default class SearchMapForm extends Component {
     return (
       <MapView
         style={ styles.map }
-        region={{
+        initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
-
-        annotations={[{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          image: map_pin,
-          title: 'test',
-          rightCalloutView : (
-            <View style={ styles.cellTopRatingContainer }>
-              <Text style={ styles.text }>4.8</Text>
-              <Image style={ styles.star } source={ star } />
-            </View>
-         ),
-        }]}stickerImages
       >
+        <MapView.Marker
+          image={ map_pin }
+          key={ title }
+          coordinate={ {latitude: 37.78825, longitude: -122.4324} }
+        >
+          <MapView.Callout style = { styles.calloutContainer }>
+            <View style={ styles.cellContainer }>
+              <View style={ styles.cellTopContainer }>
+                <Image style={ styles.avatar } source={ avatar } />
+                <View style={ styles.cellTopTextContainer }>
+                  <View style={ styles.cellTopTitleRatingContainer }>
+                    <View style={ styles.cellTopTitleContainer }>
+                      <Text style={ styles.title }> { title }</Text>
+                    </View>
+                    <View style={ styles.cellTopRatingContainer }>
+                      <Text style={ styles.text }>4.8</Text>
+                      <Image style={ styles.star } source={ star } />
+                    </View>
+                  </View>
+                  <Text style={ styles.text }>1.2 Miles  $$</Text>
+                </View>
+              </View>
+              <View style={ styles.cellBottomContainer }>
+                <Text style={ styles.dscription }>Great { title }, Great People, Great Service</Text>
+              </View>
+            </View>
+          </MapView.Callout>
+        </MapView.Marker>
       </MapView>
+
     );
   }
 }
@@ -80,7 +95,6 @@ export default class SearchMapForm extends Component {
 const styles = StyleSheet.create({
   container: {
     flex : 1,
-    backgroundColor: 'green'
   },
   map: {
     flex: 1,
@@ -89,17 +103,22 @@ const styles = StyleSheet.create({
     width: 10,
     height: 16,
   },
-
+  calloutContainer: {
+    height: 63,
+    width: width - 40,
+  },
   cellContainer: {
-    backgroundColor: 'red',
-    height: 83,
-    width,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: '#d4ebf6',
-
+    flex: 1,
+    // height: 83,
+    // width: width - 20,
+    // backgroundColor: '#fff',
+    // margin: 10,
+    // paddingVertical: 8,
+    // paddingHorizontal: 16,
+    // borderWidth: 1,
+    // borderColor: '#d4ebf6',
+    // borderRadius: 5,
+    // borderStyle: 'solid',
   },
   cellTopContainer: {
     flexDirection: 'row',
@@ -154,5 +173,7 @@ const styles = StyleSheet.create({
     color: '#a4a4a3',
     fontFamily: 'Open Sans',
     fontSize: 12,
+    alignItems: 'center',
+    paddingBottom: 5,
   },
 });
