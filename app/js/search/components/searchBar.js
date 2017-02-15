@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
 
@@ -69,6 +70,7 @@ export default class SearchBar extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       isOnFocus: false,
     };
@@ -78,6 +80,7 @@ export default class SearchBar extends React.Component {
   }
 
   _onClose() {
+
     this._textInput.setNativeProps({ text: '' });
     this.props.onSearchChange({ nativeEvent: { text : ''}});
     if (this.props.onClose) {
@@ -86,6 +89,7 @@ export default class SearchBar extends React.Component {
   }
 
   _onFocus() {
+
     this.setState({ isOnFocus: true });
     if (this.props.onFocus) {
       this.props.onFocus();
@@ -93,6 +97,7 @@ export default class SearchBar extends React.Component {
   }
 
   _onBlur() {
+
     this.setState({ isOnFocus: false });
     if (this.props.onBlur) {
       this.props.onBlur();
@@ -131,7 +136,7 @@ export default class SearchBar extends React.Component {
 
     return (
       <View
-        onStartShouldSetResponder={this._dismissKeyboard}
+        onStartShouldSetResponder={ this._dismissKeyboard}
         style={{ padding: padding, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: paddingTop, paddingBottom: paddingBottom, }}
       >
         <View

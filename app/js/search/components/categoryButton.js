@@ -14,21 +14,21 @@ export default class CategoryButton extends React.Component {
     width: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
-    onClickButton: PropTypes.func,
+    onClick: PropTypes.func,
   }
 
   static defaultProps = {
-    onClickButton: () => {},
+    onClick: () => {},
   }
 
   constructor(props) {
     super(props);
-    this.onClickButton = this.onClickButton.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
-  onClickButton() {
-    if (this.props.onClickButton) {
-      this.props.onClickButton();
+  onClick() {
+    if (this.props.onClick) {
+      this.props.onClick();
     }
   }
 
@@ -38,14 +38,14 @@ export default class CategoryButton extends React.Component {
       width,
       text,
       icon,
-      onClickButton,
+      onClick,
     } = this.props;
 
     return (
       <View style={ [styles.container, { width, height }] }>
         <TouchableOpacity
             style={ styles.button }
-            onPress={ () => onClickButton() }>
+            onPress={ () => onClick() }>
           <Image source={ icon } style={ [{ width: width - 20 }, { height: height - 20 }] }/>
           <Text style={ [styles.text, { width: width }, { height: 20 }] }>
             {text}

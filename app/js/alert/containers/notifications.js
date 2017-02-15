@@ -1,3 +1,5 @@
+'use strict';
+
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -11,29 +13,27 @@ import {
   Alert,
 } from 'react-native';
 
-import {Actions} from 'react-native-router-flux';
+import { bindActionCreators } from 'redux';
+import * as alertActions from '../actions';
+import { connect } from 'react-redux';
 
 const { width, height } = Dimensions.get('window');
 
-export default class YouForm extends Component {
+class Notifications extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-    };
   }
 
   componentWillReceiveProps(newProps) {
 
-    if (newProps.status == 'you_request') {
+    if (newProps.status == 'alert_request') {
 
-    } else if (newProps.status == 'you_success') {
+    } else if (newProps.status == 'alert_success') {
 
-    } else if (newProps.status == 'you_error') {
+    } else if (newProps.status == 'alert_error') {
 
     }
   }
-
 
   render() {
     const { status } = this.props;
@@ -41,15 +41,23 @@ export default class YouForm extends Component {
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
         </View>
-        <Text style={ styles.text }>Profile is coming soon...</Text>
+        <Text style={ styles.text }>Alerts is coming soon...</Text>
       </View>
     );
   }
 }
 
+export default connect(state => ({
+  status: state.search.status
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(alertActions, dispatch)
+  })
+)(Notifications);
+
 const styles = StyleSheet.create({
   container: {
-    flex : 1,
+    flex: 1,
   },
   navigationBarWrap:{
     flexDirection: 'row',
@@ -57,7 +65,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
-    height:64,
+    height: 64,
   },
   text: {
     marginTop: 50,
@@ -67,3 +75,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+

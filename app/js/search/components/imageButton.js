@@ -12,7 +12,7 @@ import {
 
 
 export default class ImageButton extends Component {
-  constructor(props: {}) {
+  constructor(props) {
     super(props);
 
     this.state = {

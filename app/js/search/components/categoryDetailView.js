@@ -1,130 +1,123 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  ListView,
   Text,
   View,
-  Image,
+  StyleSheet,
   Dimensions,
-  TouchableOpacity,
+  Image,
   TouchableHighlight,
-  Alert,
 } from 'react-native';
 
-import {Actions} from 'react-native-router-flux';
-import SearchBar from './searchBar';
-import CategoryButton from './categoryButton';
-
-const { width, height } = Dimensions.get('window');
-
-const coffee = require('../../../assets/imgs/stickers/coffee.png');
+const { width } = Dimensions.get('window');
 const star = require('../../../assets/imgs/star.png');
 
-const items = [
-  "0",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-];
+export default class CategoryDetailView extends React.Component {
 
-export default class SearchListForm extends Component {
-  constructor(props) {
-    super(props);
-
-      var dataSource = new ListView.DataSource(
-          {rowHasChanged: (r1, r2) => r1 !== r2});
-      this.state = {
-          dataSource: dataSource.cloneWithRows(items)
-      };
+  static propTypes = {
+    height: PropTypes.number,
+    width: PropTypes.number,
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    distance: PropTypes.number,
+    price: PropTypes.number,
+    rating: PropTypes.number,
+    onClick: PropTypes.func,
+    mode: PropTypes.number
   }
 
-  componentWillReceiveProps(newProps) {
+  static defaultProps = {
+    mode: 0,
+    rating: 5.0,
+    width: width,
+    height: 83,
+    distance: 1,
+    price: 0,
+    onClick: () => {}
+  }
 
-    if (newProps.status == 'search_category_request') {
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
 
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
+  onClick() {
+    if (this.props.onClick) {
+      this.props.onClick();
     }
   }
 
-  onCellPressed () {
+  render() {
+    const {
+      height,
+      width,
+      title,
+      icon,
+      description,
+      distance,
+      price,
+      rating,
+      onClick,
+      mode,
+    } = this.props;
 
-    alert("Tapped cell!");
-  }
-
-  renderRow(rowData, sectionID, rowID) {
-
-    const title = this.props.title;
-    const avatar = this.props.avatar;
     return (
-      <TouchableHighlight onPress={ () => this.onCellPressed() }
+      <TouchableHighlight onPress={ () => onClick() }
                           underlayColor='#dddddd'>
-        <View style={ styles.cellContainer }>
+        <View style={ [{ height: height }, { width: width },
+            mode == 0 ? styles.cellContainer : styles.detailContainer
+          ]}>
           <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ avatar } />
+            <Image style={ styles.avatar } source={ icon } />
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
                   <Text style={ styles.title }> { title }</Text>
                 </View>
                 <View style={ styles.cellTopRatingContainer }>
-                  <Text style={ styles.text }>4.8</Text>
+                  <Text style={ styles.text }> { rating } </Text>
                   <Image style={ styles.star } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>1.2 Miles  $$</Text>
+              <Text style={ styles.text }>{ distance } Miles  { price} $$</Text>
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>
-            <Text style={ styles.dscription }>Great { title }, Great People, Great Service</Text>
+            <Text style={ styles.dscription }>{ description} </Text>
           </View>
         </View>
       </TouchableHighlight>
     );
   }
-
-  render() {
-    const { status } = this.props;
-    return (
-      <ListView
-        dataSource={ this.state.dataSource }
-        renderRow={ this.renderRow.bind(this) }/>
-    );
-  }
 }
-
 const styles = StyleSheet.create({
-  container: {
-    flex : 1,
-  },
   cellContainer: {
-    height: 83,
-    width,
+    backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#d4ebf6',
-
+  },
+  detailContainer: {
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#d4ebf6',
+    borderRadius: 5,
   },
   cellTopContainer: {
     flexDirection: 'row',
-    flex:3,
+    flex: 3,
     alignItems: 'center',
   },
   cellTopTextContainer: {
     flex: 1,
     flexDirection: 'column',
     paddingLeft: 5,
+    paddingVertical: 5,
   },
   cellTopTitleRatingContainer: {
     flex: 1,
@@ -170,5 +163,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
-
 });
