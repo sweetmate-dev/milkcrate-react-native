@@ -16,12 +16,11 @@ import {
 import { bindActionCreators } from 'redux';
 import * as loginActions from '../actions';
 import { connect } from 'react-redux';
-
 import {Actions} from 'react-native-router-flux';
+import * as commonColors from '../../styles/commonColors';
+import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 
-const { width, height } = Dimensions.get('window');
 const background = require('../../../assets/imgs/background_login.png');
-
 
 class Login extends Component {
   constructor(props) {
@@ -146,8 +145,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    width,
-    height,
+    width: screenWidth,
+    height: screenHiehgt,
   },
   descriptionWrap: {
     flex: 1,
@@ -170,13 +169,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   title: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Blanch',
     fontSize: 48,
     backgroundColor: 'transparent',
   },
   description: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 12,
     paddingVertical: 5,
@@ -184,7 +183,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    color:'#5e8aa3',
+    color: commonColors.title,
     height: 45,
     marginHorizontal: 40,
     borderColor: '#fff',
@@ -196,10 +195,10 @@ const styles = StyleSheet.create({
   loginButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
     borderRadius: 4,
     borderWidth: 4,
-    borderColor: '#82ccbe',
+    borderColor: commonColors.theme,
     borderStyle: 'solid',
     marginHorizontal: 40,
     height: 40,
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   buttonUnderText: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
     textDecorationLine: 'underline',

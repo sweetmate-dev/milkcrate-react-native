@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   TextInput,
   StyleSheet,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class SearchBar extends React.Component {
+export default class SearchBar extends Component {
 
   static propTypes = {
     height: PropTypes.number.isRequired,

@@ -19,7 +19,9 @@ import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
 import You from '../../you/containers/you';
 
-const { width, height } = Dimensions.get('window');
+import * as commonColors from '../../styles/commonColors';
+import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+
 
 const homeIcon = require('../../../assets/imgs/tabbar_home.png');
 const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png');
@@ -35,7 +37,7 @@ export default class Main extends Component {
     super(props);
 
     this.state = {
-      selectedTab: 'search',
+      selectedTab: 'home',
       badge: 0,
     };
 
@@ -107,8 +109,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    width,
-    height,
+    width: screenWidth,
+    height: screenHiehgt,
   },
   iconTabbar1: {
     width: 19,
@@ -131,13 +133,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   selectedText: {
-    color: '#82ccbe',
+    color: commonColors.theme,
     fontFamily: 'Open Sans',
     fontSize: 10,
   },
   tab: {
     borderStyle: 'solid',
     borderTopWidth: 1,
-    borderTopColor: '#82ccbe',
+    borderTopColor: commonColors.theme,
   },
 });

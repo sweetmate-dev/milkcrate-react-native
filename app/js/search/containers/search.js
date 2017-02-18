@@ -20,14 +20,11 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
 import {Actions} from 'react-native-router-flux';
-import SearchBar from '../components/searchBar';
+import SearchBar from '../../components/searchBar';
 import ImageButton from '../components/imageButton';
 import CategoryButton from '../components/categoryButton';
-
-const { width, height } = Dimensions.get('window');
-
-const activityCellSize = width * 0.22;
-const categoryCellSize = width / 4;
+import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/comonStyles';
+import * as commonColors from '../../styles/commonColors';
 
 const recent = require('../../../assets/imgs/recent.png');
 const businesses = require('../../../assets/imgs/businesses.png');
@@ -267,7 +264,7 @@ const styles = StyleSheet.create({
   },
   navigationBarWrap: {
     flexDirection: 'row',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
@@ -281,8 +278,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    width,
-    height,
+    width: screenWidth,
+    height: screenWidth,
   },
   activityWrap: {
     flexDirection: 'row',
@@ -291,16 +288,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   line: {
-    width,
+    width: screenWidth,
     borderBottomWidth: 1,
-    borderBottomColor: '#d4ebf6',
+    borderBottomColor: commonColors.line,
   },
   text: {
-    color: '#a4a4a3',
+    color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 14,
     paddingVertical: 10,
-    paddingLeft: width * 0.05,
+    paddingLeft: screenWidth * 0.05,
   },
   list: {
     flexDirection:'row',
@@ -309,7 +306,7 @@ const styles = StyleSheet.create({
   cellWrap: {
     padding: 10,
     width: categoryCellSize,
-    height : categoryCellSize,
+    height: categoryCellSize,
   },
   button: {
     justifyContent: 'flex-start',
@@ -323,10 +320,9 @@ const styles = StyleSheet.create({
     width: categoryCellSize,
     height : categoryCellSize - 40,
     textAlign: 'center',
-    color: '#a4a4a3',
+    color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 12,
   },
-
 });

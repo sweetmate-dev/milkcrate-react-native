@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Text,
   View,
@@ -8,10 +8,12 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+import { screenWidth } from '../../styles/comonStyles';
+import * as commonColors from '../../styles/commonColors';
+
 const star = require('../../../assets/imgs/star.png');
 
-export default class CategoryDetailView extends React.Component {
+export default class CategoryDetailView extends Component {
 
   static propTypes = {
     height: PropTypes.number,
@@ -29,7 +31,7 @@ export default class CategoryDetailView extends React.Component {
   static defaultProps = {
     mode: 0,
     rating: 5.0,
-    width: width,
+    width: screenWidth,
     height: 83,
     distance: 1,
     price: 0,
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    borderBottomColor: '#d4ebf6',
+    borderBottomColor: commonColors.line,
   },
   detailContainer: {
     backgroundColor: '#fff',
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: '#d4ebf6',
+    borderColor: commonColors.line,
     borderRadius: 5,
   },
   cellTopContainer: {
@@ -149,17 +151,17 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   title: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
   },
   dscription: {
-    color: '#808080',
+    color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
   text: {
-    color: '#a4a4a3',
+    color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
   },

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   Text,
   View,
@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export default class CategoryButton extends React.Component {
+import * as commonColors from '../../styles/commonColors';
+
+export default class CategoryButton extends Component {
 
   static propTypes = {
     height: PropTypes.number.isRequired,
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    color: '#a4a4a3',
+    color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 12,

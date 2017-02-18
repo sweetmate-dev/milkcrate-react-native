@@ -16,8 +16,8 @@ import {
 import { bindActionCreators } from 'redux';
 import * as alertActions from '../actions';
 import { connect } from 'react-redux';
+import * as commonColors from '../../styles/commonColors';
 
-const { width, height } = Dimensions.get('window');
 
 class Notifications extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   navigationBarWrap:{
     flexDirection: 'row',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 50,
-    color: '#82ccbe',
+    color: commonColors.theme,
     fontFamily: 'Open Sans',
     fontSize: 20,
     textAlign: 'center',

@@ -15,7 +15,8 @@ import {
 import AppIntro from 'react-native-app-intro';
 import Login from '../../login/containers/login';
 
-const { width, height } = Dimensions.get('window');
+import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import * as commonColors from '../../styles/commonColors';
 
 const background1 = require('../../../assets/imgs/introduce/background_introduce1.png');
 const background2 = require('../../../assets/imgs/introduce/background_introduce2.png');
@@ -54,10 +55,10 @@ export default class Introduce extends Component {
           skipBtnLabel="Login"
           nextBtnLabel="Next"
           doneBtnLabel=""
-          rightTextColor="#5e8aa3"
-          leftTextColor="#5e8aa3"
-          dotColor="#d4ebf6"
-          activeDotColor="#5e8aa3"
+          rightTextColor={ commonColors.title }
+          leftTextColor={ commonColors.title }
+          dotColor= { commonColors.line }
+          activeDotColor={ commonColors.title }
           customStyles={ customStyles }
           defaultIndex={ this.state.defaultIndex }
         >
@@ -143,8 +144,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    width,
-    height,
+    width: screenWidth,
+    height: screenHiehgt,
   },
   slide: {
     flex: 1,
@@ -163,12 +164,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Blanch',
     fontSize: 48,
   },
   description: {
-    color: '#5e8aa3',
+    color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 12,
     paddingVertical: 5,

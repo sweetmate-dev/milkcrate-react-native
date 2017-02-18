@@ -21,11 +21,12 @@ import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import { SegmentedControls } from 'react-native-radio-buttons';
 
-import SearchBar from '../components/searchBar';
+import SearchBar from '../../components/searchBar';
 import SearchList from './searchList';
 import SearchMap from './searchMap';
 
-const { width, height } = Dimensions.get('window');
+import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import * as commonColors from '../../styles/commonColors';
 
 const back_arrow = require('../../../assets/imgs/back_arrow.png');
 const filter = require('../../../assets/imgs/filter.png');
@@ -132,8 +133,8 @@ class SearchView extends Component {
           <View style={ styles.segmented }>
             <SegmentedControls
               tint={ '#fff' }
-              selectedTint= { '#82ccbe' }
-              backTint= { '#82ccbe' }
+              selectedTint= { commonColors.theme }
+              backTint= { commonColors.theme }
               options={ ['List', 'Map'] }
               allowFontScaling={ false } // default: true
               onSelection={ option => this.setState({ selectedIndex: option }) }
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
   },
   navigationBarWrap: {
     flexDirection: 'row',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
@@ -178,8 +179,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   background: {
-    width,
-    height,
+    width: screenWidth,
+    height: screenHiehgt,
   },
   buttonWrap: {
     flex: 1,
@@ -188,8 +189,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   button: {
-    width: width * 0.12,
-    height: width * 0.12,
+    width: screenWidth * 0.12,
+    height: screenWidth * 0.12,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   segmentedWrap: {
     flexDirection: 'row',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
     height:44,
   },
   segmented: {
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     borderStyle: 'solid',
-    backgroundColor: '#82ccbe',
+    backgroundColor: commonColors.theme,
   },
   tabTextStyle: {
     color: '#fff',
@@ -229,6 +230,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   activeTabTextStyle: {
-    color: '#82ccbe',
+    color: commonColors.theme,
   },
 });

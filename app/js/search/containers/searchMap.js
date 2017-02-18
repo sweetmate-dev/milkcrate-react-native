@@ -7,7 +7,6 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
   Alert,
@@ -16,14 +15,11 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
-
 import MapView from 'react-native-maps';
-
 import CategoryDetailView from '../components/categoryDetailView';
+import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 
-const { width, height } = Dimensions.get('window');
-
-const ASPECT_RATIO = width / height;
+const ASPECT_RATIO = screenWidth / screenHiehgt;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
@@ -81,7 +77,7 @@ class SearchMap extends Component {
     }
   }
 
-  onPinPressed ( key) {
+  onPressPin (key) {
 
     this.setState({tappedPin: key});
   }
@@ -106,14 +102,14 @@ class SearchMap extends Component {
             image={ map_pin }
             key={ marker.key }
             coordinate={ marker.coordinate }
-            onPress={ () => this.onPinPressed(marker.key) }
+            onPress={ () => this.onPressPin(marker.key) }
 
           />
         ))}
 
         <View style={ styles.calloutContainer } >
           <CategoryDetailView
-            width={ width - 20}
+            width={ screenWidth - 20}
             title={ title + " - " + this.state.tappedPin }
             icon={ avatar }
             description="Great People, Great Service"

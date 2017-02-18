@@ -20,8 +20,6 @@ import { connect } from 'react-redux';
 
 import CategoryDetailView from '../components/categoryDetailView';
 
-const { width, height } = Dimensions.get('window');
-
 const items = [
   "0",
   "1",
