@@ -19,7 +19,7 @@ import * as homeActions from '../actions';
 import { connect } from 'react-redux';
 
 import Carousel from 'react-native-snap-carousel';
-import SearchBar from '../../components/searchBar';
+import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
 import TrendingCarousel from '../components/trendingCarousel';
@@ -205,21 +205,7 @@ class Home extends Component {
 
     return (
       <View style={ styles.container }>
-        <View style={ styles.navigationBarWrap }>
-          <View style={ styles.searchBarPadding }/>
-          <View style={ styles.searchBarWrap }>
-            <SearchBar
-              onSearchChange={ () => console.log('On Focus') }
-              height={ 25 }
-              autoCorrect={ false }
-              returnKeyType={ "search" }
-              iconColor={ "#ffffff99" }
-              placeholderColor="#ffffff99"
-              paddingTop={ 20 }
-            />
-          </View>
-          <View style={ styles.searchBarPadding }/>
-        </View>
+        <NavSearchBar/>
         <ScrollView
           style={ styles.scrollView }
           indicatorStyle={ 'white' }
@@ -245,21 +231,6 @@ export default connect(state => ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  navigationBarWrap: {
-    flexDirection: 'row',
-    backgroundColor: commonColors.theme,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: '#00000021',
-    height: 64,
-  },
-  searchBarWrap: {
-    flex : 6,
-    backgroundColor: 'transparent',
-  },
-  searchBarPadding: {
     flex: 1,
   },
   scrollView: {

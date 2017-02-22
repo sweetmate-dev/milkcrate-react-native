@@ -20,7 +20,7 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
 import {Actions} from 'react-native-router-flux';
-import SearchBar from '../../components/searchBar';
+import NavSearchBar from '../../components/navSearchBar';
 import ImageButton from '../components/imageButton';
 import CategoryButton from '../components/categoryButton';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/comonStyles';
@@ -172,6 +172,11 @@ class Search extends Component {
 
   onSelectActivity (index) {
 
+    if (index == 5) {
+      //Events
+      Actions.Events();
+      return;
+    }
     alert("Clicked " + activityTitles[index]);
     // Actions.SearchView();
   }
@@ -202,27 +207,12 @@ class Search extends Component {
     );
   }
 
-
   render() {
     const { status } = this.props;
 
     return (
       <View style={ styles.container }>
-        <View style={ styles.navigationBarWrap }>
-          <View style={ styles.searchBarPadding }/>
-          <View style={ styles.searchBarWrap }>
-            <SearchBar
-              onSearchChange={ () => console.log('On Focus') }
-              height={ 25 }
-              autoCorrect={ false }
-              returnKeyType={ "search" }
-              iconColor={ "#ffffff99" }
-              placeholderColor="#ffffff99"
-              paddingTop={ 20 }
-            />
-          </View>
-          <View style={ styles.searchBarPadding }/>
-        </View>
+        <NavSearchBar/>
         <ScrollView>
           <View style={ styles.activityWrap }>
             <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[0] } icon={ recent } onClick={ () => this.onSelectActivity(0) }/>
@@ -261,21 +251,6 @@ export default connect(state => ({
 const styles = StyleSheet.create({
   container: {
     flex : 1,
-  },
-  navigationBarWrap: {
-    flexDirection: 'row',
-    backgroundColor: commonColors.theme,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: '#00000021',
-    height: 64,
-  },
-  searchBarWrap: {
-    flex : 6,
-    backgroundColor: 'transparent',
-  },
-  searchBarPadding: {
-    flex: 1,
   },
   background: {
     width: screenWidth,

@@ -9,7 +9,6 @@ import {
   Image,
   Dimensions,
   ScrollView,
-  SegmentedControlIOS,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -21,15 +20,13 @@ import { connect } from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import { SegmentedControls } from 'react-native-radio-buttons';
 
-import SearchBar from '../../components/searchBar';
+import NavSearchBar from '../../components/navSearchBar';
+
 import SearchList from './searchList';
 import SearchMap from './searchMap';
 
 import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
-
-const back_arrow = require('../../../assets/imgs/back_arrow.png');
-const filter = require('../../../assets/imgs/filter.png');
 
 const stickerImages = [
   require('../../../assets/imgs/stickers/fashion1.png'),
@@ -101,33 +98,12 @@ class SearchView extends Component {
 
     return (
       <View style={ styles.container }>
-        <View style={ styles.navigationBarWrap }>
-          <View style={ styles.buttonWrap }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
-              <View style={ styles.button }>
-                <Image source={ back_arrow } style={ styles.image }/>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={ styles.searchBarWrap }>
-            <SearchBar
-              onSearchChange={ () => console.log('On Focus') }
-              height={ 25 }
-              autoCorrect={ false }
-              returnKeyType={ "search" }
-              iconColor={ "#ffffff99" }
-              placeholderColor="#ffffff99"
-              paddingTop={ 20 }
-            />
-          </View>
-          <View style={ styles.buttonWrap }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
-              <View style={ styles.button }>
-                <Image source={ filter } style={ styles.image }/>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <NavSearchBar
+          leftButton={ true }
+          rightButton={ true }
+          onBack={ this.onBack }
+          onFilter={ this.onFilter }
+          />
         <View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedPadding }/>
           <View style={ styles.segmented }>
@@ -166,38 +142,9 @@ const styles = StyleSheet.create({
   container: {
     flex : 1,
   },
-  navigationBarWrap: {
-    flexDirection: 'row',
-    backgroundColor: commonColors.theme,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: '#00000021',
-    height: 64,
-  },
-  searchBarWrap: {
-    flex : 6,
-    backgroundColor: 'transparent',
-  },
   background: {
     width: screenWidth,
     height: screenHiehgt,
-  },
-  buttonWrap: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  button: {
-    width: screenWidth * 0.12,
-    height: screenWidth * 0.12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: 14,
-    height: 14,
-    marginTop: 10,
   },
   segmentedWrap: {
     flexDirection: 'row',

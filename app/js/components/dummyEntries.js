@@ -361,3 +361,59 @@ export const RecentActivityEntries = [
     coins: 14,
   },
 ];
+
+
+export const EventsEntries = [
+  {
+    date: 'Wednesday, Feb 22 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '1. Volunteer for the Bicycle Coalition',
+        coins: 1,
+      },
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '2. Volunteer for the Bicycle Coalition',
+        coins: 2,
+      },
+
+    ],
+  },
+  {
+    date: 'Thursday, Feb 23 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '3. Volunteer for the Bicycle Coalition',
+        coins: 4,
+      },
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '4. Volunteer for the Bicycle Coalition',
+        coins: 5,
+      },
+
+    ],
+  },
+  {
+    date: 'Friday, Feb 24 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '5. Volunteer for the Bicycle Coalition',
+        coins: 6,
+      },
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '6. Volunteer for the Bicycle Coalition',
+        coins: 7,
+      },
+      {
+        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        title: '7. Volunteer for the Bicycle Coalition',
+        coins: 8,
+      },
+    ],
+  },
+];

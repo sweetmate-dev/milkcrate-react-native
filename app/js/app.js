@@ -15,6 +15,7 @@ import Login from './login/containers/login';
 import Main from './main/containers/main';
 import Search from './search/containers/search';
 import SearchView from './search/containers/searchView';
+import Events from './search/containers/events'
 
 const scenes = Actions.create(
     <Scene key="root">
@@ -23,7 +24,7 @@ const scenes = Actions.create(
       <Scene key="Main" component={ Main } initial={ true } />
       <Scene key="Search" component={ Search } />
       <Scene key="SearchView" component={ SearchView }  />
-
+      <Scene key="Events" component={ Events }  />
     </Scene>
 );
 

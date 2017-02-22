@@ -57,7 +57,7 @@ export default class SearchBar extends Component {
     iconSearchName: "md-search",
     iconBackName: "md-arrow-back",
     placeholder: "Search",
-    returnKeyType: "search",
+    returnKeyType: "Discover",
     padding: 0,
     paddingLeft: 0,
     paddingRight: 0,
@@ -82,7 +82,7 @@ export default class SearchBar extends Component {
   _onClose() {
 
     this._textInput.setNativeProps({ text: '' });
-    this.props.onSearchChange({ nativeEvent: { text : ''}});
+    this.props.onSearchChange({ nativeEvent: { text : '' }});
     if (this.props.onClose) {
       this.props.onClose();
     }
@@ -136,7 +136,7 @@ export default class SearchBar extends Component {
 
     return (
       <View
-        onStartShouldSetResponder={ this._dismissKeyboard}
+        onStartShouldSetResponder={ this._dismissKeyboard }
         style={{ padding: padding, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: paddingTop, paddingBottom: paddingBottom, }}
       >
         <View
@@ -151,16 +151,17 @@ export default class SearchBar extends Component {
             ]
           }
         >
-          { this.state.isOnFocus ?
-            <Icon
+          {
+            this.state.isOnFocus ?
+              <Icon
                 name={ iconSearchName } size={ height * 0.75 }
                 color={ iconColor }
-            />
-          :
-            <Icon
-              name={ iconSearchName } size={ height * 0.75 }
-              color={ iconColor }
-            />
+              />
+            :
+              <Icon
+                name={ iconSearchName } size={ height * 0.75 }
+                color={ iconColor }
+              />
           }
           <TextInput
             autoCapitalize="none"
@@ -186,15 +187,17 @@ export default class SearchBar extends Component {
               ]
             }
           />
-          {this.state.isOnFocus ?
-            <TouchableOpacity onPress={ this._onClose }>
-              <Icon
-                style={{ paddingRight: height * 0.5 }}
-                name={ iconCloseName} size={ iconSize }
-                color={ iconColor }
-              />
-            </TouchableOpacity>
-          : null
+          {
+            this.state.isOnFocus ?
+              <TouchableOpacity onPress={ this._onClose }>
+                <Icon
+                  style={{ paddingRight: height * 0.5 }}
+                  name={ iconCloseName} size={ iconSize }
+                  color={ iconColor }
+                />
+              </TouchableOpacity>
+            :
+              null
           }
         </View>
       </View>
