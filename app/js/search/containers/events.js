@@ -19,7 +19,7 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import CalendarStrip from 'react-native-calendar-strip';
+import CalendarStrip from '../components/calendar/calendarStrip';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/comonStyles';
@@ -32,7 +32,8 @@ var dataSource = new ListView.DataSource({
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2
 });
 
-var arrayValidDate = [];
+let arrayValidDate = [];
+let eventDays = [];
 
 class Events extends Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class Events extends Component {
 
     EventsEntries.map((entry) => {
       arrayValidDate.push(true);
+      eventDays.push(entry.date);
     });
   }
 
@@ -159,6 +161,7 @@ class Events extends Component {
           highlightDateNameStyle={ styles.calendarDateName }
           highlightDateNumberStyle={ styles.calendarDateNumber }
           onDateSelected={ (date) => this.onSelectDate(date) }
+          eventDays={ eventDays }
         />
         <ListView
           dataSource={ this.state.dataSource }
@@ -203,8 +206,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   calendarIcon: {
-    width: 10,
-    height: 15,
+    width: 7,
+    height: 14,
   },
   sectionHeaderContainer: {
     backgroundColor: '#fff',

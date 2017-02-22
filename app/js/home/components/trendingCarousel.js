@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   coinNumber: {
-    color: commonColors.coinNumber,
+    color: '#eaD475',
     fontFamily: 'Open Sans',
     fontSize: 12,
     textAlign: 'center',

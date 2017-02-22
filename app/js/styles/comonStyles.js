@@ -17,10 +17,11 @@ export function hp (percentage) {
 }
 
 export const carouselHeight = screenHiehgt * 0.3;
-export const carouselWidth = wp(80);
+export const carouselWidth = wp(88);
 export const carouselerWidth = screenWidth;
 export const carouselItemHorizontalPadding = wp(1);
 export const carouselItemWidth = carouselWidth + carouselItemHorizontalPadding * 2;
 
 export const activityCellSize = screenWidth * 0.22;
 export const categoryCellSize = screenWidth / 4;
+

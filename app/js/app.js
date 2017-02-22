@@ -24,7 +24,7 @@ const scenes = Actions.create(
       <Scene key="Main" component={ Main } initial={ true } />
       <Scene key="Search" component={ Search } />
       <Scene key="SearchView" component={ SearchView }  />
-      <Scene key="Events" component={ Events }  />
+      <Scene key="Events" component={ Events }  initial={ true }/>
     </Scene>
 );
 

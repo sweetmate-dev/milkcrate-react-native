@@ -33,6 +33,9 @@ import { ChallengeCarouselEntries, LeaderboardEntries, TrendingCarouselEntries, 
 
 const trending = require('../../../assets/imgs/trending.png');
 
+const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
+
+
 
 class Home extends Component {
   constructor(props) {
@@ -156,7 +159,9 @@ class Home extends Component {
         <View style={ styles.listViewWrap }>
           <ListView
             dataSource={ this.state.dataSourceLeaderboard }
-            renderRow={ this.renderLeaderboardRow.bind(this) }/>
+            renderRow={ this.renderLeaderboardRow.bind(this) }
+            contentContainerStyle={ styles.leaderboardListView}
+          />
         </View>
       </View>
     );
@@ -241,7 +246,7 @@ const styles = StyleSheet.create({
 
   },
   sliderContainer: {
-
+    marginLeft: -carouselLeftMargin,
   },
   leaderboardContainer: {
     flex: 1,
@@ -278,5 +283,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 10,
+  },
+  leaderboardListView: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

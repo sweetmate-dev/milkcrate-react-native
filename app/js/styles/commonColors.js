@@ -6,3 +6,4 @@
  export const grayMoreText = '#a4a4a3';
  export const line = '#d4ebf6';
  export const coinNumber = '#ead475';
+ export const dateDot = '#f59271';

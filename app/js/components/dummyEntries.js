@@ -36,34 +36,45 @@ export const LeaderboardEntries = [
     name: 'Ashley S.',
     description: 'Down 3 spots from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
+    status: 0,
   },
   {
     name: 'Morgan B.',
     description: 'Up 2 spots from last week. Keep Going!',
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 1,
+    status: 0,
   },
   {
     name: 'Paul V.',
     description: 'Same position from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 2,
+    status: 1,
   },
   {
     name: 'Ashley S.',
     description: 'Down 3 spots from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
+    status: 2,
   },
   {
     name: 'Morgan B.',
     description: 'Up 2 spots from last week. Keep Going!',
     avatar: require('../../assets/imgs/avatar.png'),
+    status: 0,
   },
   {
     name: 'Paul V.',
     description: 'Same position from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
+    status: 0,
   },
+  {
+    name: 'Paul V.',
+    description: 'Same position from last week.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    status: 0,
+  },
+
 ];
 
 export const TrendingCarouselEntries = [
@@ -381,7 +392,7 @@ export const EventsEntries = [
     ],
   },
   {
-    date: 'Thursday, Feb 23 2017',
+    date: 'Thursday, Feb 24 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
@@ -397,7 +408,7 @@ export const EventsEntries = [
     ],
   },
   {
-    date: 'Friday, Feb 24 2017',
+    date: 'Friday, Feb 26 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),

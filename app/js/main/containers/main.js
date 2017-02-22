@@ -37,7 +37,7 @@ export default class Main extends Component {
     super(props);
 
     this.state = {
-      selectedTab: 'search',
+      selectedTab: 'home',
       badge: 0,
     };
 
