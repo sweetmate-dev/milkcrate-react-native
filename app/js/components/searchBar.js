@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   searchBarInput: {
     flex: 1,
     fontWeight: 'normal',
-    color: '#212121',
+    color: '#fff',
     backgroundColor: 'transparent',
   },
 });
@@ -132,7 +132,7 @@ export default class SearchBar extends Component {
 
     let { iconSize } = this.props
 
-    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.5
+    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.8
 
     return (
       <View
@@ -154,12 +154,12 @@ export default class SearchBar extends Component {
           {
             this.state.isOnFocus ?
               <Icon
-                name={ iconSearchName } size={ height * 0.75 }
+                name={ iconSearchName } size={ height }
                 color={ iconColor }
               />
             :
               <Icon
-                name={ iconSearchName } size={ height * 0.75 }
+                name={ iconSearchName } size={ height }
                 color={ iconColor }
               />
           }
@@ -181,7 +181,7 @@ export default class SearchBar extends Component {
                 {
                   paddingLeft: height * 0.3,
                   fontSize: height * 0.6,
-                  color: '#fff',
+                  flex: 1,
                 },
                 textStyle
               ]

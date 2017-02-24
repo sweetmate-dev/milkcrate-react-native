@@ -50,11 +50,16 @@ export default class LeaderboardListCell extends Component {
   getStatus () {
 
     if (this.props.status == 1)
-      return expand;
+      return (
+        <Image style={ styles.imageStatus } source={ expand }/>
+      );
     else if (this.props.status == 2)
-      return collapse;
-
-    return null;
+      return (
+        <Image style={ styles.imageStatus } source={ collapse }/>
+      );
+    return (
+      <View style={ styles.imageStatus } />
+    );
   }
 
   render() {
@@ -73,7 +78,7 @@ export default class LeaderboardListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.firstWrap }>
-            <Image style={ styles.imageStatus } source={ this.getStatus() }/>
+            { this.getStatus() }
             <Text style={ styles.textIndex }>{ index }</Text>
             <Image style={ styles.avatar } source={ avatar }/>
           </View>

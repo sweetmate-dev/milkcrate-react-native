@@ -93,6 +93,7 @@ class Login extends Component {
               placeholderTextColor="#9b9b9b"
               textAlign="center"
               style={ styles.input }
+              underlineColorAndroid="transparent"
               onChangeText={ (text) => this.setState({ email: text }) }
             />
             <TextInput
@@ -101,6 +102,7 @@ class Login extends Component {
               placeholderTextColor="#9b9b9b"
               textAlign="center"
               style={ styles.input }
+              underlineColorAndroid="transparent"
               onChangeText={ (text) => this.setState({ password: text }) }
             />
             <TextInput
@@ -110,6 +112,7 @@ class Login extends Component {
               placeholderTextColor="#9b9b9b"
               textAlign="center"
               style={ styles.input }
+              underlineColorAndroid="transparent"
               onChangeText={ (text) => this.setState({ communityCode: text }) }
             />
           </View>
@@ -185,6 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: commonColors.title,
     height: 45,
+    alignSelf: 'stretch',
     marginHorizontal: 40,
     borderColor: '#fff',
     backgroundColor: '#fff',

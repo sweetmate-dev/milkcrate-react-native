@@ -12,7 +12,7 @@ import {
   Alert,
 } from 'react-native';
 
-import AppIntro from 'react-native-app-intro';
+import AppIntro from '../components/AppIntro';
 import Login from '../../login/containers/login';
 
 import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
@@ -30,19 +30,10 @@ export default class Introduce extends Component {
     super(props);
 
     StatusBar.setHidden(true);
-
-    this.state = {
-      defaultIndex: 0,
-    };
   }
 
   componentWillReceiveProps(newProps) {
 
-  }
-
-  onGoLogin = (index) => {
-
-    this.setState({ defaultIndex : 6 });
   }
 
   render() {
@@ -51,7 +42,6 @@ export default class Introduce extends Component {
     return (
       <View style={ styles.container }>
         <AppIntro
-          onSkipBtnClick={ this.onGoLogin }
           skipBtnLabel="Login"
           nextBtnLabel="Next"
           doneBtnLabel=""
@@ -60,7 +50,7 @@ export default class Introduce extends Component {
           dotColor= { commonColors.line }
           activeDotColor={ commonColors.title }
           customStyles={ customStyles }
-          defaultIndex={ this.state.defaultIndex }
+          goLastPage={ true }
         >
           <View style={ styles.slide }>
             <Image source={ background1 } style={ styles.background } resizeMode="cover">

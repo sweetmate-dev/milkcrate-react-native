@@ -88,25 +88,27 @@ class SearchMap extends Component {
     const avatar = this.props.avatar;
 
     return (
-      <MapView
-        style={ styles.map }
-        initialRegion={{
-          latitude: LATITUDE,
-          longitude: LONGITUDE,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }}
-      >
-        {this.state.markers.map(marker => (
-          <MapView.Marker
-            image={ map_pin }
-            key={ marker.key }
-            coordinate={ marker.coordinate }
-            onPress={ () => this.onPressPin(marker.key) }
+      <View style={ styles.container }>
+        <MapView
+          style={ styles.map }
+          initialRegion={{
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }}
+        >
+          {this.state.markers.map(marker => (
+            <MapView.Marker
+              image={ map_pin }
+              key={ marker.key }
+              coordinate={ marker.coordinate }
+              onPress={ () => this.onPressPin(marker.key) }
 
-          />
-        ))}
+            />
+          ))}
 
+        </MapView>
         <View style={ styles.calloutContainer } >
           <CategoryDetailView
             width={ screenWidth - 20}
@@ -119,8 +121,7 @@ class SearchMap extends Component {
             mode={ 1 }
           />
         </View>
-
-      </MapView>
+      </View>
     );
   }
 }
