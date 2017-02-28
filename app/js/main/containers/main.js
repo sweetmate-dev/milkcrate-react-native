@@ -22,7 +22,6 @@ import You from '../../you/containers/you';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 
-
 const homeIcon = require('../../../assets/imgs/tabbar_home.png');
 const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png');
 const searchIcon = require('../../../assets/imgs/tabbar_search.png');
@@ -30,14 +29,18 @@ const searchSelectedIcon = require('../../../assets/imgs/tabbar_search_selected.
 const alertIcon = require('../../../assets/imgs/tabbar_alert.png');
 const alertSelectedIcon = require('../../../assets/imgs/tabbar_alert_selected.png');
 const youIcon = require('../../../assets/imgs/tabbar_you.png');
-const youelectedIcon = require('../../../assets/imgs/tabbar_you_selected.png');
+const youSelectedIcon = require('../../../assets/imgs/tabbar_you_selected.png');
 
 export default class Main extends Component {
   constructor(props) {
     super(props);
 
+    let tab = this.props.tab;
+    if (tab == null)
+      tab = 'home';
+
     this.state = {
-      selectedTab: 'home',
+      selectedTab: tab,
       badge: 0,
     };
 
@@ -49,7 +52,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const {status} = this.props;
+    const {status, subOne} = this.props;
 
     return (
       <View style={ styles.container }>
@@ -64,7 +67,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ homeIcon } style={ styles.iconTabbar1 }/> }
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.setState({ selectedTab: 'home' }) }>
-            <Home/>
+            <Home subOne = { subOne }/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'search' }
@@ -74,7 +77,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.setState({selectedTab: 'search' }) }>
-            <Search/>
+            <Search subOne = { subOne }/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'alert' }
@@ -85,7 +88,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.setState({selectedTab: 'alert' }) }>
-            <Notifications/>
+            <Notifications subOne = { subOne }/>
           </TabNavigator.Item>
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'you' }
@@ -93,9 +96,9 @@ export default class Main extends Component {
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
-            renderSelectedIcon={ () => <Image source={ youelectedIcon } style={ styles.iconTabbar4 }/> }
+            renderSelectedIcon={ () => <Image source={ youSelectedIcon } style={ styles.iconTabbar4 }/> }
             onPress={ () => this.setState({selectedTab: 'you' }) }>
-            <You/>
+            <You subOne = { subOne }/>
           </TabNavigator.Item>
         </TabNavigator>
       </View>

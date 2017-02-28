@@ -159,6 +159,28 @@ class Search extends Component {
     };
   }
 
+  componentDidMount() {
+
+    if (this.props.subOne != null) {
+
+      let subOne = this.props.subOne;
+
+      for (let i = 0 ; i < activityTitles.length ; i++) {
+        if (activityTitles[i].toLowerCase() == subOne.toLocaleString()) {
+          this.onSelectActivity ( i );
+          return;
+        }
+      }
+
+      for (let i = 0 ; i < categoryTitles.length ; i++) {
+        if (categoryTitles[i].toLowerCase() == subOne.toLocaleString()) {
+          this.onSelectCategory ( i );
+          return;
+        }
+      }
+    }
+  }
+
   componentWillReceiveProps(newProps) {
 
     if (newProps.status == 'search_category_request') {
@@ -246,7 +268,6 @@ export default connect(state => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
 )(Search);
-
 
 const styles = StyleSheet.create({
   container: {

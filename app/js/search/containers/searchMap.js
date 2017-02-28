@@ -104,7 +104,6 @@ class SearchMap extends Component {
               key={ marker.key }
               coordinate={ marker.coordinate }
               onPress={ () => this.onPressPin(marker.key) }
-
             />
           ))}
 
