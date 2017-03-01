@@ -11,8 +11,8 @@ import {
 import { screenWidth } from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const expand = require('../../../assets/imgs/expand.png');
-const collapse = require('../../../assets/imgs/collapse.png');
+const chevron_down = require('../../../assets/imgs/chevron_down.png');
+const chevron_up = require('../../../assets/imgs/chevron_up.png');
 
 export default class LeaderboardListCell extends Component {
 
@@ -47,19 +47,39 @@ export default class LeaderboardListCell extends Component {
     }
   }
 
-  getStatus () {
+  getStatus (status) {
 
-    if (this.props.status == 1)
+    if (status == 1)
       return (
-        <Image style={ styles.imageStatus } source={ expand }/>
+        <Image style={ styles.imageStatus } source={ chevron_up }/>
       );
-    else if (this.props.status == 2)
+    else if (status == 2)
       return (
-        <Image style={ styles.imageStatus } source={ collapse }/>
+        <Image style={ styles.imageStatus } source={ chevron_down }/>
       );
     return (
       <View style={ styles.imageStatus } />
     );
+  }
+
+  getDescription(status, name, description) {
+
+    if (status == 1){
+      return (
+        <View style={ styles.secondWrap }>
+          <Text style={ styles.textName }>{ name }</Text>
+          <Text style={ styles.textDescription }>{ description }</Text>
+        </View>
+      );
+    }else if ((status == 2) || (status == 3)){
+      return (
+        <View style={ styles.secondWrap }>
+          <Text style={ [styles.textName, { color: '#80808099' }] }>{ name }</Text>
+          <Text style={ [styles.textDescription, { color: '#80808099'}] }>{ description }</Text>
+        </View>
+      );
+    }
+
   }
 
   render() {
@@ -78,13 +98,10 @@ export default class LeaderboardListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.firstWrap }>
-            { this.getStatus() }
+            { this.getStatus(status) }
             <Text style={ styles.textIndex }>{ index }</Text>
             <Image style={ styles.avatar } source={ avatar }/>
-          </View>
-          <View style={ styles.secondWrap }>
-            <Text style={ styles.textName }>{ name }</Text>
-            <Text style={ styles.textDescription }>{ description }</Text>
+            { this.getDescription(status, name, description) }
           </View>
         </View>
       </TouchableHighlight>

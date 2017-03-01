@@ -1137,6 +1137,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Milkcrate;
 				PRODUCT_NAME = Milkcrate;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1154,6 +1155,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Milkcrate;
 				PRODUCT_NAME = Milkcrate;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -25,9 +25,9 @@ import Events from './search/containers/events'
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce } initial />
+    <Scene key="Introduce" component={ Introduce }  />
     <Scene key="Login" component={ Login } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
     <Scene key="SearchView" component={ SearchView } />
     <Scene key="Events" component={ Events } />
   </Scene>

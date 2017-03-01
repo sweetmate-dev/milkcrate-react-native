@@ -48,19 +48,19 @@ export const LeaderboardEntries = [
     name: 'Paul V.',
     description: 'Same position from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 1,
+    status: 2,
   },
   {
     name: 'Ashley S.',
     description: 'Down 3 spots from last week.',
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 2,
+    status: 1,
   },
   {
     name: 'Morgan B.',
     description: 'Up 2 spots from last week. Keep Going!',
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 0,
+    status: 3,
   },
   {
     name: 'Paul V.',
