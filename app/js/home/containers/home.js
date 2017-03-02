@@ -219,7 +219,7 @@ class Home extends Component {
           { this.showChallenges }
           { this.showLeaderboard }
           { this.showTrending }
-          { this.showRecentActivity }
+          { this.showRecentActivity }          
         </ScrollView>
       </View>
     );
