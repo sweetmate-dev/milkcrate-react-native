@@ -11,6 +11,7 @@ import {
   ScrollView,
   ListView,
   TouchableOpacity,
+  TouchableHighlight,
   Alert,
 } from 'react-native';
 
@@ -73,7 +74,6 @@ class Home extends Component {
         name={ rowData.name }
         description={ rowData.description }
         avatar={ rowData.avatar }
-        onClick={ () => this.onLeaderboardCellPressed(rowID) }
       />
     );
   }
@@ -93,13 +93,11 @@ class Home extends Component {
     );
   }
 
-  onLeaderboardCellPressed (rowID) {
-
-    alert("Tapped cell - " + rowID);
+  onLeaderboardCellPressed () {
+    alert("Tapped Leaderboard");
   }
 
   onRecentActivityCellPressed (rowID) {
-
     alert("Tapped cell - " + rowID);
   }
 
@@ -156,13 +154,15 @@ class Home extends Component {
     return (
       <View style={ styles.leaderboardContainer }>
         <Text style={ styles.title }>Leaderboard</Text>
-        <View style={ styles.listViewWrap }>
-          <ListView
-            dataSource={ this.state.dataSourceLeaderboard }
-            renderRow={ this.renderLeaderboardRow.bind(this) }
-            contentContainerStyle={ styles.leaderboardListView}
-          />
-        </View>
+        <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
+          <View style={ styles.leaderboardListViewWrapper }>
+            <ListView
+              dataSource={ this.state.dataSourceLeaderboard }
+              renderRow={ this.renderLeaderboardRow.bind(this) }
+              contentContainerStyle={ styles.leaderboardListView}
+            />
+          </View>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -196,7 +196,7 @@ class Home extends Component {
     return (
       <View style={ styles.recentActivityContainer }>
         <Text style={ styles.title }>Recent Activity</Text>
-        <View style={ styles.listViewWrap }>
+        <View style={ styles.recentActivityListViewWrapper }>
           <ListView
             dataSource={ this.state.dataSourceRecentActivity }
             renderRow={ this.renderRecentActivityRow.bind(this) }/>
@@ -258,13 +258,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 10,
   },
-  listViewWrap: {
+  leaderboardListViewWrapper: {
     borderStyle: 'solid',
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     height: commonStyles.hp(27),
+  },
+  recentActivityListViewWrapper: {
+    borderStyle: 'solid',
+    borderTopWidth: 1,
+    borderTopColor: commonColors.line,
+    borderBottomWidth: 1,
+    borderBottomColor: commonColors.line,
+    // height: commonStyles.hp(27),
   },
   trendingContainer: {
     flex: 1,

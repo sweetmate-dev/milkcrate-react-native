@@ -20,18 +20,7 @@ import { connect } from 'react-redux';
 
 import CategoryDetailView from '../components/categoryDetailView';
 
-const items = [
-  "0",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-];
+import { CategoryDetailEntries } from '../../components/dummyEntries';
 
 class SearchList extends Component {
   constructor(props) {
@@ -40,7 +29,7 @@ class SearchList extends Component {
     var dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: dataSource.cloneWithRows(items)
+      dataSource: dataSource.cloneWithRows(CategoryDetailEntries)
     };
   }
 
@@ -55,24 +44,22 @@ class SearchList extends Component {
     }
   }
 
-  onCellPressed (rowID) {
-
+  onPressedCell (rowID) {
     alert("Tapped cell - " + rowID);
   }
 
   renderRow(rowData, sectionID, rowID) {
-
     const title = this.props.title;
     const avatar = this.props.avatar;
     return (
       <CategoryDetailView
         title={ title }
         icon={ avatar }
-        description="Great People, Great Service"
-        distance={ 1.2 }
-        price={ 1 }
-        rating={ 4.8 }
-        onClick={ () => this.onCellPressed(rowID) }
+        description={ rowData.description }
+        distance={ rowData.distance }
+        price={ rowData.price }
+        rating={ rowData.rating }
+        onClick={ () => this.onPressedCell(rowID) }
       />
     );
   }

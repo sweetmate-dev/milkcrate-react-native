@@ -8,7 +8,7 @@ import {
   View,
   Image,
   Dimensions,
-  ScrollView,
+  ListView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -16,12 +16,22 @@ import {
 import { bindActionCreators } from 'redux';
 import * as alertActions from '../actions';
 import { connect } from 'react-redux';
+import AlertListCell from '../components/alertListCell';
+import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 
+import { AlertEntries } from '../../components/dummyEntries';
 
 class Notifications extends Component {
   constructor(props) {
     super(props);
+
+    var dataSourceAlert = new ListView.DataSource(
+      { rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    this.state = {
+      dataSourceAlert: dataSourceAlert.cloneWithRows(AlertEntries),
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -35,13 +45,32 @@ class Notifications extends Component {
     }
   }
 
+  renderAlertRow(rowData, sectionID, rowID) {
+    return (
+      <AlertListCell
+        name={ rowData.name }
+        description={ rowData.description }
+        avatar={ rowData.avatar }
+        time={ rowData.time }
+        onClick={ () => this.onAlertCellPressed(rowID) }
+      />
+    );
+  }
+
+  onAlertCellPressed (rowID) {
+    alert("Tapped cell - " + rowID);
+  }
+
   render() {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
-        <View style={ styles.navigationBarWrap }>
+        <NavSearchBar/>
+        <View style={ styles.listViewWrap }>
+          <ListView
+            dataSource={ this.state.dataSourceAlert }
+            renderRow={ this.renderAlertRow.bind(this) }/>
         </View>
-        <Text style={ styles.text }>Alerts is coming soon...</Text>
       </View>
     );
   }
@@ -59,20 +88,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  navigationBarWrap:{
-    flexDirection: 'row',
-    backgroundColor: commonColors.theme,
+  listViewWrap: {
+    flex: 1,
     borderStyle: 'solid',
+    borderTopWidth: 1,
+    borderTopColor: commonColors.line,
     borderBottomWidth: 1,
-    borderBottomColor: '#00000021',
-    height: 64,
-  },
-  text: {
-    marginTop: 50,
-    color: commonColors.theme,
-    fontFamily: 'Open Sans',
-    fontSize: 20,
-    textAlign: 'center',
+    borderBottomColor: commonColors.line,
   },
 });
 

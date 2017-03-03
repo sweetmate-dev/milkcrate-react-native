@@ -24,30 +24,30 @@ export default class LeaderboardListCell extends Component {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     avatar: PropTypes.number.isRequired,
-    onClick: PropTypes.func,
+    // onClick: PropTypes.func,
   }
 
   static defaultProps = {
     width: screenWidth,
     height: 32,
     status: 0,
-    onClick: () => {}
+    // onClick: () => {}
   }
 
   constructor(props) {
 
     super(props);
-    this.onClick = this.onClick.bind(this);
+    // this.onClick = this.onClick.bind(this);
   }
 
-  onClick() {
+  // onClick() {
 
-    if (this.props.onClick) {
-      this.props.onClick();
-    }
-  }
+  //   if (this.props.onClick) {
+  //     this.props.onClick();
+  //   }
+  // }
 
-  getStatus (status) {
+  showStatus (status) {
 
     if (status == 1)
       return (
@@ -62,24 +62,30 @@ export default class LeaderboardListCell extends Component {
     );
   }
 
-  getDescription(status, name, description) {
+  showDescription(status, name, description) {
 
-    if (status == 1){
+    if (status == 1) {
       return (
         <View style={ styles.secondWrap }>
           <Text style={ styles.textName }>{ name }</Text>
           <Text style={ styles.textDescription }>{ description }</Text>
         </View>
       );
-    }else if ((status == 2) || (status == 3)){
+    } else if ((status == 2) || (status == 3)) {
       return (
         <View style={ styles.secondWrap }>
-          <Text style={ [styles.textName, { color: '#80808099' }] }>{ name }</Text>
-          <Text style={ [styles.textDescription, { color: '#80808099'}] }>{ description }</Text>
+          <Text style={ [styles.textName, { opacity: 0.6 }] }>{ name }</Text>
+          <Text style={ [styles.textDescription, { opacity: 0.6 }] }>{ description }</Text>
         </View>
       );
     }
+  }
 
+  showAvatar( status, avatar) {
+    if (status == 1)
+      return (<Image style={ styles.avatar } source={ avatar }/>);
+    
+    return (<Image style={ [styles.avatar, {opacity: 0.6}] } source={ avatar }/>);
   }
 
   render() {
@@ -91,20 +97,20 @@ export default class LeaderboardListCell extends Component {
       name,
       description,
       avatar,
-      onClick,
+      // onClick,
     } = this.props;
 
     return (
-      <TouchableHighlight onPress={ () => onClick() }>
+      // <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.firstWrap }>
-            { this.getStatus(status) }
+            { this.showStatus(status) }
             <Text style={ styles.textIndex }>{ index }</Text>
-            <Image style={ styles.avatar } source={ avatar }/>
-            { this.getDescription(status, name, description) }
+            { this.showAvatar(status, avatar) }
+            { this.showDescription(status, name, description) }
           </View>
         </View>
-      </TouchableHighlight>
+      // </TouchableHighlight>
     );
   }
 }

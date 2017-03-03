@@ -11,9 +11,9 @@ import {
 import { screenWidth } from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const star = require('../../../assets/imgs/star.png');
+const point = require('../../../assets/imgs/point.png');
 
-export default class CategoryDetailView extends Component {
+export default class RecentActivityListCell extends Component {
 
   static propTypes = {
     height: PropTypes.number,
@@ -23,14 +23,14 @@ export default class CategoryDetailView extends Component {
     description: PropTypes.string.isRequired,
     distance: PropTypes.number,
     price: PropTypes.number,
-    rating: PropTypes.number,
+    coins: PropTypes.number,
     onClick: PropTypes.func,
     mode: PropTypes.number
   }
 
   static defaultProps = {
     mode: 0,
-    rating: 5.0,
+    coins: 0,
     width: screenWidth,
     height: 83,
     distance: 1,
@@ -58,36 +58,34 @@ export default class CategoryDetailView extends Component {
       description,
       distance,
       price,
-      rating,
+      coins,
       onClick,
       mode,
     } = this.props;
 
     return (
-      <TouchableHighlight 
-        onPress={ () => onClick() } 
-        underlayColor='#dddddd'
-      >
-        <View style={ [{ height: height }, { width: width },
-          mode == 0 ? styles.cellContainer : styles.detailContainer] }
-        >
-          <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ icon } />
-            <View style={ styles.cellTopTextContainer }>
-              <View style={ styles.cellTopTitleRatingContainer }>
-                <View style={ styles.cellTopTitleContainer }>
-                  <Text style={ styles.title }> { title }</Text>
+      <TouchableHighlight onPress={ () => onClick() } underlayColor='#dddddd'>
+        <View style={ [{ height: height }, { width: width }, styles.mainContainer] }>
+          <View style={ styles.leftContainer }>
+            <View style={ styles.cellTopContainer }>
+              <Image style={ styles.avatar } source={ icon } />
+              <View style={ styles.cellTopTextContainer }>
+                <View style={ styles.cellTopTitleCoinContainer }>
+                  <View style={ styles.cellTopTitleContainer }>
+                    <Text style={ styles.title }> { title }</Text>
+                  </View>
                 </View>
-                <View style={ styles.cellTopRatingContainer }>
-                  <Text style={ styles.text }> { rating } </Text>
-                  <Image style={ styles.star } source={ star } />
-                </View>
+                <Text style={ styles.text }>{ distance } Miles  { price } $$</Text>
               </View>
-              <Text style={ styles.text }>{ distance } Miles  { price } $$</Text>
+            </View>
+            <View style={ styles.cellBottomContainer }>
+              <Text style={ styles.dscription }>{ description } </Text>
             </View>
           </View>
-          <View style={ styles.cellBottomContainer }>
-            <Text style={ styles.dscription }>{ description } </Text>
+          <View style={ styles.rightCoinContainer }>
+            <Image style={ styles.imagePoint } source={ point }>
+              <Text style={ styles.textPoint }>+{ coins }</Text>            
+            </Image>
           </View>
         </View>
       </TouchableHighlight>
@@ -95,7 +93,8 @@ export default class CategoryDetailView extends Component {
   }
 }
 const styles = StyleSheet.create({
-  cellContainer: {    
+  mainContainer: {
+    flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -103,14 +102,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
   },
-  detailContainer: {
-    backgroundColor: '#fff',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: commonColors.line,
-    borderRadius: 5,
+  leftContainer: {
+    flex: 9,
   },
   cellTopContainer: {
     flexDirection: 'row',
@@ -123,7 +116,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingVertical: 5,
   },
-  cellTopTitleRatingContainer: {
+  cellTopTitleCoinContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -132,11 +125,10 @@ const styles = StyleSheet.create({
     flex: 5,
     alignItems: 'flex-start',
   },
-  cellTopRatingContainer: {
+  rightCoinContainer: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
   cellBottomContainer: {
     flexDirection: 'row',
@@ -147,10 +139,11 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
   },
-  star: {
-    width: 12,
-    height: 11,
-    marginLeft: 3,
+  imagePoint: {
+    width: 34,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     color: commonColors.title,
@@ -163,8 +156,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   text: {
+    backgroundColor: 'transparent',
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
+  },
+  textPoint: {
+    backgroundColor: 'transparent',
+    color: commonColors.point,
+    fontFamily: 'Open Sans',
+    fontWeight: 'bold',
+    fontSize: 12,
+    textAlign: 'center',
   },
 });

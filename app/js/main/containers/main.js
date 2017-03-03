@@ -37,7 +37,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'home';
+      tab = 'you';
 
     this.state = {
       selectedTab: tab,
@@ -76,7 +76,7 @@ export default class Main extends Component {
             titleStyle={ styles.text }
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
-            onPress={ () => this.setState({selectedTab: 'search' }) }>
+            onPress={ () => this.setState({ selectedTab: 'search' }) }>
             <Search subOne = { subOne }/>
           </TabNavigator.Item>
           <TabNavigator.Item
@@ -87,7 +87,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ alertIcon } style={ styles.iconTabbar3 }/> }
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
-            onPress={ () => this.setState({selectedTab: 'alert' }) }>
+            onPress={ () => this.setState({ selectedTab: 'alert' }) }>
             <Notifications subOne = { subOne }/>
           </TabNavigator.Item>
           <TabNavigator.Item
@@ -105,7 +105,6 @@ export default class Main extends Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
