@@ -9,8 +9,9 @@ import {
 export const DoneButton = ({
   styles, onDoneBtnClick, onNextBtnClick,
   rightTextColor, isDoneBtnShow,
-  doneBtnLabel, nextBtnLabel,
-  doneFadeOpacity, skipFadeOpacity, nextOpacity
+  doneBtnLabel, nextBtnLabel, 
+  doneFadeOpacity, skipFadeOpacity, nextOpacity,
+  skipBtnLabel, index, total,
 }) => {
   return (
     <View style={styles.btnContainer}>
@@ -36,7 +37,12 @@ export const DoneButton = ({
         <TouchableOpacity style={styles.full}
           onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick}>
          <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
-          {nextBtnLabel}
+          {
+            index >= (total - 2) ? 
+              skipBtnLabel 
+              : 
+              nextBtnLabel
+          }
         </Text>
         </TouchableOpacity>
       </Animated.View>

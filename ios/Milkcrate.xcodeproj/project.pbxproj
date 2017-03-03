@@ -50,6 +50,7 @@
 		F471DA292D5941B7A632032D /* Blanch.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C1E7048C1B8641C9B5CAB86B /* Blanch.ttf */; };
 		F78E1001D92D454882D41503 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3EB1A0652AE46A28EFBB9E2 /* Entypo.ttf */; };
 		FD4013342B03406F85503F2E /* OpenSans_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6830886BF4754F4AAD0DC63A /* OpenSans_bold.ttf */; };
+		501D13ADA60740B784475E90 /* OpenSans_Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D7B8416F9D24A1EBA84FDD8 /* OpenSans_Semibold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -300,6 +301,7 @@
 		D17C00A6DAA74C3784E7A942 /* OpenSans.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = OpenSans.ttf; path = ../app/assets/fonts/OpenSans.ttf; sourceTree = "<group>"; };
 		E3EB1A0652AE46A28EFBB9E2 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		E4E1B397CB8249689232941B /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		4D7B8416F9D24A1EBA84FDD8 /* OpenSans_Semibold.ttf */ = {isa = PBXFileReference; name = "OpenSans_Semibold.ttf"; path = "../app/assets/fonts/OpenSans_Semibold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -494,6 +496,7 @@
 				3A40D211EE204C7A9A098AC5 /* Octicons.ttf */,
 				2DE9E1AA10654925845B75BF /* SimpleLineIcons.ttf */,
 				6E0ABED755074414A1F30BFA /* Zocial.ttf */,
+				4D7B8416F9D24A1EBA84FDD8 /* OpenSans_Semibold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -962,6 +965,7 @@
 				AC401B12430F4BDAAB465750 /* Octicons.ttf in Resources */,
 				DA29DC6D6453456E82FD7B1E /* SimpleLineIcons.ttf in Resources */,
 				5AE6AE15EC094604BC266195 /* Zocial.ttf in Resources */,
+				501D13ADA60740B784475E90 /* OpenSans_Semibold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

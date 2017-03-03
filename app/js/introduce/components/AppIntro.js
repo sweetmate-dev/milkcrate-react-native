@@ -229,25 +229,33 @@ export default class AppIntro extends Component {
     }
     return (
       <View style={[this.styles.paginationContainer]}>
-        {this.props.showSkipButton ? <SkipButton
-          {...this.props}
-          {...this.state}
-          isSkipBtnShow={isSkipBtnShow}
-          styles={this.styles}
-          onSkipBtnClick={this.onSkipBtnClick.bind(this, context)} /> :
-          <View style={this.styles.btnContainer} />
+        {
+          this.props.showSkipButton && index < 1 ? 
+            <SkipButton
+              {...this.props}
+              {...this.state}
+              isSkipBtnShow={isSkipBtnShow}
+              styles={this.styles}
+              onSkipBtnClick={this.onSkipBtnClick.bind(this, context)} /> 
+            :
+            <View style={this.styles.btnContainer} />
         }
         {this.props.showDots && RenderDots(index, total, {
           ...this.props,
           styles: this.styles
         })}
-        {this.props.showDoneButton ? <DoneButton
-            {...this.props}
-            {...this.state}
-            isDoneBtnShow={isDoneBtnShow}
-            styles={this.styles}
-            onNextBtnClick={this.onNextBtnClick.bind(this, context)}
-            onDoneBtnClick={this.props.onDoneBtnClick} /> :
+        {
+          this.props.showDoneButton ? 
+            <DoneButton
+              index={ index }
+              total={ total }
+              {...this.props}
+              {...this.state}
+              isDoneBtnShow={isDoneBtnShow}
+              styles={this.styles}
+              onNextBtnClick={this.onNextBtnClick.bind(this, context)}
+              onDoneBtnClick={this.props.onDoneBtnClick} /> 
+            :
             <View style={this.styles.btnContainer} />
           }
       </View>

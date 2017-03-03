@@ -67,9 +67,9 @@ export default class Introduce extends Component {
             <Image source={ background2 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>DISCOVER</Text>
-                <Text style={ styles.description }>And check in to hundreds of sustainable</Text>
-                <Text style={ styles.description }>businesses in your neighborhood.</Text>
+                <Text style={ styles.title }>Earn Points</Text>
+                <Text style={ styles.description }>When you check in to hundreds of</Text>
+                <Text style={ styles.description }>sustainable businesses in your neighborhood.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -79,9 +79,9 @@ export default class Introduce extends Component {
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
                 <Text style={ styles.title }>TAKE IMPACTFUL ACTIONS</Text>
-                <Text style={ styles.description }>Take part in our weekly challenges, or earn</Text>
-                <Text style={ styles.description }>points for taking random actions throughout</Text>
-                <Text style={ styles.description }>the week.</Text>
+                <Text style={ styles.description }>Earn more points when you take part in our</Text>
+                <Text style={ styles.description }>weekly challenges and for taking random</Text>
+                <Text style={ styles.description }>actions throughout the week.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -90,10 +90,10 @@ export default class Introduce extends Component {
             <Image source={ background4 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>PARTICIPATE</Text>
-                <Text style={ styles.description }>In volunteer opportunities and</Text>
+                <Text style={ styles.title }>Get Involved</Text>
+                <Text style={ styles.description }>Volunteer opportunities and</Text>
                 <Text style={ styles.description }>green-themed events, all found in our</Text>
-                <Text style={ styles.description }>categorized calendar.</Text>
+                <Text style={ styles.description }>categorized calendar to earn more points.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -102,10 +102,10 @@ export default class Introduce extends Component {
             <Image source={ background5 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>EARN POINTS & REWARDS</Text>
-                <Text style={ styles.description }>Check in, check off actions, register for</Text>
-                <Text style={ styles.description }>events, sign up for services and watch your</Text>
-                <Text style={ styles.description }>points automatically tally up!</Text>
+                <Text style={ styles.title }>Points For Rewards</Text>
+                <Text style={ styles.description }>Use your earned points from all of your</Text>
+                <Text style={ styles.description }>activities and challenges on great local</Text>
+                <Text style={ styles.description }>rewards.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -160,9 +160,9 @@ const styles = StyleSheet.create({
   },
   description: {
     color: commonColors.title,
-    fontFamily: 'Open Sans',
-    fontSize: 12,
-    paddingVertical: 5,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    paddingVertical: 2,
   },
 });
 

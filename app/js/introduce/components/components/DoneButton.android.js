@@ -9,6 +9,7 @@ export const DoneButton = ({
   styles, onDoneBtnClick, onNextBtnClick,
   rightTextColor, isDoneBtnShow,
   doneBtnLabel, nextBtnLabel,
+  skipBtnLabel, index, total,
 }) => {
   return (
     <View style={[styles.btnContainer, { height: 0, paddingBottom: 5 }]}>
@@ -16,11 +17,23 @@ export const DoneButton = ({
         onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick}
       >
        <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
-         {isDoneBtnShow ? doneBtnLabel : nextBtnLabel}
+         {
+           showButton(isDoneBtnShow, doneBtnLabel, nextBtnLabel, skipBtnLabel, index, total)
+         }
        </Text>
       </TouchableOpacity>
     </View>
   )
+}
+
+function showButton(isDoneBtnShow, doneBtnLabel, nextBtnLabel, skipBtnLabel, index, total) {
+  if (isDoneBtnShow)
+    return doneBtnLabel;
+
+  if (index >= (total - 2))
+    return skipBtnLabel;
+  
+  return nextBtnLabel;
 }
 
 export default DoneButton
