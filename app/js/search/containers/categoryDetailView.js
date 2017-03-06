@@ -72,22 +72,22 @@ export default class CategoryDetailView extends Component {
           mode == 0 ? styles.cellContainer : styles.detailContainer] }
         >
           <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ icon } />
+            <Image style={ styles.imageAvatar } source={ icon } />
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
-                  <Text style={ styles.title }>{ title }</Text>
+                  <Text style={ styles.textTitle }>{ title }</Text>
                 </View>
                 <View style={ styles.cellTopRatingContainer }>
-                  <Text style={ styles.text }>{ rating } </Text>
-                  <Image style={ styles.star } source={ star } />
+                  <Text style={ styles.textValue }>{ rating } </Text>
+                  <Image style={ styles.imageStar } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>{ distance } Miles  { price } $$</Text>
+              <Text style={ styles.textValue }>{ distance } Miles  { price } $$</Text>
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>
-            <Text style={ styles.dscription }>{ description } </Text>
+            <Text style={ styles.textDscription }>{ description } </Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -143,26 +143,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  avatar: {
+  imageAvatar: {
     width: 44,
     height: 44,
   },
-  star: {
+  imageStar: {
     width: 12,
     height: 11,
     marginLeft: 3,
   },
-  title: {
+  textTitle: {
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
   },
-  dscription: {
+  textDscription: {
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
-  text: {
+  textValue: {
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,

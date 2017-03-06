@@ -228,11 +228,17 @@ class Search extends Component {
 
   onSelectExploreWays (index) {
 
-    if (index == 5) {
+    if (index == 1) {
+      //Businesses
+      Actions.BusinessesDetail();
+      return;
+
+    } else if (index == 5) {
       //Events
       Actions.Events();
       return;
-    }
+     }
+
     alert("Clicked " + exploreWays[index].title);
     // Actions.SearchView();
   }

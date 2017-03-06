@@ -50,7 +50,7 @@ class Home extends Component {
 
     this.state = {
       selectedDailyPollValue: '',
-      selectedDailyPollIndex: 2,
+      selectedDailyPollIndex: -1,
       dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
     };
@@ -235,6 +235,7 @@ class Home extends Component {
                       selectedDailyPollValue: value,
                       selectedDailyPollIndex: index
                     })
+                    alert( 'Selected Index - ' + index.toString() );
                   }
                   
                   return (

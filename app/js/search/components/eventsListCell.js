@@ -53,7 +53,7 @@ export default class EventsListCell extends Component {
         <View style={ styles.cellContainer }>
           <View style={ styles.mainContainer }>
             <Image style={ styles.avatar } source={ avatar }/>
-            <Text style={ styles.textTitle }> { title }</Text>
+            <Text style={ styles.textTitle }>{ title }</Text>
           </View>
           <View style={ styles.pointContainer }>
             <Image style={ styles.imagePoint } source={ point }>

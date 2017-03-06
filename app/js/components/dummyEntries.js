@@ -353,7 +353,7 @@ export const RecentActivityEntries = [
   {
     name: 'Tony S.',
     time: 1,
-    description: 'Attend the Philly Bike Share meeting',
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 0,
     coins: 10,
@@ -635,3 +635,29 @@ export const ProfileRecentActivityEntries = [
   },  
 ];
 
+export const BusinessRecentActivityEntries = [
+  {
+    name: 'Tony S.',
+    time: 1,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 0,
+    rating: 5,
+  },
+  {
+    name: 'Tony S.',
+    time: 6,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 1,
+    rating: 4,
+  },
+  {
+    name: 'Tony S.',
+    time: 7,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 2,
+    rating: 4.8,
+  },  
+];

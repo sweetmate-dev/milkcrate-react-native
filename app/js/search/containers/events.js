@@ -8,9 +8,7 @@ import {
   View,
   Image,
   Dimensions,
-  ScrollView,
   ListView,
-  TouchableOpacity,
   Alert,
 } from 'react-native';
 
