@@ -3,6 +3,7 @@ import search from './search/reducer';
 import alert from './alert/reducer';
 import home from './home/reducer';
 import you from './you/reducer';
+import profile from './profile/reducer';
 
 export {
   login,
@@ -10,4 +11,5 @@ export {
   alert,
   home,
   you,
+  profile,
 };

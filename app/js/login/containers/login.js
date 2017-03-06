@@ -16,11 +16,12 @@ import {
 import { bindActionCreators } from 'redux';
 import * as loginActions from '../actions';
 import { connect } from 'react-redux';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 
 const background = require('../../../assets/imgs/background_login.png');
+const eye = require('../../../assets/imgs/eye.png');
 
 class Login extends Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      confirmPassword: '',
       communityCode: ''
     };
   }
@@ -44,7 +46,7 @@ class Login extends Component {
     }
   }
 
-  onLogIn () {
+  onLogIn() {
 
     if (this.state.email == '') {
       Alert.alert('Please enter email address.');
@@ -61,12 +63,12 @@ class Login extends Component {
       return;
     }
 
-    Actions.Main();
+    Actions.Profile();
 
     // this.props.login(this.state.email, this.state.password, this.state.communityCode);
   }
 
-  onContactUs () {
+  onContactUs() {
 
     alert("Contact Us");
   }
@@ -76,56 +78,68 @@ class Login extends Component {
     return (
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">
-          <View style={ styles.descriptionWrap }>
-            <Text style={ styles.title }>Get Started!</Text>
-            <Text style={ styles.description }>
-              Did you get our registration email?
-            </Text>
-            <Text style={ styles.description }>
-              Use your credentials below to sign in.
-            </Text>
+          <View style={ styles.descriptionContainer }>
+            <Text style={ styles.textTitle }>Get Started!</Text>
+            <Text style={ styles.textDescription }>Did you get our registration email?</Text>
+            <Text style={ styles.textDescription }>Use your credentials below to sign in.</Text>
           </View>
-          <View style={ styles.inputWrap }>
+          <View style={ styles.inputContainer }>
             <TextInput
               autoCapitalize="none"
               autoCorrect={ false }
               placeholder="Email"
-              placeholderTextColor="#9b9b9b"
+              placeholderTextColor={ commonColors.placeholderText }
               textAlign="center"
               style={ styles.input }
               underlineColorAndroid="transparent"
+              returnKeyType={ 'next' }
               onChangeText={ (text) => this.setState({ email: text }) }
             />
             <TextInput
               placeholder="Password"
               secureTextEntry={ true }
-              placeholderTextColor="#9b9b9b"
+              placeholderTextColor={ commonColors.placeholderText }
               textAlign="center"
               style={ styles.input }
               underlineColorAndroid="transparent"
+              returnKeyType={ 'next' }
               onChangeText={ (text) => this.setState({ password: text }) }
             />
+            <View style={ styles.inputWrapper }>
+              <TextInput
+                placeholder="Confirm Password"
+                secureTextEntry={ true }
+                placeholderTextColor={ commonColors.placeholderText }
+                textAlign="center"
+                style={ styles.input }
+                underlineColorAndroid="transparent"
+                returnKeyType={ 'next' }
+                onChangeText={ (text) => this.setState({ password: text }) }
+              />
+              <Image source={ eye } style={ styles.imageEye }/>
+            </View>
             <TextInput
               autoCapitalize="none"
               autoCorrect={ false }
               placeholder="Community Code"
-              placeholderTextColor="#9b9b9b"
+              placeholderTextColor={ commonColors.placeholderText }
               textAlign="center"
               style={ styles.input }
               underlineColorAndroid="transparent"
+              returnKeyType={ 'go' }
               onChangeText={ (text) => this.setState({ communityCode: text }) }
             />
           </View>
-          <View style={ styles.bottomWrap }>
+          <View style={ styles.bottomContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onLogIn() }>
-              <View style={ styles.loginButton }>
-                <Text style={ styles.buttonText }>Submit</Text>
+              <View style={ styles.buttonLogin }>
+                <Text style={ styles.textButton }>Submit</Text>
               </View>
             </TouchableOpacity>
             <View style={ styles.bottomContentWrap }>
-              <Text style={ styles.description }>Didn’t get the email?</Text>
+              <Text style={ styles.textInvite }>Didn’t get the invite?</Text>
               <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
-                <Text style={ styles.buttonUnderText }>Contact Us.</Text>
+                <Text style={ styles.textUnderButton }>Contact Us.</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -151,17 +165,18 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenHiehgt,
   },
-  descriptionWrap: {
-    flex: 1,
-    justifyContent: 'flex-end',
+  descriptionContainer: {
+    flex: 1.2,
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 20,
   },
-  inputWrap: {
-    flex: 1,
+  inputContainer: {
+    flex: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  bottomWrap: {
+  bottomContainer: {
     flex: 1,
     justifyContent: 'flex-start',
   },
@@ -171,21 +186,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
-  title: {
+  textTitle: {
     color: commonColors.title,
     fontFamily: 'Blanch',
     fontSize: 48,
     backgroundColor: 'transparent',
   },
-  description: {
+  textDescription: {
+    color: commonColors.title,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 12,
+    paddingTop: 5,
+    backgroundColor: 'transparent',
+  },
+  textInvite: {
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 12,
     paddingVertical: 5,
     backgroundColor: 'transparent',
   },
+  imageEye: {
+    width: 20,
+    height: 13,
+    position: 'absolute',
+    right: 50,
+  },
+  inputWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+  },
   input: {
-    fontSize: 16,
+    fontSize: 14,
     color: commonColors.title,
     height: 45,
     alignSelf: 'stretch',
@@ -196,7 +229,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 5,
   },
-  loginButton: {
+  buttonLogin: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: commonColors.theme,
@@ -207,17 +240,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     height: 40,
   },
-  buttonText: {
+  textButton: {
     color: '#fff',
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 14,
     backgroundColor: 'transparent',
   },
-  buttonUnderText: {
+  textUnderButton: {
     color: commonColors.title,
     fontFamily: 'Open Sans',
-    fontSize: 14,
+    fontSize: 12,
+    fontWeight: 'bold',
     textDecorationLine: 'underline',
     backgroundColor: 'transparent',
   },

@@ -6,12 +6,13 @@ import {
   Dimensions,
   Image,
   TouchableHighlight,
+  Alert,
 } from 'react-native';
 
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const coinImage = require('../../../assets/imgs/conis.png');
+const point = require('../../../assets/imgs/point.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export default class RecentActivityListCell extends Component {
@@ -35,16 +36,18 @@ export default class RecentActivityListCell extends Component {
   }
 
   constructor(props) {
-
     super(props);
     this.onClick = this.onClick.bind(this);
   }
 
   onClick() {
-
     if (this.props.onClick) {
       this.props.onClick();
     }
+  }
+
+  onLike() {
+    alert("onLike");
   }
 
   render() {
@@ -74,19 +77,25 @@ export default class RecentActivityListCell extends Component {
             <Text style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
-                <Image style={ styles.imageIcon } source={ heart }/>
+                <TouchableHighlight onPress={ () => this.onLike() }>
+                  <View style={ styles.likeWrapper }>
+                    <Image style={ styles.imageLike } source={ heart }/>
+                  </View>  
+                </TouchableHighlight>
+
                 <Text style={ styles.textSmall }>
+
                 {
                   hearts != 0 ? hearts : hearts + " - Be the first to like it!"
                 }
                 </Text>
               </View>
-              <View style={ styles.coinContainer }>
-                <Text style={ styles.coinNumber }>{ coins } </Text>
-                <Image style={ styles.imageIcon } source={ coinImage } />
+              <View style={ styles.pointContainer }>
+                <Image style={ styles.imagePoint } source={ point }>
+                  <Text style={ styles.textPoint }>+{ coins }</Text>            
+                </Image>
               </View>
             </View>
-
           </View>
         </View>
       </TouchableHighlight>
@@ -152,18 +161,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imageIcon: {
-    width: 16,
-    height: 16,
+  likeWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
   },
-  coinContainer: {
-    flexDirection: 'row',
+  imageLike: {
+    width: 16,
+    height: 15,
+  },  
+  pointContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  coinNumber: {
-    color: commonColors.coinNumber,
+  imagePoint: {
+    width: 34,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textPoint: {
+    backgroundColor: 'transparent',
+    color: commonColors.point,
     fontFamily: 'Open Sans',
+    fontWeight: 'bold',
     fontSize: 12,
     textAlign: 'center',
   },

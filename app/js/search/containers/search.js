@@ -19,27 +19,57 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
 import ImageButton from '../components/imageButton';
 import CategoryButton from '../components/categoryButton';
+import ExploreWaysListCell from '../components/exploreWaysListCell';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const recent = require('../../../assets/imgs/recent.png');
-const businesses = require('../../../assets/imgs/businesses.png');
-const services = require('../../../assets/imgs/services.png');
-const actions = require('../../../assets/imgs/actions.png');
-const volunteer = require('../../../assets/imgs/volunteer.png');
-const events = require('../../../assets/imgs/events.png');
-
-const activityTitles = [
-  'Recent',
-  'Businesses',
-  'Services',
-  'Actions',
-  'Volunteer',
-  'Events',
+const exploreWays = [
+  {
+    title: 'Recent',
+    description: 'See your most recent activities',
+    icon: require('../../../assets/imgs/recent.png'),
+    iconWidth: 21,
+    iconHeight: 21,
+  },
+  {
+    title: 'Businesses',
+    description: 'Earn points by checking in to certified business',
+    icon: require('../../../assets/imgs/businesses.png'),
+    iconWidth: 14,
+    iconHeight: 21,
+  },
+  {
+    title: 'Services',
+    description: 'Signup for curated services to earn more points',
+    icon: require('../../../assets/imgs/services.png'),
+    iconWidth: 23,
+    iconHeight: 20,
+  },
+  {
+    title: 'Take Action',
+    description: 'Earn points for actions you take',
+    icon: require('../../../assets/imgs/actions.png'),
+    iconWidth: 22,
+    iconHeight: 22,
+  },
+  {
+    title: 'Volunteer',
+    description: 'Find volunteer opportunities and earn points ',
+    icon: require('../../../assets/imgs/volunteer.png'),
+    iconWidth: 26,
+    iconHeight: 25,
+  },
+  {
+    title: 'Events',
+    description: 'Find great events to attend and earn more points',
+    icon: require('../../../assets/imgs/events.png'),
+    iconWidth: 23,
+    iconHeight: 25,
+  },
 ];
 
 const categoryTitles = [
@@ -151,11 +181,15 @@ class Search extends Component {
   constructor(props) {
     super(props);
 
-    var dataSource = new ListView.DataSource(
+    var dataSourceExploreWays = new ListView.DataSource(
+      { rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    var dataSourceCategories = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      dataSource: dataSource.cloneWithRows(categoryImages),
+      dataSourceExploreWays: dataSourceExploreWays.cloneWithRows(exploreWays),
+      dataSourceCategories: dataSourceCategories.cloneWithRows(categoryImages),
     };
   }
 
@@ -165,9 +199,9 @@ class Search extends Component {
 
       let subOne = this.props.subOne;
 
-      for (let i = 0 ; i < activityTitles.length ; i++) {
-        if (activityTitles[i].toLowerCase() == subOne.toLocaleString()) {
-          this.onSelectActivity ( i );
+      for (let i = 0 ; i < exploreWays.length ; i++) {
+        if (exploreWays[i].title.toLowerCase() == subOne.toLocaleString()) {
+          this.onSelectExploreWays ( i );
           return;
         }
       }
@@ -192,14 +226,14 @@ class Search extends Component {
     }
   }
 
-  onSelectActivity (index) {
+  onSelectExploreWays (index) {
 
     if (index == 5) {
       //Events
       Actions.Events();
       return;
     }
-    alert("Clicked " + activityTitles[index]);
+    alert("Clicked " + exploreWays[index].title);
     // Actions.SearchView();
   }
 
@@ -208,20 +242,34 @@ class Search extends Component {
     Actions.SearchView({ title:categoryTitles[rowID], index:rowID });
   }
 
-  renderRow(rowData, sectionID, rowID) {
+  renderExploreWaysRow(rowData, sectionID, rowID) {
+    return (
+      <ExploreWaysListCell
+        key={ rowID }
+        title={ rowData.title }
+        description={ rowData.description }
+        icon={ rowData.icon }
+        iconWidth={ rowData.iconWidth }
+        iconHeight={ rowData.iconHeight }
+        onClick={ () => this.onSelectExploreWays(rowID) }
+      />
+    );      
+  }
+
+  renderCategoriesRow(rowData, sectionID, rowID) {
 
     return (
-      <View style={ styles.cellWrap }>
-        <View style={ styles.button }>
+      <View style={ styles.categoryCellWrap }>
+        <View style={ styles.categoryCellButtonWrapper }>
           <ImageButton
-            style={ styles.cellImage }
+            style={ styles.categoryCellImage }
             appearance={{
               normal: categoryImages[rowID],
               highlight: categoryActiveImages[rowID]
             }}
             onPress={ () => this.onSelectCategory(rowID) }
           />
-          <Text style={ styles.cellText }>
+          <Text style={ styles.cagegoryCellText }>
             { categoryTitles[rowID] }
           </Text>
         </View>
@@ -236,24 +284,20 @@ class Search extends Component {
       <View style={ styles.container }>
         <NavSearchBar/>
         <ScrollView>
-          <View style={ styles.activityWrap }>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[0] } icon={ recent } onClick={ () => this.onSelectActivity(0) }/>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[1] } icon={ businesses } onClick={ () => this.onSelectActivity(1) }/>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[2] } icon={ services } onClick={ () => this.onSelectActivity(2) }/>
-          </View>
-          <View style={ styles.activityWrap }>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[3] } icon={ actions } onClick={ () => this.onSelectActivity(3) }/>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[4] } icon={ volunteer } onClick={ () => this.onSelectActivity(4) }/>
-            <CategoryButton height={ activityCellSize } width={ activityCellSize } text={ activityTitles[5] } icon={ events } onClick={ () => this.onSelectActivity(5) }/>
-          </View>
-          <View style={ styles.line }/>
-          <Text style={ styles.text }>Categories</Text>
+          <Text style={ styles.textTitle }>Explore Ways to Earn Points</Text>
+          <ListView
+            dataSource={ this.state.dataSourceExploreWays }
+            renderRow={ this.renderExploreWaysRow.bind(this) }
+            contentContainerStyle={ styles.listViewExploreWays }
+          />
+
+          <Text style={ styles.textTitle }>Browse by Category</Text>
 
           <ListView
             pageSize = { categoryImages.length }
-            dataSource={ this.state.dataSource }
-            renderRow={ this.renderRow.bind(this) }
-            contentContainerStyle={ styles.list }
+            dataSource={ this.state.dataSourceCategories }
+            renderRow={ this.renderCategoriesRow.bind(this) }
+            contentContainerStyle={ styles.listViewCategories }
           />
         </ScrollView>
       </View>
@@ -277,42 +321,36 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: screenWidth,
   },
-  activityWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  line: {
-    width: screenWidth,
-    borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,
-  },
-  text: {
-    color: commonColors.grayMoreText,
+  textTitle: {
     fontFamily: 'Open Sans',
     fontSize: 14,
-    paddingVertical: 10,
+    color: commonColors.grayMoreText,
+    paddingTop: 24,
+    paddingBottom: 8,
     paddingLeft: screenWidth * 0.05,
   },
-  list: {
+  listViewCategories: {
     flexDirection:'row',
     flexWrap: 'wrap',
   },
-  cellWrap: {
+  listViewExploreWays: {
+    borderTopWidth: 1,
+    borderTopColor: commonColors.line,
+  },
+  categoryCellWrap: {
     padding: 10,
     width: categoryCellSize,
     height: categoryCellSize,
   },
-  button: {
+  categoryCellButtonWrapper: {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  cellImage: {
+  categoryCellImage: {
     width: categoryCellSize - 40,
     height : categoryCellSize - 40,
   },
-  cellText: {
+  cagegoryCellText: {
     width: categoryCellSize,
     height : categoryCellSize - 40,
     textAlign: 'center',

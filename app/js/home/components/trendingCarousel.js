@@ -13,7 +13,7 @@ import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const locationImage = require('../../../assets/imgs/location.png');
-const coinImage = require('../../../assets/imgs/conis.png');
+const point = require('../../../assets/imgs/point.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export const carouselHeight = commonStyles.screenHiehgt * 0.36;
@@ -90,12 +90,13 @@ export default class TrendingCarousel extends Component {
             </View>
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
-                <Image style={ styles.imageIcon } source={ heart }/>
+                <Image style={ styles.imageLike } source={ heart }/>
                 <Text style={ styles.textSmall }> { hearts }</Text>
               </View>
-              <View style={ styles.coinContainer }>
-                <Text style={ styles.coinNumber }>{ coins } </Text>
-                <Image style={ styles.imageIcon } source={ coinImage } />
+              <View style={ styles.pointContainer }>
+                <Image style={ styles.imagePoint } source={ point }>
+                  <Text style={ styles.textPoint }>+{ coins }</Text>            
+                </Image>
               </View>
             </View>
           </View>
@@ -160,7 +161,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: entryBorderRadius,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    paddingHorizontal: 15,
+    paddingLeft: 15,
+    paddingRight: 10,
   },
   textCategory: {
     color: '#fff',
@@ -241,18 +243,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imageIcon: {
+  imageLike: {
     width: 16,
-    height: 16,
+    height: 15,
+  },  
+  pointContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
-  coinContainer: {
-    flexDirection: 'row',
+  imagePoint: {
+    width: 34,
+    height: 34,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  coinNumber: {
-    color: '#eaD475',
+  textPoint: {
+    backgroundColor: 'transparent',
+    color: commonColors.point,
     fontFamily: 'Open Sans',
+    fontWeight: 'bold',
     fontSize: 12,
     textAlign: 'center',
   },

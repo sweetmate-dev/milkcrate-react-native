@@ -11,30 +11,29 @@ import {
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const point = require('../../../assets/imgs/point.png');
-
-export default class EventsListCell extends Component {
+export default class ExploreWaysListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    avatar: PropTypes.number.isRequired,
-    coins: PropTypes.number,
+    description: PropTypes.string.isRequired,
+    icon: PropTypes.number.isRequired,
+    iconWidth: PropTypes.number,
+    iconHeight: PropTypes.number,
     onClick: PropTypes.func,
   }
 
   static defaultProps = {
-    coins: 0,
-    onClick: () => {}
+    onClick: () => {},
+    iconWidth: 16,
+    iconHeight: 16,    
   }
 
   constructor(props) {
-
     super(props);
     this.onClick = this.onClick.bind(this);
   }
 
   onClick() {
-
     if (this.props.onClick) {
       this.props.onClick();
     }
@@ -43,22 +42,22 @@ export default class EventsListCell extends Component {
   render() {
     const {
       title,
-      avatar,
-      coins,
+      description,
+      icon,
+      iconWidth,
+      iconHeight,
       onClick,
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
-          <View style={ styles.mainContainer }>
-            <Image style={ styles.avatar } source={ avatar }/>
-            <Text style={ styles.textTitle }> { title }</Text>
+          <View style={ styles.iconContainer }>
+            <Image style={ [{ width: iconWidth }, { height: iconHeight }] } source={ icon }/>            
           </View>
-          <View style={ styles.pointContainer }>
-            <Image style={ styles.imagePoint } source={ point }>
-              <Text style={ styles.textPoint }>+{ coins }</Text>            
-            </Image>
+          <View style={ styles.contentContainer }>
+            <Text style={ styles.textTitle }>{ title }</Text>
+            <Text style={ styles.textDscription }>{ description } </Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -70,49 +69,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 5,
-    paddingHorizontal: 10,
-    height: commonStyles.hp(8),
+    height: commonStyles.hp(7.2),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
-    alignItems: 'center',
   },
-  mainContainer: {
+  iconContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingVertical: 5,
-    flexDirection: 'row',
-    paddingLeft: 10,
+    justifyContent: 'center',
   },
-  avatar: {
-    width: 40,
-    height: 40,
+  contentContainer: {
+    flex: 7,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   textTitle: {
     flex: 1,
-    paddingLeft: 10,
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
   },
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
+  textDscription: {
+    flex: 1,
+    color: commonColors.grayText,
     fontFamily: 'Open Sans',
-    fontWeight: 'bold',
     fontSize: 12,
-    textAlign: 'center',
   },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
 });

@@ -12,7 +12,7 @@ import {
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const coinImage = require('../../../assets/imgs/conis.png');
+const point = require('../../../assets/imgs/point.png');
 
 const entryBorderRadius = 5;
 
@@ -25,16 +25,6 @@ export default class ChallengeCarousel extends Component {
     coins: PropTypes.number,
   };
 
-  onRemindMeLater () {
-
-    alert("clicked onRemindMeLater");
-  }
-
-  onLearnMore () {
-
-    alert("clicked onLearnMore");
-  }
-
   render () {
     const { title, subtitle, avatar, coins } = this.props;
 
@@ -46,30 +36,17 @@ export default class ChallengeCarousel extends Component {
         >
         <View style={ styles.contentContainer }>
           <View style={ styles.topContainer }>
-            <Text style={ styles.title }>{ title }</Text>
+            <Text style={ styles.textTitle }>{ title }</Text>
           </View>
           <View style={ styles.centerContainer }>
             <Image style={ styles.avatar } source={ avatar } />
             <Text style={ styles.description }>{ subtitle } </Text>
-            <View style={ styles.coinContainer }>
-              <Text style={ styles.coinNumber }>{ coins } </Text>
-              <Image style={ styles.coinImage } source={ coinImage } />
-            </View>
           </View>
           <View style={ styles.bottomContainer }>
-            <View style={ styles.container }>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onRemindMeLater() }>
-                <View style={ styles.remindButtonWrap }>
-                  <Text style={ styles.remindText }>Remind me later</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={ styles.container }>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onLearnMore() }>
-                <View style={ styles.learnMoreButtonWrap }>
-                  <Text style={ styles.learnMoreText }>Learn More</Text>
-                </View>
-              </TouchableOpacity>
+            <View style={ styles.pointContainer }>
+              <Image style={ styles.imagePoint } source={ point }>
+                <Text style={ styles.textPoint }>+{ coins }</Text>            
+              </Image>
             </View>
           </View>
         </View>
@@ -112,13 +89,12 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    flexDirection: 'row',
     borderBottomLeftRadius: entryBorderRadius,
     borderBottomRightRadius: entryBorderRadius,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
   },
-  title: {
+  textTitle: {
     color: commonColors.title,
     fontFamily: 'Blanch',
     fontSize: 28,
@@ -129,50 +105,31 @@ const styles = StyleSheet.create({
     height: 44,
   },
   description: {
-    flex: 5,
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
     paddingHorizontal: 5,
   },
-  coinContainer: {
+  pointContainer: {
     flex: 1,
-    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 10,
+    paddingBottom: 10,
+
+  },
+  imagePoint: {
+    width: 34,
+    height: 34,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  coinNumber: {
-    color: commonColors.coinNumber,
-    fontFamily: 'Open Sans',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  coinImage: {
-    width: 16,
-    height: 16,
-  },
-  remindButtonWrap: {
-    padding: 5,
-    borderRadius: 5,
-    margin: 10,
-  },
-  remindText: {
-    color: commonColors.theme,
-    fontFamily: 'Open Sans',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  learnMoreButtonWrap: {
-    backgroundColor: '#125e65',
-    borderRadius: 5,
-    padding: 5,
-    margin: 10,
-  },
-  learnMoreText: {
-    color: '#fff',
+  textPoint: {
+    backgroundColor: 'transparent',
+    color: commonColors.point,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 12,
     textAlign: 'center',
   },
 });

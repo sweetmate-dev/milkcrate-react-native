@@ -1,31 +1,31 @@
 export const ChallengeCarouselEntries = [
   {
     title: 'Weekly Challenge 1',
-    subtitle: 'Take the public transit to work today',
+    subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/stickers/transit.png'),
     coins: 10,
   },
   {
     title: 'Weekly Challenge 2',
-    subtitle: 'Take the public transit to work today',
+    subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/stickers/transit.png'),
     coins: 11,
   },
   {
     title: 'Weekly Challenge 3',
-    subtitle: 'Take the public transit to work today',
+    subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/stickers/transit.png'),
     coins: 12,
   },
   {
     title: 'Weekly Challenge 4',
-    subtitle: 'Take the public transit to work today',
+    subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/stickers/transit.png'),
     coins: 13,
   },
   {
     title: 'Weekly Challenge 5',
-    subtitle: 'Take the public transit to work today',
+    subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/stickers/transit.png'),
     coins: 14,
   },
@@ -330,6 +330,25 @@ export const TrendingCarouselEntries = [
   },
 ];
 
+export const DailyPollEntries = [
+  {
+    label: 'I eat meat daily', 
+    value: 0,
+  }, 
+  {
+    label: 'Meatless 1-2 times per week', 
+    value: 1,
+  },
+  {
+    label: 'I’m mostly vegetarian', 
+    value: 2,
+  },
+  {
+    label: 'I’m vegan and I source locally', 
+    value: 3,
+  },
+];
+
 export const RecentActivityEntries = [
   {
     name: 'Tony S.',
@@ -376,7 +395,7 @@ export const RecentActivityEntries = [
 
 export const EventsEntries = [
   {
-    date: 'Wednesday, Feb 22 2017',
+    date: 'Wednesday, Mar 8 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
@@ -392,7 +411,7 @@ export const EventsEntries = [
     ],
   },
   {
-    date: 'Thursday, Feb 24 2017',
+    date: 'Friday, Mar 10 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
@@ -408,7 +427,7 @@ export const EventsEntries = [
     ],
   },
   {
-    date: 'Friday, Feb 26 2017',
+    date: 'Sunday, Mar 12 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
@@ -615,3 +634,4 @@ export const ProfileRecentActivityEntries = [
     coins: 19,
   },  
 ];
+

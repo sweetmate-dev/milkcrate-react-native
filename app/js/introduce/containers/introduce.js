@@ -104,8 +104,7 @@ export default class Introduce extends Component {
               <View style={ styles.contentWrap }>
                 <Text style={ styles.title }>Points For Rewards</Text>
                 <Text style={ styles.description }>Use your earned points from all of your</Text>
-                <Text style={ styles.description }>activities and challenges on great local</Text>
-                <Text style={ styles.description }>rewards.</Text>
+                <Text style={ styles.description }>activities and challenges on great local.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
