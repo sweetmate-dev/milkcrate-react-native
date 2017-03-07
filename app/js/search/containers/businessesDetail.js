@@ -22,11 +22,12 @@ import MapView from 'react-native-maps';
 import Stars from 'react-native-stars-rating';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
-import RecentActivityListCell from '../components/recentActivityListCell';
+import * as commonStyles from '../../styles/comonStyles';
+import BusinessRecentActivityListCell from '../components/businessRecentActivityListCell';
 
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
 import { BusinessRecentActivityEntries } from '../../components/dummyEntries';
 
+const dummyText = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit..';
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
@@ -35,7 +36,7 @@ const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
 const avatar = require('../../../assets/imgs/avatar.png');
 
-const ASPECT_RATIO = screenWidth / screenHiehgt;
+const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
@@ -115,10 +116,9 @@ class BusinessesDetail extends Component {
     alert("Tapped Checkin button!");
   }
 
-
   renderRecentActivityRow(rowData, sectionID, rowID) {
     return (
-      <RecentActivityListCell
+      <BusinessRecentActivityListCell
         name={ rowData.name }
         description={ rowData.description }
         avatar={ rowData.avatar }
@@ -140,17 +140,12 @@ class BusinessesDetail extends Component {
           rightButton={ true }
           onBack={ this.onBack }
           onFilter={ this.onFilter }
-          placeholder ='Discover Events'
+          placeholder ='Discover Businesses'
         />
         <ScrollView>
           <MapView
             style={ styles.map }
-            initialRegion={{
-              latitude: LATITUDE,
-              longitude: LONGITUDE,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            }}
+            initialRegion={ this.state.region }
           >
             {
               <MapView.Marker
@@ -208,7 +203,7 @@ class BusinessesDetail extends Component {
                 <Text style={ styles.textValue }>8am-7pm</Text>
               </View>
             </View>
-            <Text style={ styles.textDescription }>Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit..</Text>
+            <Text style={ styles.textDescription }>{ dummyText }</Text>
             <TouchableOpacity onPress={ () => this.onGetDirection() }>
               <Text style={ styles.textTitle }>See this listing on Foursqaure</Text>
             </TouchableOpacity>
@@ -294,15 +289,12 @@ export default connect(state => ({
 )(BusinessesDetail);
 
 const styles = StyleSheet.create({
-  padding: {
-    flex: 10,
-  },
   container: {
     flex: 1,
   },
   map: {
-    width: screenWidth,
-    height: 140,
+    width: commonStyles.screenWidth,
+    height: commonStyles.hp(21),
   },
   map_pin: {
     width: 10,
@@ -387,7 +379,7 @@ const styles = StyleSheet.create({
     width: 48,
   },
   textOpenNow: {
-    color: commonColors.detail,
+    color: commonColors.detailTitle,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 14,
@@ -429,7 +421,7 @@ const styles = StyleSheet.create({
   textCertificationsButton: {
     textAlign: 'center',
     backgroundColor: commonColors.line,
-    color: commonColors.detail,    
+    color: commonColors.detailTitle,    
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
@@ -527,5 +519,4 @@ const styles = StyleSheet.create({
     backgroundColor: commonColors.bottomButton,
     height: 40,
   },
-
 });

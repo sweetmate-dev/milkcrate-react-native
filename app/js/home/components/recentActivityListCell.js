@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
 
@@ -76,20 +77,20 @@ export default class RecentActivityListCell extends Component {
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.like_coinContainer }>
-              <View style={ styles.heartContainer }>
-                <TouchableHighlight onPress={ () => this.onLike() }>
+              <TouchableOpacity onPress={ () => this.onLike() }>
+                <View style={ styles.heartContainer }>
                   <View style={ styles.likeWrapper }>
                     <Image style={ styles.imageLike } source={ heart }/>
                   </View>  
-                </TouchableHighlight>
+  
+                  <Text style={ styles.textSmall }>
 
-                <Text style={ styles.textSmall }>
-
-                {
-                  hearts != 0 ? hearts : hearts + " - Be the first to like it!"
-                }
-                </Text>
-              </View>
+                  {
+                    hearts != 0 ? hearts : hearts + " - Be the first to like it!"
+                  }
+                  </Text>
+                </View>
+              </TouchableOpacity>  
               <View style={ styles.pointContainer }>
                 <Image style={ styles.imagePoint } source={ point }>
                   <Text style={ styles.textPoint }>+{ coins }</Text>            
@@ -106,9 +107,9 @@ const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingVertical: 5,
+    paddingVertical: 6,
     paddingHorizontal: 10,
-    height: commonStyles.hp(14),
+    // height: commonStyles.hp(14),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
@@ -148,9 +149,11 @@ const styles = StyleSheet.create({
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
+    // marginVertical: 5,
+    marginTop: 5,
   },
   like_coinContainer: {
-    flex : 1,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -164,7 +167,8 @@ const styles = StyleSheet.create({
   likeWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 5,
+    paddingVertical: 5,
+    paddingRight: 5,
   },
   imageLike: {
     width: 16,

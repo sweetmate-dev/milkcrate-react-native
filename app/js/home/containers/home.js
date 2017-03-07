@@ -37,6 +37,7 @@ const trending = require('../../../assets/imgs/trending.png');
 const point = require('../../../assets/imgs/point.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
+const dummyText1 = 'See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to';
 
 class Home extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ class Home extends Component {
     this.state = {
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
+      dailyPollReadLines: 1,
       dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
     };
@@ -103,8 +105,12 @@ class Home extends Component {
     alert("Tapped cell - " + rowID);
   }
 
-  onReadMore() {
+  onReadMoreLess() {
 
+    if (this.state.dailyPollReadLines == 0)
+      this.setState({ dailyPollReadLines: 1 });
+    else 
+      this.setState({ dailyPollReadLines: 0 });
   }
 
   getChallengeCarousel (entries) {
@@ -212,10 +218,10 @@ class Home extends Component {
             <View style={ styles.dailyPollTopLeftContentContainer }>
               <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
               <View style={ styles.descriptionContainer }>
-                <Text style={ styles.textDescription }>See how your lifestyle choices to…</Text>
+                <Text style={ styles.textDescription } numberOfLines={ this.state.dailyPollReadLines }>{ dummyText1 }</Text>
                 <View style={ styles.buttonWrapper }>
-                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMore() }>
-                    <Text style={ styles.textReadMoreButton }>Read More</Text>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
+                    <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollReadLines == 1 ? 'Read More' : 'Read Less' }</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -441,7 +447,7 @@ const styles = StyleSheet.create({
   descriptionContainer: {
     flexDirection: 'row',
     paddingTop: 10,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
   buttonWrapper: {

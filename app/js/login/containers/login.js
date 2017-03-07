@@ -31,7 +31,8 @@ class Login extends Component {
       email: '',
       password: '',
       confirmPassword: '',
-      communityCode: ''
+      communityCode: '',
+      secureTextPassword: true,
     };
   }
 
@@ -69,8 +70,11 @@ class Login extends Component {
   }
 
   onContactUs() {
-
     alert("Contact Us");
+  }
+
+  onShowPlainTextPassword () {
+    this.setState({ secureTextPassword: !this.state.secureTextPassword });
   }
 
   render() {
@@ -96,8 +100,10 @@ class Login extends Component {
               onChangeText={ (text) => this.setState({ email: text }) }
             />
             <TextInput
+              autoCapitalize="none"
+              autoCorrect={ false }
               placeholder="Password"
-              secureTextEntry={ true }
+              secureTextEntry={ this.state.secureTextPassword }
               placeholderTextColor={ commonColors.placeholderText }
               textAlign="center"
               style={ styles.input }
@@ -107,8 +113,10 @@ class Login extends Component {
             />
             <View style={ styles.inputWrapper }>
               <TextInput
+                autoCapitalize="none"
+                autoCorrect={ false }
                 placeholder="Confirm Password"
-                secureTextEntry={ true }
+                secureTextEntry={ this.state.secureTextPassword }
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="center"
                 style={ styles.input }
@@ -116,7 +124,13 @@ class Login extends Component {
                 returnKeyType={ 'next' }
                 onChangeText={ (text) => this.setState({ password: text }) }
               />
-              <Image source={ eye } style={ styles.imageEye }/>
+              <TouchableOpacity 
+                activeOpacity={ .5 } 
+                style={ styles.eyeButtonWrapper }
+                onPress={ () => this.onShowPlainTextPassword() }
+              >
+                <Image source={ eye } style={ styles.imageEye }/>
+              </TouchableOpacity>  
             </View>
             <TextInput
               autoCapitalize="none"
@@ -208,9 +222,14 @@ const styles = StyleSheet.create({
   },
   imageEye: {
     width: 20,
-    height: 13,
+    height: 13,    
+  },
+  eyeButtonWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
     position: 'absolute',
-    right: 50,
+    right: 40,
   },
   inputWrapper: {
     justifyContent: 'center',

@@ -22,17 +22,21 @@ import Login from './login/containers/login';
 import Main from './main/containers/main';
 import SearchView from './search/containers/searchView';
 import BusinessesDetail from './search/containers/businessesDetail';
+import ActionDetail from './search/containers/actionDetail';
+import EventsDetail from './search/containers/eventsDetail';
 import Events from './search/containers/events';
 import Profile from './profile/containers/profile';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce } />
+    <Scene key="Introduce" component={ Introduce } initial/>
     <Scene key="Login" component={ Login } />
     <Scene key="Profile" component={ Profile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
     <Scene key="SearchView" component={ SearchView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
+    <Scene key="ActionDetail" component={ ActionDetail } />
+    <Scene key="EventsDetail" component={ EventsDetail } />
     <Scene key="Events" component={ Events } />
   </Scene>
 );

@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
   Alert,
 } from 'react-native';
 
@@ -15,7 +16,7 @@ import * as commonColors from '../../styles/commonColors';
 const star = require('../../../assets/imgs/star.png');
 const heart = require('../../../assets/imgs/heart.png');
 
-export default class RecentActivityListCell extends Component {
+export default class BusinessRecentActivityListCell extends Component {
 
   static propTypes = {
     height: PropTypes.number,
@@ -84,20 +85,19 @@ export default class RecentActivityListCell extends Component {
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.like_coinContainer }>
-              <View style={ styles.heartContainer }>
-                <TouchableHighlight onPress={ () => this.onLike() }>
+              <TouchableOpacity onPress={ () => this.onLike() }>
+                <View style={ styles.heartContainer }>
                   <View style={ styles.likeWrapper }>
                     <Image style={ styles.imageLike } source={ heart }/>
                   </View>  
-                </TouchableHighlight>
+                  <Text style={ styles.textSmall }>
 
-                <Text style={ styles.textSmall }>
-
-                {
-                  hearts != 0 ? hearts : hearts + " - Be the first to like it!"
-                }
-                </Text>
-              </View>
+                  {
+                    hearts != 0 ? hearts : hearts + " - Be the first to like it!"
+                  }
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingLeft: 5,
     paddingRight: 15,
-    height: commonStyles.hp(14),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
@@ -154,10 +153,11 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   textDescription: {
-    flex: 2,
+    flex: 1,
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
+    marginVertical: 5,
   },
   like_coinContainer: {
     flex : 1,
@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
   likeWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 5,
+    paddingVertical: 5,
+    paddingRight: 5,
   },
   imageLike: {
     width: 16,
@@ -191,10 +192,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-
-  // textValue: {
-  //   color: commonColors.grayMoreText,
-  //   fontFamily: 'Open Sans',
-  //   fontSize: 12,
-  // },
 });

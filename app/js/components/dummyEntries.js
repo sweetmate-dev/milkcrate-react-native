@@ -353,7 +353,7 @@ export const RecentActivityEntries = [
   {
     name: 'Tony S.',
     time: 1,
-    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    description: 'Pledge to switch from plastic to a reusable water bottle.',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 0,
     coins: 10,

@@ -16,8 +16,6 @@ const point = require('../../../assets/imgs/point.png');
 export default class RecentActivityListCell extends Component {
 
   static propTypes = {
-    height: PropTypes.number,
-    width: PropTypes.number,
     title: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
@@ -31,8 +29,6 @@ export default class RecentActivityListCell extends Component {
   static defaultProps = {
     mode: 0,
     coins: 0,
-    width: screenWidth,
-    height: 83,
     distance: 1,
     price: 0,
     onClick: () => {}
@@ -65,7 +61,7 @@ export default class RecentActivityListCell extends Component {
 
     return (
       <TouchableHighlight onPress={ () => onClick() } underlayColor='#dddddd'>
-        <View style={ [{ height: height }, { width: width }, styles.mainContainer] }>
+        <View style={ styles.mainContainer }>
           <View style={ styles.leftContainer }>
             <View style={ styles.cellTopContainer }>
               <Image style={ styles.avatar } source={ icon } />
@@ -101,13 +97,13 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
+    width: screenWidth,
   },
   leftContainer: {
     flex: 9,
   },
   cellTopContainer: {
     flexDirection: 'row',
-    flex: 3,
     alignItems: 'center',
   },
   cellTopTextContainer: {
@@ -132,8 +128,8 @@ const styles = StyleSheet.create({
   },
   cellBottomContainer: {
     flexDirection: 'row',
-    flex: 1,
     alignItems: 'center',
+    paddingVertical: 5,
   },
   avatar: {
     width: 44,

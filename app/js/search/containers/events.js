@@ -69,8 +69,7 @@ class Events extends Component {
   }
 
   onCellPressed (rowID) {
-
-    alert("Tapped cell - " + rowID);
+    Actions.EventsDetail();
   }
 
   onSelectDate (date) {

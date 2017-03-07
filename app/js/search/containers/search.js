@@ -227,24 +227,38 @@ class Search extends Component {
   }
 
   onSelectExploreWays (index) {
+    
+    switch (Number(index)) {
+      case 0://Recent
+        alert("Clicked " + exploreWays[index].title);
+        break;
 
-    if (index == 1) {
-      //Businesses
-      Actions.BusinessesDetail();
-      return;
+      case 1://Businesses
+        Actions.BusinessesDetail();
+        break;
 
-    } else if (index == 5) {
-      //Events
-      Actions.Events();
-      return;
-     }
+      case 2://Services
+        alert("Clicked " + exploreWays[index].title);
+        break;
+      
+      case 3://Take Action
+        Actions.ActionDetail();
+        break;
 
-    alert("Clicked " + exploreWays[index].title);
-    // Actions.SearchView();
+      case 4://Volunteer
+        alert("Clicked " + exploreWays[index].title);
+        break;
+
+      case 5://Events
+        Actions.Events();
+        break;
+      
+      default:
+
+    }
   }
 
   onSelectCategory (rowID) {
-
     Actions.SearchView({ title:categoryTitles[rowID], index:rowID });
   }
 
@@ -263,7 +277,6 @@ class Search extends Component {
   }
 
   renderCategoriesRow(rowData, sectionID, rowID) {
-
     return (
       <View style={ styles.categoryCellWrap }>
         <View style={ styles.categoryCellButtonWrapper }>
@@ -346,7 +359,7 @@ const styles = StyleSheet.create({
   categoryCellWrap: {
     padding: 10,
     width: categoryCellSize,
-    height: categoryCellSize,
+    height: categoryCellSize * 1.1,
   },
   categoryCellButtonWrapper: {
     justifyContent: 'flex-start',
@@ -364,5 +377,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 12,
+    paddingTop: 8,
   },
 });

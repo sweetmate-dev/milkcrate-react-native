@@ -9,5 +9,5 @@
  export const point = '#e4af18';
  export const placeholderText = '#9b9b9b';
  export const question = '#696969';
- export const detail = '#3d9aa2';
+ export const detailTitle = '#3d9aa2';
  export const bottomButton = '#f59174';
