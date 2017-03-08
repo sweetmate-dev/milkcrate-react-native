@@ -12,8 +12,8 @@ import {
 
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
+import Point from '../../components/Point';
 
-const point = require('../../../assets/imgs/point.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export default class RecentActivityListCell extends Component {
@@ -90,12 +90,8 @@ export default class RecentActivityListCell extends Component {
                   }
                   </Text>
                 </View>
-              </TouchableOpacity>  
-              <View style={ styles.pointContainer }>
-                <Image style={ styles.imagePoint } source={ point }>
-                  <Text style={ styles.textPoint }>+{ coins }</Text>            
-                </Image>
-              </View>
+              </TouchableOpacity>
+              <Point point={ coins }/>
             </View>
           </View>
         </View>
@@ -174,22 +170,4 @@ const styles = StyleSheet.create({
     width: 16,
     height: 15,
   },  
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
-  },
 });

@@ -9,10 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import Point from '../../components/Point';
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
-
-const point = require('../../../assets/imgs/point.png');
 
 const entryBorderRadius = 5;
 
@@ -43,11 +42,7 @@ export default class ChallengeCarousel extends Component {
             <Text style={ styles.description }>{ subtitle } </Text>
           </View>
           <View style={ styles.bottomContainer }>
-            <View style={ styles.pointContainer }>
-              <Image style={ styles.imagePoint } source={ point }>
-                <Text style={ styles.textPoint }>+{ coins }</Text>            
-              </Image>
-            </View>
+            <Point point={ coins }/>
           </View>
         </View>
       </TouchableOpacity>
@@ -93,6 +88,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: entryBorderRadius,
     alignItems: 'flex-end',
     justifyContent: 'center',
+    paddingHorizontal: 15,
+    paddingBottom: 5,
   },
   textTitle: {
     color: commonColors.title,
@@ -109,27 +106,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
     paddingHorizontal: 5,
-  },
-  pointContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingRight: 10,
-    paddingBottom: 10,
-
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
   },
 });

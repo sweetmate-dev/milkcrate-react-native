@@ -11,9 +11,9 @@ import {
 
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
+import Point from '../../components/Point';
 
 const locationImage = require('../../../assets/imgs/location.png');
-const point = require('../../../assets/imgs/point.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export const carouselHeight = commonStyles.screenHiehgt * 0.36;
@@ -93,11 +93,7 @@ export default class TrendingCarousel extends Component {
                 <Image style={ styles.imageLike } source={ heart }/>
                 <Text style={ styles.textSmall }> { hearts }</Text>
               </View>
-              <View style={ styles.pointContainer }>
-                <Image style={ styles.imagePoint } source={ point }>
-                  <Text style={ styles.textPoint }>+{ coins }</Text>            
-                </Image>
-              </View>
+              <Point point={ coins }/>
             </View>
           </View>
         </View>
@@ -203,9 +199,10 @@ const styles = StyleSheet.create({
   like_coinContainer: {
     flex : 1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
+    marginBottom: 10,
   },
   textName: {
     color: commonColors.grayText,
@@ -247,23 +244,4 @@ const styles = StyleSheet.create({
     width: 16,
     height: 15,
   },  
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
-  },
 });

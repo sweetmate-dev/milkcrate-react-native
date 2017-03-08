@@ -22,9 +22,9 @@ import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/comonStyles';
+import Point from '../../components/Point';
 
 const icon =   require('../../../assets/imgs/stickers/bicycles.png');
-const point = require('../../../assets/imgs/point.png');
 const background_top =   require('../../../assets/imgs/background_top_action.png');
 
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
@@ -77,13 +77,8 @@ class ActionDetail extends Component {
                 <Text style={ styles.textTitle }>I Recycled Today</Text>
                 <Text style={ styles.textValue }>Repeatable Action</Text>
               </View>
-              <View style={ styles.pointContainer }>
-                <Image style={ styles.imagePoint } source={ point }>
-                  <Text style={ styles.textPoint }>+{ 15 }</Text>            
-                </Image>
-              </View>
+              <Point point={ 15 }/>
             </View>
-
             <Text style={ styles.textDescription }>{ dummyText1 }</Text>
             <Text style={ styles.textDescription }>Planning Your Luxury Trip</Text>
             <Text style={ styles.textDescription }>{ dummyText2 }</Text>
@@ -146,24 +141,6 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-  },
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   textDescription: {
     color: commonColors.grayMoreText,

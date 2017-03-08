@@ -334,18 +334,22 @@ export const DailyPollEntries = [
   {
     label: 'I eat meat daily', 
     value: 0,
+    percent: 8,
   }, 
   {
     label: 'Meatless 1-2 times per week', 
     value: 1,
+    percent: 42,
   },
   {
     label: 'I’m mostly vegetarian', 
     value: 2,
+    percent: 36,
   },
   {
     label: 'I’m vegan and I source locally', 
     value: 3,
+    percent: 14,
   },
 ];
 

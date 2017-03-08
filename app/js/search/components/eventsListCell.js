@@ -10,8 +10,7 @@ import {
 
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
-
-const point = require('../../../assets/imgs/point.png');
+import Point from '../../components/Point';
 
 export default class EventsListCell extends Component {
 
@@ -55,11 +54,7 @@ export default class EventsListCell extends Component {
             <Image style={ styles.avatar } source={ avatar }/>
             <Text style={ styles.textTitle }>{ title }</Text>
           </View>
-          <View style={ styles.pointContainer }>
-            <Image style={ styles.imagePoint } source={ point }>
-              <Text style={ styles.textPoint }>+{ coins }</Text>            
-            </Image>
-          </View>
+          <Point point={ coins }/>
         </View>
       </TouchableHighlight>
     );
@@ -96,23 +91,4 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
   },
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
 });

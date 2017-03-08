@@ -23,9 +23,9 @@ import MapView from 'react-native-maps';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/comonStyles';
+import Point from '../../components/Point';
 
 const icon =   require('../../../assets/imgs/stickers/bicycles.png');
-const point = require('../../../assets/imgs/point.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const web = require('../../../assets/imgs/web.png');
 
@@ -114,11 +114,7 @@ class EventsDetail extends Component {
                 <Text style={ styles.textTitle }>Volunteer for the Bicycle Coalition</Text>
                 <Text style={ styles.textValue }>1.2 Miles</Text>
               </View>
-              <View style={ styles.pointContainer }>
-                <Image style={ styles.imagePoint } source={ point }>
-                  <Text style={ styles.textPoint }>+{ 15 }</Text>            
-                </Image>
-              </View>
+              <Point point={ 15 }/>
             </View>
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
@@ -207,24 +203,6 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-  },
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   textDescription: {
     color: commonColors.grayMoreText,

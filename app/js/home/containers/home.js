@@ -27,6 +27,9 @@ import TrendingCarousel from '../components/trendingCarousel';
 import LeaderboardListCell from '../components/leaderboardListCell';
 import RecentActivityListCell from '../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import DailyPollStateCell from '../components/dailyPollStateCell';
+import Point from '../../components/Point';
+
 
 import * as commonStyles from '../../styles/comonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -34,7 +37,6 @@ import * as commonColors from '../../styles/commonColors';
 import { ChallengeCarouselEntries, LeaderboardEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
 
 const trending = require('../../../assets/imgs/trending.png');
-const point = require('../../../assets/imgs/point.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
 const dummyText1 = 'See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to';
@@ -53,6 +55,9 @@ class Home extends Component {
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
       dailyPollReadLines: 1,
+      selectedDailyPollValue: 0,
+      selectedDailyPollIndex: -1,
+
       dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
     };
@@ -204,16 +209,88 @@ class Home extends Component {
     );
   }
 
+  get showDailyPollSelectMode() {
+    return (
+      <View style={ styles.dailyPollSelectContentContainer }>
+        <RadioForm 
+          formHorizontal={ false }
+          animation={ true }
+          style={ styles.radioFormWrapper }
+        >
+          { 
+            DailyPollEntries.map((obj, index) => {
+              var onPress = (value, index) => {
+                this.setState({
+                  selectedDailyPollValue: value,
+                  selectedDailyPollIndex: index
+                })
+                {/*alert( 'Selected Index - ' + index.toString() );*/}
+              }
+              
+              return (
+                <RadioButton 
+                  labelHorizontal={ true }
+                  key={ index }
+                  style={ (DailyPollEntries.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
+                >
+                  <RadioButtonInput
+                    obj={ obj }
+                    index={ index }
+                    isSelected={ this.state.selectedDailyPollIndex === index }
+                    onPress={ onPress }
+                    borderWidth={ 1 }
+                    buttonInnerColor={ commonColors.theme }
+                    buttonOuterColor={ this.state.selectedDailyPollIndex === index ? commonColors.theme : commonColors.grayMoreText }
+                    buttonSize={ 16 }
+                    buttonOuterSize={ 16 }
+                    buttonStyle={{ }}
+                    buttonWrapStyle={ styles.radioButtonInputWrapper }
+                  />
+                  <RadioButtonLabel
+                    obj={ obj }
+                    index={ index }
+                    labelHorizontal={ true }
+                    onPress={ onPress }
+                    labelStyle={ styles.textRadioButtonLabel }
+                    labelWrapStyle={ styles.radioButtonLabelWrapper }
+                  />
+                </RadioButton>
+              )
+            }
+          )}
+        </RadioForm>
+      </View>
+    );
+  }
+
+  get showDailyPollStateMode() {
+    return (
+      <View style={ styles.dailyPollSelectContentContainer }>
+        {
+          DailyPollEntries.map((obj, index) => {
+            return (
+              <DailyPollStateCell
+                key={ index }
+                percent={ obj.percent }
+                description={ obj.label }
+                selected={ this.state.selectedDailyPollIndex === index ? true : false }
+                bottomLine={ (DailyPollEntries.length - 1) === index ? false : true }
+              />
+            );
+          })
+        }
+      </View>
+    );
+  }
+
   get showDailyPoll() {
     return (
       <View style={ styles.dailyPollContainer }>
         <Text style={ styles.textTitle }>Daily Poll</Text>
         <View style={ styles.dailyPollMainContentContainer }>
           <View style={ styles.dailyPollTopContentContainer }>
-            <View style={ styles.pointContainer }>
-              <Image style={ styles.imagePoint } source={ point }>
-                <Text style={ styles.textPoint }>+{ 10 }</Text>            
-              </Image>
+            <View>
+              <Point point={ 10 }/>
             </View>
             <View style={ styles.dailyPollTopLeftContentContainer }>
               <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
@@ -227,56 +304,10 @@ class Home extends Component {
               </View>
             </View>
           </View>
-          
-          <View style={ styles.dailyPollSelectContentContainer }>
-            <RadioForm 
-              formHorizontal={ false }
-              animation={ true }
-              style={ styles.radioFormWrapper }
-            >
-              { 
-                DailyPollEntries.map((obj, index) => {
-                  var onPress = (value, index) => {
-                    this.setState({
-                      selectedDailyPollValue: value,
-                      selectedDailyPollIndex: index
-                    })
-                    alert( 'Selected Index - ' + index.toString() );
-                  }
-                  
-                  return (
-                    <RadioButton 
-                      labelHorizontal={ true }
-                      key={ index }
-                      style={ (DailyPollEntries.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
-                    >
-                      <RadioButtonInput
-                        obj={ obj }
-                        index={ index }
-                        isSelected={ this.state.selectedDailyPollIndex === index }
-                        onPress={ onPress }
-                        borderWidth={ 1 }
-                        buttonInnerColor={ commonColors.theme }
-                        buttonOuterColor={ this.state.selectedDailyPollIndex === index ? commonColors.theme : commonColors.grayMoreText }
-                        buttonSize={ 16 }
-                        buttonOuterSize={ 16 }
-                        buttonStyle={{ }}
-                        buttonWrapStyle={ styles.radioButtonInputWrapper }
-                      />
-                      <RadioButtonLabel
-                        obj={ obj }
-                        index={ index }
-                        labelHorizontal={ true }
-                        onPress={ onPress }
-                        labelStyle={ styles.textRadioLabel }
-                        labelWrapStyle={ styles.radioLabelWrapper }
-                      />
-                    </RadioButton>
-                  )
-                }
-              )}
-            </RadioForm>
-          </View>
+
+          {
+            this.state.selectedDailyPollIndex === -1 ? this.showDailyPollSelectMode : this.showDailyPollStateMode
+          }
 
         </View>
       </View>
@@ -397,46 +428,29 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,
-    
+    borderBottomColor: commonColors.line,    
   },
   dailyPollTopContentContainer: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15,    
   },
   dailyPollTopLeftContentContainer: {
     flex: 1,
     paddingLeft: 10,
     alignItems: 'flex-start',
     justifyContent: 'center',
-  },
-  pointContainer: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  imagePoint: {
-    width: 34,
-    height: 34,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textPoint: {
-    backgroundColor: 'transparent',
-    color: commonColors.point,
-    fontFamily: 'Open Sans',
-    fontWeight: 'bold',
-    fontSize: 12,
-    textAlign: 'center',
+    paddingTop: 5,
   },
   textQuestion: {
     color: commonColors.question,
     fontFamily: 'Open Sans',
     fontSize: 14,
-    paddingTop: 5,
   },
   textDescription: {
     flex: 3,
@@ -460,14 +474,14 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     backgroundColor: 'transparent',
   },
-  textRadioLabel: {
+  textRadioButtonLabel: {
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
     textAlign: 'left',
     backgroundColor: 'transparent',    
   },
-  radioLabelWrapper: {
+  radioButtonLabelWrapper: {
     marginLeft: 5,
     paddingVertical: 10,
   },
@@ -484,10 +498,13 @@ const styles = StyleSheet.create({
   },
   radioFormWrapper: {
     flex: 1,
+    paddingLeft: 15,
   },
   dailyPollSelectContentContainer: {
-    flexDirection: 'row',
-    paddingLeft: 15,
-    // paddingVertical: 5,
+    // paddingLeft: 15,
   },
+  dailyPollStateModeWrapper: {
+
+  },
+
 });
