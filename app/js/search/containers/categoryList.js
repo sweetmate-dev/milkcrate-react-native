@@ -22,7 +22,7 @@ import CategoryDetailView from '../components/categoryDetailView';
 
 import { CategoryDetailEntries } from '../../components/dummyEntries';
 
-class SearchList extends Component {
+class CategoryList extends Component {
   constructor(props) {
     super(props);
 
@@ -80,4 +80,4 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(SearchList);
+)(CategoryList);

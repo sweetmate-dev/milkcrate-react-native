@@ -42,9 +42,8 @@ export default class Point extends Component {
 
 const styles = StyleSheet.create({
   pointContainer: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',    
+    justifyContent: 'center',
   },
   imagePoint: {
     width: 28,

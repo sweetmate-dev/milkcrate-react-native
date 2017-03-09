@@ -17,10 +17,10 @@ import TabNavigator from 'react-native-tab-navigator';
 import Home from '../../home/containers/home';
 import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
-import You from '../../you/containers/you';
+import Profile from '../../profile/containers/profile';
 
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 const homeIcon = require('../../../assets/imgs/tabbar_home.png');
 const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png');
@@ -59,6 +59,7 @@ export default class Main extends Component {
         <TabNavigator
           tabBarStyle = { styles.tab }
         >
+          {/* Home */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'home' }
             title="Home"
@@ -69,6 +70,8 @@ export default class Main extends Component {
             onPress={ () => this.setState({ selectedTab: 'home' }) }>
             <Home subOne = { subOne }/>
           </TabNavigator.Item>
+
+          {/* Search */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'search' }
             title="Search"
@@ -79,6 +82,8 @@ export default class Main extends Component {
             onPress={ () => this.setState({ selectedTab: 'search' }) }>
             <Search subOne = { subOne }/>
           </TabNavigator.Item>
+
+          {/* Alert */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'alert' }
             title="Alert"
@@ -90,6 +95,8 @@ export default class Main extends Component {
             onPress={ () => this.setState({ selectedTab: 'alert' }) }>
             <Notifications subOne = { subOne }/>
           </TabNavigator.Item>
+          
+          {/* You */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'you' }
             title="You"
@@ -98,8 +105,9 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
             renderSelectedIcon={ () => <Image source={ youSelectedIcon } style={ styles.iconTabbar4 }/> }
             onPress={ () => this.setState({selectedTab: 'you' }) }>
-            <You subOne = { subOne }/>
+            <Profile subOne = { subOne }/>
           </TabNavigator.Item>
+
         </TabNavigator>
       </View>
     );

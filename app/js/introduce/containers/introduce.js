@@ -15,7 +15,7 @@ import {
 import AppIntro from '../components/AppIntro';
 import Login from '../../login/containers/login';
 
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const background1 = require('../../../assets/imgs/introduce/background_introduce1.png');

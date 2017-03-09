@@ -10,12 +10,13 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  TouchableHighlight,
   ListView,
   Alert,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as youActions from '../actions';
+import * as communityPointsActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -23,17 +24,23 @@ import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
+import LeaderboardListCell from '../../components/leaderboardListCell';
 
-import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
+import { ProfileRecentActivityEntries, LeaderboardEntries } from '../../components/dummyEntries';
 
-class Profile extends Component {
+class CommunityPoints extends Component {
   constructor(props) {
     super(props);
 
     var dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    var dataSourceLeaderboard = new ListView.DataSource(
+      { rowHasChanged: (r1, r2) => r1 !== r2 });
+
     this.state = {
-      recentActivityDataSource: dataSource.cloneWithRows(ProfileRecentActivityEntries)
+      recentActivityDataSource: dataSource.cloneWithRows(ProfileRecentActivityEntries),
+      dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
     };
   }
 
@@ -52,6 +59,10 @@ class Profile extends Component {
     alert("Tapped cell - " + rowID);
   }
 
+  onLeaderboardCellPressed () {
+    alert("Tapped Leaderboard");
+  }
+
   renderRow(rowData, sectionID, rowID) {
 
     return (
@@ -67,12 +78,21 @@ class Profile extends Component {
     );
   }
 
-  onSettings() {
-    Actions.Settings();
+  renderLeaderboardRow(rowData, sectionID, rowID) {
+
+    return (
+      <LeaderboardListCell
+        status={ rowData.status }
+        index={ Number(rowID) + 1 }
+        name={ rowData.name }
+        points={ rowData.points }
+        avatar={ rowData.avatar }
+      />
+    );
   }
 
-  onSeeCommunityPoints() {
-    Actions.CommunityPoints();
+  onBack() {
+    Actions.pop();
   }
 
   render() {
@@ -81,20 +101,16 @@ class Profile extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          buttons={ commonStyles.NavSettingButton }
-          onSetting={ this.onSettings }
+          buttons={ commonStyles.NavBackButton }
+          onBack={ this.onBack }
         />
         <ScrollView>
           <View style={ styles.topContainer }>
-            <Text style={ styles.textName }>Philip Tribe</Text>
+            <Text style={ styles.textName }>Comcast</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>129</Text>
+                <Text style={ styles.textValue }>1298</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
-              </View>
-              <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>14th ></Text>
-                <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>8</Text>
@@ -103,12 +119,17 @@ class Profile extends Component {
             </View>
           </View>
 
-          <View style={ styles.buttonContainer }>
-            <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
-              <View style={ styles.buttonWrapper }>
-                <Text style={ styles.textButton }>See Community Points</Text>
+          <View style={ styles.leaderboardContainer }>
+            <Text style={ styles.textSectionTitle }>Comcast Leaderboard • You are in 4th place</Text>
+            <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
+              <View style={ styles.leaderboardListViewWrapper }>
+                <ListView
+                  dataSource={ this.state.dataSourceLeaderboard }
+                  renderRow={ this.renderLeaderboardRow.bind(this) }
+                  contentContainerStyle={ styles.leaderboardListView}
+                />
               </View>
-            </TouchableOpacity>
+            </TouchableHighlight>
           </View>
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
@@ -127,9 +148,9 @@ export default connect(state => ({
   status: state.profile.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(youActions, dispatch)
+    actions: bindActionCreators(communityPointsActions, dispatch)
   })
-)(Profile);
+)(CommunityPoints);
 
 const styles = StyleSheet.create({
   container: {
@@ -153,7 +174,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   pointSubContainer: {
     alignItems: 'center',
@@ -184,24 +205,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
   },
-  buttonContainer: {
-    paddingTop: 24,
-    paddingBottom: 14,
+  leaderboardContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  leaderboardListViewWrapper: {
+    borderStyle: 'solid',
+    borderTopWidth: 1,
+    borderTopColor: commonColors.line,
+    borderBottomWidth: 1,
+    borderBottomColor: commonColors.line,
+    height: commonStyles.hp(27),
+  },
+  leaderboardListView: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
   },
-  buttonWrapper: {
-    backgroundColor: commonColors.theme,    
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 9,
-    paddingHorizontal: 24,
-    borderRadius: 5,
-  },
-  textButton: {
-    color: '#fff',
-    fontFamily: 'Open Sans',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
+
 });

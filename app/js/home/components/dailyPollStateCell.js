@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-import { screenWidth } from '../../styles/comonStyles';
+import { screenWidth } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 export default class DailyPollStateCell extends Component {

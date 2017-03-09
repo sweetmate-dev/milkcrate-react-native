@@ -17,7 +17,7 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import CategoryDetailView from '../components/categoryDetailView';
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 const ASPECT_RATIO = screenWidth / screenHiehgt;
 const LATITUDE = 37.78825;
@@ -28,7 +28,7 @@ const SPACE = 0.01;
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 
-class SearchMap extends Component {
+class CategoryMap extends Component {
   constructor(props) {
     super(props);
 
@@ -131,7 +131,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(SearchMap);
+)(CategoryMap);
 
 const styles = StyleSheet.create({
   container: {

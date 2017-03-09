@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 
-import * as commonStyles from '../../styles/comonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const star = require('../../../assets/imgs/star.png');

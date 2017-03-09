@@ -5,14 +5,14 @@ import {
   StyleSheet,
   Dimensions,
   Image,
-  TouchableHighlight,
 } from 'react-native';
 
-import { screenWidth } from '../../styles/comonStyles';
-import * as commonColors from '../../styles/commonColors';
+import { screenWidth } from '../styles/commonStyles';
+import * as commonColors from '../styles/commonColors';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 
-const chevron_down = require('../../../assets/imgs/chevron_down.png');
-const chevron_up = require('../../../assets/imgs/chevron_up.png');
+const chevron_down = require('../../assets/imgs/chevron_down.png');
+const chevron_up = require('../../assets/imgs/chevron_up.png');
 
 export default class LeaderboardListCell extends Component {
 
@@ -22,7 +22,7 @@ export default class LeaderboardListCell extends Component {
     status: PropTypes.number,
     index: PropTypes.number,
     name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    points: PropTypes.number.isRequired,
     avatar: PropTypes.number.isRequired,
     // onClick: PropTypes.func,
   }
@@ -31,6 +31,7 @@ export default class LeaderboardListCell extends Component {
     width: screenWidth,
     height: 32,
     status: 0,
+    points: 0,
     // onClick: () => {}
   }
 
@@ -62,20 +63,26 @@ export default class LeaderboardListCell extends Component {
     );
   }
 
-  showDescription(status, name, description) {
+  showInfo(status, name, points) {
 
     if (status == 1) {
       return (
-        <View style={ styles.secondWrap }>
-          <Text style={ styles.textName }>{ name }</Text>
-          <Text style={ styles.textDescription }>{ description }</Text>
-        </View>
+        <View style={ styles.activeCellInfoContainer }>
+          <View style={ styles.secondContainer }>
+            <Text style={ styles.textName }>{ name }</Text>
+            <Text style={ styles.textPoints }>{ points } points</Text>
+          </View>
+          <View style={ styles.viewMoreContainer }>
+            <Text style={ styles.textViewMore }>View More</Text>
+            <EntypoIcon style={ styles.rightIcon } name="chevron-thin-right" size={ 15 } color={ commonColors.grayMoreText }/>
+          </View>
+        </View>  
       );
     } else if ((status == 2) || (status == 3)) {
       return (
-        <View style={ styles.secondWrap }>
+        <View style={ styles.secondContainer }>
           <Text style={ [styles.textName, { opacity: 0.6 }] }>{ name }</Text>
-          <Text style={ [styles.textDescription, { opacity: 0.6 }] }>{ description }</Text>
+          <Text style={ [styles.textPoints, { opacity: 0.6 }] }>{ points } points</Text>
         </View>
       );
     }
@@ -95,7 +102,7 @@ export default class LeaderboardListCell extends Component {
       status,
       index,
       name,
-      description,
+      points,
       avatar,
       // onClick,
     } = this.props;
@@ -103,11 +110,11 @@ export default class LeaderboardListCell extends Component {
     return (
       // <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
-          <View style={ styles.firstWrap }>
+          <View style={ styles.firstContainer }>
             { this.showStatus(status) }
             <Text style={ styles.textIndex }>{ index }</Text>
             { this.showAvatar(status, avatar) }
-            { this.showDescription(status, name, description) }
+            { this.showInfo(status, name, points) }
           </View>
         </View>
       // </TouchableHighlight>
@@ -121,9 +128,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 15,
   },
-  firstWrap: {
+  firstContainer: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   imageStatus: {
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 2,
   },
-  secondWrap: {
+  secondContainer: {
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingLeft: 10,
@@ -152,9 +160,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
-  textDescription: {
+  textPoints: {
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
+  },
+  activeCellInfoContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  viewMoreContainer: {
+    flexDirection: 'row',
+  },
+  textViewMore: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+  },
+  rightIcon: {
+    paddingTop: 2.5,
+    alignSelf: 'center',
   },
 });

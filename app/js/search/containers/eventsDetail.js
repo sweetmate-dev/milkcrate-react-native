@@ -22,7 +22,7 @@ import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
-import * as commonStyles from '../../styles/comonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
 const icon =   require('../../../assets/imgs/stickers/bicycles.png');
@@ -88,8 +88,7 @@ class EventsDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          leftButton={ true }
-          rightButton={ true }
+          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
           onBack={ this.onBack }
           onFilter={ this.onFilter }
           placeholder ='Discover Events Detail'

@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-import { screenWidth } from '../../styles/comonStyles';
+import { screenWidth } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const star = require('../../../assets/imgs/star.png');

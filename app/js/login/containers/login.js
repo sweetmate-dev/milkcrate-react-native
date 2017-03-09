@@ -18,7 +18,7 @@ import * as loginActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 const background = require('../../../assets/imgs/background_login.png');
 const eye = require('../../../assets/imgs/eye.png');
@@ -64,7 +64,7 @@ class Login extends Component {
       return;
     }
 
-    Actions.Profile();
+    Actions.SetupProfile();
 
     // this.props.login(this.state.email, this.state.password, this.state.communityCode);
   }

@@ -17,15 +17,15 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import { SegmentedControls } from 'react-native-radio-buttons';
 
 import NavSearchBar from '../../components/navSearchBar';
 
-import SearchList from './searchList';
-import SearchMap from './searchMap';
+import CategoryList from './categoryList';
+import CategoryMap from './categoryMap';
 
-import { screenWidth, screenHiehgt } from '../../styles/comonStyles';
+import  * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const stickerImages = [
@@ -63,7 +63,7 @@ const stickerImages = [
   require('../../../assets/imgs/stickers/wares.png'),
 ];
 
-class SearchView extends Component {
+class CategoryView extends Component {
   constructor(props) {
     super(props);
 
@@ -99,8 +99,7 @@ class SearchView extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          leftButton={ true }
-          rightButton={ true }
+          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
           onBack={ this.onBack }
           onFilter={ this.onFilter }
           />
@@ -121,9 +120,9 @@ class SearchView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <SearchList title={ title } avatar={ stickerImages[index] } />
+            <CategoryList title={ title } avatar={ stickerImages[index] } />
             :
-            <SearchMap title={ title } avatar={ stickerImages[index] } />
+            <CategoryMap title={ title } avatar={ stickerImages[index] } />
         }
       </View>
     );
@@ -136,15 +135,15 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(SearchView);
+)(CategoryView);
 
 const styles = StyleSheet.create({
   container: {
     flex : 1,
   },
   background: {
-    width: screenWidth,
-    height: screenHiehgt,
+    width: commonStyles.screenWidth,
+    height: commonStyles.screenHiehgt,
   },
   segmentedWrap: {
     flexDirection: 'row',

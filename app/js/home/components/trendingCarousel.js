@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import * as commonStyles from '../../styles/comonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
 

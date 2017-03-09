@@ -25,3 +25,7 @@ export const carouselItemWidth = carouselWidth + carouselItemHorizontalPadding *
 export const activityCellSize = screenWidth * 0.22;
 export const categoryCellSize = screenWidth / 4;
 
+export const NavNoneButton = 0;
+export const NavBackButton = 1;
+export const NavFilterButton = 2;
+export const NavSettingButton = 4;

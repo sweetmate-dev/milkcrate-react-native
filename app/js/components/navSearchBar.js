@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 
 import SearchBar from './searchBar';
-import { screenWidth } from '../styles/comonStyles';
+import { screenWidth } from '../styles/commonStyles';
 import * as commonColors from '../styles/commonColors';
+import * as commonStyles from '../styles/commonStyles';
 
 const back_arrow = require('../../assets/imgs/back_arrow.png');
 const filter = require('../../assets/imgs/filter.png');
+const setting = require('../../assets/imgs/setting.png');
 
 export default class NavSearchBar extends Component {
 
@@ -21,18 +23,18 @@ export default class NavSearchBar extends Component {
     onSearchChange: PropTypes.func,
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
-    leftButton: PropTypes.bool,
-    rightButton: PropTypes.bool,
+    onSetting: PropTypes.func,
     placeholder: PropTypes.string,
+    buttons: PropTypes.number,    
   }
 
   static defaultProps = {
     onSearchChange: () => {},
     onBack: () => {},
     onFilter: () => {},
-    leftButton: false,
-    rightButton: false,
-    placeholder: 'Discover'
+    onSetting: () => {},
+    placeholder: 'Discover',
+    buttons: commonStyles.NavNoneButton,
   }
 
   constructor(props) {
@@ -40,34 +42,36 @@ export default class NavSearchBar extends Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onBack = this.onBack.bind(this);
     this.onFilter = this.onFilter.bind(this);
+    this.onSetting = this.onSetting.bind(this);
   }
 
   onSearchChange() {
-
     if (this.props.onSearchChange) {
       this.props.onSearchChange();
     }
   }
 
   onBack() {
-
     if (this.props.onBack) {
       this.props.onBack();
     }
   }
 
   onFilter() {
-
     if (this.props.onFilter) {
       this.props.onFilter();
     }
   }
 
+  onSetting() {
+    if (this.props.onSetting) {
+      this.props.onSetting();
+    }
+  }
   render() {
     const {
-      leftButton,
-      rightButton,
       placeholder,
+      buttons,
     } = this.props;
 
     return (
@@ -75,7 +79,7 @@ export default class NavSearchBar extends Component {
 
         <View style={ styles.navigationBarWrap }>
           {
-            leftButton ?
+            buttons & commonStyles.NavBackButton ?
               <View style={ styles.buttonWrap }>
                 <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
                   <View style={ styles.button }>
@@ -99,7 +103,7 @@ export default class NavSearchBar extends Component {
             />
           </View>
           {
-            rightButton ?
+            buttons & commonStyles.NavFilterButton ?
               <View style={ styles.buttonWrap }>
                 <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
                   <View style={ styles.button }>
@@ -108,7 +112,16 @@ export default class NavSearchBar extends Component {
                 </TouchableOpacity>
               </View>
             :
-              <View style={ styles.searchBarPadding }/>
+              buttons & commonStyles.NavSettingButton ?
+                <View style={ styles.buttonWrap }>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSetting() }>
+                    <View style={ styles.button }>
+                      <Image source={ setting } style={ styles.image }/>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              :
+                <View style={ styles.searchBarPadding }/>
           }
         </View>
       </View>

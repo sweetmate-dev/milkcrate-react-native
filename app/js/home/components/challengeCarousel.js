@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Point from '../../components/Point';
-import * as commonStyles from '../../styles/comonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const entryBorderRadius = 5;

@@ -24,7 +24,7 @@ import NavSearchBar from '../../components/navSearchBar';
 import ImageButton from '../components/imageButton';
 import CategoryButton from '../components/categoryButton';
 import ExploreWaysListCell from '../components/exploreWaysListCell';
-import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/comonStyles';
+import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
@@ -259,7 +259,7 @@ class Search extends Component {
   }
 
   onSelectCategory (rowID) {
-    Actions.SearchView({ title:categoryTitles[rowID], index:rowID });
+    Actions.CategoryView({ title:categoryTitles[rowID], index:rowID });
   }
 
   renderExploreWaysRow(rowData, sectionID, rowID) {

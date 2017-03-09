@@ -24,14 +24,14 @@ import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
 import TrendingCarousel from '../components/trendingCarousel';
-import LeaderboardListCell from '../components/leaderboardListCell';
+import LeaderboardListCell from '../../components/leaderboardListCell';
 import RecentActivityListCell from '../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
 
 
-import * as commonStyles from '../../styles/comonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 import { ChallengeCarouselEntries, LeaderboardEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
@@ -81,7 +81,7 @@ class Home extends Component {
         status={ rowData.status }
         index={ Number(rowID) + 1 }
         name={ rowData.name }
-        description={ rowData.description }
+        points={ rowData.points }
         avatar={ rowData.avatar }
       />
     );
