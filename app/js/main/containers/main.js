@@ -52,7 +52,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const {status, subOne} = this.props;
+    const { status, subOne } = this.props;
 
     return (
       <View style={ styles.container }>
