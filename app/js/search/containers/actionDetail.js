@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     width: commonStyles.screenWidth,
     height: commonStyles.hp(24),
   },
-
   infoContainer: {
     flexDirection: 'row',
     alignItems: 'center',

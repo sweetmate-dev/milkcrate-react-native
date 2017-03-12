@@ -49,7 +49,7 @@ class Profile extends Component {
   }
 
   onPressedRecentActivityCell(rowID) {
-    alert("Tapped cell - " + rowID);
+    Actions.WeeklyRecap();
   }
 
   renderRow(rowData, sectionID, rowID) {

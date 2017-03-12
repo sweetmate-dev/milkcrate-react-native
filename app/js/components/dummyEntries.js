@@ -396,7 +396,6 @@ export const RecentActivityEntries = [
   },
 ];
 
-
 export const EventsEntries = [
   {
     date: 'Wednesday, Mar 8 2017',
@@ -664,4 +663,29 @@ export const BusinessRecentActivityEntries = [
     hearts: 2,
     rating: 4.8,
   },  
+];
+
+export const WeeklyRecapEntries = [
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    time: 2,
+    coins: 10,
+  },
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    time: 2,
+    coins: 11,
+  },
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    time: 2,
+    coins: 12,
+  },
+  
 ];
