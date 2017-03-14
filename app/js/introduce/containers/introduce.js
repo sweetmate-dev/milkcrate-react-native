@@ -42,7 +42,7 @@ export default class Introduce extends Component {
     return (
       <View style={ styles.container }>
         <AppIntro
-          skipBtnLabel="Login"
+          skipBtnLabel="Log In"
           nextBtnLabel="Next"
           doneBtnLabel=""
           rightTextColor={ commonColors.title }

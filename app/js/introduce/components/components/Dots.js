@@ -10,17 +10,17 @@ export const Dot = ({
   if (active) {
     return (
       <View
-        style={[styles.dotStyle, styles.activeDotStyle, { 
+        style={ [styles.dotStyle, styles.activeDotStyle, { 
           backgroundColor: activeDotColor 
-        }]}
+        }] }
       />
     );
   } else {
     return (
       <View 
-        style={[styles.dotStyle, { 
+        style={ [styles.dotStyle, { 
           backgroundColor: dotColor
-        }]} />
+        }] } />
     );
   }
 }

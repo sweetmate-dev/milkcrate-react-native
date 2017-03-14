@@ -5,6 +5,8 @@ import {
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
+import codePush from "react-native-code-push";
+import { Crashlytics } from 'react-native-fabric';
 
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
@@ -32,10 +34,10 @@ import WeeklyRecap from './main/containers/weeklyRecap';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce } />
+    <Scene key="Introduce" component={ Introduce } initial/>
     <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -102,7 +104,7 @@ const deepLink_Search_Categories = [
   { url: '/search/wares', action: Actions.Main, parameters: { tab: 'search', subOne: 'wares', }},
 ];
 
-export default class App extends Component {
+class App extends Component {
 
   deepLinks () {
 
@@ -148,6 +150,7 @@ export default class App extends Component {
   }
 
   render() {
+
     return (
       <Provider store={ store }>
         <Router hideNavBar={ true } scenes={ scenes }/>
@@ -155,3 +158,6 @@ export default class App extends Component {
     );
   }
 }
+
+export default codePush(App);
+

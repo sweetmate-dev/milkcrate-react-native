@@ -298,6 +298,7 @@ class Search extends Component {
 
   render() {
     const { status } = this.props;
+    rete;
 
     return (
       <View style={ styles.container }>

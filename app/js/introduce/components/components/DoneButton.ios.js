@@ -14,8 +14,8 @@ export const DoneButton = ({
   skipBtnLabel, index, total,
 }) => {
   return (
-    <View style={styles.btnContainer}>
-      <Animated.View style={[styles.full, { height: 0 }, {
+    <View style={ styles.btnContainer }>
+      <Animated.View style={ [styles.full, { height: 0 }, {
         opacity: doneFadeOpacity,
         transform: [{
           translateX: skipFadeOpacity.interpolate({
@@ -25,25 +25,25 @@ export const DoneButton = ({
         }],
       }]}
       >
-        <View style={styles.full}>
-          <Text style={[styles.controllText, {
+        <View style={ styles.full }>
+          <Text style={[styles.controllText, { 
             color: rightTextColor, paddingRight: 30,
           }]}>
-            {doneBtnLabel}
+            { doneBtnLabel }
           </Text>
         </View>
       </Animated.View>
-      <Animated.View style={[styles.full, { height: 0 }, { opacity: nextOpacity }]}>
-        <TouchableOpacity style={styles.full}
-          onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick}>
-         <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
-          {
-            index >= (total - 2) ? 
-              skipBtnLabel 
-              : 
-              nextBtnLabel
-          }
-        </Text>
+      <Animated.View style={ [styles.full, { height: 0 }, { opacity: nextOpacity }] }>
+        <TouchableOpacity style={ styles.full }
+          onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick }>
+          <Text style={ [styles.nextButtonText, { color: rightTextColor }] }>
+            {
+              index >= (total - 2) ? 
+                skipBtnLabel 
+                : 
+                nextBtnLabel
+            }
+          </Text>
         </TouchableOpacity>
       </Animated.View>
     </View>

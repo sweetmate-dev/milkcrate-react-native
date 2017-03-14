@@ -214,7 +214,13 @@ export default class AppIntro extends Component {
 
     index=Math.round(index);
 
-    if (index === total - 1) {
+    if (index === 0) {
+      this.setDoneBtnOpacity(0);
+      this.setSkipBtnOpacity(1);
+      this.setNextOpacity(1);
+      isDoneBtnShow = false;
+      isSkipBtnShow = true;
+    } else if (index === total - 1) {
       this.setDoneBtnOpacity(1);
       this.setSkipBtnOpacity(0);
       this.setNextOpacity(0);
@@ -222,25 +228,26 @@ export default class AppIntro extends Component {
       isSkipBtnShow = false;
     } else {
       this.setDoneBtnOpacity(0);
-      this.setSkipBtnOpacity(1);
+      this.setSkipBtnOpacity(0);
       this.setNextOpacity(1);
       isDoneBtnShow = false;
-      isSkipBtnShow = true;
+      isSkipBtnShow = false;
     }
+    
     return (
       <View style={[this.styles.paginationContainer]}>
         {
-          this.props.showSkipButton && index < 1 ? 
+          this.props.showSkipButton ? 
             <SkipButton
-              {...this.props}
-              {...this.state}
-              isSkipBtnShow={isSkipBtnShow}
-              styles={this.styles}
-              onSkipBtnClick={this.onSkipBtnClick.bind(this, context)} /> 
+              { ...this.props }
+              { ...this.state }
+              isSkipBtnShow={ isSkipBtnShow }
+              styles={ this.styles }
+              onSkipBtnClick={ this.onSkipBtnClick.bind(this, context) }/> 
             :
-            <View style={this.styles.btnContainer} />
+            <View style={ this.styles.btnContainer } />
         }
-        {this.props.showDots && RenderDots(index, total, {
+        { this.props.showDots && RenderDots(index, total, {
           ...this.props,
           styles: this.styles
         })}
@@ -249,14 +256,14 @@ export default class AppIntro extends Component {
             <DoneButton
               index={ index }
               total={ total }
-              {...this.props}
-              {...this.state}
-              isDoneBtnShow={isDoneBtnShow}
-              styles={this.styles}
-              onNextBtnClick={this.onNextBtnClick.bind(this, context)}
-              onDoneBtnClick={this.props.onDoneBtnClick} /> 
+              { ...this.props }
+              { ...this.state }
+              isDoneBtnShow={ isDoneBtnShow }
+              styles={ this.styles }
+              onNextBtnClick={ this.onNextBtnClick.bind(this, context) }
+              onDoneBtnClick={ this.props.onDoneBtnClick }/> 
             :
-            <View style={this.styles.btnContainer} />
+            <View style={ this.styles.btnContainer }/>
           }
       </View>
     );
@@ -274,18 +281,18 @@ export default class AppIntro extends Component {
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
-    const imgSource = (typeof img === 'string') ? {uri: img} : img;
+    const imgSource = (typeof img === 'string') ? { uri: img } : img;
     const pageView = (
-      <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
-        <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
-          <Image style={imgStyle} source={imgSource} />
+      <View style={ [this.styles.slide, { backgroundColor }] } showsPagination={ false } key={ index }>
+        <Animated.View style={ [this.styles.header, ...AnimatedStyle1.transform] }>
+          <Image style={ imgStyle } source={ imgSource }/>
         </Animated.View>
-        <View style={this.styles.info}>
-          <Animated.View style={AnimatedStyle2.transform}>
-            <Text style={[this.styles.title, { color: fontColor }]}>{title}</Text>
+        <View style= {this.styles.info }>
+          <Animated.View style={ AnimatedStyle2.transform }>
+            <Text style={ [this.styles.title, { color: fontColor }] }>{ title }</Text>
           </Animated.View>
-          <Animated.View style={AnimatedStyle3.transform}>
-            <Text style={[this.styles.description, { color: fontColor }]}>{description}</Text>
+          <Animated.View style={ AnimatedStyle3.transform }>
+            <Text style={ [this.styles.description, { color: fontColor }] }>{ description }</Text>
           </Animated.View>
         </View>
       </View>
@@ -304,14 +311,14 @@ export default class AppIntro extends Component {
     let animatedChild = children;
     if (level !== 0) {
       animatedChild = (
-        <Animated.View key={index} style={[children.props.style, transform]}>
-          {nodes}
+        <Animated.View key={ index } style={ [children.props.style, transform] }>
+          { nodes }
         </Animated.View>
       );
     } else {
       animatedChild = (
-        <View key={index} style={children.props.style}>
-          {nodes}
+        <View key={ index } style={ children.props.style }>
+          { nodes }
         </View>
       );
     }
@@ -351,11 +358,11 @@ export default class AppIntro extends Component {
 
     return (
       <View>
-        {androidPages}
+        { androidPages }
         <Swiper
-          loop={false}
-          index={this.props.defaultIndex}
-          renderPagination={this.renderPagination}
+          loop={ false }
+          index={ this.props.defaultIndex }
+          renderPagination={ this.renderPagination }
           onMomentumScrollEnd={(e, state) => {
             if (this.isToTintStatusBar()) {
               StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[state.index].backgroundColor, -0.3), false);
@@ -367,7 +374,7 @@ export default class AppIntro extends Component {
             [{ x: this.state.parallax }]
           )}
         >
-          {pages}
+          { pages }
         </Swiper>
       </View>
     );
