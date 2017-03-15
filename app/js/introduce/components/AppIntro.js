@@ -105,6 +105,9 @@ const defaulStyles = {
 }
 
 export default class AppIntro extends Component {
+  
+  currentPageIndex = 0;
+  
   constructor(props) {
     super(props);
 
@@ -119,9 +122,12 @@ export default class AppIntro extends Component {
   }
 
   onNextBtnClick = (context) => {
+
+    const currentIndex = Math.round(context.state.index);
+
     if (context.state.isScrolling || context.state.total < 2) return;
     const state = context.state;
-    const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
+    const diff = (context.props.loop ? 1 : 0) + 1 + currentIndex;
     let x = 0;
     if (state.dir === 'x') x = diff * state.width;
     if (Platform.OS === 'ios') {
@@ -134,7 +140,7 @@ export default class AppIntro extends Component {
         },
       });
     }
-    this.props.onNextBtnClick(context.state.index);
+    this.props.onNextBtnClick(currentIndex);
   }
 
   onSkipBtnClick = (context) => {
@@ -233,7 +239,7 @@ export default class AppIntro extends Component {
       isDoneBtnShow = false;
       isSkipBtnShow = false;
     }
-    
+
     return (
       <View style={[this.styles.paginationContainer]}>
         {

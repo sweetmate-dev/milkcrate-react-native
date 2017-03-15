@@ -29,34 +29,33 @@ export default class Point extends Component {
     const { point } = this.props;
 
     return (
-      <View>
-        <View style={ styles.pointContainer }>
-          <Image style={ styles.imagePoint } source={ point_image }>
-            <Text style={ styles.textPoint }>+{ point }</Text>            
-          </Image>
-        </View>
-      </View>        
+      <View style={ styles.pointContainer }>
+        <Text style={ styles.textPoint }>+{ point }</Text>
+        <Image style={ styles.imagePoint } source={ point_image }/>          
+      </View>      
     );
   }
 }
 
 const styles = StyleSheet.create({
   pointContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   imagePoint: {
-    width: 28,
-    height: 27,
+    width: 18,
+    height: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   textPoint: {
     backgroundColor: 'transparent',
-    color: commonColors.point,
+    color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
     fontSize: 12,
     textAlign: 'center',
+    marginRight: 2,
   },
 });

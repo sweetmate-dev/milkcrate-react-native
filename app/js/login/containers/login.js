@@ -22,6 +22,7 @@ import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 const background = require('../../../assets/imgs/background_login.png');
 const eye = require('../../../assets/imgs/eye.png');
+const eye_slash = require('../../../assets/imgs/eye_slash.png');
 
 class Login extends Component {
   constructor(props) {
@@ -73,8 +74,12 @@ class Login extends Component {
     alert("Contact Us");
   }
 
-  onShowPlainTextPassword () {
-    this.setState({ secureTextPassword: !this.state.secureTextPassword });
+  onShowPlainTextPassword() {
+    this.setState({ secureTextPassword: false });
+  }
+
+  onHidePlainTextPassword() {
+    this.setState({ secureTextPassword: true });
   }
 
   render() {
@@ -99,18 +104,27 @@ class Login extends Component {
               returnKeyType={ 'next' }
               onChangeText={ (text) => this.setState({ email: text }) }
             />
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={ false }
-              placeholder="Password"
-              secureTextEntry={ this.state.secureTextPassword }
-              placeholderTextColor={ commonColors.placeholderText }
-              textAlign="center"
-              style={ styles.input }
-              underlineColorAndroid="transparent"
-              returnKeyType={ 'next' }
-              onChangeText={ (text) => this.setState({ password: text }) }
-            />
+            <View style={ styles.inputWrapper }>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={ false }
+                placeholder="Password"
+                secureTextEntry={ this.state.secureTextPassword }
+                placeholderTextColor={ commonColors.placeholderText }
+                textAlign="center"
+                style={ styles.input }
+                underlineColorAndroid="transparent"
+                returnKeyType={ 'next' }
+                onChangeText={ (text) => this.setState({ password: text }) }
+              />
+              <TouchableOpacity 
+                activeOpacity={ .5 } 
+                style={ styles.eyeButtonWrapper }
+                onPress={ () => this.onHidePlainTextPassword() }
+              >
+                <Image source={ eye_slash } style={ styles.imageEye }/>
+              </TouchableOpacity>  
+            </View>
             <View style={ styles.inputWrapper }>
               <TextInput
                 autoCapitalize="none"
@@ -247,6 +261,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     marginBottom: 5,
+    paddingHorizontal: 30,
   },
   buttonLogin: {
     justifyContent: 'center',

@@ -230,7 +230,7 @@ class BusinessesDetail extends Component {
             </View>
           </View>
           <View style={ styles.recentActivityContainer }>
-            <Text style={ styles.textRecentActivity }>Recent Activity</Text>
+            <Text style={ styles.textRecentActivity }>Comments</Text>
             <View style={ styles.recentActivityListViewWrapper }>
               <ListView
                 dataSource={ this.state.dataSourceRecentActivity }
@@ -296,8 +296,8 @@ const styles = StyleSheet.create({
     height: commonStyles.hp(21),
   },
   map_pin: {
-    width: 10,
-    height: 16,
+    width: 24,
+    height: 37,
   },
   mainContentContainer: {
     paddingLeft: 20,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   },
   textRecentActivity: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     paddingBottom: 10,
     paddingLeft: 5,

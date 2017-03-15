@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
-  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 
 import Point from '../../components/Point';
@@ -28,8 +28,9 @@ export default class ChallengeCarousel extends Component {
     const { title, subtitle, avatar, coins } = this.props;
 
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         activeOpacity={ 0.5 }
+        underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
         onPress={() => { alert(`You've clicked '${ title }'`); }}
         >
@@ -45,7 +46,7 @@ export default class ChallengeCarousel extends Component {
             <Point point={ coins }/>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }

@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   textCellTitle: {
     color: commonColors.title,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
   logoutButtonWrapper: {

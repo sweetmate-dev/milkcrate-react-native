@@ -289,18 +289,16 @@ class Home extends Component {
         <Text style={ styles.textTitle }>Daily Poll</Text>
         <View style={ styles.dailyPollMainContentContainer }>
           <View style={ styles.dailyPollTopContentContainer }>
-            <View>
+            <View style={ styles.dailyPollTopTitlePointContainer }>
+              <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
               <Point point={ 10 }/>
             </View>
-            <View style={ styles.dailyPollTopLeftContentContainer }>
-              <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
-              <View style={ styles.descriptionContainer }>
-                <Text style={ styles.textDescription } numberOfLines={ this.state.dailyPollReadLines }>{ dummyText1 }</Text>
-                <View style={ styles.buttonWrapper }>
-                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
-                    <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollReadLines == 1 ? 'Read More' : 'Read Less' }</Text>
-                  </TouchableOpacity>
-                </View>
+            <View style={ styles.descriptionContainer }>
+              <Text style={ styles.textDescription } numberOfLines={ this.state.dailyPollReadLines }>{ dummyText1 }</Text>
+              <View style={ styles.buttonWrapper }>
+                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
+                  <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollReadLines == 1 ? 'Read More' : 'Read Less' }</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -339,7 +337,7 @@ class Home extends Component {
           scrollEventThrottle={ 200 }
         >
           { this.showChallenges }
-          { this.showLeaderboard }
+          {/*{ this.showLeaderboard }*/}
           { this.showTrending }
           { this.showDailyPoll }
           { this.showRecentActivity }          
@@ -377,7 +375,7 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     padding: 10,
   },
@@ -431,21 +429,20 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,    
   },
   dailyPollTopContentContainer: {
-    flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     paddingVertical: 10,
-    paddingHorizontal: 15,    
+    paddingLeft: 25,
+    paddingRight: 15,
   },
-  dailyPollTopLeftContentContainer: {
-    flex: 1,
-    paddingLeft: 10,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    paddingTop: 5,
+  dailyPollTopTitlePointContainer: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   textQuestion: {
     color: commonColors.question,

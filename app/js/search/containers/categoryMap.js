@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map_pin: {
-    width: 10,
-    height: 16,
+    width: 24,
+    height: 37,
   },
   calloutContainer: {
     position: 'absolute',

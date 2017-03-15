@@ -298,8 +298,7 @@ class Search extends Component {
 
   render() {
     const { status } = this.props;
-    rete;
-
+    
     return (
       <View style={ styles.container }>
         <NavSearchBar/>
@@ -342,7 +341,7 @@ const styles = StyleSheet.create({
     height: screenWidth,
   },
   textTitle: {
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     color: commonColors.grayMoreText,
     paddingTop: 24,

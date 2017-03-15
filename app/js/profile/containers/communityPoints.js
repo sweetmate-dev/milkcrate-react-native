@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   textSectionTitle: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     padding: 10,
   },

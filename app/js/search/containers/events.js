@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
 });

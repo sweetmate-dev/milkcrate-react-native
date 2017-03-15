@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
-  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 
 import * as commonStyles from '../../styles/commonStyles';
@@ -54,11 +54,12 @@ export default class TrendingCarousel extends Component {
     const { title, location, category_avatar, users, time, hearts, coins } = this.props;
 
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         activeOpacity={ 0.5 }
+        underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
         onPress={() => { alert(`You've clicked '${ title }'`); }}
-        >
+      >
         <View style={ styles.contentContainer }>
           <View style={ styles.backgroundContainer }>
             <View style={ styles.topBackground }/>
@@ -97,7 +98,7 @@ export default class TrendingCarousel extends Component {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }

@@ -29,7 +29,7 @@ const camera = require('../../../assets/imgs/camera.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 
 
-const arrayGender = ['Male', 'Female'];
+const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 class SetupProfile extends Component {
   constructor(props) {
@@ -108,7 +108,7 @@ class SetupProfile extends Component {
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
-            <Text style={ styles.textTitle }>Setup Your Profile!</Text>
+            <Text style={ styles.textTitle }>Set up Your Profile!</Text>
           </View>
           <View style={ styles.photoContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPickProfilePhoto() }>
@@ -136,9 +136,9 @@ class SetupProfile extends Component {
                 date={ this.state.birthday }
                 mode="date"
                 placeholder="Birthday"
-                format="YYYY-MM-DD"
-                minDate="1900-01-01"
-                maxDate="2100-12-31"
+                format="MMM DD, YYYY"
+                minDate="Jan 01, 1900"
+                maxDate="Dec 31, 2200"
                 confirmBtnText="Confirm"
                 cancelBtnText="Cancel"
                 showIcon={ false }
@@ -152,7 +152,7 @@ class SetupProfile extends Component {
               <View style={ styles.dropDownWrapper }>
                 <ModalDropdown
                   options={ arrayGender }
-                  defaultValue='Gender'
+                  defaultValue='Prefer not to say'
                   style={ styles.dropdown }
                   textStyle ={ styles.dropDownText }
                   dropdownStyle={ styles.dropdownStyle }
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownStyle: {
-    height: 80,
+    height: 140,
     width: (screenWidth - 80) / 2 - 3,
     justifyContent: 'center',
     alignItems: 'center',

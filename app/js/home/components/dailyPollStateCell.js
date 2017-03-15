@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     textAlign: 'center',
-    paddingLeft: 15,
+    paddingLeft: 20,
     paddingRight: 10,
   },
   cellBackgroundContainer: {    
