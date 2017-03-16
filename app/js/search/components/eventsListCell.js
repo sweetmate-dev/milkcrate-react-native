@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    height: commonStyles.hp(8),
+    height: 56,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
@@ -74,10 +74,9 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingVertical: 5,
-    flexDirection: 'row',
     paddingLeft: 10,
   },
   avatar: {

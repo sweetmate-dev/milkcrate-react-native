@@ -66,9 +66,9 @@ class SetupProfile extends Component {
 
   onPickProfilePhoto() {
     var options = {
+      quality: 1.0,
       storageOptions: {
         skipBackup: true,
-        path: 'images',
       }
     };
 

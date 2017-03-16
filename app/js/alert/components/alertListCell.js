@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 2,
   },
   textName: {
     color: commonColors.grayText,

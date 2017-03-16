@@ -140,7 +140,7 @@ class Events extends Component {
           buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
           onBack={ this.onBack }
           onFilter={ this.onFilter }
-          placeholder ='Discover Events'
+          placeholder ='Search for events'
         />
         <CalendarStrip
           style={ styles.calendar }

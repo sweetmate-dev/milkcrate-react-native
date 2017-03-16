@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import Stars from 'react-native-stars-rating';
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import BusinessRecentActivityListCell from '../components/businessRecentActivityListCell';
@@ -74,10 +74,6 @@ class BusinessesDetail extends Component {
     } else if (newProps.status == 'search_category_error') {
 
     }
-  }
-
-  onPressPin () {
-
   }
 
   onBack () {
@@ -135,22 +131,22 @@ class BusinessesDetail extends Component {
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar
-          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
+        <NavTitleBar
+          buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          onFilter={ this.onFilter }
-          placeholder ='Discover Businesses'
+          title ='Elixr Coffee Roasters'
         />
         <ScrollView>
           <MapView
             style={ styles.map }
             initialRegion={ this.state.region }
+            scrollEnabled={ false }
+            zoomEnabled={ false }
           >
             {
               <MapView.Marker
                 image={ map_pin }
                 coordinate={ this.state.coordinate }
-                onPress={ () => this.onPressPin() }
               />
             }
           </MapView>
@@ -160,7 +156,7 @@ class BusinessesDetail extends Component {
               <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>Elixr Coffee Roasters</Text>
-                <Text style={ styles.textValue }>{ 1.2 } Miles  { 10 } $$</Text>
+                <Text style={ styles.textValue }>{ 1.2 } Miles  $$</Text>
               </View>
               <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ 4.8 } </Text>
@@ -230,7 +226,9 @@ class BusinessesDetail extends Component {
             </View>
           </View>
           <View style={ styles.recentActivityContainer }>
-            <Text style={ styles.textRecentActivity }>Comments</Text>
+            <View style={ styles.sectionTitleWrapper }>
+              <Text style={ styles.textSectionTitle }>Comments</Text>
+            </View>
             <View style={ styles.recentActivityListViewWrapper }>
               <ListView
                 dataSource={ this.state.dataSourceRecentActivity }
@@ -239,17 +237,21 @@ class BusinessesDetail extends Component {
           </View>
           <View style={ styles.ratingMainContainer }>
             <Image style={ styles.imageAvatar } source={ avatar } />
-            <View style={ styles.ratingContentContainer }>
-              <Stars
-                isActive={ true }
-                rateMax={ 5 }
-                rate={ this.state.businessRate }
-                size={ 30 }
-                onStarpress={ (rating) => this.setState({ businessRate: rating }) }
-              />
+            <View style={ styles.rating_commentContentContainer }>
+              <View style={ styles.ratingContentContainer }>
+                <Text style={ styles.textSectionTitle }>Tap stars to rate</Text>
+                <Stars
+                  isActive={ true }
+                  rateMax={ 5 }
+                  rate={ this.state.businessRate }
+                  size={ 25 }
+                  onStarpress={ (rating) => this.setState({ businessRate: rating }) }
+                />
+              </View>
               <TextInput
                 autoCapitalize="none"
                 autoCorrect={ false }
+                multiline={ true }
                 placeholder="Add a comment"
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="left"
@@ -257,7 +259,7 @@ class BusinessesDetail extends Component {
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'done' }
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
-              />              
+              />
             </View>            
           </View>
           <View style={ styles.buttonRateBusinessWrapper }>
@@ -267,13 +269,12 @@ class BusinessesDetail extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
-            <View style={ styles.buttonCheckin }>
-              <Text style={ styles.textButton }>I’m Here • Checkin</Text>
-            </View>
-          </TouchableOpacity>
-
         </ScrollView>
+        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
+          <View style={ styles.buttonCheckin }>
+            <Text style={ styles.textButton }>I’m Here • Checkin</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -400,7 +401,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   certificationsContainer: {
-    paddingHorizontal: 15,
+    paddingLeft: 20,
+    paddingRight: 16,
     paddingTop: 5,
   },
   certificationsButtonContainer: {
@@ -457,12 +459,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
-  textRecentActivity: {
-    color: commonColors.grayMoreText,
-    fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
+  sectionTitleWrapper: {
     paddingBottom: 10,
     paddingLeft: 5,
+  },
+  textSectionTitle: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,    
   },
   ratingMainContainer: {
     flexDirection: 'row',
@@ -470,22 +474,29 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 15,    
   },
-  ratingContentContainer: {
+  rating_commentContentContainer: {
     flex: 1,
     paddingLeft: 15,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
+  ratingContentContainer: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   input: {
     fontSize: 14,
     color: commonColors.title,
-    height: 32,
+    height: 64,
     alignSelf: 'stretch',
     borderColor: '#efefef',
     backgroundColor: '#efefef',
     borderWidth: 1,
     borderRadius: 3,
-    paddingHorizontal: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     marginTop: 5,
   },
   buttonRateBusinessWrapper: {
@@ -517,5 +528,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: commonColors.bottomButton,
     height: 40,
-  },
+  },  
 });

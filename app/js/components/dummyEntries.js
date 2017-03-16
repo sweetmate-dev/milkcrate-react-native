@@ -360,6 +360,7 @@ export const RecentActivityEntries = [
     description: 'Pledge to switch from plastic to a reusable water bottle.',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 0,
+    likeByMe: false,
     coins: 10,
   },
   {
@@ -368,6 +369,7 @@ export const RecentActivityEntries = [
     description: 'Attend the Philly Bike Share meeting',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 1,
+    likeByMe: false,
     coins: 11,
   },
   {
@@ -376,6 +378,7 @@ export const RecentActivityEntries = [
     description: 'Attend the Philly Bike Share meeting',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 2,
+    likeByMe: true,
     coins: 12,
   },
   {
@@ -384,6 +387,7 @@ export const RecentActivityEntries = [
     description: 'Attend the Philly Bike Share meeting',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 3,
+    likeByMe: true,
     coins: 13,
   },
   {
@@ -392,59 +396,60 @@ export const RecentActivityEntries = [
     description: 'Attend the Philly Bike Share meeting',
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 4,
+    likeByMe: false,
     coins: 14,
   },
 ];
 
 export const EventsEntries = [
   {
-    date: 'Wednesday, Mar 8 2017',
+    date: 'Wednesday, Mar 15 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '1. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 1,
       },
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '2. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 2,
       },
 
     ],
   },
   {
-    date: 'Friday, Mar 10 2017',
+    date: 'Friday, Mar 17 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '3. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 4,
       },
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '4. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 5,
       },
 
     ],
   },
   {
-    date: 'Sunday, Mar 12 2017',
+    date: 'Sunday, Mar 19 2017',
     events: [
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '5. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 6,
       },
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '6. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 7,
       },
       {
         avatar: require('../../assets/imgs/stickers/bicycles.png'),
-        title: '7. Volunteer for the Bicycle Coalition',
+        title: 'Volunteer for the Bicycle Coalition',
         coins: 8,
       },
     ],

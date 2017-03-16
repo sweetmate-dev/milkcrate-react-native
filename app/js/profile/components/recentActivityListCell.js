@@ -70,11 +70,11 @@ export default class RecentActivityListCell extends Component {
                     <Text style={ styles.title }>{ title }</Text>
                   </View>
                 </View>
-                <Text style={ styles.text }>{ distance } Miles  { price } $$</Text>
+                <Text style={ styles.text }>{ distance } Miles  $$</Text>
               </View>
             </View>
             <View style={ styles.cellBottomContainer }>
-              <Text style={ styles.dscription }>{ description } </Text>
+              <Text numberOfLines={ 1 } style={ styles.dscription }>{ description } </Text>
             </View>
           </View>
           <View style={ styles.rightCoinContainer }>

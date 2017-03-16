@@ -27,6 +27,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const SPACE = 0.01;
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
+const map_selected_pin = require('../../../assets/imgs/map_marker_selected.png');
 
 class CategoryMap extends Component {
   constructor(props) {
@@ -41,28 +42,28 @@ class CategoryMap extends Component {
       },
       markers: [
         {
-          key: "1",
+          pin: map_pin,
           coordinate: {
             latitude: LATITUDE + SPACE,
             longitude: LONGITUDE + SPACE,
           },
         },
         {
-          key: '2',
+          pin: map_pin,
           coordinate: {
             latitude: LATITUDE,
             longitude: LONGITUDE,
           },
         },
         {
-          key: '3',
+          pin: map_pin,
           coordinate: {
             latitude: LATITUDE + SPACE,
             longitude: LONGITUDE - SPACE,
           },
         },
       ],
-      tappedPin: '1',
+      tappedPin: 0,
     };
   }
 
@@ -77,9 +78,23 @@ class CategoryMap extends Component {
     }
   }
 
-  onPressPin (key) {
+  componentDidMount() {
 
-    this.setState({tappedPin: key});
+    this.setState( ( state) => {
+      state.markers[this.state.tappedPin].pin = map_selected_pin;
+      return state;
+    });
+  }
+
+  onPressPin (index) {
+
+    this.setState( ( state) => {
+      state.markers[this.state.tappedPin].pin = map_pin;
+      state.markers[index].pin = map_selected_pin;
+      return state;
+    });
+
+    this.setState({ tappedPin: index });
   }
 
   render() {
@@ -98,20 +113,23 @@ class CategoryMap extends Component {
             longitudeDelta: LONGITUDE_DELTA,
           }}
         >
-          {this.state.markers.map(marker => (
-            <MapView.Marker
-              image={ map_pin }
-              key={ marker.key }
-              coordinate={ marker.coordinate }
-              onPress={ () => this.onPressPin(marker.key) }
-            />
-          ))}
-
+          {
+            this.state.markers.map( (marker, index) => (
+              <MapView.Marker
+                image={ marker.pin }
+                key={ index }
+                coordinate={ marker.coordinate }
+                flat={ true }
+                onPress={ () => this.onPressPin(index) }
+              />
+            ))            
+          }
         </MapView>
+
         <View style={ styles.calloutContainer } >
           <CategoryDetailView
             width={ screenWidth - 20}
-            title={ title + " - " + this.state.tappedPin }
+            title={ title + " - " + this.state.tappedPin.toString() }
             icon={ avatar }
             description="Great People, Great Service"
             distance={ 1.2 }
@@ -139,10 +157,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  map_pin: {
-    width: 24,
-    height: 37,
   },
   calloutContainer: {
     position: 'absolute',

@@ -45,7 +45,7 @@ const scenes = Actions.create(
     <Scene key="Events" component={ Events } />
     <Scene key="Settings" component={ Settings } />
     <Scene key="CommunityPoints" component={ CommunityPoints } />
-    <Scene key="WeeklyRecap" component={ WeeklyRecap } />
+    <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
   </Scene>
 );
 

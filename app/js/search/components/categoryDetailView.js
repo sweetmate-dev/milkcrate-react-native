@@ -83,7 +83,7 @@ export default class CategoryDetailView extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>{ distance } Miles  { price } $$</Text>
+              <Text style={ styles.text }>{ distance } Miles  $$</Text>
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>
@@ -148,8 +148,8 @@ const styles = StyleSheet.create({
     height: 44,
   },
   star: {
-    width: 12,
-    height: 11,
+    width: 16,
+    height: 16,
     marginLeft: 3,
   },
   title: {

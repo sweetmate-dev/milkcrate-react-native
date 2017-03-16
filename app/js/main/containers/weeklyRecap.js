@@ -61,6 +61,7 @@ const exploreWays = [
 
 const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 const icon =   require('../../../assets/imgs/stickers/coffee.png');
+const location =   require('../../../assets/imgs/weekly_location.png');
 
 export default class WeeklyRecap extends Component {
   constructor(props) {
@@ -70,7 +71,7 @@ export default class WeeklyRecap extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      seledtedDays: [false, false, false, false, false, false, false,],
+      seledtedDays: [true, false, true, false, false, false, false,],
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(WeeklyRecapEntries),
     };
   }
@@ -150,15 +151,15 @@ export default class WeeklyRecap extends Component {
               })
             }
           </View>
-          <View style={ styles.daysTitleWrapper }> 
-            <Text style={ styles.textTitle }>Tap any days you forgot</Text> 
-          </View>
           <View style={ styles.daysInfoContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>Elixr Coffee Roasters</Text>
-                <Text style={ styles.textValue }>Checked in 2 times.</Text>
+                <View style={ styles.checkedTimesContainer }>
+                  <Image style={ styles.imageLocation } source={ location } />
+                  <Text style={ styles.textValue }>Checked in 2 times.</Text>                  
+                </View>                  
               </View>
               <Point point={ 10 }/>
             </View>
@@ -175,6 +176,7 @@ export default class WeeklyRecap extends Component {
                 })
               }
             </View>  
+            <Text style={ styles.textComment }>Did you go on other days? Tap to select them</Text>
           </View>
           <ListView
             dataSource={ this.state.dataSourceRecentActivity }
@@ -195,8 +197,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: commonColors.percentListCellWeakBackground,
-    height: 58,    
+    backgroundColor: commonColors.theme,
+    height: 64,    
   },
   headerTitleWrapper: {
     flex: 3,
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   textHeaderTitle: {
-    color: commonColors.title,
+    color: '#fff',
     fontFamily: 'Blanch',
     fontSize: 28,
   },
@@ -216,13 +218,13 @@ const styles = StyleSheet.create({
   saveWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#72b3a6',
     borderRadius: 5,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   textSave: {
-    color: commonColors.title,
+    color: '#fff',
     fontFamily: 'OpenSans-Semibold',
     fontSize: 12,
     textAlign: 'center',
@@ -272,7 +274,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginTop: 25,
-    marginBottom: 20,
+    marginBottom: 40,
     marginHorizontal: 25,
   },
   textCount: {
@@ -311,12 +313,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
-  daysTitleWrapper: {
-    marginTop: 20,
-    paddingHorizontal: 16,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
   daysInfoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -324,14 +320,15 @@ const styles = StyleSheet.create({
     borderTopColor: commonColors.line,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
-    marginTop: 8,
+    paddingVertical: 8,
   },
   daysContainer: {
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 15,
+    paddingTop: 15,
+    paddingBottom: 8,
     paddingHorizontal: 16,
   },
   dayWrapper: {
@@ -362,5 +359,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 10,
     fontWeight: 'bold',
-  },  
+  },
+  checkedTimesContainer: {
+    flexDirection: 'row',
+  },
+  imageLocation: {
+    width: 10,
+    height: 16,
+    marginRight: 4,
+  },
+  textComment: {
+    alignSelf: 'stretch',
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 10,
+    paddingHorizontal: 16,
+    textAlign: 'left',
+  },
+
 });

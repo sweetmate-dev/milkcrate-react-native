@@ -57,7 +57,7 @@ export default class SearchBar extends Component {
     iconSearchName: "md-search",
     iconBackName: "md-arrow-back",
     placeholder: "Search",
-    returnKeyType: "Discover",
+    returnKeyType: "Search",
     padding: 0,
     paddingLeft: 0,
     paddingRight: 0,
@@ -132,7 +132,7 @@ export default class SearchBar extends Component {
 
     let { iconSize } = this.props
 
-    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.8
+    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.5
 
     return (
       <View
@@ -144,7 +144,7 @@ export default class SearchBar extends Component {
             [
               styles.searchBar,
               {
-                height: height + 10,
+                height: height,
                 paddingLeft: height * 0.25,
               },
               inputStyle
@@ -154,12 +154,12 @@ export default class SearchBar extends Component {
           {
             this.state.isOnFocus ?
               <Icon
-                name={ iconSearchName } size={ height }
+                name={ iconSearchName } size={ height * 0.7 }
                 color={ iconColor }
               />
             :
               <Icon
-                name={ iconSearchName } size={ height }
+                name={ iconSearchName } size={ height * 0.7 }
                 color={ iconColor }
               />
           }
@@ -180,7 +180,7 @@ export default class SearchBar extends Component {
               [styles.searchBarInput,
                 {
                   paddingLeft: height * 0.3,
-                  fontSize: height * 0.6,
+                  fontSize: height * 0.5,
                   flex: 1,
                 },
                 textStyle

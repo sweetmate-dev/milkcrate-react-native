@@ -19,7 +19,7 @@ import * as actionDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
@@ -61,11 +61,10 @@ class ActionDetail extends Component {
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar
-          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
+        <NavTitleBar
+          buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          onFilter={ this.onFilter }
-          placeholder ='Discover Action'
+          title ='I Recycled Today'
         />
         <ScrollView>
           <Image style={ styles.imageTopBackground } source={ background_top }/>
@@ -74,7 +73,6 @@ class ActionDetail extends Component {
               <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>I Recycled Today</Text>
-                <Text style={ styles.textValue }>Repeatable Action</Text>
               </View>
               <Point point={ 15 }/>
             </View>
@@ -134,11 +132,6 @@ const styles = StyleSheet.create({
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
-  },
-  textValue: {
-    color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
-    fontSize: 12,
   },
   textDescription: {
     color: commonColors.grayMoreText,

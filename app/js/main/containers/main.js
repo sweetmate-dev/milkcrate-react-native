@@ -85,26 +85,26 @@ export default class Main extends Component {
 
           {/* Alert */}
           <TabNavigator.Item
-            selected={ this.state.selectedTab === 'alert' }
-            title="Alert"
+            selected={ this.state.selectedTab === 'alerts' }
+            title="Alerts"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
             renderIcon={ () => <Image source={ alertIcon } style={ styles.iconTabbar3 }/> }
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
-            onPress={ () => this.setState({ selectedTab: 'alert' }) }>
+            onPress={ () => this.setState({ selectedTab: 'alerts' }) }>
             <Notifications subOne = { subOne }/>
           </TabNavigator.Item>
           
           {/* You */}
           <TabNavigator.Item
-            selected={ this.state.selectedTab === 'you' }
-            title="You"
+            selected={ this.state.selectedTab === 'profile' }
+            title="Profile"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
             renderSelectedIcon={ () => <Image source={ youSelectedIcon } style={ styles.iconTabbar4 }/> }
-            onPress={ () => this.setState({selectedTab: 'you' }) }>
+            onPress={ () => this.setState({selectedTab: 'profile' }) }>
             <Profile subOne = { subOne }/>
           </TabNavigator.Item>
 

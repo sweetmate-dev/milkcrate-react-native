@@ -4,11 +4,11 @@ import {
   StyleSheet,
   View,
   Image,
+  Text,
   TouchableOpacity,
   Alert,
 } from 'react-native';
 
-import SearchBar from './searchBar';
 import { screenWidth } from '../styles/commonStyles';
 import * as commonColors from '../styles/commonColors';
 import * as commonStyles from '../styles/commonStyles';
@@ -17,38 +17,29 @@ const back_arrow = require('../../assets/imgs/back_arrow.png');
 const filter = require('../../assets/imgs/filter.png');
 const setting = require('../../assets/imgs/setting.png');
 
-export default class NavSearchBar extends Component {
+export default class NavTitleBar extends Component {
 
   static propTypes = {
-    onSearchChange: PropTypes.func,
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
-    placeholder: PropTypes.string,
+    title: PropTypes.string,
     buttons: PropTypes.number,    
   }
 
   static defaultProps = {
-    onSearchChange: () => {},
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
-    placeholder: 'Search for activities',
+    title: 'Title',
     buttons: commonStyles.NavNoneButton,
   }
 
   constructor(props) {
     super(props);
-    this.onSearchChange = this.onSearchChange.bind(this);
     this.onBack = this.onBack.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSetting = this.onSetting.bind(this);
-  }
-
-  onSearchChange() {
-    if (this.props.onSearchChange) {
-      this.props.onSearchChange();
-    }
   }
 
   onBack() {
@@ -70,7 +61,7 @@ export default class NavSearchBar extends Component {
   }
   render() {
     const {
-      placeholder,
+      title,
       buttons,
     } = this.props;
 
@@ -88,19 +79,10 @@ export default class NavSearchBar extends Component {
                 </TouchableOpacity>
               </View>
             :
-              <View style={ styles.searchBarPadding }/>
+              <View style={ styles.titleBarPadding }/>
           }
-          <View style={ styles.searchBarWrap }>
-            <SearchBar
-              onSearchChange={ () => this.onSearchChange() }
-              height={ 28 }
-              autoCorrect={ false }
-              returnKeyType={ "search" }
-              iconColor={ "#ffffff99" }
-              placeholder = { placeholder }
-              placeholderColor="#ffffff99"
-              paddingTop={ 28 }
-            />
+          <View style={ styles.titleBarWrap }>
+            <Text style={ styles.textTitle }>{ title }</Text>
           </View>
           {
             buttons & commonStyles.NavFilterButton ?
@@ -121,7 +103,7 @@ export default class NavSearchBar extends Component {
                   </TouchableOpacity>
                 </View>
               :
-                <View style={ styles.searchBarPadding }/>
+                <View style={ styles.titleBarPadding }/>
           }
         </View>
       </View>
@@ -140,27 +122,35 @@ const styles = StyleSheet.create({
     borderBottomColor: '#00000021',
     height: 64,
   },
-  searchBarWrap: {
+  titleBarWrap: {
     flex : 6,
     backgroundColor: 'transparent',
   },
-  searchBarPadding: {
+  titleBarPadding: {
     flex: 1,
+  },
+  textTitle: {
+    color: '#fff',
+    fontFamily: 'Blanch',
+    fontSize: 28,
+    textAlign: 'center',
+    paddingTop: 20,
   },
   buttonWrap: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
   button: {
     width: screenWidth * 0.12,
-    height: 44,
+    height: screenWidth * 0.12,
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
     width: 14,
     height: 14,
+    marginTop: 10,
   },
 });

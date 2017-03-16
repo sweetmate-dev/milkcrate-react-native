@@ -20,14 +20,13 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
 const icon =   require('../../../assets/imgs/stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
-const web = require('../../../assets/imgs/web.png');
 
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
 
@@ -74,10 +73,6 @@ class EventsDetail extends Component {
     alert("Tapped 'I am Going' button!");
   }
 
-  onGoWeb() {
-    alert("Tapped web button!");
-  }
-
   onGetDirection() {
     alert("Tapped GetDirection button!");
   }
@@ -87,22 +82,22 @@ class EventsDetail extends Component {
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar
-          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
+        <NavTitleBar
+          buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          onFilter={ this.onFilter }
-          placeholder ='Discover Events Detail'
+          title = 'Volunteer for the Bicycle Coalition'
         />
         <ScrollView>
           <MapView
             style={ styles.map }
             initialRegion={ this.state.region }
+            scrollEnabled={ false }
+            zoomEnabled={ false }
           >
             {
               <MapView.Marker
                 image={ map_pin }
                 coordinate={ this.state.coordinate }
-                onPress={ () => this.onPressPin() }
               />
             }
           </MapView>
@@ -122,15 +117,7 @@ class EventsDetail extends Component {
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
-              </View>
-              <View style={ styles.visitContainer }>
-                <TouchableOpacity onPress={ () => this.onGoWeb() }>
-                  <View style={ styles.visitCellContainer }>
-                    <Image style={ styles.imageVisit } source={ web } />
-                    <Text style={ styles.textInfoTitle }>Web</Text>
-                  </View>
-                </TouchableOpacity>  
-              </View>
+              </View>              
             </View>
 
             <View style={ styles.dateContinaer }>
@@ -148,7 +135,7 @@ class EventsDetail extends Component {
         </ScrollView>
         <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
           <View style={ styles.buttonCheckin }>
-            <Text style={ styles.textButton }>I'm Going</Text>
+            <Text style={ styles.textButton }>Register</Text>
             </View>
         </TouchableOpacity>
       </View>

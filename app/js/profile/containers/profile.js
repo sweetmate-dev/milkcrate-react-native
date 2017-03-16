@@ -93,12 +93,12 @@ class Profile extends Component {
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>14th ></Text>
+                <Text style={ styles.textValue }>14th</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>8</Text>
-                <Text style={ styles.textSmall }>Hours Volunteered</Text>
+                <Text style={ styles.textSmall }>Volunteer Hours</Text>
               </View>
             </View>
           </View>
@@ -138,9 +138,9 @@ const styles = StyleSheet.create({
   topContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 16,
     paddingHorizontal: 20,
-    backgroundColor: '#ebf6fb',
+    // backgroundColor: '#ebf6fb',
   },
   textName: {
     color: commonColors.title,
@@ -153,11 +153,13 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    paddingTop: 16,
   },
   pointSubContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    width: commonStyles.screenWidth / 3,
   },
   textValue: {
     color: commonColors.bottomButton,

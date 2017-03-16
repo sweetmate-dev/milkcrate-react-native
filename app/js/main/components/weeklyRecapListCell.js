@@ -14,7 +14,7 @@ import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
 
-const calendar = require('../../../assets/imgs/events.png');
+// const calendar = require('../../../assets/imgs/events.png');
 
 export default class WeeklyRecapListCell extends Component {
 
@@ -63,11 +63,7 @@ export default class WeeklyRecapListCell extends Component {
           <Image style={ styles.imageIcon } source={ icon }/>
           <View style={ styles.mainContentContainer }>
             <Text style={ styles.textDescription }>{ date }</Text>
-            <Text style={ styles.textTitle }>{ title }</Text>
-            <View style={ styles.calendarContainer }>
-              <Image style={ styles.imageCalendar } source={ calendar }/>
-              <Text style={ styles.textDescription }>RSVP’d and attended for { time } hours.</Text>
-            </View>
+            <Text style={ styles.textTitle }>{ title }</Text>            
           </View>
           <Point point={ coins }/>
         </View>
@@ -79,19 +75,20 @@ const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingVertical: 6,
+    paddingVertical: 16,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
+    alignItems: 'center',
   },  
   mainContentContainer: {
     flex: 1,
     paddingHorizontal: 10,
   },
   imageIcon: {
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
     borderRadius: 2,
   },
   textTitle: {
@@ -106,14 +103,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     backgroundColor: 'transparent',
   },  
-  imageCalendar: {
-    width: 15,
-    height: 16,
-    marginRight: 5,
-  },
-  calendarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
+  // imageCalendar: {
+  //   width: 15,
+  //   height: 16,
+  //   marginRight: 5,
+  // },
+  // calendarContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'flex-start',
+  // },
 });

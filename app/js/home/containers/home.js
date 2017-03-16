@@ -96,6 +96,7 @@ class Home extends Component {
         avatar={ rowData.avatar }
         time={ rowData.time }
         hearts={ rowData.hearts }
+        likeByMe={ rowData.likeByMe }
         coins={ rowData.coins }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />

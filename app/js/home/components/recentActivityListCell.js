@@ -14,7 +14,8 @@ import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
 
-const heart = require('../../../assets/imgs/heart.png');
+const imageHeart = require('../../../assets/imgs/heart.png');
+const imageRedHeart = require('../../../assets/imgs/heart_red.png');
 
 export default class RecentActivityListCell extends Component {
 
@@ -25,19 +26,32 @@ export default class RecentActivityListCell extends Component {
     description: PropTypes.string.isRequired,
     avatar: PropTypes.number.isRequired,
     time: PropTypes.number,
-    heart: PropTypes.number,
+    hearts: PropTypes.number,
+    likeByMe: PropTypes.bool,
     onClick: PropTypes.func,
   }
 
   static defaultProps = {
     width: commonStyles.screenWidth,
-    height: commonStyles.hp(14),
-    heart: 0,
-    onClick: () => {}
+    hearts: 0,
+    likeByMe: false,
+    onClick: () => {},
   }
 
   constructor(props) {
     super(props);
+
+    var image;
+    if (this.props.likeByMe === true)
+      image = imageRedHeart;
+    else 
+      image = imageHeart;
+
+    this.state = {
+      imageLike: image,
+      hearts: this.props.hearts,
+    }
+
     this.onClick = this.onClick.bind(this);
   }
 
@@ -48,7 +62,16 @@ export default class RecentActivityListCell extends Component {
   }
 
   onLike() {
-    alert("onLike");
+
+    if (this.state.imageLike === imageHeart ) {
+
+      this.setState({ imageLike: imageRedHeart });
+      this.setState({ hearts: this.state.hearts + 1 });
+    } else {
+
+      this.setState({ imageLike: imageHeart });
+      this.setState({ hearts: this.state.hearts - 1 });
+    }
   }
 
   render() {
@@ -61,37 +84,40 @@ export default class RecentActivityListCell extends Component {
       time,
       hearts,
       coins,
+      likeByMe,
       onClick,
     } = this.props;
-
+    
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
-          <View style={ styles.avatarsContainer }>
+          <View style={ styles.avatarContainer }>
             <Image style={ styles.avatar } source={ avatar }/>
           </View>
           <View style={ styles.mainContentContainer }>
-            <View style={ styles.names_timeContainer }>
-              <Text style={ styles.textName }>{ name }</Text>
-              <Text style={ styles.textSmall }>{ time } min ago completed</Text>
+            <View style={ styles.topContainer }>
+              <View style={ styles.names_timeContainer }>
+                <Text style={ styles.textName }>{ name }</Text>
+                <Text style={ styles.textSmall }>{ time }{ time > 1 ? ' mins ago' : ' min ago' }</Text>                
+              </View>
+              <Point point={ coins }/>
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
-            <View style={ styles.like_coinContainer }>
+            <View style={ styles.bottomContainer }>
               <TouchableOpacity onPress={ () => this.onLike() }>
                 <View style={ styles.heartContainer }>
                   <View style={ styles.likeWrapper }>
-                    <Image style={ styles.imageLike } source={ heart }/>
+                    <Image style={ styles.imageLike } source={ this.state.imageLike }/>
                   </View>  
   
                   <Text style={ styles.textSmall }>
 
                   {
-                    hearts != 0 ? hearts : hearts + " - Be the first to like it!"
+                    this.state.hearts != 0 ? this.state.hearts : this.state.hearts + " - Be the first to like it!"
                   }
                   </Text>
                 </View>
               </TouchableOpacity>
-              <Point point={ coins }/>
             </View>
           </View>
         </View>
@@ -148,12 +174,18 @@ const styles = StyleSheet.create({
     // marginVertical: 5,
     marginTop: 5,
   },
-  like_coinContainer: {
+ topContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     alignSelf: 'stretch',
+  },
+
+  bottomContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   heartContainer: {
     flexDirection: 'row',
