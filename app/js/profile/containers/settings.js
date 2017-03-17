@@ -51,7 +51,11 @@ class Settings extends Component {
   }
 
   onEditProfile() {
-    alert( 'Tapped onEditProfile');
+    Actions.EditProfile();
+  }
+
+  onChangePassword() {
+    alert( 'Tapped onChangePassword');
   }
 
   onShareThisApp() {
@@ -106,6 +110,13 @@ class Settings extends Component {
               <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
             </View>
           </TouchableHighlight>
+          <TouchableHighlight onPress={ () => this.onChangePassword() }>
+            <View style={ styles.cellContainer }>
+              <Text style={ styles.textCellTitle }>Change password</Text>
+              <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
+            </View>
+          </TouchableHighlight>
+
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Allow others to see my activity</Text>
             <Switch onValueChange={ (value) => this.setState({ allowOthersToSeeMyActivity: value })} value={ this.state.allowOthersToSeeMyActivity }/>
@@ -189,13 +200,14 @@ export default connect(state => ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#f8f8f8',
   },
   scrollView: {
-    backgroundColor: '#f8f8f8',
+    backgroundColor: 'transparent',
   },
   textSettingsSection: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     marginTop: 40,
     marginLeft: 8,
@@ -203,7 +215,7 @@ const styles = StyleSheet.create({
   },
   textOtherSection: {
     color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     marginTop: 16,
     marginLeft: 8,
@@ -227,7 +239,7 @@ const styles = StyleSheet.create({
   },
   textCellTitle: {
     color: commonColors.title,
-    fontFamily: 'OpenSans-Semibold',
+    fontFamily: 'Open Sans',
     fontSize: 14,
   },
   logoutButtonWrapper: {
@@ -245,7 +257,7 @@ const styles = StyleSheet.create({
   },
   textLogOut: {
     color: commonColors.bottomButton,
-    fontFamily: 'Open Sans',
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
 

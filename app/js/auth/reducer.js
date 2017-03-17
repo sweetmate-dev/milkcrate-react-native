@@ -4,9 +4,24 @@ const initialState = {
   status: null,
 };
 
-export default function login(state = initialState, action = {}) {
+export default function auth(state = initialState, action = {}) {
 
   switch (action.type) {
+    case types.SIGNUP_REQUEST:
+      return {
+        ...state,
+        status: 'signup_request',
+      };
+    case types.SIGNUP_SUCCESS:
+      return {
+        ...state,
+        status: 'signup_success',
+      };
+    case types.SIGNU_ERROR:
+      return {
+        ...state,
+        status: 'signup_error',
+      };
     case types.LOGIN_REQUEST:
       return {
         ...state,

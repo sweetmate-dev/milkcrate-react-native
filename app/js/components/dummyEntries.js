@@ -60,7 +60,7 @@ export const LeaderboardEntries = [
     name: 'Morgan B.',
     points: 129,
     avatar: require('../../assets/imgs/avatar.png'),
-    status: 3,
+    status: 0,
   },
   {
     name: 'Paul V.',

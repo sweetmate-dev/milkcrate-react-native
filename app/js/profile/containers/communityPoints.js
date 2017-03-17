@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Dimensions,
   ScrollView,
   TouchableOpacity,
@@ -24,7 +23,7 @@ import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
-import LeaderboardListCell from '../../components/leaderboardListCell';
+import SimpleLeaderboardListCell from '../components/simpleLeaderboardListCell';
 
 import { ProfileRecentActivityEntries, LeaderboardEntries } from '../../components/dummyEntries';
 
@@ -32,15 +31,16 @@ class CommunityPoints extends Component {
   constructor(props) {
     super(props);
 
-    var dataSource = new ListView.DataSource(
+    var dataSourceRecentActivity = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     var dataSourceLeaderboard = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      recentActivityDataSource: dataSource.cloneWithRows(ProfileRecentActivityEntries),
+      dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(ProfileRecentActivityEntries),
       dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
+      currentUserIndex: 3,
     };
   }
 
@@ -60,10 +60,10 @@ class CommunityPoints extends Component {
   }
 
   onLeaderboardCellPressed () {
-    alert("Tapped Leaderboard");
+    Actions.Leaderboard();
   }
 
-  renderRow(rowData, sectionID, rowID) {
+  renderRecentActivityRow(rowData, sectionID, rowID) {
 
     return (
       <RecentActivityListCell
@@ -80,13 +80,21 @@ class CommunityPoints extends Component {
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
 
+    let currentUserIndex = -1;
+
+    if (rowID == this.state.currentUserIndex)
+      currentUserIndex = 0;
+    else if (((rowID - 1) == this.state.currentUserIndex) || ((rowID + 1) == this.state.currentUserIndex))
+      currentUserIndex = 1;
+
     return (
-      <LeaderboardListCell
+      <SimpleLeaderboardListCell
         status={ rowData.status }
         index={ Number(rowID) + 1 }
         name={ rowData.name }
         points={ rowData.points }
         avatar={ rowData.avatar }
+        currentUserIndex={ currentUserIndex } 
       />
     );
   }
@@ -135,8 +143,8 @@ class CommunityPoints extends Component {
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>
             <ListView
-              dataSource={ this.state.recentActivityDataSource }
-              renderRow={ this.renderRow.bind(this) }/>
+              dataSource={ this.state.dataSourceRecentActivity }
+              renderRow={ this.renderRecentActivityRow.bind(this) }/>
           </View>
         </ScrollView>
       </View>
@@ -221,5 +229,4 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-
 });

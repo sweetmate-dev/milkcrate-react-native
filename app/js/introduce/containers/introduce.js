@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import AppIntro from '../components/AppIntro';
-import Login from '../../login/containers/login';
+import Signup from '../../auth/containers/signup';
 
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -122,7 +122,7 @@ export default class Introduce extends Component {
               <View style={ styles.paddingBottom }></View>
             </Image>
           </View>
-          <Login/>
+          <Signup/>
         </AppIntro>
       </View>
     );

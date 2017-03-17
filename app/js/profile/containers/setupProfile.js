@@ -29,7 +29,7 @@ const camera = require('../../../assets/imgs/camera.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 
 
-const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
+const arrayGender = ['Male', 'Female', 'Other'];
 
 class SetupProfile extends Component {
   constructor(props) {
@@ -50,10 +50,11 @@ class SetupProfile extends Component {
 
     } else if (newProps.status == 'profile_error') {
 
-    }
+    } 
   }
 
   onSelectGender(gender) {
+    
     this.setState({
       gender: gender
     });
@@ -65,6 +66,7 @@ class SetupProfile extends Component {
   }
 
   onPickProfilePhoto() {
+
     var options = {
       quality: 1.0,
       storageOptions: {
@@ -72,12 +74,12 @@ class SetupProfile extends Component {
       }
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, (response) => {      
       console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
-      }
+      } 
       else if (response.error) {
         console.log('ImagePicker Error: ', response.error); 
       }
@@ -92,14 +94,15 @@ class SetupProfile extends Component {
   }
 
   showPhoto () {
-    if (this.state.profilePhoto)
+    if (this.state.profilePhoto) {
       return (
         <Image source={ this.state.profilePhoto } style={ styles.imagePhoto }/>
       );
-
+    }
+      
     return (
-        <Image source={ camera } style={ styles.imageCamera }/>
-      );
+      <Image source={ camera } style={ styles.imageCamera }/>
+    );
   }
 
   render() {
@@ -145,16 +148,22 @@ class SetupProfile extends Component {
                 customStyles={{
                   dateInput: {
                     borderColor: '#fff',
-                  }
+                  },
+                  placeholderText: {
+                    color: commonColors.placeholderText,
+                  },
+                  dateText: {
+                    color: '#000',
+                  },
                 }}
                 onDateChange={ (date) => { this.setState({ birthday: date }) }}
               />
               <View style={ styles.dropDownWrapper }>
                 <ModalDropdown
                   options={ arrayGender }
-                  defaultValue='Prefer not to say'
+                  defaultValue='Gender'
                   style={ styles.dropdown }
-                  textStyle ={ styles.dropDownText }
+                  textStyle ={ this.state.gender==='' ? styles.dropDownPlaceholderText : styles.dropDownText }
                   dropdownStyle={ styles.dropdownStyle }
                   onSelect={ (rowId, rowData) => this.onSelectGender(rowData) }
                 />
@@ -305,13 +314,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  dropDownText: {
+  dropDownPlaceholderText: {
     width: (screenWidth - 80) / 2 - 3,
-    // color: commonColors.title,
+    color: commonColors.placeholderText,
     fontFamily: 'Open Sans',
     fontSize: 14,
     textAlign: 'center',
   },
+  dropDownText: {
+    width: (screenWidth - 80) / 2 - 3,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+
   dropDownWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',

@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Dimensions,
   ScrollView,
   TouchableOpacity,
@@ -15,7 +14,7 @@ import {
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as youActions from '../actions';
+import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -127,7 +126,7 @@ export default connect(state => ({
   status: state.profile.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(youActions, dispatch)
+    actions: bindActionCreators(profileActions, dispatch)
   })
 )(Profile);
 

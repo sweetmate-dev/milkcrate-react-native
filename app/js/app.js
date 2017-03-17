@@ -20,7 +20,7 @@ const reducer = combineReducers(reducers);
 const store = createStoreWithMiddleware(reducer);
 
 import Introduce from './introduce/containers/introduce';
-import Login from './login/containers/login';
+import Signup from './auth/containers/signup';
 import Main from './main/containers/main';
 import CategoryView from './search/containers/categoryView';
 import BusinessesDetail from './search/containers/businessesDetail';
@@ -31,13 +31,16 @@ import SetupProfile from './profile/containers/setupProfile';
 import Settings from './profile/containers/settings';
 import CommunityPoints from './profile/containers/communityPoints';
 import WeeklyRecap from './main/containers/weeklyRecap';
+import Leaderboard from './profile/containers/leaderboard';
+import EditProfile from './profile/containers/editProfile';
+
 
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="Introduce" component={ Introduce } />
-    <Scene key="Login" component={ Login } />
+    <Scene key="Signup" component={ Signup } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -46,13 +49,15 @@ const scenes = Actions.create(
     <Scene key="Settings" component={ Settings } />
     <Scene key="CommunityPoints" component={ CommunityPoints } />
     <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
+    <Scene key="Leaderboard" component={ Leaderboard } />
+    <Scene key="EditProfile" component={ EditProfile } initial/>
   </Scene>
 );
 
 //Deep Links
 const deepLink_Generals = [
   { url: '/introduce', action: Actions.Introduce },
-  { url: '/login', action: Actions.Login },
+  { url: '/signup', action: Actions.Signup },
   { url: '/main', action: Actions.Main, parameters: { tab: 'home', }},
   { url: '/home', action: Actions.Main, parameters: { tab: 'home', }},
   { url: '/search', action: Actions.Main, parameters: { tab: 'search', }},

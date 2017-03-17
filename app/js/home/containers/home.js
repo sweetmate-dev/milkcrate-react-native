@@ -24,7 +24,6 @@ import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
 import TrendingCarousel from '../components/trendingCarousel';
-import LeaderboardListCell from '../../components/leaderboardListCell';
 import RecentActivityListCell from '../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DailyPollStateCell from '../components/dailyPollStateCell';
@@ -34,7 +33,7 @@ import Point from '../../components/Point';
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-import { ChallengeCarouselEntries, LeaderboardEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
+import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
 
 const trending = require('../../../assets/imgs/trending.png');
 
@@ -44,9 +43,6 @@ const dummyText1 = 'See how your lifestyle choices to See how your lifestyle cho
 class Home extends Component {
   constructor(props) {
     super(props);
-
-    var dataSourceLeaderboard = new ListView.DataSource(
-      { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     var dataSourceRecentActivity = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -58,7 +54,6 @@ class Home extends Component {
       selectedDailyPollValue: 0,
       selectedDailyPollIndex: -1,
 
-      dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
     };
   }
@@ -72,19 +67,6 @@ class Home extends Component {
     } else if (newProps.status == 'home_error') {
 
     }
-  }
-
-  renderLeaderboardRow(rowData, sectionID, rowID) {
-
-    return (
-      <LeaderboardListCell
-        status={ rowData.status }
-        index={ Number(rowID) + 1 }
-        name={ rowData.name }
-        points={ rowData.points }
-        avatar={ rowData.avatar }
-      />
-    );
   }
 
   renderRecentActivityRow(rowData, sectionID, rowID) {
@@ -101,10 +83,6 @@ class Home extends Component {
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />
     );
-  }
-
-  onLeaderboardCellPressed () {
-    alert("Tapped Leaderboard");
   }
 
   onRecentActivityCellPressed (rowID) {
@@ -165,23 +143,6 @@ class Home extends Component {
       >
         { this.getChallengeCarousel(ChallengeCarouselEntries) }
       </Carousel>
-    );
-  }
-
-  get showLeaderboard() {
-    return (
-      <View style={ styles.leaderboardContainer }>
-        <Text style={ styles.textTitle }>Comcast Leaderboard • You are in 4th place</Text>
-        <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
-          <View style={ styles.leaderboardListViewWrapper }>
-            <ListView
-              dataSource={ this.state.dataSourceLeaderboard }
-              renderRow={ this.renderLeaderboardRow.bind(this) }
-              contentContainerStyle={ styles.leaderboardListView}
-            />
-          </View>
-        </TouchableHighlight>
-      </View>
     );
   }
 
@@ -338,7 +299,6 @@ class Home extends Component {
           scrollEventThrottle={ 200 }
         >
           { this.showChallenges }
-          {/*{ this.showLeaderboard }*/}
           { this.showTrending }
           { this.showDailyPoll }
           { this.showRecentActivity }          
@@ -370,23 +330,11 @@ const styles = StyleSheet.create({
   sliderContainer: {
     marginLeft: -carouselLeftMargin,
   },
-  leaderboardContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   textTitle: {
     color: commonColors.grayMoreText,
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     padding: 10,
-  },
-  leaderboardListViewWrapper: {
-    borderStyle: 'solid',
-    borderTopWidth: 1,
-    borderTopColor: commonColors.line,
-    borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,
-    height: commonStyles.hp(27),
   },
   recentActivityListViewWrapper: {
     borderStyle: 'solid',
@@ -411,10 +359,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 10,
-  },
-  leaderboardListView: {
-    flex: 1,
-    justifyContent: 'center',
   },
   dailyPollContainer: {
     flex: 1,

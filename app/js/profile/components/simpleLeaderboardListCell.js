@@ -7,14 +7,14 @@ import {
   Image,
 } from 'react-native';
 
-import { screenWidth } from '../styles/commonStyles';
-import * as commonColors from '../styles/commonColors';
+import { screenWidth } from '../../styles/commonStyles';
+import * as commonColors from '../../styles/commonColors';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 
-const chevron_down = require('../../assets/imgs/chevron_down.png');
-const chevron_up = require('../../assets/imgs/chevron_up.png');
+const chevron_down = require('../../../assets/imgs/chevron_down.png');
+const chevron_up = require('../../../assets/imgs/chevron_up.png');
 
-export default class LeaderboardListCell extends Component {
+export default class SimpleLeaderboardListCell extends Component {
 
   static propTypes = {
     height: PropTypes.number,
@@ -24,7 +24,7 @@ export default class LeaderboardListCell extends Component {
     name: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
     avatar: PropTypes.number.isRequired,
-    // onClick: PropTypes.func,
+    currentUserIndex: PropTypes.number,
   }
 
   static defaultProps = {
@@ -32,21 +32,13 @@ export default class LeaderboardListCell extends Component {
     height: 32,
     status: 0,
     points: 0,
-    // onClick: () => {}
+    currentUserIndex: -1,
   }
 
   constructor(props) {
 
     super(props);
-    // this.onClick = this.onClick.bind(this);
   }
-
-  // onClick() {
-
-  //   if (this.props.onClick) {
-  //     this.props.onClick();
-  //   }
-  // }
 
   showStatus (status) {
 
@@ -63,9 +55,9 @@ export default class LeaderboardListCell extends Component {
     );
   }
 
-  showInfo(status, name, points) {
+  showInfo(currentUserIndex, name, points) {
 
-    if (status == 1) {
+    if (currentUserIndex == 0) {
       return (
         <View style={ styles.activeCellInfoContainer }>
           <View style={ styles.secondContainer }>
@@ -78,7 +70,7 @@ export default class LeaderboardListCell extends Component {
           </View>
         </View>  
       );
-    } else if ((status == 2) || (status == 3)) {
+    } else if (currentUserIndex == 1) {
       return (
         <View style={ styles.secondContainer }>
           <Text style={ [styles.textName, { opacity: 0.6 }] }>{ name }</Text>
@@ -88,8 +80,8 @@ export default class LeaderboardListCell extends Component {
     }
   }
 
-  showAvatar( status, avatar) {
-    if (status == 1)
+  showAvatar( currentUserIndex, avatar) {
+    if (currentUserIndex == 0)
       return (<Image style={ styles.avatar } source={ avatar }/>);
     
     return (<Image style={ [styles.avatar, {opacity: 0.6}] } source={ avatar }/>);
@@ -104,23 +96,22 @@ export default class LeaderboardListCell extends Component {
       name,
       points,
       avatar,
-      // onClick,
+      currentUserIndex,
     } = this.props;
 
     return (
-      // <TouchableHighlight onPress={ () => onClick() }>
-        <View style={ styles.cellContainer }>
-          <View style={ styles.firstContainer }>
-            { this.showStatus(status) }
-            <Text style={ styles.textIndex }>{ index }</Text>
-            { this.showAvatar(status, avatar) }
-            { this.showInfo(status, name, points) }
-          </View>
+      <View style={ styles.cellContainer }>
+        <View style={ styles.firstContainer }>
+          { this.showStatus(status) }
+          <Text style={ styles.textIndex }>{ index }</Text>
+          { this.showAvatar(currentUserIndex, avatar) }
+          { this.showInfo(currentUserIndex, name, points) }
         </View>
-      // </TouchableHighlight>
+      </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
@@ -142,7 +133,8 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-    paddingHorizontal: 5,
+    paddingLeft: 8,
+    paddingRight: 12,
   },
   avatar: {
     width: 32,

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as loginActions from '../actions';
+import * as signupActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
@@ -24,7 +24,7 @@ const background = require('../../../assets/imgs/background_login.png');
 const eye = require('../../../assets/imgs/eye.png');
 const eye_slash = require('../../../assets/imgs/eye_slash.png');
 
-class Login extends Component {
+class Signup extends Component {
   constructor(props) {
     super(props);
 
@@ -33,22 +33,22 @@ class Login extends Component {
       password: '',
       confirmPassword: '',
       communityCode: '',
-      secureTextPassword: true,
+      bShowConfirmPassword: true,
     };
   }
 
   componentWillReceiveProps(newProps) {
 
-    if (newProps.status == 'login_request') {
+    if (newProps.status == 'signup_request') {
 
-    } else if (newProps.status == 'login_success') {
+    } else if (newProps.status == 'signup_success') {
 
-    } else if (newProps.status == 'login_error') {
+    } else if (newProps.status == 'signup_error') {
 
     }
   }
 
-  onLogIn() {
+  onSignUp() {
 
     if (this.state.email == '') {
       Alert.alert('Please enter email address.');
@@ -67,19 +67,15 @@ class Login extends Component {
 
     Actions.SetupProfile();
 
-    // this.props.login(this.state.email, this.state.password, this.state.communityCode);
+    // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
   }
 
   onContactUs() {
     alert("Contact Us");
   }
 
-  onShowPlainTextPassword() {
-    this.setState({ secureTextPassword: false });
-  }
-
-  onHidePlainTextPassword() {
-    this.setState({ secureTextPassword: true });
+  onToggleConfirmPassword() {
+    this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
   }
 
   render() {
@@ -109,7 +105,7 @@ class Login extends Component {
                 autoCapitalize="none"
                 autoCorrect={ false }
                 placeholder="Password"
-                secureTextEntry={ this.state.secureTextPassword }
+                secureTextEntry={ this.state.bShowConfirmPassword }
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="center"
                 style={ styles.input }
@@ -117,20 +113,13 @@ class Login extends Component {
                 returnKeyType={ 'next' }
                 onChangeText={ (text) => this.setState({ password: text }) }
               />
-              <TouchableOpacity 
-                activeOpacity={ .5 } 
-                style={ styles.eyeButtonWrapper }
-                onPress={ () => this.onHidePlainTextPassword() }
-              >
-                <Image source={ eye_slash } style={ styles.imageEye }/>
-              </TouchableOpacity>  
             </View>
             <View style={ styles.inputWrapper }>
               <TextInput
                 autoCapitalize="none"
                 autoCorrect={ false }
                 placeholder="Confirm Password"
-                secureTextEntry={ this.state.secureTextPassword }
+                secureTextEntry={ this.state.bShowConfirmPassword }
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="center"
                 style={ styles.input }
@@ -141,9 +130,9 @@ class Login extends Component {
               <TouchableOpacity 
                 activeOpacity={ .5 } 
                 style={ styles.eyeButtonWrapper }
-                onPress={ () => this.onShowPlainTextPassword() }
+                onPress={ () => this.onToggleConfirmPassword() }
               >
-                <Image source={ eye } style={ styles.imageEye }/>
+                <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
               </TouchableOpacity>  
             </View>
             <TextInput
@@ -159,8 +148,8 @@ class Login extends Component {
             />
           </View>
           <View style={ styles.bottomContainer }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onLogIn() }>
-              <View style={ styles.buttonLogin }>
+            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
+              <View style={ styles.buttonSubmit }>
                 <Text style={ styles.textButton }>Submit</Text>
               </View>
             </TouchableOpacity>
@@ -178,12 +167,12 @@ class Login extends Component {
 }
 
 export default connect(state => ({
-  status: state.login.status
+  status: state.auth.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(loginActions, dispatch)
+    actions: bindActionCreators(signupActions, dispatch)
   })
-)(Login);
+)(Signup);
 
 const styles = StyleSheet.create({
   container: {
@@ -263,7 +252,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingHorizontal: 30,
   },
-  buttonLogin: {
+  buttonSubmit: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: commonColors.theme,
