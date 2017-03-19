@@ -55,7 +55,7 @@ class Settings extends Component {
   }
 
   onChangePassword() {
-    alert( 'Tapped onChangePassword');
+    Actions.ChangePassword();
   }
 
   onShareThisApp() {

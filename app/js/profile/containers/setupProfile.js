@@ -34,7 +34,8 @@ const arrayGender = ['Male', 'Female', 'Other'];
 class SetupProfile extends Component {
   constructor(props) {
     super(props);
-      this.state = {
+    
+    this.state = {
       profilePhoto: null,
       name: '',
       birthday: '',
@@ -327,7 +328,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-
   dropDownWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',

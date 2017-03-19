@@ -21,6 +21,7 @@ const store = createStoreWithMiddleware(reducer);
 
 import Introduce from './introduce/containers/introduce';
 import Signup from './auth/containers/signup';
+import Login from './auth/containers/login';
 import Main from './main/containers/main';
 import CategoryView from './search/containers/categoryView';
 import BusinessesDetail from './search/containers/businessesDetail';
@@ -33,14 +34,16 @@ import CommunityPoints from './profile/containers/communityPoints';
 import WeeklyRecap from './main/containers/weeklyRecap';
 import Leaderboard from './profile/containers/leaderboard';
 import EditProfile from './profile/containers/editProfile';
+import ChangePassword from './profile/containers/changePassword';
 
 
 const scenes = Actions.create(
   <Scene key="root">
     <Scene key="Introduce" component={ Introduce } />
     <Scene key="Signup" component={ Signup } />
+    <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -50,7 +53,8 @@ const scenes = Actions.create(
     <Scene key="CommunityPoints" component={ CommunityPoints } />
     <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
     <Scene key="Leaderboard" component={ Leaderboard } />
-    <Scene key="EditProfile" component={ EditProfile } initial/>
+    <Scene key="EditProfile" component={ EditProfile } />
+    <Scene key="ChangePassword" component={ ChangePassword } />
   </Scene>
 );
 

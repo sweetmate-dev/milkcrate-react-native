@@ -20,6 +20,8 @@ import * as homeActions from '../actions';
 import { connect } from 'react-redux';
 
 import Carousel from 'react-native-snap-carousel';
+import timer from 'react-native-timer';
+
 import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
@@ -28,6 +30,8 @@ import RecentActivityListCell from '../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
+import FadeInView from '../components/fadeInView';
+import FadeOutView from '../components/fadeOutView';
 
 
 import * as commonStyles from '../../styles/commonStyles';
@@ -50,9 +54,8 @@ class Home extends Component {
     this.state = {
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
-      dailyPollReadLines: 1,
-      selectedDailyPollValue: 0,
-      selectedDailyPollIndex: -1,
+      dailyPollLearnMore: false,
+      selectedDailyPollStateMode: false,
 
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
     };
@@ -91,10 +94,7 @@ class Home extends Component {
 
   onReadMoreLess() {
 
-    if (this.state.dailyPollReadLines == 0)
-      this.setState({ dailyPollReadLines: 1 });
-    else 
-      this.setState({ dailyPollReadLines: 0 });
+    this.setState({ dailyPollLearnMore: !this.state.dailyPollLearnMore });    
   }
 
   getChallengeCarousel (entries) {
@@ -171,6 +171,18 @@ class Home extends Component {
     );
   }
 
+  get showMainDailyPollSelectMode() {
+
+    return (
+      this.state.selectedDailyPollIndex == -1 ? 
+        this.showDailyPollSelectMode  
+        : 
+        <FadeOutView> 
+          { this.showDailyPollSelectMode } 
+        </FadeOutView>
+    );
+  }
+
   get showDailyPollSelectMode() {
     return (
       <View style={ styles.dailyPollSelectContentContainer }>
@@ -181,12 +193,17 @@ class Home extends Component {
         >
           { 
             DailyPollEntries.map((obj, index) => {
-              var onPress = (value, index) => {
+              var onPressRadioButton = (value, index) => {
+                
                 this.setState({
                   selectedDailyPollValue: value,
                   selectedDailyPollIndex: index
-                })
-                {/*alert( 'Selected Index - ' + index.toString() );*/}
+                });
+
+                timer.setTimeout( this, 'DailyPollTimer', () => {
+                  timer.clearInterval(this, 'DailyPollTimer');
+                  this.setState({ selectedDailyPollStateMode: true });
+                }, 500);                
               }
               
               return (
@@ -199,7 +216,7 @@ class Home extends Component {
                     obj={ obj }
                     index={ index }
                     isSelected={ this.state.selectedDailyPollIndex === index }
-                    onPress={ onPress }
+                    onPress={ onPressRadioButton }
                     borderWidth={ 1 }
                     buttonInnerColor={ commonColors.theme }
                     buttonOuterColor={ this.state.selectedDailyPollIndex === index ? commonColors.theme : commonColors.grayMoreText }
@@ -212,7 +229,7 @@ class Home extends Component {
                     obj={ obj }
                     index={ index }
                     labelHorizontal={ true }
-                    onPress={ onPress }
+                    onPress={ onPressRadioButton }
                     labelStyle={ styles.textRadioButtonLabel }
                     labelWrapStyle={ styles.radioButtonLabelWrapper }
                   />
@@ -221,27 +238,29 @@ class Home extends Component {
             }
           )}
         </RadioForm>
-      </View>
+      </View>      
     );
   }
 
   get showDailyPollStateMode() {
     return (
-      <View style={ styles.dailyPollSelectContentContainer }>
-        {
-          DailyPollEntries.map((obj, index) => {
-            return (
-              <DailyPollStateCell
-                key={ index }
-                percent={ obj.percent }
-                description={ obj.label }
-                selected={ this.state.selectedDailyPollIndex === index ? true : false }
-                bottomLine={ (DailyPollEntries.length - 1) === index ? false : true }
-              />
-            );
-          })
-        }
-      </View>
+      <FadeInView>
+        <View style={ styles.dailyPollSelectContentContainer }>
+          {
+            DailyPollEntries.map((obj, index) => {
+              return (
+                <DailyPollStateCell
+                  key={ index }
+                  percent={ obj.percent }
+                  description={ obj.label }
+                  selected={ this.state.selectedDailyPollIndex === index ? true : false }
+                  bottomLine={ (DailyPollEntries.length - 1) === index ? false : true }
+                />
+              );
+            })
+          }
+        </View>
+      </FadeInView>
     );
   }
 
@@ -251,22 +270,29 @@ class Home extends Component {
         <Text style={ styles.textTitle }>Daily Poll</Text>
         <View style={ styles.dailyPollMainContentContainer }>
           <View style={ styles.dailyPollTopContentContainer }>
-            <View style={ styles.dailyPollTopTitlePointContainer }>
-              <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
+            <View style={ styles.dailyPollTopPointContainer }>
+              <View style={ styles.dailyPollLearnMoreContainer }>
+                <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
+                <View style={ styles.buttonWrapper }>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
+                    <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollLearnMore == false ? 'Learn More' : 'Learn Less' }</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
               <Point point={ 10 }/>
             </View>
-            <View style={ styles.descriptionContainer }>
-              <Text style={ styles.textDescription } numberOfLines={ this.state.dailyPollReadLines }>{ dummyText1 }</Text>
-              <View style={ styles.buttonWrapper }>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
-                  <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollReadLines == 1 ? 'Read More' : 'Read Less' }</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            {
+              this.state.dailyPollLearnMore == true ?
+                <View style={ styles.descriptionContainer }>
+                  <Text style={ styles.textDescription }>{ dummyText1 }</Text>
+                </View>
+              :
+                null
+            }
           </View>
 
           {
-            this.state.selectedDailyPollIndex === -1 ? this.showDailyPollSelectMode : this.showDailyPollStateMode
+            this.state.selectedDailyPollStateMode === false ? this.showMainDailyPollSelectMode : this.showDailyPollStateMode            
           }
 
         </View>
@@ -383,11 +409,15 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 15,
   },
-  dailyPollTopTitlePointContainer: {
+  dailyPollTopPointContainer: {
     alignSelf: 'stretch',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  dailyPollLearnMoreContainer: {
+    alignSelf: 'stretch',
+    justifyContent: 'center',
   },
   textQuestion: {
     color: commonColors.question,
@@ -413,7 +443,6 @@ const styles = StyleSheet.create({
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
-    textAlign: 'right',
     backgroundColor: 'transparent',
   },
   textRadioButtonLabel: {

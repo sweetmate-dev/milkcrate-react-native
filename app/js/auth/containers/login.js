@@ -14,41 +14,39 @@ import {
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as signupActions from '../actions';
+import * as loginActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
-const background = require('../../../assets/imgs/background_login.png');
+const background = require('../../../assets/imgs/background_profile.png');
 const eye = require('../../../assets/imgs/eye.png');
 const eye_slash = require('../../../assets/imgs/eye_slash.png');
 
-class Signup extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: '',
       password: '',
-      confirmPassword: '',
-      communityCode: '',
       bShowConfirmPassword: true,
     };
   }
 
   componentWillReceiveProps(newProps) {
 
-    if (newProps.status == 'signup_request') {
+    if (newProps.status == 'login_request') {
 
-    } else if (newProps.status == 'signup_success') {
+    } else if (newProps.status == 'login_success') {
 
-    } else if (newProps.status == 'signup_error') {
+    } else if (newProps.status == 'login_error') {
 
     }
   }
 
-  onSignUp() {
+  onLogin() {
 
     if (this.state.email == '') {
       Alert.alert('Please enter email address.');
@@ -60,22 +58,17 @@ class Signup extends Component {
       return;
     }
 
-    if (this.state.communityCode == '') {
-      Alert.alert('Please enter communicy code.');
-      return;
-    }
-
-    Actions.SetupProfile();
+    Actions.Main();
 
     // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
   }
 
-  onContactUs() {
-    alert("Contact Us");
+  onForgotPassword() {
+    alert("onForgotPassword");
   }
 
-  onLearnMore() {
-    alert("Learn More");
+  onCreateAccount() {
+    Actions.Signup();
   }
 
   onToggleConfirmPassword() {
@@ -88,9 +81,10 @@ class Signup extends Component {
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
-            <Text style={ styles.textTitle }>Get Started!</Text>
-            <Text style={ styles.textDescription }>Did you get our registration email?</Text>
-            <Text style={ styles.textDescription }>Use your credentials below to sign in.</Text>
+            <Text style={ styles.textTitle }>Log In</Text>
+            <Text style={ styles.textDescription }>Welcome back!</Text>
+            <Text style={ styles.textDescription }>If you don’t have an account you’ll need to </Text>
+            <Text style={ styles.textDescription }>create one.</Text>
           </View>
           <View style={ styles.inputContainer }>
             <TextInput
@@ -103,7 +97,7 @@ class Signup extends Component {
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
               onChangeText={ (text) => this.setState({ email: text }) }
-            />
+            />            
             <View style={ styles.inputWrapper }>
               <TextInput
                 autoCapitalize="none"
@@ -117,57 +111,44 @@ class Signup extends Component {
                 returnKeyType={ 'next' }
                 onChangeText={ (text) => this.setState({ password: text }) }
               />
-            </View>
-            <View style={ styles.inputWrapper }>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={ false }
-                placeholder="Confirm Password"
-                secureTextEntry={ this.state.bShowConfirmPassword }
-                placeholderTextColor={ commonColors.placeholderText }
-                textAlign="center"
-                style={ styles.input }
-                underlineColorAndroid="transparent"
-                returnKeyType={ 'next' }
-                onChangeText={ (text) => this.setState({ confirmPassword: text }) }
-              />
               <TouchableOpacity 
                 activeOpacity={ .5 } 
                 style={ styles.eyeButtonWrapper }
                 onPress={ () => this.onToggleConfirmPassword() }
               >
                 <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
-              </TouchableOpacity>  
+              </TouchableOpacity>
             </View>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={ false }
-              placeholder="Community Code"
-              placeholderTextColor={ commonColors.placeholderText }
-              textAlign="center"
-              style={ styles.input }
-              underlineColorAndroid="transparent"
-              returnKeyType={ 'go' }
-              onChangeText={ (text) => this.setState({ communityCode: text }) }
-            />
-          </View>
-          <View style={ styles.bottomContainer }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
-              <View style={ styles.buttonSubmit }>
-                <Text style={ styles.textButton }>Submit</Text>
+            <View style={ styles.buttonWrapper }>
+              <TouchableOpacity 
+                activeOpacity={ .5 } 
+                onPress={ () => this.onForgotPassword() }
+              >
+                <Text style={ styles.textTitleButton }>Forgot Password</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity 
+              activeOpacity={ .5 } 
+              style={ styles.loginButtonWrapper }
+              onPress={ () => this.onLogin() }
+            >
+              <View style={ styles.buttonLogin }>
+                <Text style={ styles.textButton }>Log In</Text>
               </View>
             </TouchableOpacity>
-            <View style={ styles.bottomContentWrap }>
-              <Text style={ styles.textInvite }>Didn’t get the invite?</Text>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
-                <Text style={ styles.textUnderButton }>Contact Us.</Text>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
-                <Text style={ styles.textUnderButton }>Learn More</Text>
-              </TouchableOpacity>
 
+            <View style={ styles.buttonWrapper }>
+              <TouchableOpacity 
+                activeOpacity={ .5 } 
+                onPress={ () => this.onCreateAccount() }
+              >
+                <Text style={ styles.textTitleButton }>Create Account</Text>
+              </TouchableOpacity>
             </View>
+            
           </View>
+          <View style={ styles.bottomContainer }/>
         </Image>
       </View>
     );
@@ -178,9 +159,9 @@ export default connect(state => ({
   status: state.auth.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(signupActions, dispatch)
+    actions: bindActionCreators(loginActions, dispatch)
   })
-)(Signup);
+)(Login);
 
 const styles = StyleSheet.create({
   container: {
@@ -191,13 +172,13 @@ const styles = StyleSheet.create({
     height: screenHiehgt,
   },
   descriptionContainer: {
-    flex: 1.2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
   },
   inputContainer: {
-    flex: 1.2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -260,7 +241,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     paddingHorizontal: 30,
   },
-  buttonSubmit: {
+  loginButtonWrapper: {
+    marginTop: 16,
+    alignSelf: 'stretch',
+  },
+  buttonWrapper: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  buttonLogin: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: commonColors.theme,
@@ -278,12 +267,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: 'transparent',
   },
-  textUnderButton: {
+  textTitleButton: {
     color: commonColors.title,
     fontFamily: 'Open Sans',
-    fontSize: 12,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
+    fontSize: 14,
     backgroundColor: 'transparent',
   },
 });
