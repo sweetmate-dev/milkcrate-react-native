@@ -24,22 +24,27 @@ import DatePicker from 'react-native-datepicker'
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
+//added by li
+import bendService from '../../bend/bendService'
+
 const background = require('../../../assets/imgs/background_profile.png');
 const camera = require('../../../assets/imgs/camera.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 
-
+import moment from 'moment'
 const arrayGender = ['Male', 'Female', 'Other'];
 
 class SetupProfile extends Component {
   constructor(props) {
     super(props);
+    var user = bendService.getActiveUser()
     
     this.state = {
       profilePhoto: null,
-      name: '',
-      birthday: '',
-      gender: '',
+      profilePhotoFile:null,
+      name: user.name?user.name:'',
+      birthday: user.birthdate?moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY'):'',
+      gender: user.gender?user.gender:'',
     };
   }
 
@@ -63,7 +68,52 @@ class SetupProfile extends Component {
 
   onCompleteProfile() {
 
-    Actions.Main();
+    //check name
+    if(this.state.name == '') {
+      alert("Please input your first and last name");
+      return;
+    }
+
+    if(this.state.profilePhotoFile) {
+      //upload image first
+      bendService.uploadFile(this.state.profilePhotoFile, (err, file)=>{
+        if(err) {
+          alert("Failed to upload file. Please try again later")
+          return;
+        }
+
+        this.updateUserInfo(file);
+      })
+    }
+    this.updateUserInfo();
+  }
+
+  updateUserInfo(f) {
+    var userData = bendService.getActiveUser()
+    if(f) {
+      userData.avatar = bendService.makeBendFile(f._id)
+    }
+
+    userData.name = this.state.name
+    if(this.state.birthday) {
+      userData.birthdate = moment(new Date(this.state.birthday)).format('YYYY-MM-DD')
+    }
+
+    if(this.state.gender) {
+      userData.gender = this.state.gender;
+    }
+
+    console.log(userData)
+
+    bendService.updateUser(userData, (err, ret)=>{
+      console.log(err, ret)
+      if(err) {
+        alert("Failed to update user profile")
+        return;
+      }
+
+      Actions.Main();
+    })
   }
 
   onPickProfilePhoto() {
@@ -88,7 +138,8 @@ class SetupProfile extends Component {
         let source = { uri: response.uri };
 
         this.setState({
-          profilePhoto: source
+          profilePhoto: source,
+          profilePhotoFile:response
         });
       }
     });

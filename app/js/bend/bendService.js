@@ -62,6 +62,23 @@ module.exports = {
         })
     },
 
+    updateUser(userData, cb) {
+        if(userData.avatar) {
+            userData.avatar = this.makeBendFile(userData.avatar._id)
+        }
+        if(userData.community) {
+            userData.community = this.makeBendRef("community", userData.community._id)
+        }
+        if(userData.coverImage) {
+            userData.coverImage = this.makeBendFile(userData.coverImage._id)
+        }
+        Bend.User.update(userData).then((ret)=> {
+            cb(null, ret);
+        }, (err)=> {
+            cb(err)
+        })
+    },
+
     /**
      * getActiveUser
      *
@@ -69,6 +86,40 @@ module.exports = {
      */
     getActiveUser() {
         return Bend.getActiveUser();
+    },
+
+    uploadFile(file, cb){
+        file._filename = Date.now() + ""
+
+        var obj = {
+            _filename: file.fileName,
+            mimeType: "image/jpeg",
+            size: file.fileSize,
+        };
+        console.log(obj);
+
+        Bend.File.upload(file, obj, {"public": true}, (res) => {
+            console.log(res);
+        }).then((res)=>{
+            console.log("Success upload", res._downloadURL)
+            cb(null, res);
+        }, (error) => {
+            console.log("Error upload", error)
+            cb(error);
+        });
+    },
+    makeBendRef(id, collectionName) {
+        return {
+            "_type": "BendRef",
+            "_id": id,
+            "_collection": collectionName
+        }
+    },
+    makeBendFile(id) {
+        return {
+            "_type": "BendFile",
+            "_id": id
+        };
     }
 }
 
