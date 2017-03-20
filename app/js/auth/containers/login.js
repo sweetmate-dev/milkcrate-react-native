@@ -64,11 +64,17 @@ class Login extends Component {
     //li added/changes
     bendService.login(this.state.email, this.state.password, (err, user)=>{
       console.log(err, user);
+      if(err) {
+        alert("Email or password is incorrect")
+        return
+      }
 
       if(!err) {
         //check community code
-        
-        Actions.Main();
+        if(!user.name) {
+          Actions.SetupProfile();
+        } else
+          Actions.Main();
       }
     })
 
