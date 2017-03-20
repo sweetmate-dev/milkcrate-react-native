@@ -36,39 +36,39 @@ const exploreWays = [
     iconHeight: 21,
   },
   {
-    title: 'Businesses',
-    description: 'Earn points by checking in to certified business',
-    icon: require('../../../assets/imgs/businesses.png'),
-    iconWidth: 14,
-    iconHeight: 21,
-  },
-  {
-    title: 'Services',
-    description: 'Signup for curated services to earn more points',
-    icon: require('../../../assets/imgs/services.png'),
-    iconWidth: 23,
-    iconHeight: 20,
-  },
-  {
     title: 'Take Action',
-    description: 'Earn points for actions you take',
+    description: 'Explore easy, self-reported lifestyle behaviors',
     icon: require('../../../assets/imgs/actions.png'),
     iconWidth: 22,
     iconHeight: 22,
   },
   {
-    title: 'Volunteer',
-    description: 'Find volunteer opportunities and earn points ',
+    title: 'Businesses',
+    description: 'Check in to hundreds of local, sustainable businesses nearby',
+    icon: require('../../../assets/imgs/businesses.png'),
+    iconWidth: 14,
+    iconHeight: 21,
+  },
+  {
+    title: 'Events',
+    description: 'Register for green events and add them to your calendar',
+    icon: require('../../../assets/imgs/events.png'),
+    iconWidth: 23,
+    iconHeight: 25,
+  },
+  {
+    title: 'Volunteer Opportunities',
+    description: 'Find a local volunteer opportunity that’s right for you',
     icon: require('../../../assets/imgs/volunteer.png'),
     iconWidth: 26,
     iconHeight: 25,
   },
   {
-    title: 'Events',
-    description: 'Find great events to attend and earn more points',
-    icon: require('../../../assets/imgs/events.png'),
+    title: 'Services',
+    description: 'Sign up for eco-friendly lifestyle services',
+    icon: require('../../../assets/imgs/services.png'),
     iconWidth: 23,
-    iconHeight: 25,
+    iconHeight: 20,
   },
 ];
 
@@ -227,7 +227,7 @@ class Search extends Component {
   }
 
   onSelectExploreWays (index) {
-    
+
     switch (Number(index)) {
       case 0://Recent
         alert("Clicked " + exploreWays[index].title);
@@ -240,7 +240,7 @@ class Search extends Component {
       case 2://Services
         alert("Clicked " + exploreWays[index].title);
         break;
-      
+
       case 3://Take Action
         Actions.ActionDetail();
         break;
@@ -252,7 +252,7 @@ class Search extends Component {
       case 5://Events
         Actions.Events();
         break;
-      
+
       default:
 
     }
@@ -273,7 +273,7 @@ class Search extends Component {
         iconHeight={ rowData.iconHeight }
         onClick={ () => this.onSelectExploreWays(rowID) }
       />
-    );      
+    );
   }
 
   renderCategoriesRow(rowData, sectionID, rowID) {
@@ -298,7 +298,7 @@ class Search extends Component {
 
   render() {
     const { status } = this.props;
-    
+
     return (
       <View style={ styles.container }>
         <NavSearchBar/>

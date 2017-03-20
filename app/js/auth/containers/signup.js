@@ -88,9 +88,9 @@ class Signup extends Component {
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
-            <Text style={ styles.textTitle }>Get Started!</Text>
-            <Text style={ styles.textDescription }>Did you get our registration email?</Text>
-            <Text style={ styles.textDescription }>Use your credentials below to sign in.</Text>
+            <Text style={ styles.textTitle }>Getting Started</Text>
+            <Text style={ styles.textDescription }>Your administrator should have sent you an access code.</Text>
+            <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
           </View>
           <View style={ styles.inputContainer }>
             <TextInput
@@ -131,13 +131,13 @@ class Signup extends Component {
                 returnKeyType={ 'next' }
                 onChangeText={ (text) => this.setState({ confirmPassword: text }) }
               />
-              <TouchableOpacity 
-                activeOpacity={ .5 } 
+              <TouchableOpacity
+                activeOpacity={ .5 }
                 style={ styles.eyeButtonWrapper }
                 onPress={ () => this.onToggleConfirmPassword() }
               >
                 <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
-              </TouchableOpacity>  
+              </TouchableOpacity>
             </View>
             <TextInput
               autoCapitalize="none"
@@ -158,7 +158,7 @@ class Signup extends Component {
               </View>
             </TouchableOpacity>
             <View style={ styles.bottomContentWrap }>
-              <Text style={ styles.textInvite }>Didn’t get the invite?</Text>
+              <Text style={ styles.textInvite }>Don’t know your access code?</Text>
               <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
                 <Text style={ styles.textUnderButton }>Contact Us.</Text>
               </TouchableOpacity>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   },
   imageEye: {
     width: 20,
-    height: 13,    
+    height: 13,
   },
   eyeButtonWrapper: {
     justifyContent: 'center',

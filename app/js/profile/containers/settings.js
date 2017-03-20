@@ -81,7 +81,7 @@ class Settings extends Component {
   onTermsOfUse() {
     alert( 'Tapped onTermsOfUse');
   }
-  
+
   onSoftwareLicenses() {
     alert( 'Tapped onSoftwareLicenses');
   }
@@ -106,7 +106,7 @@ class Settings extends Component {
           <Text style={ styles.textSettingsSection }>Settings</Text>
           <TouchableHighlight onPress={ () => this.onEditProfile() }>
             <View style={ styles.cellContainer }>
-              <Text style={ styles.textCellTitle }>Edit prolfile</Text>
+              <Text style={ styles.textCellTitle }>Edit profile</Text>
               <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
             </View>
           </TouchableHighlight>
@@ -148,7 +148,7 @@ class Settings extends Component {
             </View>
           </TouchableHighlight>
           <View style={ styles.line }/>
-          
+
           {/* About */}
           <Text style={ styles.textOtherSection }>About</Text>
           <TouchableHighlight onPress={ () => this.onAboutMilkCrate() }>
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   logoutButtonWrapper: {
     width: commonStyles.screenWidth,
     height: 56,
-    backgroundColor: '#fff',    
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     borderTopWidth: 1,

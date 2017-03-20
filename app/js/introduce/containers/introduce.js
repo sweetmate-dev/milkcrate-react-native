@@ -56,9 +56,9 @@ export default class Introduce extends Component {
             <Image source={ background1 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.description }>A platform to help individuals like</Text>
-                <Text style={ styles.description }>you make a difference for the</Text>
-                <Text style={ styles.description }>environment and your community.</Text>
+                <Text style={ styles.description }>Let your sustainable journey begin –</Text>
+                <Text style={ styles.description }>and get ready to earn rewards</Text>
+                <Text style={ styles.description }>for making an impact!</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -67,9 +67,10 @@ export default class Introduce extends Component {
             <Image source={ background2 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>Earn Points</Text>
-                <Text style={ styles.description }>When you check in to hundreds of</Text>
-                <Text style={ styles.description }>sustainable businesses in your neighborhood.</Text>
+                <Text style={ styles.title }>DISCOVER BUSINESSES</Text>
+                <Text style={ styles.description }>Earn points for checking in to </Text>
+               <Text style={ styles.description }>hundreds of sustainable businesses</Text>
+                <Text style={ styles.description }>in your neighborhood.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -78,10 +79,10 @@ export default class Introduce extends Component {
             <Image source={ background3 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>TAKE IMPACTFUL ACTIONS</Text>
-                <Text style={ styles.description }>Earn more points when you take part in our</Text>
-                <Text style={ styles.description }>weekly challenges and for taking random</Text>
-                <Text style={ styles.description }>actions throughout the week.</Text>
+                <Text style={ styles.title }>TAKE ACTION</Text>
+                <Text style={ styles.description }>See your points increase as you take part</Text>
+                <Text style={ styles.description }>in weekly challenges and for completing</Text>
+                <Text style={ styles.description }>activities throughout the week.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -90,10 +91,9 @@ export default class Introduce extends Component {
             <Image source={ background4 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>Get Involved</Text>
-                <Text style={ styles.description }>Volunteer opportunities and</Text>
-                <Text style={ styles.description }>green-themed events, all found in our</Text>
-                <Text style={ styles.description }>categorized calendar to earn more points.</Text>
+                <Text style={ styles.title }>GET INVOLVED</Text>
+                <Text style={ styles.description }>Explore amazing local volunteer</Text>
+                <Text style={ styles.description }>opportunities and green-themed events.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -102,10 +102,10 @@ export default class Introduce extends Component {
             <Image source={ background5 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
               <View style={ styles.contentWrap }>
-                <Text style={ styles.title }>Points For Rewards</Text>
-                <Text style={ styles.description }>Use your earned points from all of your</Text>
-                <Text style={ styles.description }>activities and challenges on great local</Text>
-                <Text style={ styles.description }>rewards.</Text>
+                <Text style={ styles.title }>CELEBRATE WITH REWARDS</Text>
+                <Text style={ styles.description }>Use your earned points from all of</Text>
+                <Text style={ styles.description }>your activities and challenges on</Text>
+                <Text style={ styles.description }>great local rewards.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
@@ -116,8 +116,8 @@ export default class Introduce extends Component {
               <View style={ styles.contentWrap }>
                 <Text style={ styles.title }>VIEW YOUR PROGRESS</Text>
                 <Text style={ styles.description }>See your individual impact and personal</Text>
-                <Text style={ styles.description }>achievements as well as your community’s</Text>
-                <Text style={ styles.description }>activity for comparison and competition.</Text>
+                <Text style={ styles.description }>achievements as well as your own community’s</Text>
+                <Text style={ styles.description }>overall activity for comparison and competition.</Text>
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>

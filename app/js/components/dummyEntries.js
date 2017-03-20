@@ -79,7 +79,7 @@ export const LeaderboardEntries = [
 
 export const TrendingCarouselEntries = [
   {
-    title: 'Checkin',
+    title: 'Check In',
     location: 'HipCityVeg',
     category_avatar: require('../../assets/imgs/stickers/dining.png'),
     users: [
@@ -129,7 +129,7 @@ export const TrendingCarouselEntries = [
     coins: 11,
   },
   {
-    title: 'Checkin',
+    title: 'Check In',
     location: 'HipCityVeg',
     category_avatar: require('../../assets/imgs/stickers/fashion1.png'),
     users: [
@@ -179,7 +179,7 @@ export const TrendingCarouselEntries = [
     coins: 12,
   },
   {
-    title: 'Checkin',
+    title: 'Check In',
     location: 'HipCityVeg',
     category_avatar: require('../../assets/imgs/stickers/fashion2.png'),
     users: [
@@ -229,7 +229,7 @@ export const TrendingCarouselEntries = [
     coins: 13,
   },
   {
-    title: 'Checkin',
+    title: 'Check In',
     location: 'HipCityVeg',
     category_avatar: require('../../assets/imgs/stickers/transit.png'),
     users: [
@@ -279,7 +279,7 @@ export const TrendingCarouselEntries = [
     coins: 14,
   },
   {
-    title: 'Checkin',
+    title: 'Check In',
     location: 'HipCityVeg',
     category_avatar: require('../../assets/imgs/stickers/baby.png'),
     users: [
@@ -332,22 +332,22 @@ export const TrendingCarouselEntries = [
 
 export const DailyPollEntries = [
   {
-    label: 'I eat meat daily', 
+    label: 'I eat meat daily',
     value: 0,
     percent: 8,
-  }, 
+  },
   {
-    label: 'Meatless 1-2 times per week', 
+    label: 'Meatless 1-2 times per week',
     value: 1,
     percent: 42,
   },
   {
-    label: 'I’m mostly vegetarian', 
+    label: 'I’m mostly vegetarian',
     value: 2,
     percent: 36,
   },
   {
-    label: 'I’m vegan and I source locally', 
+    label: 'I’m vegan and I source locally',
     value: 3,
     percent: 14,
   },
@@ -472,7 +472,7 @@ export const AlertEntries = [
   {
     name: 'Jennifer S.',
     time: 3,
-    description: 'Liked your activity,',
+    description: 'Liked your activity.',
     avatar: require('../../assets/imgs/avatar.png'),
   },
 ];
@@ -557,7 +557,7 @@ export const CategoryDetailEntries = [
     distance: 1.9,
     price: 19,
     rating: 4.7,
-  },     
+  },
 ];
 
 export const ProfileRecentActivityEntries = [
@@ -640,7 +640,7 @@ export const ProfileRecentActivityEntries = [
     distance: 1.2,
     price: 19,
     coins: 19,
-  },  
+  },
 ];
 
 export const BusinessRecentActivityEntries = [
@@ -667,7 +667,7 @@ export const BusinessRecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 2,
     rating: 4.8,
-  },  
+  },
 ];
 
 export const WeeklyRecapEntries = [
@@ -692,5 +692,5 @@ export const WeeklyRecapEntries = [
     time: 2,
     coins: 12,
   },
-  
+
 ];
