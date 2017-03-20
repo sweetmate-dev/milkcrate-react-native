@@ -3741,7 +3741,7 @@ import RNFetchBlob from 'react-native-fetch-blob'
                                 log('Updating the active user because the updated user was the active user.');
                             }
 
-                            Bend.setActiveUser(user);
+                            //Bend.setActiveUser(user);
                         }
                     }
 
