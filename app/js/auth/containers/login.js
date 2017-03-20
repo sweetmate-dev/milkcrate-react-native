@@ -20,6 +20,9 @@ import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
+//added by li
+import bendService from '../../bend/bendService'
+
 const background = require('../../../assets/imgs/background_profile.png');
 const eye = require('../../../assets/imgs/eye.png');
 const eye_slash = require('../../../assets/imgs/eye_slash.png');
@@ -58,7 +61,16 @@ class Login extends Component {
       return;
     }
 
-    Actions.Main();
+    //li added/changes
+    bendService.login(this.state.email, this.state.password, (err, user)=>{
+      console.log(err, user);
+
+      if(!err) {
+        //check community code
+        
+        Actions.Main();
+      }
+    })
 
     // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
   }

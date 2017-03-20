@@ -20,6 +20,9 @@ import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
+//added by li
+import bendService from '../../bend/bendService'
+
 const background = require('../../../assets/imgs/background_login.png');
 const eye = require('../../../assets/imgs/eye.png');
 const eye_slash = require('../../../assets/imgs/eye_slash.png');
@@ -65,7 +68,33 @@ class Signup extends Component {
       return;
     }
 
-    Actions.SetupProfile();
+      //li added/changes
+      bendService.signup({
+          username:this.state.email,
+          password:this.state.password,
+          confirmPassword:this.state.confirmPassword,
+          code:this.state.communityCode
+      }, (err, user)=>{
+          if(err) {
+              if(err.name.code == 'milkcrate-app.error.common.missingInput') {
+                  alert("Some inputs are missing");
+              } else if(err.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
+                  alert("Please enter a valid email address")
+              } else if(err.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
+                  alert("Your password and confirmation did not match. Please check them and try again.")
+              } else if(err.name.code == 'milkcrate-app.error.signup.invalidCode') {
+                  alert("Please enter a valid community code")
+              } else if(err.name.code == 'milkcrate-app.error.signup.invalidUsername') {
+                  alert("This email address is already taken. Please retry with another email.")
+              } else if(err.name.code == 'milkcrate-app.error.common.unknown') {
+                  alert("Unknown system error")
+              }
+          }
+
+          if(!err) {
+              Actions.SetupProfile();
+          }
+      })
 
     // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
   }

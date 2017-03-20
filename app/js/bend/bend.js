@@ -1932,6 +1932,44 @@ import RNFetchBlob from 'react-native-fetch-blob'
             return wrapCallbacks(promise, options);
         };
 
+        Bend.executeAnonymous = function(id, args, options) {
+            // Debug.
+            if(BEND_DEBUG) {
+                log('Executing custom command.', arguments);
+            }
+
+            // Cast arguments.
+            options = options || {};
+
+            // Prepare the response.
+            var promise = Bend.Persistence.create({
+                namespace: RPC,
+                collection: 'custom',
+                id: id,
+                data: args,
+                auth: Auth.Basic
+            }, options).then(null, function(error) {
+                // If `REQUEST_ERROR`, the debug object may hold an actual custom response.
+                if(Bend.Error.REQUEST_ERROR === error.name && isObject(error.debug)) {
+                    return Bend.Defer.reject(error.debug);
+                }
+
+                return Bend.Defer.reject(error);
+            });
+
+            // Debug.
+            if(BEND_DEBUG) {
+                promise.then(function(response) {
+                    log('Executed the custom command.', response);
+                }, function(error) {
+                    log('Failed to execute the custom command.', error);
+                });
+            }
+
+            // Return the response.
+            return wrapCallbacks(promise, options);
+        };
+
         // Data Store.
         // -----------
 
@@ -2727,10 +2765,10 @@ import RNFetchBlob from 'react-native-fetch-blob'
                         return response;
                     });
                     /*var upload = Bend.Persistence.Net.request('PUT', url, file, headers, options);
-                    return upload.then(function() {
-                        response._data = file; // Merge into the file metadata.
-                        return response;
-                    });*/
+                     return upload.then(function() {
+                     response._data = file; // Merge into the file metadata.
+                     return response;
+                     });*/
                 });
 
                 // Debug.

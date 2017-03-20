@@ -1,7 +1,7 @@
 import * as Bend from './bend'
 
-var appKey = '57c99bb24bad3035c82b3528';
-var appSecret = 'HKxfLQZQ8fAdVJLZ7rCMVVwhpJB8RUtstS0rQfYx';
+var appKey = '589d36e94bad3014f50128ce';
+var appSecret = 'deduKe8DAuA1ry2cYYQXSQEFHgZy9qTvrL0D2lsc';
 
 module.exports = {
     /**
@@ -54,7 +54,8 @@ module.exports = {
      *             created user is altivated already, so can logged in automatically
      */
     signup(userData, cb) {
-        Bend.User.signup(userData).then((ret)=>{
+        console.log(userData);
+        Bend.executeAnonymous("signup", userData).then((ret)=>{
             cb(null, ret);
         }, (err)=>{
             cb(err);
