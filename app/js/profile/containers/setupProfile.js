@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownStyle: {
-    height: 140,
+    height: 105,
     width: (screenWidth - 80) / 2 - 3,
     justifyContent: 'center',
     alignItems: 'center',

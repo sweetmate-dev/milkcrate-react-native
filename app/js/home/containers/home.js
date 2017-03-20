@@ -18,6 +18,7 @@ import {
 import { bindActionCreators } from 'redux';
 import * as homeActions from '../actions';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
@@ -42,7 +43,6 @@ import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, Re
 const trending = require('../../../assets/imgs/trending.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
-const dummyText1 = 'See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to See how your lifestyle choices to';
 
 class Home extends Component {
   constructor(props) {
@@ -54,7 +54,6 @@ class Home extends Component {
     this.state = {
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
-      dailyPollLearnMore: false,
       selectedDailyPollStateMode: false,
 
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
@@ -89,15 +88,17 @@ class Home extends Component {
   }
 
   onRecentActivityCellPressed (rowID) {
+
     alert("Tapped cell - " + rowID);
   }
 
-  onReadMoreLess() {
+  onLearnMore() {
 
-    this.setState({ dailyPollLearnMore: !this.state.dailyPollLearnMore });    
+    Actions.LearnMoreModal();
   }
 
   getChallengeCarousel (entries) {
+
     if (!entries) {
       return false;
     }
@@ -274,21 +275,13 @@ class Home extends Component {
               <View style={ styles.dailyPollLearnMoreContainer }>
                 <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
                 <View style={ styles.buttonWrapper }>
-                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onReadMoreLess() }>
-                    <Text style={ styles.textReadMoreButton }>{ this.state.dailyPollLearnMore == false ? 'Learn More' : 'Learn Less' }</Text>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onLearnMore() }>
+                    <Text style={ styles.textReadMoreButton }>Learn More</Text>
                   </TouchableOpacity>
                 </View>
               </View>
               <Point point={ 10 }/>
             </View>
-            {
-              this.state.dailyPollLearnMore == true ?
-                <View style={ styles.descriptionContainer }>
-                  <Text style={ styles.textDescription }>{ dummyText1 }</Text>
-                </View>
-              :
-                null
-            }
           </View>
 
           {
@@ -424,20 +417,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
   },
-  textDescription: {
-    flex: 3,
-    color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
-    fontSize: 14,
-  },
-  descriptionContainer: {
-    flexDirection: 'row',
-    paddingTop: 10,
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-  },
   buttonWrapper: {
     flex: 1,
+    paddingTop: 8,
   },
   textReadMoreButton: {
     color: commonColors.title,

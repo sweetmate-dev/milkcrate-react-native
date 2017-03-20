@@ -37,15 +37,16 @@ import WeeklyRecap from './main/containers/weeklyRecap';
 import Leaderboard from './profile/containers/leaderboard';
 import EditProfile from './profile/containers/editProfile';
 import ChangePassword from './profile/containers/changePassword';
+import LearnMoreModal from './home/components/learnMoreModal';
 
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce } initial />
+    <Scene key="Introduce" component={ Introduce }  />
     <Scene key="Signup" component={ Signup } />
     <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -57,6 +58,8 @@ const scenes = Actions.create(
     <Scene key="Leaderboard" component={ Leaderboard } />
     <Scene key="EditProfile" component={ EditProfile } />
     <Scene key="ChangePassword" component={ ChangePassword } />
+    <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
+
   </Scene>
 );
 
@@ -119,7 +122,7 @@ class App extends Component {
 
   deepLinks () {
 
-    DeepLinking.addScheme('milkcrate://');
+    DeepLinking.addScheme('milkcrate.neusis.com://');
     Linking.addEventListener('url', DeepLinking.handleUrl);
 
     deepLink_Generals.forEach((link) => {

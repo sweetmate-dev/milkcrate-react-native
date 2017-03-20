@@ -61,6 +61,8 @@ class Profile extends Component {
         distance={ rowData.distance }
         price={ rowData.price }
         coins={ rowData.coins }
+        hearts={ rowData.hearts }
+        likeByMe={ rowData.likeByMe }
         onClick={ () => this.onPressedRecentActivityCell(rowID) }
       />
     );
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     width: commonStyles.screenWidth / 3,
   },
   textValue: {
-    color: commonColors.bottomButton,
+    color: '#82ccbe',
     fontFamily: 'Open Sans',
     fontSize: 16,
     fontWeight: 'bold',

@@ -97,6 +97,7 @@ class EditProfile extends Component {
           <TextField
             label='Email'
             autoCorrect={ false }
+            autoCapitalize="none"
             keyboardType='email-address'
             inputStyle={ inputStyle }
             labelStyle={ labelStyle }
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   dropdownStyle: {
-    height: 100,
+    height: 105,
     width: commonStyles.screenWidth - 32,
     justifyContent: 'center',
     alignItems: 'center',

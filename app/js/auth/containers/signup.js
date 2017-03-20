@@ -20,6 +20,8 @@ import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
+var Mailer = require('NativeModules').RNMail;
+
 //added by li
 import bendService from '../../bend/bendService'
 
@@ -100,7 +102,16 @@ class Signup extends Component {
   }
 
   onContactUs() {
-    alert("Contact Us");
+    
+    Mailer.mail({
+      subject: 'Help',
+      recipients: ['support@mymilkcrate.com'],
+      body: '',      
+    }, (error, event) => {
+      if(error) {
+        Alert.alert('Error', 'Could not send mail. Please send a mail to support@example.com');
+      }
+    });
   }
 
   onLearnMore() {
