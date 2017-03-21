@@ -56,6 +56,8 @@ module.exports = {
     signup(userData, cb) {
         console.log(userData);
         Bend.executeAnonymous("signup", userData).then((ret)=>{
+            console.log("signup ret", ret);
+            Bend.setActiveUser(ret.user);
             cb(null, ret);
         }, (err)=>{
             cb(err);
