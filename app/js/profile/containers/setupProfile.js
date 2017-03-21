@@ -31,8 +31,8 @@ const background = require('../../../assets/imgs/background_profile.png');
 const camera = require('../../../assets/imgs/camera.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 
-import moment from 'moment'
-const arrayGender = ['Male', 'Female', 'Other'];
+import moment from 'moment';
+const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 class SetupProfile extends Component {
   constructor(props) {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dropdownStyle: {
-    height: 105,
+    height: 140,
     width: (screenWidth - 80) / 2 - 3,
     justifyContent: 'center',
     alignItems: 'center',

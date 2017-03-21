@@ -28,7 +28,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
-const arrayGender = ['Male', 'Female', 'Other'];
+const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 class EditProfile extends Component {
 
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   dropdownStyle: {
-    height: 105,
+    height: 140,
     width: commonStyles.screenWidth - 32,
     justifyContent: 'center',
     alignItems: 'center',

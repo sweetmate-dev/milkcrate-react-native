@@ -46,7 +46,7 @@ const scenes = Actions.create(
     <Scene key="Signup" component={ Signup } />
     <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -168,7 +168,7 @@ class App extends Component {
       if(activeUser && activeUser._id) {
         Actions.Main()
       } else {
-        Actions.Introduce()
+        // Actions.Introduce()
       }
       this.setState({initialize:true})
     })
