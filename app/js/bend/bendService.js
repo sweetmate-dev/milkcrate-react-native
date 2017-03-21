@@ -14,8 +14,8 @@ module.exports = {
             appKey: appKey,
             appSecret: appSecret
         }).then(
-            function () {
-                cb(null);
+            function (activeUser) {
+                cb(null, activeUser);
             },
             function (error) {
                 cb(error);

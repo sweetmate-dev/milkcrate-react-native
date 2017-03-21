@@ -42,11 +42,11 @@ import LearnMoreModal from './home/components/learnMoreModal';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce }  initial/>
+    <Scene key="Introduce" component={ Introduce }/>
     <Scene key="Signup" component={ Signup } />
     <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET }/>
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />
@@ -119,6 +119,13 @@ const deepLink_Search_Categories = [
 ];
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      initialize:false
+    };
+  }
 
   deepLinks () {
 
@@ -156,8 +163,14 @@ class App extends Component {
   componentDidMount() {
 
     this.deepLinks();
-    bendService.init((err)=>{
-      console.log("bend init", err)
+    bendService.init((err, activeUser)=>{
+      console.log("bend init", err, activeUser)
+      if(activeUser && activeUser._id) {
+        Actions.Main()
+      } else {
+        Actions.Introduce()
+      }
+      this.setState({initialize:true})
     })
   }
 

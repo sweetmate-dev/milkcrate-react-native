@@ -25,6 +25,8 @@ import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
+import bendService from '../../bend/bendService'
+
 class Settings extends Component {
   constructor(props) {
     super(props);
@@ -87,7 +89,9 @@ class Settings extends Component {
   }
 
   onLogOut() {
-    alert( 'Tapped onLogOut');
+    //alert( 'Tapped onLogOut');
+    bendService.logout()
+    Actions.Login()
   }
 
   render() {
