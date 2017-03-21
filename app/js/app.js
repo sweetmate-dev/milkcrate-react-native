@@ -42,11 +42,11 @@ import LearnMoreModal from './home/components/learnMoreModal';
 
 const scenes = Actions.create(
   <Scene key="root">
-    <Scene key="Introduce" component={ Introduce }/>
+    <Scene key="Introduce" component={ Introduce } />
     <Scene key="Signup" component={ Signup } />
     <Scene key="Login" component={ Login } />
     <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET }/>
+    <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial/>
     <Scene key="CategoryView" component={ CategoryView } />
     <Scene key="BusinessesDetail" component={ BusinessesDetail } />
     <Scene key="ActionDetail" component={ ActionDetail } />

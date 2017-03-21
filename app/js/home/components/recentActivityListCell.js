@@ -113,7 +113,13 @@ export default class RecentActivityListCell extends Component {
                   <Text style={ styles.textSmall }>
 
                   {
-                    this.state.hearts != 0 ? this.state.hearts : this.state.hearts + " - Be the first to like it!"
+                    this.state.hearts == 0 ? 
+                      "0 - Be the first to like it!"
+                      : 
+                      this.state.hearts > 1 ?
+                        this.state.hearts + " Likes"
+                        :
+                        this.state.hearts + " Like"
                   }
                   </Text>
                 </View>

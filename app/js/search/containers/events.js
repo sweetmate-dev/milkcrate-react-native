@@ -137,9 +137,8 @@ class Events extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
+          buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          onFilter={ this.onFilter }
           placeholder ='Search for events'
         />
         <CalendarStrip

@@ -28,6 +28,9 @@ import CategoryMap from './categoryMap';
 import  * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
+const currentLocation = require('../../../assets/imgs/current_location_button.png');
+
+
 const stickerImages = [
   require('../../../assets/imgs/stickers/fashion1.png'),
   require('../../../assets/imgs/stickers/books.png'),
@@ -69,6 +72,7 @@ class CategoryView extends Component {
 
     this.state = {
       selectedIndex: 'List',
+      currentPosition: null,
     };
   }
 
@@ -83,12 +87,23 @@ class CategoryView extends Component {
     }
   }
 
-  onBack () {
+  onBack() {
     Actions.pop()
   }
 
-  onFilter () {
+  onFilter() {
     alert("Tapped filter button!");
+  }
+
+  onCurrentLocation() {
+    navigator.geolocation.getCurrentPosition( (position) => {
+        this.setState({ currentPosition: position });
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   render() {
@@ -99,12 +114,11 @@ class CategoryView extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          buttons={ commonStyles.NavBackButton | commonStyles.NavFilterButton }
+          buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          onFilter={ this.onFilter }
           />
         <View style={ styles.segmentedWrap }>
-          <View style={ styles.segmentedPadding }/>
+          <View style={ styles.segmentedLeft }/>
           <View style={ styles.segmented }>
             <SegmentedControls
               tint={ '#fff' }
@@ -116,13 +130,22 @@ class CategoryView extends Component {
               selectedOption={ this.state.selectedIndex }
             />
           </View>
-          <View style={ styles.segmentedPadding }/>
+          <View style={ styles.segmentedRight }>
+            {
+              this.state.selectedIndex == 'Map' ?
+                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCurrentLocation() }>
+                  <Image style={ styles.imageCurrentLocation } source={ currentLocation }/>
+                </TouchableOpacity>
+              : 
+                null
+            }
+          </View>
         </View>
         {
           this.state.selectedIndex == 'List' ?
             <CategoryList title={ title } avatar={ stickerImages[index] } />
             :
-            <CategoryMap title={ title } avatar={ stickerImages[index] } />
+            <CategoryMap title={ title } avatar={ stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );
@@ -139,7 +162,7 @@ export default connect(state => ({
 
 const styles = StyleSheet.create({
   container: {
-    flex : 1,
+    flex: 1,
   },
   background: {
     width: commonStyles.screenWidth,
@@ -148,17 +171,27 @@ const styles = StyleSheet.create({
   segmentedWrap: {
     flexDirection: 'row',
     backgroundColor: commonColors.theme,
-    height:44,
+    height: 44,
   },
   segmented: {
-    flex : 6,
+    flex: 6,
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  segmentedPadding: {
-    flex : 1,
+  segmentedLeft: {
+    flex: 1,
     backgroundColor: 'transparent',
+  },
+  segmentedRight: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageCurrentLocation: {
+    width: 20,
+    height: 22,
   },
   tabStyle: {
     borderWidth: 1,

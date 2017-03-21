@@ -66,6 +66,11 @@ class Login extends Component {
       console.log(err, user);
       if(err || !user.enabled) {
         alert("Email or password is incorrect")
+        
+        this.setState({
+          email: '',
+          password: '',
+        });
         return
       }
 
@@ -106,6 +111,7 @@ class Login extends Component {
           </View>
           <View style={ styles.inputContainer }>
             <TextInput
+              ref="email"
               autoCapitalize="none"
               autoCorrect={ false }
               placeholder="Email"
@@ -114,10 +120,13 @@ class Login extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
+              value={ this.state.email }
               onChangeText={ (text) => this.setState({ email: text }) }
+              onSubmitEditing={ () => this.refs.password.focus() }
             />            
             <View style={ styles.inputWrapper }>
               <TextInput
+                ref="password"
                 autoCapitalize="none"
                 autoCorrect={ false }
                 placeholder="Password"
@@ -126,8 +135,10 @@ class Login extends Component {
                 textAlign="center"
                 style={ styles.input }
                 underlineColorAndroid="transparent"
-                returnKeyType={ 'next' }
+                returnKeyType={ 'go' }
+                value={ this.state.password }
                 onChangeText={ (text) => this.setState({ password: text }) }
+                onSubmitEditing={ () => this.onLogin() }
               />
               <TouchableOpacity 
                 activeOpacity={ .5 } 

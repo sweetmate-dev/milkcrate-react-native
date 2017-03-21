@@ -37,7 +37,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'profile';
+      tab = 'home';
 
     this.state = {
       selectedTab: tab,
@@ -49,6 +49,18 @@ export default class Main extends Component {
     if (Platform.OS === 'ios') {
       StatusBar.setBarStyle('light-content', false);
     }
+  }
+
+  componentDidMount() {
+
+    navigator.geolocation.getCurrentPosition( (position) => {
+        console.log(JSON.stringify(position));
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   render() {

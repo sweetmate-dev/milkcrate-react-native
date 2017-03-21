@@ -134,6 +134,7 @@ class Signup extends Component {
           </View>
           <View style={ styles.inputContainer }>
             <TextInput
+              ref="email"
               autoCapitalize="none"
               autoCorrect={ false }
               placeholder="Email"
@@ -142,10 +143,13 @@ class Signup extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
+              value={ this.state.email }
               onChangeText={ (text) => this.setState({ email: text }) }
+              onSubmitEditing={ () => this.refs.password.focus() }
             />
             <View style={ styles.inputWrapper }>
               <TextInput
+                ref="password"
                 autoCapitalize="none"
                 autoCorrect={ false }
                 placeholder="Password"
@@ -155,11 +159,14 @@ class Signup extends Component {
                 style={ styles.input }
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'next' }
+                value={ this.state.password }
                 onChangeText={ (text) => this.setState({ password: text }) }
+                onSubmitEditing={ () => this.refs.confirmPassword.focus() }
               />
             </View>
             <View style={ styles.inputWrapper }>
               <TextInput
+                ref="confirmPassword"
                 autoCapitalize="none"
                 autoCorrect={ false }
                 placeholder="Confirm Password"
@@ -169,6 +176,8 @@ class Signup extends Component {
                 style={ styles.input }
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'next' }
+                value={ this.state.confirmPassword }
+                onSubmitEditing={ () => this.refs.communityCode.focus() }
                 onChangeText={ (text) => this.setState({ confirmPassword: text }) }
               />
               <TouchableOpacity
@@ -180,6 +189,7 @@ class Signup extends Component {
               </TouchableOpacity>
             </View>
             <TextInput
+              ref="communityCode"
               autoCapitalize="none"
               autoCorrect={ false }
               placeholder="Community Code"
@@ -188,7 +198,9 @@ class Signup extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'go' }
+              value={ this.state.communityCode }
               onChangeText={ (text) => this.setState({ communityCode: text }) }
+              onSubmitEditing={ () => this.onSignUp() }
             />
           </View>
           <View style={ styles.bottomContainer }>

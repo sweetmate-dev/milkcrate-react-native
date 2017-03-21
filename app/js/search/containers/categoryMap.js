@@ -28,6 +28,7 @@ const SPACE = 0.01;
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const map_selected_pin = require('../../../assets/imgs/map_marker_selected.png');
+const currentLocationMarker = require('../../../assets/imgs/current_location_marker.png');
 
 class CategoryMap extends Component {
   constructor(props) {
@@ -65,6 +66,16 @@ class CategoryMap extends Component {
       ],
       tappedPin: 0,
     };
+
+    this.watchID = null;
+  }  
+
+  componentDidMount() {
+
+    this.setState( ( state) => {
+      state.markers[this.state.tappedPin].pin = map_selected_pin;
+      return state;
+    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -76,14 +87,6 @@ class CategoryMap extends Component {
     } else if (newProps.status == 'search_category_error') {
 
     }
-  }
-
-  componentDidMount() {
-
-    this.setState( ( state) => {
-      state.markers[this.state.tappedPin].pin = map_selected_pin;
-      return state;
-    });
   }
 
   onPressPin (index) {
@@ -98,20 +101,23 @@ class CategoryMap extends Component {
   }
 
   render() {
-    const { status } = this.props;
-    const title = this.props.title;
-    const avatar = this.props.avatar;
+    const { status, title, avatar, currentLocation } = this.props;
+    let region = this.state.region;
+
+    if (currentLocation != null) {
+
+      region=Object.assign({}, region, {
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      });
+      
+    }
 
     return (
       <View style={ styles.container }>
         <MapView
           style={ styles.map }
-          initialRegion={{
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }}
+          region={ region }
         >
           {
             this.state.markers.map( (marker, index) => (
@@ -124,8 +130,17 @@ class CategoryMap extends Component {
               />
             ))            
           }
+          {
+            currentLocation != null ? 
+              <MapView.Marker
+                image={ currentLocationMarker }
+                coordinate={ currentLocation.coords }
+                flat={ true }                
+              />
+            :
+              null
+          }
         </MapView>
-
         <View style={ styles.calloutContainer } >
           <CategoryDetailView
             width={ screenWidth - 20}
