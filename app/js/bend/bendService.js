@@ -183,6 +183,7 @@ module.exports = {
         query.equalTo("community._id", communityId)
         query.notEqualTo("deleted", true)
         query.equalTo("enabled", true)
+        query.limit = 10
 
         Bend.DataStore.find("business", query, {
             relations:{
