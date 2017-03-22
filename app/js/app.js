@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Linking,
-  Alert,
+  Alert,  
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -39,29 +39,6 @@ import EditProfile from './profile/containers/editProfile';
 import ChangePassword from './profile/containers/changePassword';
 import LearnMoreModal from './home/components/learnMoreModal';
 
-
-const scenes = Actions.create(
-  <Scene key="root">
-    <Scene key="Introduce" component={ Introduce } />
-    <Scene key="Signup" component={ Signup } />
-    <Scene key="Login" component={ Login } />
-    <Scene key="SetupProfile" component={ SetupProfile } />
-    <Scene key="Main" component={ Main } type={ ActionConst.RESET } />
-    <Scene key="CategoryView" component={ CategoryView } />
-    <Scene key="BusinessesDetail" component={ BusinessesDetail } />
-    <Scene key="ActionDetail" component={ ActionDetail } />
-    <Scene key="EventsDetail" component={ EventsDetail } />
-    <Scene key="Events" component={ Events } />
-    <Scene key="Settings" component={ Settings } />
-    <Scene key="CommunityPoints" component={ CommunityPoints } />
-    <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
-    <Scene key="Leaderboard" component={ Leaderboard } />
-    <Scene key="EditProfile" component={ EditProfile } />
-    <Scene key="ChangePassword" component={ ChangePassword } />
-    <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
-
-  </Scene>
-);
 
 //Deep Links
 const deepLink_Generals = [
@@ -122,9 +99,23 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      initialize:false
+    this.state ={
+      initialize: false,
+      loggedIn: false,
     };
+    
+    bendService.init((err, activeUser)=>{
+      
+      console.log("bend init", err, activeUser)      
+      
+      if(activeUser && activeUser._id) {
+        this.setState({ loggedIn: true });
+      } else {
+        this.setState({ loggedIn: false });
+      }
+
+      this.setState({ initialize: true });
+    });
   }
 
   deepLinks () {
@@ -162,16 +153,7 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.deepLinks();
-    bendService.init((err, activeUser)=>{
-      console.log("bend init", err, activeUser)
-      if(activeUser && activeUser._id) {
-        Actions.Main()
-      } else {
-        // Actions.Introduce()
-      }
-      this.setState({initialize:true})
-    })
+    this.deepLinks();    
   }
 
   componentWillUnmount() {
@@ -180,6 +162,32 @@ class App extends Component {
   }
 
   render() {
+
+    if (this.state.initialize === false )
+      return null;
+
+    const scenes = Actions.create(
+      <Scene key="root">
+        <Scene key="Introduce" component={ Introduce } />
+        <Scene key="Signup" component={ Signup } />
+        <Scene key="Login" component={ Login } />
+        <Scene key="SetupProfile" component={ SetupProfile } />
+        <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
+        <Scene key="CategoryView" component={ CategoryView } />
+        <Scene key="BusinessesDetail" component={ BusinessesDetail } />
+        <Scene key="ActionDetail" component={ ActionDetail } />
+        <Scene key="EventsDetail" component={ EventsDetail } />
+        <Scene key="Events" component={ Events } />
+        <Scene key="Settings" component={ Settings } />
+        <Scene key="CommunityPoints" component={ CommunityPoints } />
+        <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
+        <Scene key="Leaderboard" component={ Leaderboard } />
+        <Scene key="EditProfile" component={ EditProfile } />
+        <Scene key="ChangePassword" component={ ChangePassword } />
+        <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
+
+      </Scene>
+    );
 
     return (
       <Provider store={ store }>
