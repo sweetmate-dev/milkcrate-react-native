@@ -34,6 +34,8 @@ import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
 
+//added by li, 2017/03/22
+import bendService from '../../bend/bendService'
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -48,7 +50,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
-    var dataSourceRecentActivity = new ListView.DataSource(
+    this.dataSourceRecentActivity = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
@@ -56,8 +58,46 @@ class Home extends Component {
       selectedDailyPollIndex: -1,
       selectedDailyPollStateMode: false,
 
-      dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(RecentActivityEntries),
+      dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
+      challenges :[],
+      community:{}
     };
+  }
+
+  componentDidMount() {
+    bendService.getWeeklyChallenges("", (err, rets)=>{
+      //console.log("getWeeklyChallenges", err, rets)
+
+    })
+
+    bendService.getCurrentTrading((err, rets)=>{
+      //console.log("current trading", err, rets)
+    })
+
+    bendService.getCommunity((err, ret)=>{
+      if(err) {
+        console.log(err);
+        return;
+      }
+      //console.log("community", err, ret)
+      this.setState({
+        community:ret
+      })
+    })
+
+    bendService.getRecentActivities((err, rets)=>{
+      if(err) {
+        console.log(err);return
+      }
+      //console.log("recent activities", err, rets)
+      this.setState({
+        dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(rets)
+      })
+    })
+
+    bendService.getPollQuestion((err, rets)=>{
+      //console.log("poll questions", err, rets)
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -75,13 +115,13 @@ class Home extends Component {
 
     return (
       <RecentActivityListCell
-        name={ rowData.name }
-        description={ rowData.description }
-        avatar={ rowData.avatar }
-        time={ rowData.time }
-        hearts={ rowData.hearts }
-        likeByMe={ rowData.likeByMe }
-        coins={ rowData.coins }
+        name={ rowData.user.name||'' }
+        description={ rowData.activity.description||'' }
+        avatar={ require('../../../assets/imgs/avatar.png') }
+        time={ 1 }
+        hearts={ Number(rowData.likeCount) }
+        likeByMe={ false }
+        coins={ Number(rowData.points) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />
     );
@@ -296,11 +336,12 @@ class Home extends Component {
   get showRecentActivity() {
     return (
       <View style={ styles.recentActivityContainer }>
-        <Text style={ styles.textTitle }>Recent Activity at Comcast</Text>
+        <Text style={ styles.textTitle }>Recent Activity at {this.state.community.name}</Text>
         <View style={ styles.recentActivityListViewWrapper }>
           <ListView
-            dataSource={ this.state.dataSourceRecentActivity }
-            renderRow={ this.renderRecentActivityRow.bind(this) }/>
+              enableEmptySections={true}
+              dataSource={ this.state.dataSourceRecentActivity }
+              renderRow={ this.renderRecentActivityRow.bind(this) }/>
         </View>
       </View>
     );
