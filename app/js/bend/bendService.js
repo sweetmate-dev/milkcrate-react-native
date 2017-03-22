@@ -173,8 +173,8 @@ module.exports = {
         })
     },
 
-    //get current trading
-    getCurrentTrading(cb) {
+    //get currently trending
+    getTrending(cb) {
         //get community of current user
         var communityId = this.getActiveUser().community._id;
         if(!communityId) return []
@@ -353,6 +353,3 @@ module.exports = {
         };
     }
 }
-
-
-
