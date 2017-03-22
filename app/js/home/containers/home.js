@@ -59,44 +59,76 @@ class Home extends Component {
       selectedDailyPollStateMode: false,
 
       dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
-      challenges :[],
-      community:{}
+      challenges: [
+        {
+          title: 'Weekly Challenge 1',
+          subtitle: 'Today',
+          avatar: null,
+          coins: 0,
+        },
+      ],
+
+      community: {}
     };
   }
 
   componentDidMount() {
-    bendService.getWeeklyChallenges("", (err, rets)=>{
-      //console.log("getWeeklyChallenges", err, rets)
+    
+    bendService.getWeeklyChallenges( "", (error, result)=>{
 
-    })
-
-    bendService.getCurrentTrading((err, rets)=>{
-      //console.log("current trading", err, rets)
-    })
-
-    bendService.getCommunity((err, ret)=>{
-      if(err) {
-        console.log(err);
+      if (error) {
+        console.log(error);
         return;
       }
-      //console.log("community", err, ret)
-      this.setState({
-        community:ret
-      })
+
+      // console.log("getWeeklyChallenges", result);      
+      this.setState({ challenges: result });
     })
 
-    bendService.getRecentActivities((err, rets)=>{
-      if(err) {
-        console.log(err);return
+    bendService.getTrending( (error, result) => {
+
+      if (error) {
+        console.log(error);
+        return;
       }
-      //console.log("recent activities", err, rets)
+
+      // console.log("current trending", error, result)
+    })
+
+    bendService.getCommunity( (error, result) => {
+      
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      // console.log("community", error, result)
       this.setState({
-        dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(rets)
+        community:result
       })
     })
 
-    bendService.getPollQuestion((err, rets)=>{
-      //console.log("poll questions", err, rets)
+    bendService.getRecentActivities( (error, result) => {
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      // console.log("recent activities", error, result)
+
+      this.setState({
+        dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
+      })
+    })
+
+    bendService.getPollQuestion( (error, result) => {
+      
+      if (error) {
+        console.log('poll questions erroror', error);
+        return;
+      }
+      console.log("poll questions", result);
     })
   }
 
@@ -106,17 +138,17 @@ class Home extends Component {
 
     } else if (newProps.status == 'home_success') {
 
-    } else if (newProps.status == 'home_error') {
+    } else if (newProps.status == 'home_erroror') {
 
     }
   }
 
-  renderRecentActivityRow(rowData, sectionID, rowID) {
+  renderrorecentActivityRow(rowData, sectionID, rowID) {
 
     return (
       <RecentActivityListCell
-        name={ rowData.user.name||'' }
-        description={ rowData.activity.description||'' }
+        name={ rowData.user.name || '' }
+        description={ rowData.activity.description || '' }
         avatar={ require('../../../assets/imgs/avatar.png') }
         time={ 1 }
         hearts={ Number(rowData.likeCount) }
@@ -139,15 +171,14 @@ class Home extends Component {
 
   getChallengeCarousel (entries) {
 
-    if (!entries) {
-      return false;
-    }
-
     return entries.map((entry, index) => {
       return (
         <ChallengeCarousel
-          key={`carousel-entry-${index}`}
-          {...entry}
+          key={ index }
+          title={ entry.title }
+          subtitle="Take public transit to work today"
+          avatar={ require('../../../assets/imgs/stickers/transit.png') }
+          coins={ 10 }
         />
       );
     });
@@ -169,6 +200,10 @@ class Home extends Component {
   }
 
   get showChallenges () {
+
+    if (this.state.challenges.length == 0)
+      return null;
+
     return (
       <Carousel
         sliderWidth={ commonStyles.carouselerWidth }
@@ -182,7 +217,7 @@ class Home extends Component {
         snapOnAndroid={ true }
         removeClippedSubviews={ false }
       >
-        { this.getChallengeCarousel(ChallengeCarouselEntries) }
+        { this.getChallengeCarousel( this.state.challenges ) }
       </Carousel>
     );
   }
@@ -336,12 +371,12 @@ class Home extends Component {
   get showRecentActivity() {
     return (
       <View style={ styles.recentActivityContainer }>
-        <Text style={ styles.textTitle }>Recent Activity at {this.state.community.name}</Text>
+        <Text style={ styles.textTitle }>Recent Activity at { this.state.community.location }</Text>
         <View style={ styles.recentActivityListViewWrapper }>
           <ListView
-              enableEmptySections={true}
+              enableEmptySections={ true }
               dataSource={ this.state.dataSourceRecentActivity }
-              renderRow={ this.renderRecentActivityRow.bind(this) }/>
+              renderrorow={ this.renderrorecentActivityRow.bind(this) }/>
         </View>
       </View>
     );
