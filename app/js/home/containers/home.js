@@ -36,6 +36,7 @@ import FadeOutView from '../components/fadeOutView';
 
 //added by li, 2017/03/22
 import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -45,6 +46,61 @@ import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, Re
 const trending = require('../../../assets/imgs/trending.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
+
+const categoryImages = {
+  animals:require('../../../assets/imgs/categories/animals.png'),
+  animals_active:require('../../../assets/imgs/categories/animals_active.png'),
+  baby:require('../../../assets/imgs/categories/baby.png'),
+  baby_active:require('../../../assets/imgs/categories/baby_active.png'),
+  beauty:require('../../../assets/imgs/categories/beauty.png'),
+  beauty_active:require('../../../assets/imgs/categories/beauty_active.png'),
+  bicycles:require('../../../assets/imgs/categories/bicycles.png'),
+  bicycles_active:require('../../../assets/imgs/categories/bicycles_active.png'),
+  civic:require('../../../assets/imgs/categories/civic.png'),
+  civic_active:require('../../../assets/imgs/categories/civic_active.png'),
+  coffee:require('../../../assets/imgs/categories/coffee.png'),
+  coffee_active:require('../../../assets/imgs/categories/coffee_active.png'),
+  community:require('../../../assets/imgs/categories/community.png'),
+  community_active:require('../../../assets/imgs/categories/community_active.png'),
+  construction:require('../../../assets/imgs/categories/construction.png'),
+  construction_active:require('../../../assets/imgs/categories/construction_active.png'),
+  dining:require('../../../assets/imgs/categories/dining.png'),
+  dining_active:require('../../../assets/imgs/categories/dining_active.png'),
+  drinks:require('../../../assets/imgs/categories/drinks.png'),
+  drinks_active:require('../../../assets/imgs/categories/drinks_active.png'),
+  education:require('../../../assets/imgs/categories/education.png'),
+  education_active:require('../../../assets/imgs/categories/education_active.png'),
+  energy:require('../../../assets/imgs/categories/energy.png'),
+  energy_active:require('../../../assets/imgs/categories/energy_active.png'),
+  fashion:require('../../../assets/imgs/categories/fashion.png'),
+  fashion_active:require('../../../assets/imgs/categories/fashion_active.png'),
+  finance:require('../../../assets/imgs/categories/finance.png'),
+  finance_active:require('../../../assets/imgs/categories/finance_active.png'),
+  food:require('../../../assets/imgs/categories/food.png'),
+  food_active:require('../../../assets/imgs/categories/food_active.png'),
+  garden:require('../../../assets/imgs/categories/garden.png'),
+  garden_active:require('../../../assets/imgs/categories/garden_active.png'),
+  'green-space':require('../../../assets/imgs/categories/green-space.png'),
+  'green-space_active':require('../../../assets/imgs/categories/green-space_active.png'),
+  'health-wellness':require('../../../assets/imgs/categories/health-wellness.png'),
+  'health-wellness_active':require('../../../assets/imgs/categories/health-wellness_active.png'),
+  'home-office':require('../../../assets/imgs/categories/home-office.png'),
+  'home-office_active':require('../../../assets/imgs/categories/home-office_active.png'),
+  'media-communications':require('../../../assets/imgs/categories/media-communications.png'),
+  'media-communications_active':require('../../../assets/imgs/categories/media-communications_active.png'),
+  products:require('../../../assets/imgs/categories/products.png'),
+  products_active:require('../../../assets/imgs/categories/products_active.png'),
+  services:require('../../../assets/imgs/categories/services.png'),
+  services_active:require('../../../assets/imgs/categories/services_active.png'),
+  'special-events':require('../../../assets/imgs/categories/special-events.png'),
+  'special-events_active':require('../../../assets/imgs/categories/special-events_active.png'),
+  'tourism-hospitality':require('../../../assets/imgs/categories/tourism-hospitality.png'),
+  'tourism-hospitality_active':require('../../../assets/imgs/categories/tourism-hospitality_active.png'),
+  transit:require('../../../assets/imgs/categories/transit.png'),
+  transit_active:require('../../../assets/imgs/categories/transit_active.png'),
+  waste:require('../../../assets/imgs/categories/waste.png'),
+  waste_active:require('../../../assets/imgs/categories/waste_active.png'),
+}
 
 class Home extends Component {
   constructor(props) {
@@ -61,7 +117,13 @@ class Home extends Component {
       dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
       challenges: [],
       community: {},
-      categories:[]
+      categories:[],
+      trendings:[],
+      pollQuestion:{
+        question:{},
+        answers:[],
+        myAnswer:null
+      }
     };
 
     this.acitivtyQuery = {
@@ -86,7 +148,7 @@ class Home extends Component {
         return;
       }
 
-      console.log("getWeeklyChallenges", result);
+      //console.log("getWeeklyChallenges", result);
       this.setState({ challenges: result });
     })
 
@@ -97,11 +159,13 @@ class Home extends Component {
         return;
       }
 
-      // console.log("current trending", error, result)
+      //console.log("current trending", error, result)
+      this.setState({
+        trendings:result
+      })
     })
 
     bendService.getCommunity( (error, result) => {
-      
       if (error) {
         console.log(error);
         return;
@@ -115,13 +179,21 @@ class Home extends Component {
 
     this.loadRecentActivities()
 
-    bendService.getPollQuestion( (error, result) => {
+    bendService.getPollQuestion( (error, question, answers, myAnswer) => {
       
       if (error) {
         console.log('poll questions erroror', error);
         return;
       }
-      //console.log("poll questions", result);
+      console.log("poll questions", question, answers, myAnswer);
+
+      this.setState({
+        pollQuestion:{
+          question:question,
+          answers:answers,
+          myAnswer:myAnswer
+        }
+      })
     })
   }
 
@@ -191,7 +263,7 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat?require('../../../assets/imgs/categories/' + cat + '.png'):require('../../../assets/imgs/stickers/transit.png') }
+          avatar={ cat?categoryImages[cat]:require('../../../assets/imgs/stickers/transit.png') }
           points={ entry.activity.points?Number(entry.activity.points):0 }
           link={entry.activity.url}
         />
@@ -200,15 +272,36 @@ class Home extends Component {
   }
 
   getTrendingCarousel (entries) {
-    if (!entries) {
+    if (!entries || entries.length == 0) {
       return false;
     }
 
     return entries.map((entry, index) => {
+      var cat = bendService.getActivityCategory(this.state.categories, entry)
       return (
         <TrendingCarousel
           key={`carousel-entry-${index}`}
-          {...entry}
+          title={'CHECK IN'}
+          activityType={'business'}
+          location={entry.name}
+          category_avatar={cat?categoryImages[cat]:require('../../../assets/imgs/stickers/transit.png')}
+          users={[
+      {
+        name: 'Paul A.',
+        avatar: require('../../../assets/imgs/avatar.png'),
+      },
+      {
+        name: 'Paul B.',
+        avatar: require('../../../assets/imgs/avatar.png'),
+      },
+      {
+        name: 'Paul c.',
+        avatar: require('../../../assets/imgs/avatar.png'),
+      },
+    ]}
+          time={1}
+          hearts={Number(entry.likeCount)||0}
+          coins={Number(entry.points)||0}
         />
       );
     });
@@ -244,7 +337,7 @@ class Home extends Component {
           <Text style={ styles.textTitle }>Currently Trending</Text>
           <Image style={ styles.imageTrending } source={ trending }/>
         </View>
-        <Carousel
+        {this.state.trendings.length > 0 && <Carousel
           sliderWidth={ commonStyles.carouselerWidth }
           itemWidth={ commonStyles.carouselItemWidth }
           inactiveSlideScale={ 1 }
@@ -256,8 +349,8 @@ class Home extends Component {
           snapOnAndroid={ true }
           removeClippedSubviews={ false }
         >
-          { this.getTrendingCarousel(TrendingCarouselEntries) }
-        </Carousel>
+          { this.getTrendingCarousel(this.state.trendings) }
+        </Carousel>}
       </View>
     );
   }
@@ -283,16 +376,37 @@ class Home extends Component {
           style={ styles.radioFormWrapper }
         >
           { 
-            DailyPollEntries.map((obj, index) => {
+            this.state.pollQuestion.answers.map((obj, index) => {
               var onPressRadioButton = (value, index) => {
-                
+                console.log(value, index)
                 this.setState({
                   selectedDailyPollValue: value,
                   selectedDailyPollIndex: index
                 });
 
+                //do polling
+                bendService.pollResponse(this.state.pollQuestion.question, this.state.pollQuestion.answers[index], (err, ret)=>{
+                  if(err) {
+                    console.log(err);
+                    return
+                  }
+
+                  //update values locally
+                  this.state.pollQuestion.question.responseCount++;
+                  this.state.pollQuestion.answers[index].count++
+                  this.state.pollQuestion.answers[index].percentage = Math.round(this.state.pollQuestion.answers[index].count * 100 / this.state.pollQuestion.question.responseCount);
+                  _.map(this.state.pollQuestion.answers, (o)=>{
+                    o.percentage = Math.round(o.count * 100 / this.state.pollQuestion.question.responseCount);
+                  })
+
+                  this.setState({
+                    pullQuestion:this.state.pollQuestion
+                  })
+                })
+
                 timer.setTimeout( this, 'DailyPollTimer', () => {
                   timer.clearInterval(this, 'DailyPollTimer');
+                  this.state.pollQuestion.myAnswer = this.state.pollQuestion.answers[index]
                   this.setState({ selectedDailyPollStateMode: true });
                 }, 500);                
               }
@@ -301,10 +415,13 @@ class Home extends Component {
                 <RadioButton 
                   labelHorizontal={ true }
                   key={ index }
-                  style={ (DailyPollEntries.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
+                  style={ (this.state.pollQuestion.answers.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
                 >
                   <RadioButtonInput
-                    obj={ obj }
+                    obj={ {
+                    label:obj.title,
+                    value:obj.position
+                    } }
                     index={ index }
                     isSelected={ this.state.selectedDailyPollIndex === index }
                     onPress={ onPressRadioButton }
@@ -317,7 +434,10 @@ class Home extends Component {
                     buttonWrapStyle={ styles.radioButtonInputWrapper }
                   />
                   <RadioButtonLabel
-                    obj={ obj }
+                    obj={ {
+                    label:obj.title,
+                    value:obj.position
+                    } }
                     index={ index }
                     labelHorizontal={ true }
                     onPress={ onPressRadioButton }
@@ -338,14 +458,14 @@ class Home extends Component {
       <FadeInView>
         <View style={ styles.dailyPollSelectContentContainer }>
           {
-            DailyPollEntries.map((obj, index) => {
+            this.state.pollQuestion.answers.map((obj, index) => {
               return (
                 <DailyPollStateCell
                   key={ index }
-                  percent={ obj.percent }
-                  description={ obj.label }
+                  percent={ Number(obj.percentage) }
+                  description={ obj.title }
                   selected={ this.state.selectedDailyPollIndex === index ? true : false }
-                  bottomLine={ (DailyPollEntries.length - 1) === index ? false : true }
+                  bottomLine={ (this.state.pollQuestion.answers.length - 1) === index ? false : true }
                 />
               );
             })
@@ -363,7 +483,7 @@ class Home extends Component {
           <View style={ styles.dailyPollTopContentContainer }>
             <View style={ styles.dailyPollTopPointContainer }>
               <View style={ styles.dailyPollLearnMoreContainer }>
-                <Text style={ styles.textQuestion }>What is your typical weekly diet?</Text>
+                <Text style={ styles.textQuestion }>{this.state.pollQuestion.question.question}</Text>
                 <View style={ styles.buttonWrapper }>
                   <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onLearnMore() }>
                     <Text style={ styles.textReadMoreButton }>Learn More</Text>
@@ -375,7 +495,7 @@ class Home extends Component {
           </View>
 
           {
-            this.state.selectedDailyPollStateMode === false ? this.showMainDailyPollSelectMode : this.showDailyPollStateMode            
+            !this.state.pollQuestion.myAnswer? this.showMainDailyPollSelectMode : this.showDailyPollStateMode
           }
 
         </View>

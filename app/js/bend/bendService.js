@@ -2,7 +2,7 @@ import * as Bend from './bend'
 import {
     AsyncStorage
 } from 'react-native';
-import async from 'async'
+import * as async from 'async'
 import * as _ from 'underscore'
 
 var appKey = '589d36e94bad3014f50128ce';
@@ -214,6 +214,7 @@ module.exports = {
                 coverImage:"BendFile"
             }
         }).then((rets)=>{
+            //console.log("trendings", rets)
             //get any 2 items
             var count = rets.length;
             if(count > 2) {
@@ -278,9 +279,10 @@ module.exports = {
                 (questionRet, callback)=>{
                     //pollQuestionAnswer update
                     Bend.DataStore.get("pollQuestionAnswer", answer._id).then((ret)=>{
+                        ret.count = Number(ret.count)||0
                         ret.count++;
-                        ret.percentage = ret.count * 100 / questionRet.responseCount
-                        Bend.DataStore.update("pollQuestion", ret).then((ret)=>{
+                        ret.percentage = Math.round(ret.count * 100 / questionRet.responseCount)
+                        Bend.DataStore.update("pollQuestionAnswer", ret).then((ret)=>{
                             callback(null, ret)
                         }, (err)=>{
                             callback(err)
@@ -288,8 +290,26 @@ module.exports = {
                     }, (err)=>{
                         callback(err)
                     })
+
+                    //get another answers and also need to update percentage
+                    var q = new Bend.Query();
+                    q.equalTo("question._id", questionRet._id);
+                    q.notEqualTo("_id", answer._id);
+                    q.notEqualTo("deleted", true)
+
+                    Bend.DataStore.find("pollQuestionAnswer", q).then((rets)=>{
+                        _.map(rets, (a)=>{
+                            a.percentage = Math.round(Number(a.count||0) * 100 / questionRet.responseCount)
+                            Bend.DataStore.update("pollQuestionAnswer", a).then((ret)=>{
+                                console.log(ret);
+                            }, (err)=>{
+                                console.log(err);
+                            })
+                        })
+                    })
                 }
             ], (err, ret)=>{
+                console.log("pollResponse result", err, ret)
                 cb(err, ret)
             })
         }, (err)=>{
@@ -329,6 +349,7 @@ module.exports = {
                         //get related answers
                         query = new Bend.Query();
                         query.equalTo("question._id", rets[0]._id)
+                        query.ascending("position")
                         Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
                             cb(null, rets[0], answers, null);
                         }, (err)=>{
