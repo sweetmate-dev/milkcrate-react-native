@@ -82,27 +82,38 @@ class CategoryView extends Component {
     const  index = this.props.index;
     console.log("title, index", title, index)
 
-    bendService.searchActivity({
-      category:UtilService.convertToSlug(title),
-      offset:0,
-      limit:20
-    }, (err, ret)=>{
-      if(err) {
-        console.log("search failed", err)
-        return
-      }
-      
-      console.log("search result", ret)
-      var activities = []
-      activities = activities.concat(ret.data.action);
-      activities = activities.concat(ret.data.business);
-      activities = activities.concat(ret.data.service);
-      activities = activities.concat(ret.data.event);
-      activities = activities.concat(ret.data.volunteer_opportunity);
-      this.setState({
-        activities:activities
-      })
-    })
+    navigator.geolocation.getCurrentPosition( (position) => {
+          this.setState({ currentPosition: position })
+
+          bendService.searchActivity({
+            category:UtilService.convertToSlug(title),
+            offset:0,
+            limit:20,
+            lat:position.latitude,
+            long:position.longitude
+          }, (err, ret)=>{
+            if(err) {
+              console.log("search failed", err)
+              return
+            }
+
+            //console.log("search result", ret)
+            var activities = []
+            activities = activities.concat(ret.data.action);
+            activities = activities.concat(ret.data.business);
+            activities = activities.concat(ret.data.service);
+            activities = activities.concat(ret.data.event);
+            activities = activities.concat(ret.data.volunteer_opportunity);
+            this.setState({
+              activities:activities
+            })
+          })
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   componentWillReceiveProps(newProps) {
@@ -172,7 +183,7 @@ class CategoryView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <CategoryList title={ title } avatar={ stickerImages[index] } activities={this.state.activities}/>
+            <CategoryList title={ title } avatar={ stickerImages[index] } activities={this.state.activities} currentLocation={ this.state.currentPosition }/>
             :
             <CategoryMap title={ title } avatar={ stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }

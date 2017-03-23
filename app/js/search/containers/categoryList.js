@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 import CategoryDetailView from '../components/categoryDetailView';
 
 import { CategoryDetailEntries } from '../../components/dummyEntries';
+import UtilService from '../../components/util'
 
 class CategoryList extends Component {
   constructor(props) {
@@ -56,7 +57,8 @@ class CategoryList extends Component {
         title={ rowData.name }
         icon={ avatar }
         description={ rowData.description }
-        distance={ rowData.distance||1.0 }
+        distance={ rowData._geoloc?UtilService.getDistanceFromLatLonInKm(rowData._geoloc[0], rowData._geoloc[1],
+        this.props.currentLocation.latitude, this.props.currentLocation.longitude):1.0}
         price={ 10}
         rating={ rowData.points||0 }
         onClick={ () => this.onPressedCell(rowID) }
