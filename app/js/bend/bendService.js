@@ -151,6 +151,28 @@ module.exports = {
 
     //-------- start of home apis ---------------
 
+    //get all categories
+    getCategories(cb) {
+      Bend.DataStore.find("category", new Bend.Query()).then((rets)=>{
+          cb(null, rets)
+      }, (err)=>{
+          cb(err)
+      })
+    },
+
+    getActivityCategory(cats, activity) {
+        if(!activity.categories || activity.categories.length == 0)  return null;
+        var exist = _.find(cats, (o)=>{
+            return o._id == activity.categories[0]
+        })
+
+        if(exist) {
+            return exist.slug
+        }
+
+        return null
+    },
+
     //get weekly challenges
     getWeeklyChallenges(activityQuery, cb) {
         //get community of current user

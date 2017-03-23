@@ -60,7 +60,8 @@ class Home extends Component {
 
       dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
       challenges: [],
-      community: {}
+      community: {},
+      categories:[]
     };
 
     this.acitivtyQuery = {
@@ -73,9 +74,13 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    
-    bendService.getWeeklyChallenges( "", (error, result)=>{
+    bendService.getCategories((err, cats)=>{
+      this.setState({
+        categories:cats
+      })
+    })
 
+    bendService.getWeeklyChallenges( "", (error, result)=>{
       if (error) {
         console.log(error);
         return;
@@ -180,12 +185,13 @@ class Home extends Component {
   getChallengeCarousel (entries) {
 
     return entries.map((entry, index) => {
+      var cat = bendService.getActivityCategory(this.state.categories, entry.activity)
       return (
         <ChallengeCarousel
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ require('../../../assets/imgs/stickers/transit.png') }
+          avatar={ cat?require('../../../assets/imgs/categories/' + cat + '.png'):require('../../../assets/imgs/stickers/transit.png') }
           points={ entry.activity.points?Number(entry.activity.points):0 }
           link={entry.activity.url}
         />
