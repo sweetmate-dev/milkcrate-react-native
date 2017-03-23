@@ -86,13 +86,21 @@ class CategoryView extends Component {
       category:UtilService.convertToSlug(title),
       offset:0,
       limit:20
-    }, (err, rets)=>{
+    }, (err, ret)=>{
       if(err) {
         console.log("search failed", err)
         return
       }
+      
+      console.log("search result", ret)
+      var activities = []
+      activities = activities.concat(ret.data.action);
+      activities = activities.concat(ret.data.business);
+      activities = activities.concat(ret.data.service);
+      activities = activities.concat(ret.data.event);
+      activities = activities.concat(ret.data.volunteer_opportunity);
       this.setState({
-        activities:rets
+        activities:activities
       })
     })
   }

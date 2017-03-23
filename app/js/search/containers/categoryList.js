@@ -53,7 +53,7 @@ class CategoryList extends Component {
     const avatar = this.props.avatar;
     return (
       <CategoryDetailView
-        title={ title }
+        title={ rowData.name }
         icon={ avatar }
         description={ rowData.description }
         distance={ rowData.distance||1.0 }
