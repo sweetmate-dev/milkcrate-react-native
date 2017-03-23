@@ -79,7 +79,7 @@ export default class CategoryDetailView extends Component {
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>
-            <Text style={ styles.dscription }>{ description } </Text>
+            <Text numberOfLines={ 1 } style={ styles.dscription }>{ description } </Text>
           </View>
         </View>
       </TouchableHighlight>
