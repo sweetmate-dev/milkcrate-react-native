@@ -59,17 +59,17 @@ class Home extends Component {
       selectedDailyPollStateMode: false,
 
       dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
-      challenges: [
-        {
-          title: 'Weekly Challenge 1',
-          subtitle: 'Today',
-          avatar: null,
-          coins: 0,
-        },
-      ],
-
+      challenges: [],
       community: {}
     };
+
+    this.acitivtyQuery = {
+      offset:0,
+      limit:20,
+      more:true
+    }
+
+    this.loadRecentActivities.bind(this);
   }
 
   componentDidMount() {
@@ -81,7 +81,7 @@ class Home extends Component {
         return;
       }
 
-      // console.log("getWeeklyChallenges", result);      
+      console.log("getWeeklyChallenges", result);
       this.setState({ challenges: result });
     })
 
@@ -108,19 +108,7 @@ class Home extends Component {
       })
     })
 
-    bendService.getRecentActivities( (error, result) => {
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      // console.log("recent activities", error, result)
-
-     this.setState({
-        dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
-      })
-    })
+    this.loadRecentActivities()
 
     bendService.getPollQuestion( (error, result) => {
       
@@ -128,7 +116,7 @@ class Home extends Component {
         console.log('poll questions erroror', error);
         return;
       }
-      console.log("poll questions", result);
+      //console.log("poll questions", result);
     })
   }
 
@@ -143,13 +131,33 @@ class Home extends Component {
     }
   }
 
+  loadRecentActivities() {
+    if(this.acitivtyQuery.more) {
+      bendService.getRecentActivities(this.acitivtyQuery.offset, this.acitivtyQuery.limit, (error, result) => {
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+
+        this.acitivtyQuery.more = (result.length == this.acitivtyQuery.limit)
+
+        //console.log("recent activities", error, result)
+
+        this.setState({
+          dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
+        })
+      })
+    }
+  }
+
   renderrorecentActivityRow(rowData, sectionID, rowID) {
 
     return (
       <RecentActivityListCell
         name={ rowData.user.name || '' }
         description={ rowData.activity.description || '' }
-        avatar={ require('../../../assets/imgs/avatar.png') }
+        avatar={ rowData.user.avatar?rowData.user.avatar._downloadURL:'' }
         time={ 1 }
         hearts={ Number(rowData.likeCount) }
         likeByMe={ false }
@@ -176,9 +184,10 @@ class Home extends Component {
         <ChallengeCarousel
           key={ index }
           title={ entry.title }
-          subtitle="Take public transit to work today"
+          subtitle={entry.activity.name}
           avatar={ require('../../../assets/imgs/stickers/transit.png') }
-          coins={ 10 }
+          points={ entry.activity.points?Number(entry.activity.points):0 }
+          link={entry.activity.url}
         />
       );
     });

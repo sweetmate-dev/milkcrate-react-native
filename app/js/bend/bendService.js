@@ -63,7 +63,7 @@ module.exports = {
     signup(userData, cb) {
         console.log(userData);
         Bend.executeAnonymous("signup", userData).then((ret)=>{
-            console.log("signup ret", ret);
+            //console.log("signup ret", ret);
             Bend.setActiveUser(ret.user);
             //this.setUserInfo();
             cb(null, ret);
@@ -204,7 +204,7 @@ module.exports = {
     },
 
     //get recent activities
-    getRecentActivities(cb) {
+    getRecentActivities(offset, limit, cb) {
         //get community of current user
         var communityId = this.getActiveUser().community._id;
         if(!communityId) return []
@@ -213,12 +213,15 @@ module.exports = {
         query.equalTo("community._id", communityId)
         query.notEqualTo("deleted", true)
         query.descending("_bmd.createdAt")
+        query.limit(limit)
+        query.skip(offset)
 
         Bend.DataStore.find("activity", query, {
             relations:{
                 activity:["action", "business", "event", "volunteer_opportunity", "service"],
                 community:"community",
-                user:"user"
+                user:"user",
+                "user.avatar":"bendFile"
             }
         }).then((rets)=>{
             cb(null, rets)

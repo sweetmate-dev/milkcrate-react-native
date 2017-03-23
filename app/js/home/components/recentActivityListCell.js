@@ -24,7 +24,7 @@ export default class RecentActivityListCell extends Component {
     width: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    avatar: PropTypes.number.isRequired,
+    avatar: PropTypes.string.isRequired,
     time: PropTypes.number,
     hearts: PropTypes.number,
     likeByMe: PropTypes.bool,
@@ -92,7 +92,8 @@ export default class RecentActivityListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            <Image style={ styles.avatar } source={ avatar }/>
+            {avatar != ''&&<Image style={ styles.avatar } source={{ uri:avatar }}/>}
+            {avatar == ''&&<Image style={ styles.avatar } source={require('../../../assets/imgs/default-avatar.png')}/>}
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.topContainer }>
