@@ -160,7 +160,7 @@ class Home extends Component {
         return;
       }
 
-      //console.log("current trending", error, result)
+      console.log("current trending", error, result)
       this.setState({
         trendings:result
       })
@@ -186,7 +186,7 @@ class Home extends Component {
         console.log('poll questions erroror', error);
         return;
       }
-      console.log("poll questions", question, answers, myAnswer);
+      //console.log("poll questions", question, answers, myAnswer);
 
       this.setState({
         pollQuestion:{
@@ -286,21 +286,8 @@ class Home extends Component {
           activityType={'business'}
           location={entry.name}
           category_avatar={cat?categoryImages[cat]:require('../../../assets/imgs/stickers/transit.png')}
-          users={[
-      {
-        name: 'Paul A.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-      {
-        name: 'Paul B.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-      {
-        name: 'Paul c.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-    ]}
-          time={1}
+          users={entry.users}
+          time={entry._bmd.createdAt}
           hearts={Number(entry.likeCount)||0}
           coins={Number(entry.points)||0}
         />

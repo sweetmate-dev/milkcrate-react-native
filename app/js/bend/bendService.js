@@ -217,10 +217,74 @@ module.exports = {
             //console.log("trendings", rets)
             //get any 2 items
             var count = rets.length;
+            var trends = []
             if(count > 2) {
-                cb(null, _.sample(rets, 2));
+                trends = _.sample(rets, 2);
             } else
-                cb(null, rets)
+                trends = rets
+
+            if(trends.length > 0) {
+                //get users
+                async.parallel([
+                    (callback)=>{
+                       var t =  trends.length > 0?trends[0]:null
+                        if(t) {
+                            var q = new Bend.Query()
+                            q.equalTo("activity._id", t._id);
+                            q.descending("_bmd.createdAt");
+                            q.limit(20)
+                            Bend.DataStore.find("activity", q, {
+                                relations:{
+                                    user:"user",
+                                    "user.avatar":"bendFile",
+                                }
+                            }).then((rets)=>{
+                                var users = []
+                                _.map(rets, (o)=>{
+                                    users.push(o.user);
+                                })
+                                t.users = users
+                                callback(null, null)
+                            }, (err)=>{
+                                callback(err, null)
+                            })
+                        } else {
+                            callback(null, null)
+                        }
+                    },
+                    (callback)=>{
+                        var t =  trends.length > 1?trends[1]:null
+                        if(t) {
+                            var q = new Bend.Query()
+                            q.equalTo("activity._id", t._id);
+                            q.descending("_bmd.createdAt");
+                            q.limit(20)
+                            Bend.DataStore.find("activity", q, {
+                                relations:{
+                                    user:"user",
+                                    "user.avatar":"bendFile",
+                                }
+                            }).then((rets)=>{
+                                var users = []
+                                _.map(rets, (o)=>{
+                                    users.push(o.user);
+                                })
+                                t.users = users
+                                callback(null, null)
+                            }, (err)=>{
+                                callback(err, null)
+                            })
+                        } else {
+                            callback(null, null)
+                        }
+                    }
+                ], (err, rets)=>{
+                    cb(null, trends)
+                })
+            } else {
+                cb(null,trends)
+            }
+
         }, (err)=>{
             cb(err)
         })
