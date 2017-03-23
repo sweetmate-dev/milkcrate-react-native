@@ -51,11 +51,11 @@ const stickerImages = [
   require('../../../assets/imgs/stickers/green-space.png'),
   require('../../../assets/imgs/stickers/health-wellness.png'),
   require('../../../assets/imgs/stickers/home-office.png'),
-  require('../../../assets/imgs/stickers/media_communications.png'),
+  require('../../../assets/imgs/stickers/media-communications.png'),
   require('../../../assets/imgs/stickers/products.png'),
   require('../../../assets/imgs/stickers/services.png'),
   require('../../../assets/imgs/stickers/special-events.png'),
-  require('../../../assets/imgs/stickers/tourism_hospitality.png'),
+  require('../../../assets/imgs/stickers/tourism-hospitality.png'),
   require('../../../assets/imgs/stickers/transit.png'),
   require('../../../assets/imgs/stickers/waste.png'),
 ];

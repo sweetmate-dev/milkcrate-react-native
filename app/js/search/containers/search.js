@@ -73,7 +73,7 @@ const exploreWays = [
 ];
 
 const categoryTitles = [
-  'Animas',
+  'Animals',
   'Baby',
   'Beauty',
   'Bicycles',
@@ -121,11 +121,11 @@ const categoryImages = [
   require('../../../assets/imgs/categories/green-space.png'),
   require('../../../assets/imgs/categories/health-wellness.png'),
   require('../../../assets/imgs/categories/home-office.png'),
-  require('../../../assets/imgs/categories/media_communications.png'),
+  require('../../../assets/imgs/categories/media-communications.png'),
   require('../../../assets/imgs/categories/products.png'),
   require('../../../assets/imgs/categories/services.png'),
   require('../../../assets/imgs/categories/special-events.png'),
-  require('../../../assets/imgs/categories/tourism_hospitality.png'),
+  require('../../../assets/imgs/categories/tourism-hospitality.png'),
   require('../../../assets/imgs/categories/transit.png'),
   require('../../../assets/imgs/categories/waste.png'),
 ];
@@ -133,7 +133,7 @@ const categoryImages = [
 const categoryActiveImages = [
   require('../../../assets/imgs/categories/animals_active.png'),
   require('../../../assets/imgs/categories/baby_active.png'),
-  require('../../../assets/imgs/categories/beauty_active_active.png'),
+  require('../../../assets/imgs/categories/beauty_active.png'),
   require('../../../assets/imgs/categories/bicycles_active.png'),
   require('../../../assets/imgs/categories/civic_active.png'),
   require('../../../assets/imgs/categories/coffee_active.png'),
@@ -150,11 +150,11 @@ const categoryActiveImages = [
   require('../../../assets/imgs/categories/green-space_active.png'),
   require('../../../assets/imgs/categories/health-wellness_active.png'),
   require('../../../assets/imgs/categories/home-office_active.png'),
-  require('../../../assets/imgs/categories/media_communications_active.png'),
+  require('../../../assets/imgs/categories/media-communications_active.png'),
   require('../../../assets/imgs/categories/products_active.png'),
   require('../../../assets/imgs/categories/services_active.png'),
   require('../../../assets/imgs/categories/special-events_active.png'),
-  require('../../../assets/imgs/categories/tourism_hospitality_active.png'),
+  require('../../../assets/imgs/categories/tourism-hospitality_active.png'),
   require('../../../assets/imgs/categories/transit_active.png'),
   require('../../../assets/imgs/categories/waste_active.png'),
 ];

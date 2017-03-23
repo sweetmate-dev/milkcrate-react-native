@@ -131,7 +131,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/fashion1.png'),
+    category_avatar: require('../../assets/imgs/stickers/fashion.png'),
     users: [
       {
         name: 'Paul A.',
@@ -181,7 +181,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/fashion2.png'),
+    category_avatar: require('../../assets/imgs/stickers/fashion.png'),
     users: [
       {
         name: 'Paul A.',
