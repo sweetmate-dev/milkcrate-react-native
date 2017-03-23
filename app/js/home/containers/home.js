@@ -485,7 +485,7 @@ class Home extends Component {
           </View>
 
           {
-            !this.state.pollQuestion.myAnswer? this.showMainDailyPollSelectMode : this.showDailyPollStateMode
+            !this.state.pollQuestion.myAnswer ? this.showMainDailyPollSelectMode : this.showDailyPollStateMode
           }
 
         </View>
@@ -636,15 +636,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',    
   },
   radioButtonLabelWrapper: {
+    flex: 1,
     marginLeft: 5,
+    marginRight: 10,
     paddingVertical: 10,
   },
   radioButtonInputWrapper: {
+    // flex: 1,
     paddingVertical: 10,
-    marginLeft: -30,
+    marginLeft: 20,
   },
   radioButtonWrapper: {
-    marginLeft: 40,
+    flex: 1,
+    // marginLeft: 40,
   },
   radioButtonBorder: {
     borderBottomWidth: 1,
@@ -652,7 +656,7 @@ const styles = StyleSheet.create({
   },
   radioFormWrapper: {
     flex: 1,
-    paddingLeft: 15,
+    // paddingLeft: 15,
   },
   dailyPollSelectContentContainer: {
     // paddingLeft: 15,

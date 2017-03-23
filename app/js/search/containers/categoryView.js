@@ -97,7 +97,7 @@ class CategoryView extends Component {
               return
             }
 
-            //console.log("search result", ret)
+            console.log("search result", ret)
             var activities = []
             activities = activities.concat(ret.data.action);
             activities = activities.concat(ret.data.business);

@@ -42,8 +42,7 @@ export default class DailyPollStateCell extends Component {
     return (
       <View style={ [styles.container, bottomLine ? styles.bottomLine : null] }>
         <View style={ [styles.cellBackgroundContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }] }>
-          <View style = { [styles.cellPercentContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }, { width: screenWidth / 100 * percent }] }>
-          </View>
+          <View style = { [styles.cellPercentContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }, { width: screenWidth / 100 * percent }] }/>
           <View style= { styles.cellContainer }>
             <Text style={ styles.textPercent_Select }>{ percent }%</Text>
             <Text style={ selected == true ? styles.textPercent_Select : styles.textDescription }>{ description }</Text>
@@ -55,28 +54,31 @@ export default class DailyPollStateCell extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    
+    flex: 1,
   },
   bottomLine: {
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,    
+    borderBottomColor: commonColors.line,
   },
   textDescription: {
+    flex: 5,
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
     textAlign: 'left',
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
+    paddingRight: 10,
   },
   textPercent_Select: {
+    flex: 1,
     color: commonColors.title,
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     textAlign: 'center',
-    paddingLeft: 20,
-    paddingRight: 10,
+    paddingLeft: 5,
   },
-  cellBackgroundContainer: {    
+  cellBackgroundContainer: {
+    flex: 1,
   },
   cellPercentContainer: {
     position: 'absolute',
@@ -85,7 +87,8 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   cellContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row',    
     paddingVertical: 13,
+    alignItems: 'center'
   },
 });
