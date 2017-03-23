@@ -16,8 +16,6 @@ const star = require('../../../assets/imgs/star.png');
 export default class CategoryDetailView extends Component {
 
   static propTypes = {
-    height: PropTypes.number,
-    width: PropTypes.number,
     title: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
     description: PropTypes.string,
@@ -31,8 +29,6 @@ export default class CategoryDetailView extends Component {
   static defaultProps = {
     mode: 0,
     rating: 5.0,
-    width: screenWidth,
-    height: 83,
     distance: 1,
     price: 0,
     onClick: () => {}
@@ -51,8 +47,6 @@ export default class CategoryDetailView extends Component {
 
   render() {
     const {
-      height,
-      width,
       title,
       icon,
       description,
@@ -68,9 +62,7 @@ export default class CategoryDetailView extends Component {
         onPress={ () => onClick() } 
         underlayColor='#dddddd'
       >
-        <View style={ [{ height: height }, { width: width },
-          mode == 0 ? styles.cellContainer : styles.detailContainer] }
-        >
+        <View style={ mode == 0 ? styles.cellContainer : styles.detailContainer }>
           <View style={ styles.cellTopContainer }>
             <Image style={ styles.avatar } source={ icon } />
             <View style={ styles.cellTopTextContainer }>
@@ -95,7 +87,8 @@ export default class CategoryDetailView extends Component {
   }
 }
 const styles = StyleSheet.create({
-  cellContainer: {    
+  cellContainer: {
+    width: screenWidth,
     backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -104,6 +97,7 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
   },
   detailContainer: {
+    width: screenWidth,
     backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 16,

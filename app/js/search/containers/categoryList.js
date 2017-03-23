@@ -19,8 +19,9 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
 import CategoryDetailView from '../components/categoryDetailView';
-
 import { CategoryDetailEntries } from '../../components/dummyEntries';
+
+import * as commonColors from '../../styles/commonColors';
 
 class CategoryList extends Component {
   constructor(props) {
@@ -56,9 +57,9 @@ class CategoryList extends Component {
         title={ rowData.name }
         icon={ avatar }
         description={ rowData.description }
-        distance={ rowData.distance||1.0 }
+        distance={ rowData.distance || 1.0 }
         price={ 10}
-        rating={ rowData.points||0 }
+        rating={ Number(rowData.points) || 0 }
         onClick={ () => this.onPressedCell(rowID) }
       />
     );
@@ -68,9 +69,10 @@ class CategoryList extends Component {
     const { status } = this.props;
     return (
       <ListView
-          enableEmptySections={ true }
+        enableEmptySections={ true }
         dataSource={ this.dataSource.cloneWithRows(this.props.activities) }
-        renderRow={ this.renderRow.bind(this) }/>
+        renderRow={ this.renderRow.bind(this) }
+        contentContainerStyle={ styles.categoryDetailListView }/>
     );
   }
 }
@@ -82,3 +84,11 @@ export default connect(state => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
 )(CategoryList);
+
+const styles = StyleSheet.create({  
+  categoryDetailListView: {
+    borderStyle: 'solid',
+    borderTopWidth: 1,
+    borderTopColor: commonColors.line,    
+  },
+});

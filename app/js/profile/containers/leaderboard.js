@@ -98,7 +98,7 @@ class Leaderboard extends Component {
         <ListView
           dataSource={ this.state.dataSourceLeaderboard }
           renderRow={ this.renderLeaderboardRow.bind(this) }
-          contentContainerStyle={ styles.leaderboardListView}
+          contentContainerStyle={ styles.leaderboardListView }
         />
 
       </View>

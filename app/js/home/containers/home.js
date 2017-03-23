@@ -186,6 +186,7 @@ class Home extends Component {
         console.log('poll questions erroror', error);
         return;
       }
+
       console.log("poll questions", question, answers, myAnswer);
 
       this.setState({
@@ -235,7 +236,7 @@ class Home extends Component {
       <RecentActivityListCell
         name={ rowData.user.name || '' }
         description={ rowData.activity.description || '' }
-        avatar={ rowData.user.avatar?rowData.user.avatar._downloadURL:'' }
+        avatar={ rowData.user.avatar ? rowData.user.avatar._downloadURL : '' }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount) }
         likeByMe={ false }
@@ -264,9 +265,9 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat?categoryImages[cat]:require('../../../assets/imgs/stickers/transit.png') }
-          points={ entry.activity.points?Number(entry.activity.points):0 }
-          link={entry.activity.url}
+          avatar={ cat ? categoryImages[cat] : require('../../../assets/imgs/stickers/transit.png') }
+          points={ entry.activity.points ? Number(entry.activity.points) : 0 }
+          link={ entry.activity.url }
         />
       );
     });
@@ -281,28 +282,28 @@ class Home extends Component {
       var cat = bendService.getActivityCategory(this.state.categories, entry)
       return (
         <TrendingCarousel
-          key={`carousel-entry-${index}`}
-          title={'CHECK IN'}
-          activityType={'business'}
-          location={entry.name}
-          category_avatar={cat?categoryImages[cat]:require('../../../assets/imgs/stickers/transit.png')}
+          key={ index }
+          title='CHECK IN'
+          activityType='business'
+          location={ entry.name }
+          category_avatar={ cat ? categoryImages[cat] : require('../../../assets/imgs/stickers/transit.png') }
           users={[
-      {
-        name: 'Paul A.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-      {
-        name: 'Paul B.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-      {
-        name: 'Paul c.',
-        avatar: require('../../../assets/imgs/avatar.png'),
-      },
-    ]}
-          time={1}
-          hearts={Number(entry.likeCount)||0}
-          coins={Number(entry.points)||0}
+            {
+              name: 'Paul A.',
+              avatar: require('../../../assets/imgs/avatar.png'),
+            },
+            {
+              name: 'Paul B.',
+              avatar: require('../../../assets/imgs/avatar.png'),
+            },
+            {
+              name: 'Paul c.',
+              avatar: require('../../../assets/imgs/avatar.png'),
+            },
+          ]}
+          time={ 1 }
+          hearts={ Number(entry.likeCount) || 0 }
+          coins={ Number(entry.points) || 0 }
         />
       );
     });
@@ -338,18 +339,19 @@ class Home extends Component {
           <Text style={ styles.textTitle }>Currently Trending</Text>
           <Image style={ styles.imageTrending } source={ trending }/>
         </View>
-        {this.state.trendings.length > 0 && <Carousel
-          sliderWidth={ commonStyles.carouselerWidth }
-          itemWidth={ commonStyles.carouselItemWidth }
-          inactiveSlideScale={ 1 }
-          inactiveSlideOpacity={ 1 }
-          enableMomentum={ false }
-          containerCustomStyle={ styles.slider }
-          contentContainerCustomStyle={ styles.sliderContainer }
-          showsHorizontalScrollIndicator={ false }
-          snapOnAndroid={ true }
-          removeClippedSubviews={ false }
-        >
+        {
+          this.state.trendings.length > 0 && <Carousel
+            sliderWidth={ commonStyles.carouselerWidth }
+            itemWidth={ commonStyles.carouselItemWidth }
+            inactiveSlideScale={ 1 }
+            inactiveSlideOpacity={ 1 }
+            enableMomentum={ false }
+            containerCustomStyle={ styles.slider }
+            contentContainerCustomStyle={ styles.sliderContainer }
+            showsHorizontalScrollIndicator={ false }
+            snapOnAndroid={ true }
+            removeClippedSubviews={ false }
+          >
           { this.getTrendingCarousel(this.state.trendings) }
         </Carousel>}
       </View>
@@ -419,10 +421,10 @@ class Home extends Component {
                   style={ (this.state.pollQuestion.answers.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
                 >
                   <RadioButtonInput
-                    obj={ {
-                    label:obj.title,
-                    value:obj.position
-                    } }
+                    obj={{
+                      label:obj.title,
+                      value:obj.position
+                    }}
                     index={ index }
                     isSelected={ this.state.selectedDailyPollIndex === index }
                     onPress={ onPressRadioButton }
@@ -435,10 +437,10 @@ class Home extends Component {
                     buttonWrapStyle={ styles.radioButtonInputWrapper }
                   />
                   <RadioButtonLabel
-                    obj={ {
-                    label:obj.title,
-                    value:obj.position
-                    } }
+                    obj={{
+                      label:obj.title,
+                      value:obj.position
+                    }}
                     index={ index }
                     labelHorizontal={ true }
                     onPress={ onPressRadioButton }
