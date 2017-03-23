@@ -28,6 +28,15 @@ class UtilService {
             return this.formatSimpleDateTime(ts)
         }
     }
+
+    static convertToSlug(Text)
+    {
+        return Text
+            .toLowerCase()
+            .replace(/[^\w ]+/g,'')
+            .replace(/ +/g,'-')
+            ;
+    }
 }
 
 export default UtilService

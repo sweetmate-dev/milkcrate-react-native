@@ -20,7 +20,7 @@ export default class CategoryDetailView extends Component {
     width: PropTypes.number,
     title: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     distance: PropTypes.number,
     price: PropTypes.number,
     rating: PropTypes.number,

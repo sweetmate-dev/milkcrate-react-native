@@ -30,6 +30,11 @@ import * as commonColors from '../../styles/commonColors';
 
 const currentLocation = require('../../../assets/imgs/current_location_button.png');
 
+//added by li, 2017/03/23
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+
 
 const stickerImages = [
   require('../../../assets/imgs/stickers/animals.png'),
@@ -68,7 +73,28 @@ class CategoryView extends Component {
     this.state = {
       selectedIndex: 'List',
       currentPosition: null,
+      activities:[]
     };
+  }
+
+  componentDidMount() {
+    const title = this.props.title;
+    const  index = this.props.index;
+    console.log("title, index", title, index)
+
+    bendService.searchActivity({
+      category:UtilService.convertToSlug(title),
+      offset:0,
+      limit:20
+    }, (err, rets)=>{
+      if(err) {
+        console.log("search failed", err)
+        return
+      }
+      this.setState({
+        activities:rets
+      })
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -138,7 +164,7 @@ class CategoryView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <CategoryList title={ title } avatar={ stickerImages[index] } />
+            <CategoryList title={ title } avatar={ stickerImages[index] } activities={this.state.activities}/>
             :
             <CategoryMap title={ title } avatar={ stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }

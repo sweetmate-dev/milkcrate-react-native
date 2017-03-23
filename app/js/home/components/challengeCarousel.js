@@ -42,9 +42,9 @@ export default class ChallengeCarousel extends Component {
             <Image style={ styles.avatar } source={ avatar } />
             <Text style={ styles.description }>{ subtitle } </Text>
           </View>
-          {points > 0 && <View style={ styles.bottomContainer }>
-            <Point point={ points }/>
-          </View>}
+          <View style={ styles.bottomContainer }>
+            {points > 0 && <Point point={ points }/>}
+          </View>
         </View>
       </TouchableHighlight>
     );

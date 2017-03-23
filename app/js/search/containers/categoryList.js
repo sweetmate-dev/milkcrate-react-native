@@ -26,10 +26,10 @@ class CategoryList extends Component {
   constructor(props) {
     super(props);
 
-    var dataSource = new ListView.DataSource(
+    this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      dataSource: dataSource.cloneWithRows(CategoryDetailEntries)
+      dataSource: this.dataSource.cloneWithRows(CategoryDetailEntries)
     };
   }
 
@@ -56,9 +56,9 @@ class CategoryList extends Component {
         title={ title }
         icon={ avatar }
         description={ rowData.description }
-        distance={ rowData.distance }
-        price={ rowData.price }
-        rating={ rowData.rating }
+        distance={ rowData.distance||1.0 }
+        price={ 10}
+        rating={ rowData.points||0 }
         onClick={ () => this.onPressedCell(rowID) }
       />
     );
@@ -68,7 +68,8 @@ class CategoryList extends Component {
     const { status } = this.props;
     return (
       <ListView
-        dataSource={ this.state.dataSource }
+          enableEmptySections={ true }
+        dataSource={ this.dataSource.cloneWithRows(this.props.activities) }
         renderRow={ this.renderRow.bind(this) }/>
     );
   }

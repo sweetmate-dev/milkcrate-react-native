@@ -365,6 +365,17 @@ module.exports = {
 
     //-------- end of home apis ---------------
 
+    //-------- search view ---------------------
+    searchActivity(param, cb){
+        Bend.execute("search-activity", param).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    //-------- end of search view --------------
+
     //file upload api
     uploadFile(file, cb){
         file._filename = Date.now() + ""
