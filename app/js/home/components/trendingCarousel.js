@@ -13,6 +13,8 @@ import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
 
+import UtilService from '../../components/util'
+
 const locationImage = require('../../../assets/imgs/location.png');
 const heart = require('../../../assets/imgs/heart.png');
 
@@ -39,14 +41,19 @@ export default class TrendingCarousel extends Component {
 
     return entries.map((entry, index) => {
 
-      if (index > 4) {
+      if (index > 6) {
 
         return null;
       }
 
-      return (
-        <Image key={ index} style={ styles.imageUserAvatar } source={ entry.avatar }/>
-      );
+      if(entry.avatar)
+        return (
+          <Image key={ index} style={ styles.imageUserAvatar } source={{uri:entry.avatar._downloadURL}}/>
+        );
+      else
+        return (
+            <Image key={ index} style={ styles.imageUserAvatar } source={require('../../../assets/imgs/default-avatar.png')}/>
+        );
     });
   }
 
@@ -80,13 +87,13 @@ export default class TrendingCarousel extends Component {
             <View style={ styles.avatarsMainContainer }>
               <View style={ styles.names_timeContainer }>
                 <Text style={ styles.textName }>{ users[0].name } and {users.length - 1} others</Text>
-                <Text style={ styles.textSmall }>Latest { time } min ago</Text>
+                <Text style={ styles.textSmall }>Latest {UtilService.getPastDateTime(time)}</Text>
               </View>
               <View style={ styles.avatarsContainer }>
                 { this.getUsers(users) }
-                <View style={ styles.moreUserContainer }>
-                  <Text style={ styles.textMoreUser }>+{ users.length - 5 }</Text>
-                </View>
+                {users.length > 6 && <View style={ styles.moreUserContainer }>
+                  <Text style={ styles.textMoreUser }>+{ users.length - 6 }</Text>
+                </View>}
               </View>
             </View>
             <View style={ styles.like_coinContainer }>
