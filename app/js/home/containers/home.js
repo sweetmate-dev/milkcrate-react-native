@@ -117,7 +117,7 @@ class Home extends Component {
 
       // console.log("recent activities", error, result)
 
-      this.setState({
+     this.setState({
         dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
       })
     })
@@ -376,7 +376,7 @@ class Home extends Component {
           <ListView
               enableEmptySections={ true }
               dataSource={ this.state.dataSourceRecentActivity }
-              renderrorow={ this.renderrorecentActivityRow.bind(this) }/>
+              renderRow={ this.renderrorecentActivityRow.bind(this) }/>
         </View>
       </View>
     );

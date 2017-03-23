@@ -340,7 +340,7 @@ module.exports = {
             cb(error);
         });
     },
-    makeBendRef(id, collectionName) {
+    makeBendRef(collectionName, id) {
         return {
             "_type": "BendRef",
             "_id": id,
