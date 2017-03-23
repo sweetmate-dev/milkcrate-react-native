@@ -118,26 +118,26 @@ class Home extends Component {
       dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
       challenges: [],
       community: {},
-      categories:[],
-      trendings:[],
+      categories: [],
+      trendings: [],
       pollQuestion:{
-        question:{},
-        answers:[],
-        myAnswer:null
+        question: {},
+        answers: [],
+        myAnswer: null
       }
     };
 
     this.acitivtyQuery = {
-      offset:0,
-      limit:20,
-      more:true
+      offset: 0,
+      limit: 20,
+      more: true
     }
 
     this.loadRecentActivities.bind(this);
   }
 
   componentDidMount() {
-    bendService.getCategories((err, cats)=>{
+    bendService.getCategories((error, cats)=>{
       this.setState({
         categories:cats
       })
@@ -375,15 +375,15 @@ class Home extends Component {
                 });
 
                 //do polling
-                bendService.pollResponse(this.state.pollQuestion.question, this.state.pollQuestion.answers[index], (err, ret)=>{
-                  if(err) {
-                    console.log(err);
+                bendService.pollResponse(this.state.pollQuestion.question, this.state.pollQuestion.answers[index], (error, result)=>{
+                  if(error) {
+                    console.log(error);
                     return
                   }
 
                   //update values locally
-                  this.state.pollQuestion.question.responseCount++;
-                  this.state.pollQuestion.answers[index].count++
+                  this.state.pollQuestion.question.responseCount ++;
+                  this.state.pollQuestion.answers[index].count ++
                   this.state.pollQuestion.answers[index].percentage = Math.round(this.state.pollQuestion.answers[index].count * 100 / this.state.pollQuestion.question.responseCount);
                   _.map(this.state.pollQuestion.answers, (o)=>{
                     o.percentage = Math.round(o.count * 100 / this.state.pollQuestion.question.responseCount);

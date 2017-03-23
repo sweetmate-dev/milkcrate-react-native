@@ -56,7 +56,7 @@ export default class CategoryDetailView extends Component {
       onClick,
       mode,
     } = this.props;
-
+    
     return (
       <TouchableHighlight 
         onPress={ () => onClick() } 
@@ -75,7 +75,7 @@ export default class CategoryDetailView extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>{ distance } Miles  $$</Text>
+              <Text style={ styles.text }>{ distance.toFixed(3) } Miles  $$</Text>
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>

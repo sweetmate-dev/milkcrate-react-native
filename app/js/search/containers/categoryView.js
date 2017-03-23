@@ -83,36 +83,38 @@ class CategoryView extends Component {
     console.log("title, index", title, index)
 
     navigator.geolocation.getCurrentPosition( (position) => {
-          this.setState({ currentPosition: position })
 
-          bendService.searchActivity({
-            category:UtilService.convertToSlug(title),
-            offset:0,
-            limit:20,
-            lat:position.latitude,
-            long:position.longitude
-          }, (err, ret)=>{
-            if(err) {
-              console.log("search failed", err)
-              return
-            }
+        this.setState({ currentPosition: position })
 
-            console.log("search result", ret)
-            var activities = []
-            activities = activities.concat(ret.data.action);
-            activities = activities.concat(ret.data.business);
-            activities = activities.concat(ret.data.service);
-            activities = activities.concat(ret.data.event);
-            activities = activities.concat(ret.data.volunteer_opportunity);
-            this.setState({
-              activities:activities
-            })
+        bendService.searchActivity({
+          category:UtilService.convertToSlug(title),
+          offset: 0,
+          limit: 20,
+          lat: position.latitude,
+          long: position.longitude
+        }, (error, result)=>{
+          if (error) {
+            console.log("search failed", error)
+            return
+          }
+
+          console.log("search result", result)
+          var activities = []
+          activities = activities.concat(result.data.action);
+          activities = activities.concat(result.data.business);
+          activities = activities.concat(result.data.service);
+          activities = activities.concat(result.data.event);
+          activities = activities.concat(result.data.volunteer_opportunity);
+
+          this.setState({
+            activities:activities
           })
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        })
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }
 
@@ -183,7 +185,7 @@ class CategoryView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <CategoryList title={ title } avatar={ stickerImages[index] } activities={this.state.activities} currentLocation={ this.state.currentPosition }/>
+            <CategoryList title={ title } avatar={ stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
             :
             <CategoryMap title={ title } avatar={ stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }
