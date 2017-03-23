@@ -25,7 +25,7 @@ export default class RecentActivityListCell extends Component {
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
-    time: PropTypes.number,
+    time: PropTypes.string,
     hearts: PropTypes.number,
     likeByMe: PropTypes.bool,
     onClick: PropTypes.func,
@@ -99,7 +99,7 @@ export default class RecentActivityListCell extends Component {
             <View style={ styles.topContainer }>
               <View style={ styles.names_timeContainer }>
                 <Text style={ styles.textName }>{ name }</Text>
-                <Text style={ styles.textSmall }>{ time }{ time > 1 ? ' mins ago' : ' min ago' }</Text>                
+                <Text style={ styles.textSmall }>{ time }</Text>
               </View>
               <Point point={ coins }/>
             </View>

@@ -37,6 +37,7 @@ import FadeOutView from '../components/fadeOutView';
 //added by li, 2017/03/22
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
+import UtilService from '../../components/util'
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -235,7 +236,7 @@ class Home extends Component {
         name={ rowData.user.name || '' }
         description={ rowData.activity.description || '' }
         avatar={ rowData.user.avatar?rowData.user.avatar._downloadURL:'' }
-        time={ 1 }
+        time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount) }
         likeByMe={ false }
         coins={ Number(rowData.points) }
