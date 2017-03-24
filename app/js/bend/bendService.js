@@ -160,6 +160,18 @@ module.exports = {
       })
     },
 
+    getCategory(catId, cb) {
+        Bend.DataStore.get("category", catId, {
+            relations:{
+                coverImage:"BendFile"
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
     getActivityCategory(cats, activity) {
         if(!activity.categories || activity.categories.length == 0)  return null;
         var exist = _.find(cats, (o)=>{
@@ -532,6 +544,30 @@ module.exports = {
     },
 
     //-------- end of search view --------------
+
+    //-------detail view ------
+    checkActionDid(actionId, cb) {
+        Bend.execute("checkActionDid", {
+            actionId:actionId
+        }).then((ret)=>{
+            cb(null, ret.result);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    captureActivity(id, type, cb) {
+        Bend.execute("capture-activity", {
+            type:type,
+            id:id
+        }).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    //-------end of detail view ------
 
     //file upload api
     uploadFile(file, cb, ext){

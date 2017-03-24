@@ -107,8 +107,10 @@ class CategoryGroupedView extends Component {
     Actions.pop()
   }
 
-  onPressedActionsCell (rowID) {
-    alert("Tapped cell - " + rowID);
+  onPressedActionsCell (action) {
+    Actions.ActionDetail({
+      action:action
+    })
   }
 
   onPressedBusinessesCell (rowID) {
@@ -122,7 +124,7 @@ class CategoryGroupedView extends Component {
         title={ rowData.name }
         avatar={ commonStyles.stickerImages[this.props.index] }
         coins={ rowData.points }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
   }
