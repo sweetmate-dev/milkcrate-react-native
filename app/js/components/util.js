@@ -113,6 +113,20 @@ class UtilService {
     static getCategoryImage(catSlug) {
         return categoryImages2[catSlug];
     }
+
+    static getSmallImage(file) {
+        if(file._file)
+            file = file._file;
+
+        if(file._versions) {
+            if(file._versions.sm) {
+                return file._versions.sm._downloadURL;
+            } else
+                return file._downloadURL;
+        } else {
+            return file._downloadURL;
+        }
+    }
 }
 
 export default UtilService

@@ -62,15 +62,8 @@ export default class RecentActivityListCell extends Component {
   }
 
   onLike() {
-
-    if (this.state.imageLike === imageHeart ) {
-
-      this.setState({ imageLike: imageRedHeart });
-      this.setState({ hearts: this.state.hearts + 1 });
-    } else {
-
-      this.setState({ imageLike: imageHeart });
-      this.setState({ hearts: this.state.hearts - 1 });
+    if (this.props.onLike) {
+      this.props.onLike();
     }
   }
 
@@ -108,20 +101,19 @@ export default class RecentActivityListCell extends Component {
               <TouchableOpacity onPress={ () => this.onLike() }>
                 <View style={ styles.heartContainer }>
                   <View style={ styles.likeWrapper }>
-                    <Image style={ styles.imageLike } source={ this.state.imageLike }/>
-                  </View>  
-  
-                  <Text style={ styles.textSmall }>
+                    <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
+                  </View>
 
-                  {
-                    this.state.hearts == 0 ? 
-                      "0 - Be the first to like it!"
-                      : 
-                      this.state.hearts > 1 ?
-                        this.state.hearts + " Likes"
-                        :
-                        this.state.hearts + " Like"
-                  }
+                  <Text style={ styles.textSmall }>
+                    {
+                      this.props.hearts == 0 ?
+                          "0 - Be the first to like it!"
+                          :
+                          this.props.hearts > 1 ?
+                          this.props.hearts + " Likes"
+                              :
+                          this.props.hearts + " Like"
+                    }
                   </Text>
                 </View>
               </TouchableOpacity>

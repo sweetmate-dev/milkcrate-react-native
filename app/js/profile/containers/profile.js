@@ -44,7 +44,8 @@ class Profile extends Component {
         more: true
       },
       currentLocation:null,
-      categories:[]
+      categories:[],
+      recentActivities:[]
     };
 
     this.loadRecentActivities.bind(this);
@@ -99,9 +100,10 @@ class Profile extends Component {
         }
 
         if(result.length > 0) {
+          this.state.recentActivities = this.state.recentActivities.concat(result)
           this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
           this.setState({
-            dataSourceRecentActivity:this.dataSource.cloneWithRows(result)
+            recentActivities:this.state.recentActivities
           })
         }
 
@@ -128,10 +130,37 @@ class Profile extends Component {
         price={ rowData.price||0 }
         coins={ Number(rowData.points||0) }
         hearts={ Number(rowData.likeCount||0) }
-        likeByMe={ false }
-        onClick={ () => this.onPressedRecentActivityCell(rowID) }
+        likeByMe={ rowData.likedByMe||false }
+        onClick={ () => this.onPressedRecentActivityCell(rowID)
+        }
+        onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
+        }
       />
     );
+  }
+
+  onLike(activity, like) {
+    bendService.likeActivity(activity, like, (err, ret)=>{
+      if(err) {
+        console.log(err);
+        return
+      }
+
+      var exist = _.find(this.state.recentActivities, (o)=>{
+        return o._id == activity._id
+      })
+      if(ret && exist) {
+        exist.likedByMe = like
+        if(like)
+          exist.likeCount = Number(exist.likeCount||0) + 1
+        else
+          exist.likeCount = Math.max(Number(exist.likeCount||0) - 1, 0)
+
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      }
+    })
   }
 
   onSettings() {
@@ -182,9 +211,14 @@ class Profile extends Component {
           <View style={ styles.recentActivityListViewWrapper }>
             <ListView
                 enableEmptySections={ true }
-                dataSource={ this.state.dataSourceRecentActivity }
+                dataSource={ this.dataSource.cloneWithRows(this.state.recentActivities) }
                 renderRow={ this.renderRow.bind(this) }/>
           </View>
+          {this.state.acitivtyQuery.more && <View style={ styles.loadMoreButtonWrapper }>
+            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.loadRecentActivities() }>
+              <Text style={ styles.textReadMoreButton }>Load More</Text>
+            </TouchableOpacity>
+          </View>}
         </ScrollView>
       </View>
     );
@@ -268,10 +302,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 5,
   },
+  loadMoreButtonWrapper: {
+    flex: 1,
+    paddingTop: 5,
+    paddingBottom:5,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
   textButton: {
     color: '#fff',
     fontFamily: 'Open Sans',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  textReadMoreButton: {
+    color: commonColors.title,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+    backgroundColor: 'transparent',
   },
 });

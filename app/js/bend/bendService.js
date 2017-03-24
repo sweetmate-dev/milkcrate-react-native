@@ -313,7 +313,34 @@ module.exports = {
                 "user.avatar":"bendFile"
             }
         }).then((rets)=>{
-            cb(null, rets)
+            //consider likes
+            var activityIds = []
+            _.map(rets, (o)=>{
+                activityIds.push(o._id)
+            })
+
+            query = new Bend.Query();
+            query.equalTo("user._id", this.getActiveUser()._id)
+            query.notEqualTo("deleted", true)
+            query.contains("activity._id", activityIds)
+            Bend.DataStore.find("activityLike", query).then(function(likes){
+                var likedActivityIds = []
+                _.map(likes, (_o)=>{
+                    likedActivityIds.push(_o.activity._id)
+                })
+                if(likedActivityIds.length > 0) {
+                    likedActivityIds = _.uniq(likedActivityIds)
+
+                    _.map(rets, (o)=> {
+                        if(likedActivityIds.indexOf(o._id) != -1)
+                            o.likedByMe = true
+                    })
+                }
+
+                cb(null, rets)
+            }, function(err){
+                cb(err)
+            })
         }, (err)=>{
             cb(err)
         })
@@ -335,9 +362,51 @@ module.exports = {
                 community:"community"
             }
         }).then((rets)=>{
-            cb(null, rets)
+            //consider likes
+            var activityIds = []
+            _.map(rets, (o)=>{
+                activityIds.push(o._id)
+            })
+
+            query = new Bend.Query();
+            query.equalTo("user._id", this.getActiveUser()._id)
+            query.notEqualTo("deleted", true)
+            query.contains("activity._id", activityIds)
+            Bend.DataStore.find("activityLike", query).then(function(likes){
+                var likedActivityIds = []
+                _.map(likes, (_o)=>{
+                    likedActivityIds.push(_o.activity._id)
+                })
+                if(likedActivityIds.length > 0) {
+                    likedActivityIds = _.uniq(likedActivityIds)
+
+                    _.map(rets, (o)=> {
+                        if(likedActivityIds.indexOf(o._id) != -1)
+                            o.likedByMe = true
+                    })
+                }
+
+                cb(null, rets)
+            }, function(err){
+                cb(err)
+            })
         }, (err)=>{
             cb(err)
+        })
+    },
+
+    likeActivity(activity, like, cb) {
+        Bend.execute("setActivityLikeStatus", {
+            like:like,
+            activityId:activity._id
+        }).then((ret)=>{
+            if(ret.result == 'ok') {
+                cb(null, true);
+            } else {
+                cb(null, false);
+            }
+        }, (err)=>{
+            cb(err);
         })
     },
 

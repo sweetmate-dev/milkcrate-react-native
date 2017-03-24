@@ -65,6 +65,7 @@ class Home extends Component {
       community: {},
       categories: [],
       trendings: [],
+      recentActivities:[],
       pollQuestion:{
         question: {},
         answers: [],
@@ -169,14 +170,16 @@ class Home extends Component {
           result.pop()
         }
 
-        this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
+        if(result.length > 0) {
+          this.state.recentActivities = this.state.recentActivities.concat(result)
+          this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
+          this.setState({
+            recentActivities:this.state.recentActivities
+          })
+        }
 
         this.setState({
           acitivtyQuery:this.state.acitivtyQuery
-        })
-
-        this.setState({
-          dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
         })
       })
     }
@@ -188,14 +191,40 @@ class Home extends Component {
       <RecentActivityListCell
         name={ rowData.user.name || '' }
         description={ rowData.activity.description || '' }
-        avatar={ rowData.user.avatar ? rowData.user.avatar._downloadURL : '' }
+        avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        hearts={ Number(rowData.likeCount) }
-        likeByMe={ false }
-        coins={ Number(rowData.points) }
+        hearts={ Number(rowData.likeCount||0) }
+        likeByMe={ rowData.likedByMe||false }
+        coins={ Number(rowData.points||0) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
+        onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
+        }
       />
     );
+  }
+
+  onLike(activity, like) {
+    bendService.likeActivity(activity, like, (err, ret)=>{
+      if(err) {
+        console.log(err);
+        return
+      }
+
+      var exist = _.find(this.state.recentActivities, (o)=>{
+        return o._id == activity._id
+      })
+      if(ret && exist) {
+        exist.likedByMe = like
+        if(like)
+          exist.likeCount = Number(exist.likeCount||0) + 1
+        else
+          exist.likeCount = Math.max(Number(exist.likeCount||0) - 1, 0)
+
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      }
+    })
   }
 
   onRecentActivityCellPressed (rowID) {
@@ -241,8 +270,8 @@ class Home extends Component {
           category_avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
           users={ entry.users }
           time={ entry._bmd.createdAt }
-          hearts={ Number(entry.likeCount) || 0 }
-          coins={ Number(entry.points) || 0 }
+          hearts={ Number(entry.likeCount||0) }
+          coins={ Number(entry.points||0)}
         />
       );
     });
@@ -452,7 +481,7 @@ class Home extends Component {
         <View style={ styles.recentActivityListViewWrapper }>
           <ListView
               enableEmptySections={ true }
-              dataSource={ this.state.dataSourceRecentActivity }
+              dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
               renderRow={ this.renderrorecentActivityRow.bind(this) }/>
         </View>
         {this.state.acitivtyQuery.more && <View style={ styles.loadMoreButtonWrapper }>
