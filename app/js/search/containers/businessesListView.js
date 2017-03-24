@@ -44,8 +44,8 @@ class BusinessesListView extends Component {
     }
   }
 
-  onPressedCell (rowID) {
-    Actions.BusinessesDetail();
+  onPressedCell (rowData) {
+    Actions.BusinessesDetail({ business: rowData });
   }
 
   renderRow(rowData, sectionID, rowID) {
@@ -61,7 +61,7 @@ class BusinessesListView extends Component {
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.points) || 0 }
-        onClick={ () => this.onPressedCell(rowID) }
+        onClick={ () => this.onPressedCell(rowData) }
       />
     );
   }

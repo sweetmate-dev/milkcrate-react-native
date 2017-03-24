@@ -241,7 +241,7 @@ class BusinessesDetail extends Component {
                 </TouchableOpacity>}
               </View>
               <View style={ styles.visitContainer }>
-                {business.phoneNumber&&<TouchableOpacity onPress={ () => this.onCallPhone() }>
+                {business.phoneNumber != '' &&<TouchableOpacity onPress={ () => this.onCallPhone() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ phone } />
                     <Text style={ styles.textInfoTitle }>Phone</Text>

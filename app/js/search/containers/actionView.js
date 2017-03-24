@@ -78,7 +78,22 @@ class ActionView extends Component {
           this.setState({
             actions: result.data.action
           })
-
+          // result.data.action.map((action, index) => {
+          //   if (action.categories && action.categories.length > 0) {
+          //     bendService.getCategory(action.categories[0], (error, result)=>{
+                
+          //       if (error){
+          //         console.log(error);
+          //         return
+          //       }
+          //       this.setState( (state) => {
+          //         console.log('images : ', result.slug);
+          //         state.avatarImages[index] = UtilService.getCategoryImage(result.slug);
+          //         return state;
+          //       });
+          //     })
+          //   }
+          // });
         })
       },
       (error) => {
