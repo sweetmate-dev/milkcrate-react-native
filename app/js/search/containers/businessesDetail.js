@@ -42,6 +42,12 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+//added by li, 2017/03/22
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+
+
 class BusinessesDetail extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +55,14 @@ class BusinessesDetail extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
+      category:{
+        coverImage:{
+          _downloadURL:null
+        }
+      },
+      initialize:false,
+      didStatus:false,
+      currentLocation:null,
       businessRate: 0,
       businessComment: '',
       dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(BusinessRecentActivityEntries),
@@ -63,6 +77,44 @@ class BusinessesDetail extends Component {
         longitude: LONGITUDE,
       },
     };
+  }
+
+  componentDidMount(){
+    const business = this.props.business
+    console.log("business", business)
+    bendService.checkActivityDid(business._id, 'business', (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      this.setState({
+        didStatus:ret
+      })
+    })
+
+    //console.log(action)
+    if(business.categories&&business.categories.length >0) {
+      bendService.getCategory(business.categories[0], (err, ret)=>{
+        if(err){
+          console.log(err);return
+        }
+
+        this.setState({
+          category:ret,
+          initialize:true
+        })
+      })
+    }
+
+    navigator.geolocation.getCurrentPosition( (position) => {
+
+          this.setState({ currentLocation: position })
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   componentWillReceiveProps(newProps) {
@@ -109,7 +161,15 @@ class BusinessesDetail extends Component {
   }
 
   onCheckin() {
-    alert("Tapped Checkin button!");
+    bendService.captureActivity(this.props.business._id, 'business', (err,ret)=>{
+      if(err){
+        console.log(err);return;
+      }
+
+      this.setState({
+        didStatus:true
+      })
+    })
   }
 
   renderRecentActivityRow(rowData, sectionID, rowID) {
@@ -127,36 +187,44 @@ class BusinessesDetail extends Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, business } = this.props;
 
     return (
       <View style={ styles.container }>
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title ='Elixr Coffee Roasters'
+          title ={business.name}
         />
         <ScrollView>
-          <MapView
+          {this.state.currentLocation&&<MapView
             style={ styles.map }
-            initialRegion={ this.state.region }
+            initialRegion={ {
+        latitude: this.state.currentLocation.coords.latitude,
+        longitude: this.state.currentLocation.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      } }
             scrollEnabled={ false }
             zoomEnabled={ false }
           >
             {
               <MapView.Marker
                 image={ map_pin }
-                coordinate={ this.state.coordinate }
+                coordinate={ this.state.currentLocation.coords}
               />
             }
-          </MapView>
+          </MapView>}
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ icon } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryImage(this.state.category.slug) } />
               <View style={ styles.businessInfoSubContainer }>
-                <Text style={ styles.textTitle }>Elixr Coffee Roasters</Text>
-                <Text style={ styles.textValue }>{ 1.2 } Miles  $$</Text>
+                <Text style={ styles.textTitle }>{business.name}</Text>
+                {this.state.currentLocation&&<Text style={ styles.textValue }>
+                  {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[0],business._geoloc[1],
+                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude):'Unknown '}
+                  Miles  $$</Text>}
               </View>
               <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ 4.8 } </Text>
@@ -166,25 +234,25 @@ class BusinessesDetail extends Component {
 
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>207 S Sydenham St</Text>
-                <Text style={ styles.textAddress }>Philadelphia, PA</Text>
-                <TouchableOpacity onPress={ () => this.onGetDirection() }>
+                <Text style={ styles.textAddress }>{business.address1}</Text>
+                <Text style={ styles.textAddress }>{business.city}</Text>
+                {false && <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
               <View style={ styles.visitContainer }>
-                <TouchableOpacity onPress={ () => this.onCallPhone() }>
+                {business.phoneNumber&&<TouchableOpacity onPress={ () => this.onCallPhone() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ phone } />
                     <Text style={ styles.textInfoTitle }>Phone</Text>
                   </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={ () => this.onGoWeb() }>
+                </TouchableOpacity>}
+                {business.url&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>
                   </View>
-                </TouchableOpacity>  
+                </TouchableOpacity>}
               </View>
             </View>
             <Text style={ styles.textOpenNow }>Open Now</Text>
@@ -198,10 +266,10 @@ class BusinessesDetail extends Component {
                 <Text style={ styles.textValue }>8am-7pm</Text>
               </View>
             </View>
-            <Text style={ styles.textDescription }>{ dummyText }</Text>
-            <TouchableOpacity onPress={ () => this.onGetDirection() }>
+            <Text style={ styles.textDescription }>{ business.description }</Text>
+            {false&&<TouchableOpacity onPress={ () => this.onGetDirection() }>
               <Text style={ styles.textTitle }>See this listing on Foursqaure</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
           </View>
           <View style={ styles.certificationsContainer }>
             <Text style={ styles.textDescription }>Certifications</Text>
@@ -225,7 +293,7 @@ class BusinessesDetail extends Component {
               </View>
             </View>
           </View>
-          <View style={ styles.recentActivityContainer }>
+          {/*<View style={ styles.recentActivityContainer }>
             <View style={ styles.sectionTitleWrapper }>
               <Text style={ styles.textSectionTitle }>Comments</Text>
             </View>
@@ -261,20 +329,23 @@ class BusinessesDetail extends Component {
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
               />
             </View>            
-          </View>
+          </View>*
           <View style={ styles.buttonRateBusinessWrapper }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onRateBusiness() }>
               <View style={ styles.buttonRateBusiness }>
                 <Text style={ styles.textButton }>Rate Business</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View>*/}
         </ScrollView>
-        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
+        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckin() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I’m Here • Checkin</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        {this.state.didStatus&&<View style={ styles.buttonGrey }>
+          <Text style={ styles.textOrange }>You’ve Checked In!</Text>
+        </View>}
       </View>
     );
   }
@@ -528,5 +599,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: commonColors.bottomButton,
     height: 40,
-  },  
+  },
+  textOrange: {
+    color: '#F59174',
+    fontFamily: 'Open Sans',
+    fontWeight: 'bold',
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 15,
+  },
+  buttonGrey: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EFEFEF',
+    height: 40,
+  },
 });

@@ -124,7 +124,7 @@ class Profile extends Component {
       <RecentActivityListCell
         title={ rowData.activity.name||'' }
         icon={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
-        description= { rowData.activity.description || '' }
+        description= { rowData.summary || '' }
         distance={ rowData.activity._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData.activity._geoloc[0], rowData.activity._geoloc[1],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : -1 }
         price={ rowData.price||0 }
@@ -173,7 +173,7 @@ class Profile extends Component {
 
   render() {
     const { status } = this.props;
-
+    const currentUser = bendService.getActiveUser()
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -182,7 +182,7 @@ class Profile extends Component {
         />
         <ScrollView>
           <View style={ styles.topContainer }>
-            <Text style={ styles.textName }>Philip Tribe</Text>
+            <Text style={ styles.textName }>{currentUser.name}</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>129</Text>
