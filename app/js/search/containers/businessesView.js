@@ -43,8 +43,12 @@ class BusinessesView extends Component {
     this.state = {
       selectedIndex: 'List',
       currentPosition: null,
-      businesses:[]
+      businesses: [],
+      avatarImages: [],
     };
+
+    this.avatarImages = [];
+    this.businesses = [];
   }
 
   componentDidMount() {
@@ -60,16 +64,34 @@ class BusinessesView extends Component {
           lat: position.latitude,
           long: position.longitude
         }, (error, result)=>{
+
           if (error) {
             console.log("search failed", error)
             return
           }
 
-          console.log("search result", result)
+          this.businesses = result.data.business;
+          this.businesses.map( (business, index) => {
+            if (business.categories && business.categories.length > 0) {
+              bendService.getCategory(business.categories[0], (error, result)=>{
+                
+                if (error){
+                  console.log(error);
+                  return
+                }
+                console.log(result.slug);
+                this.avatarImages[index] = UtilService.getCategoryImage(result.slug);
 
-          this.setState({
-            businesses: result.data.business
-          })
+                if (this.businesses.length == this.avatarImages.length ) {
+                  this.setState({ 
+                    businesses: this.businesses,
+                    avatarImages: this.avatarImages,
+                 });
+                }
+              })
+            }
+          });
+
         })
       },
       (error) => {
@@ -111,8 +133,6 @@ class BusinessesView extends Component {
 
   render() {
     const { status } = this.props;
-    
-    const  index = this.props.index;
 
     return (
       <View style={ styles.container }>
@@ -145,10 +165,11 @@ class BusinessesView extends Component {
           </View>
         </View>*/}
         {
+          
           this.state.selectedIndex == 'List' ?
-            <BusinessesListView avatar={ commonStyles.stickerImages[index] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition }/>
+            <BusinessesListView businesses={ this.state.businesses } avatarImages={ this.state.avatarImages } currentLocation={ this.state.currentPosition }/>
             :
-            <BusinessesMapView avatar={ commonStyles.stickerImages[index] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
+            <BusinessesMapView avatar={ commonStyles.stickerImages[0] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );

@@ -17,7 +17,7 @@ export default class BusinessesListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    icon: PropTypes.number.isRequired,
+    icon: PropTypes.number,
     description: PropTypes.string,
     distance: PropTypes.number,
     price: PropTypes.number,

@@ -16,7 +16,7 @@ export default class EventsListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    avatar: PropTypes.number.isRequired,
+    avatar: PropTypes.number,
     coins: PropTypes.number,
     onClick: PropTypes.func,
   }

@@ -31,6 +31,7 @@ class BusinessesListView extends Component {
 
     this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -50,7 +51,9 @@ class BusinessesListView extends Component {
 
   renderRow(rowData, sectionID, rowID) {
     
-    const avatar = this.props.avatar;
+    const avatar = this.props.avatarImages[rowID];
+
+    // console.log ('business images : ', avatar)
 
     return (
       <BusinessesListCell
@@ -68,6 +71,9 @@ class BusinessesListView extends Component {
 
   render() {
     const { status } = this.props;
+
+    console.log ('business images length : ', this.props.avatarImages);
+
     return (
       <ListView
         enableEmptySections={ true }
