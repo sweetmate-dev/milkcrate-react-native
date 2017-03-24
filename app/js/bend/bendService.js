@@ -441,7 +441,7 @@ module.exports = {
     //-------- end of search view --------------
 
     //file upload api
-    uploadFile(file, cb){
+    uploadFile(file, cb, ext){
         file._filename = Date.now() + ""
 
         var obj = {
@@ -449,15 +449,20 @@ module.exports = {
             mimeType: "image/jpeg",
             size: file.fileSize,
         };
-        console.log(obj);
+
+        if(ext) {
+            _.extend(obj,ext);
+        }
+
+        //console.log(obj);
 
         Bend.File.upload(file, obj, {"public": true}, (res) => {
-            console.log(res);
+            //console.log(res);
         }).then((res)=>{
-            console.log("Success upload", res._downloadURL)
+            //console.log("Success upload", res._downloadURL)
             cb(null, res);
         }, (error) => {
-            console.log("Error upload", error)
+            //console.log("Error upload", error)
             cb(error);
         });
     },

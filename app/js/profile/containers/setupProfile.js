@@ -83,7 +83,7 @@ class SetupProfile extends Component {
         }
 
         this.updateUserInfo(file);
-      })
+      }, {_workflow:'avatar'})
     }
     this.updateUserInfo();
   }
