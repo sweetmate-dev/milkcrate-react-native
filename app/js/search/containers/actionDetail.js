@@ -56,7 +56,7 @@ class ActionDetail extends Component {
     const action = this.props.action
 
     bendService.checkActivityDid(action._id,'action', (error, result)=>{
-      
+
       if(error) {
         console.log(error);
         return;
@@ -70,7 +70,7 @@ class ActionDetail extends Component {
     //console.log(action)
     if (action.categories && action.categories.length > 0) {
       bendService.getCategory(action.categories[0], (error, result)=>{
-        
+
         if (error){
           console.log(error);return
         }
@@ -92,7 +92,7 @@ class ActionDetail extends Component {
 
     }
   }
-  
+
   onBack () {
     Actions.pop()
   }
@@ -134,7 +134,7 @@ class ActionDetail extends Component {
           {this.state.initialize&&<Image style={ styles.imageTopBackground } source={{uri:action.coverImage?action.coverImage._downloadURL:this.state.category.coverImage._downloadURL}}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryImage(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategorySticker(this.state.category.slug) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{action.name}</Text>
               </View>

@@ -151,7 +151,7 @@ class BusinessesDetail extends Component {
   onCertification(key) {
     alert("Tapped certification button!");
   }
-  
+
   onRecentActivityCellPressed (rowID) {
     alert("Tapped cell - " + rowID);
   }
@@ -218,7 +218,7 @@ class BusinessesDetail extends Component {
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryImage(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategorySticker(this.state.category.slug) } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{business.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>
@@ -277,12 +277,12 @@ class BusinessesDetail extends Component {
               <TouchableOpacity onPress={ () => this.onCertification(0) }>
                 <View style={ styles.buttonCertificationsWrapper }>
                   <Text style={ styles.textCertificationsButton }>Certified Organic</Text>
-                </View>  
+                </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={ () => this.onCertification(1) }>
                 <View style={ styles.buttonCertificationsWrapper }>
                   <Text style={ styles.textCertificationsButton }>Better Business Bureau</Text>
-                </View>  
+                </View>
               </TouchableOpacity>
             </View>
             <View style={ styles.certificationsCheckContainer }>
@@ -328,7 +328,7 @@ class BusinessesDetail extends Component {
                 returnKeyType={ 'done' }
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
               />
-            </View>            
+            </View>
           </View>*
           <View style={ styles.buttonRateBusinessWrapper }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onRateBusiness() }>
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
   certificationsButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',    
+    justifyContent: 'flex-start',
   },
   buttonCertificationsWrapper: {
     justifyContent: 'center',
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
   textCertificationsButton: {
     textAlign: 'center',
     backgroundColor: commonColors.line,
-    color: commonColors.detailTitle,    
+    color: commonColors.detailTitle,
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
@@ -537,13 +537,13 @@ const styles = StyleSheet.create({
   textSectionTitle: {
     color: commonColors.grayMoreText,
     fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,    
+    fontSize: 14,
   },
   ratingMainContainer: {
     flexDirection: 'row',
     paddingTop: 15,
     paddingLeft: 5,
-    paddingRight: 15,    
+    paddingRight: 15,
   },
   rating_commentContentContainer: {
     flex: 1,

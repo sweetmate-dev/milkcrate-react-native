@@ -55,6 +55,35 @@ const categoryImages2 = {
     waste_active:require('../../assets/imgs/categories/waste_active.png'),
 }
 
+const categoryStickers = {
+    animals:require('../../assets/imgs/stickers/animals.png'),
+    baby:require('../../assets/imgs/stickers/baby.png'),
+    beauty:require('../../assets/imgs/stickers/beauty.png'),
+    bicycles:require('../../assets/imgs/stickers/bicycles.png'),
+    civic:require('../../assets/imgs/stickers/civic.png'),
+    coffee:require('../../assets/imgs/stickers/coffee.png'),
+    community:require('../../assets/imgs/stickers/community.png'),
+    construction:require('../../assets/imgs/stickers/construction.png'),
+    dining:require('../../assets/imgs/stickers/dining.png'),
+    drinks:require('../../assets/imgs/stickers/drinks.png'),
+    education:require('../../assets/imgs/stickers/education.png'),
+    energy:require('../../assets/imgs/stickers/energy.png'),
+    fashion:require('../../assets/imgs/stickers/fashion.png'),
+    finance:require('../../assets/imgs/stickers/finance.png'),
+    food:require('../../assets/imgs/stickers/food.png'),
+    garden:require('../../assets/imgs/stickers/garden.png'),
+    'green-space':require('../../assets/imgs/stickers/green-space.png'),
+    'health-wellness':require('../../assets/imgs/stickers/health-wellness.png'),
+    'home-office':require('../../assets/imgs/stickers/home-office.png'),
+    'media-communications':require('../../assets/imgs/stickers/media-communications.png'),
+    products:require('../../assets/imgs/stickers/products.png'),
+    services:require('../../assets/imgs/stickers/services.png'),
+    'special-events':require('../../assets/imgs/stickers/special-events.png'),
+    'tourism-hospitality':require('../../assets/imgs/stickers/tourism-hospitality.png'),
+    transit:require('../../assets/imgs/stickers/transit.png'),
+    waste:require('../../assets/imgs/stickers/waste.png'),
+}
+
 class UtilService {
 
     static formatDateWithFormat(ts, formatStr) {
@@ -112,6 +141,10 @@ class UtilService {
 
     static getCategoryImage(catSlug) {
         return categoryImages2[catSlug];
+    }
+
+    static getCategorySticker(catSlug) {
+        return categoryStickers[catSlug];
     }
 
     static getSmallImage(file) {

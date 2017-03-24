@@ -60,10 +60,10 @@ export default class BusinessesListCell extends Component {
     let dollars = '$';
     for (i = 1 ; i < price ; i++)
       dollars += '$';
-    
+
     return (
-      <TouchableHighlight 
-        onPress={ () => onClick() } 
+      <TouchableHighlight
+        onPress={ () => onClick() }
         underlayColor='#dddddd'
       >
         <View style={ mode == 0 ? styles.cellContainer : styles.detailContainer }>

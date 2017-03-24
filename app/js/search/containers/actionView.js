@@ -81,13 +81,13 @@ class ActionView extends Component {
           result.data.action.map((action, index) => {
             if (action.categories && action.categories.length > 0) {
               bendService.getCategory(action.categories[0], (error, result)=>{
-                
+
                 if (error){
                   console.log(error);
                   return
                 }
                 this.setState( (state) => {
-                  state.avatarImages[index] = UtilService.getCategoryImage(result.slug);
+                  state.avatarImages[index] = UtilService.getCategorySticker(result.slug);
                   return state;
                 });
               })
@@ -152,13 +152,13 @@ export default connect(state => ({
   })
 )(ActionView);
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   listViewWrapper: {
     borderStyle: 'solid',
     borderTopWidth: 1,
-    borderTopColor: commonColors.line,    
+    borderTopColor: commonColors.line,
   },
 });

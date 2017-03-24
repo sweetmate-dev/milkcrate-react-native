@@ -74,16 +74,16 @@ class BusinessesView extends Component {
           this.businesses.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {
               bendService.getCategory(business.categories[0], (error, result)=>{
-                
+
                 if (error){
                   console.log(error);
                   return
                 }
                 console.log(result.slug);
-                this.avatarImages[index] = UtilService.getCategoryImage(result.slug);
+                this.avatarImages[index] = UtilService.getCategorySticker(result.slug);
 
                 if (this.businesses.length == this.avatarImages.length ) {
-                  this.setState({ 
+                  this.setState({
                     businesses: this.businesses,
                     avatarImages: this.avatarImages,
                  });
@@ -165,7 +165,7 @@ class BusinessesView extends Component {
           </View>
         </View>*/}
         {
-          
+
           this.state.selectedIndex == 'List' ?
             <BusinessesListView businesses={ this.state.businesses } avatarImages={ this.state.avatarImages } currentLocation={ this.state.currentPosition }/>
             :
