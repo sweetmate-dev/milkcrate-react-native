@@ -43,21 +43,18 @@ class BusinessesView extends Component {
     this.state = {
       selectedIndex: 'List',
       currentPosition: null,
-      activities:[]
+      businesses:[]
     };
   }
 
   componentDidMount() {
-    const title = this.props.title;
-    const  index = this.props.index;
-    console.log("title, index", title, index)
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentPosition: position })
 
         bendService.searchActivity({
-          category:UtilService.convertToSlug(title),
+          type:'business',
           offset: 0,
           limit: 20,
           lat: position.latitude,
@@ -69,15 +66,9 @@ class BusinessesView extends Component {
           }
 
           console.log("search result", result)
-          var activities = []
-          activities = activities.concat(result.data.action);
-          activities = activities.concat(result.data.business);
-          activities = activities.concat(result.data.service);
-          activities = activities.concat(result.data.event);
-          activities = activities.concat(result.data.volunteer_opportunity);
 
           this.setState({
-            activities:activities
+            businesses: result.data.business
           })
         })
       },
@@ -120,7 +111,7 @@ class BusinessesView extends Component {
 
   render() {
     const { status } = this.props;
-    const title = this.props.title;
+    
     const  index = this.props.index;
 
     return (
@@ -129,7 +120,7 @@ class BusinessesView extends Component {
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
         />
-        <View style={ styles.segmentedWrap }>
+        {/*<View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
           <View style={ styles.segmented }>
             <SegmentedControls
@@ -152,12 +143,12 @@ class BusinessesView extends Component {
                 null
             }
           </View>
-        </View>
+        </View>*/}
         {
           this.state.selectedIndex == 'List' ?
-            <BusinessesListView title={ title } avatar={ commonStyles.stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
+            <BusinessesListView avatar={ commonStyles.stickerImages[index] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition }/>
             :
-            <BusinessesMapView title={ title } avatar={ commonStyles.stickerImages[index] } currentLocation={ this.state.currentPosition } />
+            <BusinessesMapView avatar={ commonStyles.stickerImages[index] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );

@@ -31,7 +31,7 @@ import EventsListCell from '../components/eventsListCell';
 import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
 
-class CategoryGroupedView extends Component {
+class CategoryView extends Component {
   constructor(props) {
     super(props);
 
@@ -298,7 +298,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(CategoryGroupedView);
+)(CategoryView);
 
 const styles = StyleSheet.create({  
   container: {

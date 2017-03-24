@@ -39,6 +39,8 @@ import Leaderboard from './profile/containers/leaderboard';
 import EditProfile from './profile/containers/editProfile';
 import ChangePassword from './profile/containers/changePassword';
 import LearnMoreModal from './home/components/learnMoreModal';
+import ActionView from './search/containers/actionView';
+
 
 
 //Deep Links
@@ -187,7 +189,7 @@ class App extends Component {
         <Scene key="EditProfile" component={ EditProfile } />
         <Scene key="ChangePassword" component={ ChangePassword } />
         <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
-
+        <Scene key="ActionView" component={ ActionView } />
       </Scene>
     );
 

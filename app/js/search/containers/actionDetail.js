@@ -43,7 +43,7 @@ class ActionDetail extends Component {
     this.state = {
       category:{
         coverImage:{
-          _downloadURL:null
+          _downloadURL: null
         }
       },
       initialize:false,
@@ -52,34 +52,37 @@ class ActionDetail extends Component {
   }
 
   componentDidMount(){
+
     const action = this.props.action
 
-    bendService.checkActionDid(action._id, (err, ret)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.checkActionDid(action._id, (error, result)=>{
+      if(error) {
+        console.log(error);
+        return;
       }
 
       this.setState({
-        didStatus:ret
+        didStatus: result
       })
     })
 
     //console.log(action)
-    if(action.categories&&action.categories.length >0) {
-      bendService.getCategory(action.categories[0], (err, ret)=>{
-        if(err){
-          console.log(err);return
+    if (action.categories && action.categories.length > 0) {
+      bendService.getCategory(action.categories[0], (error, result)=>{
+        
+        if (error){
+          console.log(error);return
         }
-
         this.setState({
-          category:ret,
-          initialize:true
+          category: result,
+          initialize: true,
         })
       })
     }
   }
 
   componentWillReceiveProps(newProps) {
+
     if (newProps.status == 'search_category_request') {
 
     } else if (newProps.status == 'search_category_success') {
@@ -94,13 +97,14 @@ class ActionDetail extends Component {
   }
 
   onCheckin() {
-    bendService.captureActivity(this.props.action._id, 'action', (err,ret)=>{
-      if(err){
-        console.log(err);return;
+    bendService.captureActivity(this.props.action._id, 'action', (error, result)=>{
+      if (error){
+        console.log(error);
+        return;
       }
 
       this.setState({
-        didStatus:true
+        didStatus: true
       })
     })
   }

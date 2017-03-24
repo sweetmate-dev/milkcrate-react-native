@@ -37,7 +37,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'home';
+      tab = 'search';
 
     this.state = {
       selectedTab: tab,

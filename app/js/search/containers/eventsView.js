@@ -143,7 +143,7 @@ class EventsView extends Component {
           onBack={ this.onBack }
           placeholder ='Search for events'
         />
-        <CalendarStrip
+        {/*<CalendarStrip
           style={ styles.calendar }
           selection={ 'background' }
           calendarColor={ '#d4ebf640' }
@@ -159,7 +159,7 @@ class EventsView extends Component {
           highlightDateNumberStyle={ styles.calendarDateNumber }
           onDateSelected={ (date) => this.onSelectDate(date) }
           eventDays={ eventDays }
-        />
+        />*/}
         <ListView
           dataSource={ this.state.dataSource }
           renderRow={ this.renderListRow.bind(this) }

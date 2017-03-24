@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 5,
     paddingHorizontal: 10,
-    height: 56,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',

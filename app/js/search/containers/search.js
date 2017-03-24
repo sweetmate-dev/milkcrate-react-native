@@ -218,11 +218,11 @@ class Search extends Component {
       //   break;
 
       case 0://Take Action
-        Actions.ActionDetail();
+        Actions.ActionView();
         break;
 
       case 1://Businesses
-        // Actions.BusinessesView();
+        Actions.BusinessesView();
         break;
 
       case 2://Events

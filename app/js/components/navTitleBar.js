@@ -82,7 +82,7 @@ export default class NavTitleBar extends Component {
               <View style={ styles.titleBarPadding }/>
           }
           <View style={ styles.titleBarWrap }>
-            <Text style={ styles.textTitle }>{ title }</Text>
+            <Text numberOfLines={ 1 } style={ styles.textTitle }>{ title }</Text>
           </View>
           {
             buttons & commonStyles.NavFilterButton ?
