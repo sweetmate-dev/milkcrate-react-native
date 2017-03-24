@@ -52,12 +52,12 @@ class Login extends Component {
   onLogin() {
 
     if (this.state.email == '') {
-      Alert.alert('Please enter email address.');
+      Alert.alert('Please enter your email address.');
       return;
     }
 
     if (this.state.password == '') {
-      Alert.alert('Please enter password.');
+      Alert.alert('Please enter your password.');
       return;
     }
 
@@ -65,8 +65,8 @@ class Login extends Component {
     bendService.login(this.state.email, this.state.password, (err, user)=>{
       console.log(err, user);
       if(err || !user.enabled) {
-        alert("Email or password is incorrect")
-        
+        alert("Invalid credentials. Please check your email and password and try again.")
+
         this.setState({
           email: '',
           password: '',
@@ -124,7 +124,7 @@ class Login extends Component {
               value={ this.state.email }
               onChangeText={ (text) => this.setState({ email: text }) }
               onSubmitEditing={ () => this.refs.password.focus() }
-            />            
+            />
             <View style={ styles.inputWrapper }>
               <TextInput
                 ref="password"
@@ -141,8 +141,8 @@ class Login extends Component {
                 onChangeText={ (text) => this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }
               />
-              <TouchableOpacity 
-                activeOpacity={ .5 } 
+              <TouchableOpacity
+                activeOpacity={ .5 }
                 style={ styles.eyeButtonWrapper }
                 onPress={ () => this.onToggleConfirmPassword() }
               >
@@ -150,16 +150,16 @@ class Login extends Component {
               </TouchableOpacity>
             </View>
             <View style={ styles.buttonWrapper }>
-              <TouchableOpacity 
-                activeOpacity={ .5 } 
+              <TouchableOpacity
+                activeOpacity={ .5 }
                 onPress={ () => this.onForgotPassword() }
               >
                 {/*<Text style={ styles.textTitleButton }>Forgot Password</Text>*/}
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity 
-              activeOpacity={ .5 } 
+            <TouchableOpacity
+              activeOpacity={ .5 }
               style={ styles.loginButtonWrapper }
               onPress={ () => this.onLogin() }
             >
@@ -169,14 +169,14 @@ class Login extends Component {
             </TouchableOpacity>
 
             <View style={ styles.buttonWrapper }>
-              <TouchableOpacity 
-                activeOpacity={ .5 } 
+              <TouchableOpacity
+                activeOpacity={ .5 }
                 onPress={ () => this.onCreateAccount() }
               >
                 <Text style={ styles.textTitleButton }>Create Account</Text>
               </TouchableOpacity>
             </View>
-            
+
           </View>
           <View style={ styles.bottomContainer }/>
         </Image>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   imageEye: {
     width: 20,
-    height: 13,    
+    height: 13,
   },
   eyeButtonWrapper: {
     justifyContent: 'center',

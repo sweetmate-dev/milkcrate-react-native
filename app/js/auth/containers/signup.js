@@ -56,17 +56,17 @@ class Signup extends Component {
   onSignUp() {
 
     if (this.state.email == '') {
-      Alert.alert('Please enter email address.');
+      Alert.alert('Please enter your email address.');
       return;
     }
 
     if (this.state.password == '') {
-      Alert.alert('Please enter password.');
+      Alert.alert('Please enter your password.');
       return;
     }
 
     if (this.state.communityCode == '') {
-      Alert.alert('Please enter communicy code.');
+      Alert.alert('Please enter your communicy code.');
       return;
     }
 
@@ -79,7 +79,7 @@ class Signup extends Component {
       }, (err, user)=>{
           if(err) {
               if(err.name.code == 'milkcrate-app.error.common.missingInput') {
-                  alert("Some inputs are missing");
+                  alert("Please fill in all the required fields");
               } else if(err.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
                   alert("Please enter a valid email address")
               } else if(err.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
@@ -87,9 +87,9 @@ class Signup extends Component {
               } else if(err.name.code == 'milkcrate-app.error.signup.invalidCode') {
                   alert("Please enter a valid community code")
               } else if(err.name.code == 'milkcrate-app.error.signup.invalidUsername') {
-                  alert("This email address is already taken. Please retry with another email.")
+                  alert("This email address is already taken. Please sign in instead.")
               } else if(err.name.code == 'milkcrate-app.error.common.unknown') {
-                  alert("Unknown system error")
+                  alert("Something's Awry. Please try again later.")
               }
           }
 
@@ -102,14 +102,14 @@ class Signup extends Component {
   }
 
   onContactUs() {
-    
+
     Mailer.mail({
       subject: 'Help',
       recipients: ['support@mymilkcrate.com'],
-      body: '',      
+      body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Error', 'Could not send mail. Please send a mail to support@example.com');
+        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
       }
     });
   }
