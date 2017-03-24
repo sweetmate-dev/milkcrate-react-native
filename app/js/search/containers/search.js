@@ -28,20 +28,20 @@ import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/co
 import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
-  {
-    title: 'Recent',
-    description: 'See your most recent activities',
-    icon: require('../../../assets/imgs/recent.png'),
-    iconWidth: 21,
-    iconHeight: 21,
-  },
+  // {
+  //   title: 'Recent',
+  //   description: 'See your most recent activities',
+  //   icon: require('../../../assets/imgs/recent.png'),
+  //   iconWidth: 21,
+  //   iconHeight: 21,
+  // },
   {
     title: 'Take Action',
     description: 'Explore easy, self-reported lifestyle behaviors',
     icon: require('../../../assets/imgs/actions.png'),
     iconWidth: 22,
     iconHeight: 22,
-  },
+  },  
   {
     title: 'Businesses',
     description: 'Check in to local, sustainable businesses nearby',
@@ -56,13 +56,13 @@ const exploreWays = [
     iconWidth: 23,
     iconHeight: 25,
   },
-  {
-    title: 'Volunteer Opportunities',
-    description: 'Find one that’s right for you',
-    icon: require('../../../assets/imgs/volunteer.png'),
-    iconWidth: 26,
-    iconHeight: 25,
-  },
+  // {
+  //   title: 'Volunteer Opportunities',
+  //   description: 'Find one that’s right for you',
+  //   icon: require('../../../assets/imgs/volunteer.png'),
+  //   iconWidth: 26,
+  //   iconHeight: 25,
+  // },
   {
     title: 'Services',
     description: 'Sign up for eco-friendly lifestyle services',
@@ -70,6 +70,7 @@ const exploreWays = [
     iconWidth: 23,
     iconHeight: 20,
   },
+
 ];
 
 const categoryTitles = [
@@ -212,28 +213,28 @@ class Search extends Component {
   onSelectExploreWays (index) {
 
     switch (Number(index)) {
-      case 0://Recent
-        alert("Clicked " + exploreWays[index].title);
+      // case 0://Recent
+      //   alert("Clicked " + exploreWays[index].title);
+      //   break;
+
+      case 0://Take Action
+        Actions.ActionDetail();
         break;
 
       case 1://Businesses
         Actions.BusinessesDetail();
         break;
 
-      case 2://Services
-        alert("Clicked " + exploreWays[index].title);
-        break;
-
-      case 3://Take Action
-        Actions.ActionDetail();
-        break;
-
-      case 4://Volunteer
-        alert("Clicked " + exploreWays[index].title);
-        break;
-
-      case 5://Events
+      case 2://Events
         Actions.Events();
+        break;
+
+      // case 4://Volunteer
+      //   alert("Clicked " + exploreWays[index].title);
+      //   break;
+
+      case 1://Services
+        alert("Clicked " + exploreWays[index].title);
         break;
 
       default:
@@ -242,7 +243,7 @@ class Search extends Component {
   }
 
   onSelectCategory (rowID) {
-    Actions.CategoryView({ title:categoryTitles[rowID], index:rowID });
+    Actions.CategoryGroupedView({ title: categoryTitles[rowID], index: rowID });
   }
 
   renderExploreWaysRow(rowData, sectionID, rowID) {

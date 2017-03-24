@@ -143,6 +143,7 @@ class Signup extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
+              keyboardType="email-address"
               value={ this.state.email }
               onChangeText={ (text) => this.setState({ email: text }) }
               onSubmitEditing={ () => this.refs.password.focus() }
@@ -215,7 +216,7 @@ class Signup extends Component {
                 <Text style={ styles.textUnderButton }>Contact Us.</Text>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
-                <Text style={ styles.textUnderButton }>Learn More</Text>
+                {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
               </TouchableOpacity>
 
             </View>

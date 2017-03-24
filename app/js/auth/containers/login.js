@@ -120,6 +120,7 @@ class Login extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
+              keyboardType="email-address"
               value={ this.state.email }
               onChangeText={ (text) => this.setState({ email: text }) }
               onSubmitEditing={ () => this.refs.password.focus() }
@@ -153,7 +154,7 @@ class Login extends Component {
                 activeOpacity={ .5 } 
                 onPress={ () => this.onForgotPassword() }
               >
-                <Text style={ styles.textTitleButton }>Forgot Password</Text>
+                {/*<Text style={ styles.textTitleButton }>Forgot Password</Text>*/}
               </TouchableOpacity>
             </View>
 

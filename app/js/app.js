@@ -26,6 +26,7 @@ import Signup from './auth/containers/signup';
 import Login from './auth/containers/login';
 import Main from './main/containers/main';
 import CategoryView from './search/containers/categoryView';
+import CategoryGroupedView from './search/containers/categoryGroupedView';
 import BusinessesDetail from './search/containers/businessesDetail';
 import ActionDetail from './search/containers/actionDetail';
 import EventsDetail from './search/containers/eventsDetail';
@@ -174,6 +175,7 @@ class App extends Component {
         <Scene key="SetupProfile" component={ SetupProfile } />
         <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
         <Scene key="CategoryView" component={ CategoryView } />
+        <Scene key="CategoryGroupedView" component={ CategoryGroupedView } />
         <Scene key="BusinessesDetail" component={ BusinessesDetail } />
         <Scene key="ActionDetail" component={ ActionDetail } />
         <Scene key="EventsDetail" component={ EventsDetail } />

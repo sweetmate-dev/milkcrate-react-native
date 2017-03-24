@@ -36,36 +36,6 @@ import * as _ from 'underscore'
 import UtilService from '../../components/util'
 
 
-const stickerImages = [
-  require('../../../assets/imgs/stickers/animals.png'),
-  require('../../../assets/imgs/stickers/baby.png'),
-  require('../../../assets/imgs/stickers/beauty.png'),
-  require('../../../assets/imgs/stickers/bicycles.png'),
-  require('../../../assets/imgs/stickers/civic.png'),
-  require('../../../assets/imgs/stickers/coffee.png'),
-  require('../../../assets/imgs/stickers/community.png'),
-  require('../../../assets/imgs/stickers/construction.png'),
-  require('../../../assets/imgs/stickers/dining.png'),
-  require('../../../assets/imgs/stickers/drinks.png'),
-  require('../../../assets/imgs/stickers/education.png'),
-  require('../../../assets/imgs/stickers/energy.png'),
-  require('../../../assets/imgs/stickers/fashion.png'),
-  require('../../../assets/imgs/stickers/finance.png'),
-  require('../../../assets/imgs/stickers/food.png'),
-  require('../../../assets/imgs/stickers/garden.png'),
-  require('../../../assets/imgs/stickers/green-space.png'),
-  require('../../../assets/imgs/stickers/health-wellness.png'),
-  require('../../../assets/imgs/stickers/home-office.png'),
-  require('../../../assets/imgs/stickers/media-communications.png'),
-  require('../../../assets/imgs/stickers/products.png'),
-  require('../../../assets/imgs/stickers/services.png'),
-  require('../../../assets/imgs/stickers/special-events.png'),
-  require('../../../assets/imgs/stickers/tourism-hospitality.png'),
-  require('../../../assets/imgs/stickers/transit.png'),
-  require('../../../assets/imgs/stickers/waste.png'),
-];
-
-
 class CategoryView extends Component {
   constructor(props) {
     super(props);
@@ -158,7 +128,7 @@ class CategoryView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          />
+        />
         <View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
           <View style={ styles.segmented }>
@@ -185,9 +155,9 @@ class CategoryView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <CategoryList title={ title } avatar={ stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
+            <CategoryList title={ title } avatar={ commonStyles.stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
             :
-            <CategoryMap title={ title } avatar={ stickerImages[index] } currentLocation={ this.state.currentPosition } />
+            <CategoryMap title={ title } avatar={ commonStyles.stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );
