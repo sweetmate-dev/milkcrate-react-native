@@ -113,8 +113,10 @@ class CategoryGroupedView extends Component {
     })
   }
 
-  onPressedBusinessesCell (rowID) {
-    alert("Tapped cell - " + rowID);
+  onPressedBusinessesCell (business) {
+    Actions.BusinessesDetail({
+      business:business
+    })
   }
 
 
@@ -139,7 +141,7 @@ class CategoryGroupedView extends Component {
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.points) || 0 }
-        onClick={ () => this.onPressedBusinessesCell(rowID) }
+        onClick={ () => this.onPressedBusinessesCell(rowData) }
       />
     );
   }

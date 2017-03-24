@@ -54,7 +54,7 @@ class ActionDetail extends Component {
   componentDidMount(){
     const action = this.props.action
 
-    bendService.checkActionDid(action._id, (err, ret)=>{
+    bendService.checkActivityDid(action._id,'action', (err, ret)=>{
       if(err) {
         console.log(err);return;
       }

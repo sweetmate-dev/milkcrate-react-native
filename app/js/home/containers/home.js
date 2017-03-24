@@ -190,7 +190,7 @@ class Home extends Component {
     return (
       <RecentActivityListCell
         name={ rowData.user.name || '' }
-        description={ rowData.activity.description || '' }
+        description={ rowData.summary || '' }
         avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount||0) }

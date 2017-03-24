@@ -546,9 +546,10 @@ module.exports = {
     //-------- end of search view --------------
 
     //-------detail view ------
-    checkActionDid(actionId, cb) {
-        Bend.execute("checkActionDid", {
-            actionId:actionId
+    checkActivityDid(id, type, cb) {
+        Bend.execute("checkActivityDid", {
+            id:id,
+            type:type
         }).then((ret)=>{
             cb(null, ret.result);
         }, (err)=>{
