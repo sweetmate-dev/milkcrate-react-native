@@ -243,7 +243,7 @@ class Search extends Component {
   }
 
   onSelectCategory (rowID) {
-    Actions.CategoryGroupedView({ title: categoryTitles[rowID], index: rowID });
+    Actions.CategoryView({ title: categoryTitles[rowID], index: rowID });
   }
 
   renderExploreWaysRow(rowData, sectionID, rowID) {
