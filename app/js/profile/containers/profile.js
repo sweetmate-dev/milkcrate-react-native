@@ -25,15 +25,51 @@ import RecentActivityListCell from '../components/recentActivityListCell';
 
 import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
 
+//added by li, 2017/03/24
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+
 class Profile extends Component {
   constructor(props) {
     super(props);
 
-    var dataSource = new ListView.DataSource(
+    this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      recentActivityDataSource: dataSource.cloneWithRows(ProfileRecentActivityEntries)
+      dataSourceRecentActivity: this.dataSource.cloneWithRows([]),
+      acitivtyQuery:{
+        createdAt: 0,
+        limit: 25,
+        more: true
+      },
+      currentLocation:null,
+      categories:[]
     };
+
+    this.loadRecentActivities.bind(this);
+  }
+
+  componentDidMount() {
+    bendService.getCategories((error, cats)=>{
+      this.setState({
+        categories:cats
+      })
+    })
+
+    this.loadRecentActivities()
+
+    navigator.geolocation.getCurrentPosition( (position) => {
+
+        console.log("position", position)
+          this.setState({ currentLocation: position })
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -47,22 +83,52 @@ class Profile extends Component {
     }
   }
 
+  loadRecentActivities() {
+    if(this.state.acitivtyQuery.more) {
+      bendService.getMyRecentActivities(this.state.acitivtyQuery.createdAt, this.state.acitivtyQuery.limit + 1, (error, result) => {
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+        console.log("recent activities", result)
+        this.state.acitivtyQuery.more = (result.length == this.state.acitivtyQuery.limit + 1)
+        if(this.state.acitivtyQuery.more) {
+          //remove tail item
+          result.pop()
+        }
+
+        if(result.length > 0) {
+          this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
+          this.setState({
+            dataSourceRecentActivity:this.dataSource.cloneWithRows(result)
+          })
+        }
+
+        this.setState({
+          acitivtyQuery:this.state.acitivtyQuery
+        })
+      })
+    }
+  }
+
   onPressedRecentActivityCell(rowID) {
     Actions.WeeklyRecap();
   }
 
   renderRow(rowData, sectionID, rowID) {
-
+    var cat = bendService.getActivityCategory(this.state.categories, rowData.activity)
     return (
       <RecentActivityListCell
-        title={ rowData.title }
-        icon={ rowData.icon }
-        description= { rowData.description }
-        distance={ rowData.distance }
-        price={ rowData.price }
-        coins={ rowData.coins }
-        hearts={ rowData.hearts }
-        likeByMe={ rowData.likeByMe }
+        title={ rowData.activity.name||'' }
+        icon={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
+        description= { rowData.activity.description || '' }
+        distance={ rowData.activity._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData.activity._geoloc[0], rowData.activity._geoloc[1],
+        this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : -1 }
+        price={ rowData.price||0 }
+        coins={ Number(rowData.points||0) }
+        hearts={ Number(rowData.likeCount||0) }
+        likeByMe={ false }
         onClick={ () => this.onPressedRecentActivityCell(rowID) }
       />
     );
@@ -115,8 +181,9 @@ class Profile extends Component {
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>
             <ListView
-              dataSource={ this.state.recentActivityDataSource }
-              renderRow={ this.renderRow.bind(this) }/>
+                enableEmptySections={ true }
+                dataSource={ this.state.dataSourceRecentActivity }
+                renderRow={ this.renderRow.bind(this) }/>
           </View>
         </ScrollView>
       </View>

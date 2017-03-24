@@ -183,7 +183,7 @@ module.exports = {
         query.containsAll("communities", [communityId])
         query.greaterThan("endsAt", Date.now() * 1000000)
         query.lessThan("startsAt", Date.now() * 1000000)
-
+        
         Bend.DataStore.find("challenge", query, {
             relations:{
                 activity:"activity"
@@ -291,7 +291,7 @@ module.exports = {
     },
 
     //get recent activities
-    getRecentActivities(offset, limit, cb) {
+    getRecentActivities(createdAt, limit, cb) {
         //get community of current user
         var communityId = this.getActiveUser().community._id;
         if(!communityId) return []
@@ -299,9 +299,11 @@ module.exports = {
         var query = new Bend.Query();
         query.equalTo("community._id", communityId)
         query.notEqualTo("deleted", true)
+        query.notEqualTo("hidden", true)
+        if(createdAt > 0)
+            query.lessThan("_bmd.createdAt", createdAt)
         query.descending("_bmd.createdAt")
         query.limit(limit)
-        query.skip(offset)
 
         Bend.DataStore.find("activity", query, {
             relations:{
@@ -309,6 +311,28 @@ module.exports = {
                 community:"community",
                 user:"user",
                 "user.avatar":"bendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getMyRecentActivities(createdAt, limit, cb) {
+        var query = new Bend.Query();
+        query.equalTo("user._id", this.getActiveUser()._id)
+        query.notEqualTo("deleted", true)
+        query.notEqualTo("hidden", true)
+        if(createdAt > 0)
+            query.lessThan("_bmd.createdAt", createdAt)
+        query.descending("_bmd.createdAt")
+        query.limit(limit)
+
+        Bend.DataStore.find("activity", query, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community"
             }
         }).then((rets)=>{
             cb(null, rets)

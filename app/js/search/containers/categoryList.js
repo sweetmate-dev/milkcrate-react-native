@@ -59,7 +59,7 @@ class CategoryList extends Component {
         title={ rowData.name }
         icon={ avatar }
         description={ rowData.description }
-        distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInKm(rowData._geoloc[0], rowData._geoloc[1],
+        distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
         price={ 10}
         rating={ Number(rowData.points) || 0 }

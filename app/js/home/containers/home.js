@@ -48,61 +48,6 @@ const trending = require('../../../assets/imgs/trending.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
 
-const categoryImages = {
-  animals:require('../../../assets/imgs/categories/animals.png'),
-  animals_active:require('../../../assets/imgs/categories/animals_active.png'),
-  baby:require('../../../assets/imgs/categories/baby.png'),
-  baby_active:require('../../../assets/imgs/categories/baby_active.png'),
-  beauty:require('../../../assets/imgs/categories/beauty.png'),
-  beauty_active:require('../../../assets/imgs/categories/beauty_active.png'),
-  bicycles:require('../../../assets/imgs/categories/bicycles.png'),
-  bicycles_active:require('../../../assets/imgs/categories/bicycles_active.png'),
-  civic:require('../../../assets/imgs/categories/civic.png'),
-  civic_active:require('../../../assets/imgs/categories/civic_active.png'),
-  coffee:require('../../../assets/imgs/categories/coffee.png'),
-  coffee_active:require('../../../assets/imgs/categories/coffee_active.png'),
-  community:require('../../../assets/imgs/categories/community.png'),
-  community_active:require('../../../assets/imgs/categories/community_active.png'),
-  construction:require('../../../assets/imgs/categories/construction.png'),
-  construction_active:require('../../../assets/imgs/categories/construction_active.png'),
-  dining:require('../../../assets/imgs/categories/dining.png'),
-  dining_active:require('../../../assets/imgs/categories/dining_active.png'),
-  drinks:require('../../../assets/imgs/categories/drinks.png'),
-  drinks_active:require('../../../assets/imgs/categories/drinks_active.png'),
-  education:require('../../../assets/imgs/categories/education.png'),
-  education_active:require('../../../assets/imgs/categories/education_active.png'),
-  energy:require('../../../assets/imgs/categories/energy.png'),
-  energy_active:require('../../../assets/imgs/categories/energy_active.png'),
-  fashion:require('../../../assets/imgs/categories/fashion.png'),
-  fashion_active:require('../../../assets/imgs/categories/fashion_active.png'),
-  finance:require('../../../assets/imgs/categories/finance.png'),
-  finance_active:require('../../../assets/imgs/categories/finance_active.png'),
-  food:require('../../../assets/imgs/categories/food.png'),
-  food_active:require('../../../assets/imgs/categories/food_active.png'),
-  garden:require('../../../assets/imgs/categories/garden.png'),
-  garden_active:require('../../../assets/imgs/categories/garden_active.png'),
-  'green-space':require('../../../assets/imgs/categories/green-space.png'),
-  'green-space_active':require('../../../assets/imgs/categories/green-space_active.png'),
-  'health-wellness':require('../../../assets/imgs/categories/health-wellness.png'),
-  'health-wellness_active':require('../../../assets/imgs/categories/health-wellness_active.png'),
-  'home-office':require('../../../assets/imgs/categories/home-office.png'),
-  'home-office_active':require('../../../assets/imgs/categories/home-office_active.png'),
-  'media-communications':require('../../../assets/imgs/categories/media-communications.png'),
-  'media-communications_active':require('../../../assets/imgs/categories/media-communications_active.png'),
-  products:require('../../../assets/imgs/categories/products.png'),
-  products_active:require('../../../assets/imgs/categories/products_active.png'),
-  services:require('../../../assets/imgs/categories/services.png'),
-  services_active:require('../../../assets/imgs/categories/services_active.png'),
-  'special-events':require('../../../assets/imgs/categories/special-events.png'),
-  'special-events_active':require('../../../assets/imgs/categories/special-events_active.png'),
-  'tourism-hospitality':require('../../../assets/imgs/categories/tourism-hospitality.png'),
-  'tourism-hospitality_active':require('../../../assets/imgs/categories/tourism-hospitality_active.png'),
-  transit:require('../../../assets/imgs/categories/transit.png'),
-  transit_active:require('../../../assets/imgs/categories/transit_active.png'),
-  waste:require('../../../assets/imgs/categories/waste.png'),
-  waste_active:require('../../../assets/imgs/categories/waste_active.png'),
-}
-
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -123,15 +68,14 @@ class Home extends Component {
       pollQuestion:{
         question: {},
         answers: [],
-        myAnswer: null
+        myAnswer: null,
+      },
+      acitivtyQuery:{
+        createdAt: 0,
+        limit: 25,
+        more: true
       }
     };
-
-    this.acitivtyQuery = {
-      offset: 0,
-      limit: 20,
-      more: true
-    }
 
     this.loadRecentActivities.bind(this);
   }
@@ -211,17 +155,25 @@ class Home extends Component {
   }
 
   loadRecentActivities() {
-    if(this.acitivtyQuery.more) {
-      bendService.getRecentActivities(this.acitivtyQuery.offset, this.acitivtyQuery.limit, (error, result) => {
+    if(this.state.acitivtyQuery.more) {
+      bendService.getRecentActivities(this.state.acitivtyQuery.createdAt, this.state.acitivtyQuery.limit + 1, (error, result) => {
 
         if (error) {
           console.log(error);
           return;
         }
+        console.log("recent activities", result)
+        this.state.acitivtyQuery.more = (result.length == this.state.acitivtyQuery.limit + 1)
+        if(this.state.acitivtyQuery.more) {
+          //remove tail item
+          result.pop()
+        }
 
-        this.acitivtyQuery.more = (result.length == this.acitivtyQuery.limit)
+        this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
 
-        //console.log("recent activities", error, result)
+        this.setState({
+          acitivtyQuery:this.state.acitivtyQuery
+        })
 
         this.setState({
           dataSourceRecentActivity:this.dataSourceRecentActivity.cloneWithRows(result)
@@ -265,7 +217,7 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat ? categoryImages[cat] : require('../../../assets/imgs/stickers/transit.png') }
+          avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
           points={ entry.activity.points ? Number(entry.activity.points) : 0 }
           link={ entry.activity.url }
         />
@@ -286,7 +238,7 @@ class Home extends Component {
           title='CHECK IN'
           activityType='business'
           location={ entry.name }
-          category_avatar={ cat ? categoryImages[cat] : require('../../../assets/imgs/stickers/transit.png') }
+          category_avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
           users={ entry.users }
           time={ entry._bmd.createdAt }
           hearts={ Number(entry.likeCount) || 0 }
@@ -503,6 +455,11 @@ class Home extends Component {
               dataSource={ this.state.dataSourceRecentActivity }
               renderRow={ this.renderrorecentActivityRow.bind(this) }/>
         </View>
+        {this.state.acitivtyQuery.more && <View style={ styles.loadMoreButtonWrapper }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.loadRecentActivities() }>
+            <Text style={ styles.textReadMoreButton }>Load More</Text>
+          </TouchableOpacity>
+        </View>}
       </View>
     );
   }
@@ -621,6 +578,13 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     flex: 1,
     paddingTop: 8,
+  },
+  loadMoreButtonWrapper: {
+    flex: 1,
+    paddingTop: 5,
+    paddingBottom:5,
+    justifyContent: 'center',
+    alignItems:'center'
   },
   textReadMoreButton: {
     color: commonColors.title,

@@ -105,7 +105,7 @@ export default class RecentActivityListCell extends Component {
                     <Text style={ styles.title }>{ title }</Text>
                   </View>
                 </View>
-                <Text style={ styles.text }>{ distance } Miles  $$</Text>
+                <Text style={ styles.text }>{ distance< 0 ? 'Unknown':distance } Miles  $$</Text>
                 <View style={ styles.bottomContainer }>
                   <TouchableOpacity onPress={ () => this.onLike() }>
                     <View style={ styles.heartContainer }>
