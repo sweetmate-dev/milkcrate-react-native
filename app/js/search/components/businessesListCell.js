@@ -13,7 +13,7 @@ import * as commonColors from '../../styles/commonColors';
 
 const star = require('../../../assets/imgs/star.png');
 
-export default class CategoryDetailView extends Component {
+export default class BusinessesListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -56,6 +56,10 @@ export default class CategoryDetailView extends Component {
       onClick,
       mode,
     } = this.props;
+
+    let dollars = '$';
+    for (i = 1 ; i < price ; i++)
+      dollars += '$';
     
     return (
       <TouchableHighlight 
@@ -75,7 +79,7 @@ export default class CategoryDetailView extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>{ distance.toFixed(3) } Miles  $$</Text>
+              <Text style={ styles.text }>{ distance.toFixed(3) } Miles  { dollars }</Text>
             </View>
           </View>
           <View style={ styles.cellBottomContainer }>

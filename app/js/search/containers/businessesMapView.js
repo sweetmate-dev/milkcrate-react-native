@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
-import CategoryDetailView from '../components/categoryDetailView';
+import BusinessesListCell from '../components/businessesListCell';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 const ASPECT_RATIO = screenWidth / screenHiehgt;
@@ -30,7 +30,7 @@ const map_pin = require('../../../assets/imgs/map_marker.png');
 const map_selected_pin = require('../../../assets/imgs/map_marker_selected.png');
 const currentLocationMarker = require('../../../assets/imgs/current_location_marker.png');
 
-class CategoryMap extends Component {
+class BusinessesMapView extends Component {
   constructor(props) {
     super(props);
 
@@ -142,7 +142,7 @@ class CategoryMap extends Component {
           }
         </MapView>
         <View style={ styles.calloutContainer } >
-          <CategoryDetailView
+          <BusinessesListCell
             width={ screenWidth - 20}
             title={ title + " - " + this.state.tappedPin.toString() }
             icon={ avatar }
@@ -164,7 +164,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(CategoryMap);
+)(BusinessesMapView);
 
 const styles = StyleSheet.create({
   container: {

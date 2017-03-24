@@ -18,13 +18,13 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
-import CategoryDetailView from '../components/categoryDetailView';
+import BusinessesListCell from '../components/businessesListCell';
 import { CategoryDetailEntries } from '../../components/dummyEntries';
 import UtilService from '../../components/util'
 
 import * as commonColors from '../../styles/commonColors';
 
-class CategoryList extends Component {
+class BusinessesListView extends Component {
   constructor(props) {
     super(props);
 
@@ -55,13 +55,13 @@ class CategoryList extends Component {
     const avatar = this.props.avatar;
 
     return (
-      <CategoryDetailView
+      <BusinessesListCell
         title={ rowData.name }
         icon={ avatar }
         description={ rowData.description }
         distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
-        price={ 10}
+        price={ Number(rowData.priceTier) }
         rating={ Number(rowData.points) || 0 }
         onClick={ () => this.onPressedCell(rowID) }
       />
@@ -86,7 +86,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(CategoryList);
+)(BusinessesListView);
 
 const styles = StyleSheet.create({  
   categoryDetailListView: {

@@ -25,7 +25,7 @@ import NavTitleBar from '../../components/navTitleBar';
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
 
-import CategoryDetailView from '../components/categoryDetailView';
+import BusinessesListCell from '../components/businessesListCell';
 import EventsListCell from '../components/eventsListCell';
 
 import * as commonColors from '../../styles/commonColors';
@@ -129,13 +129,13 @@ class CategoryGroupedView extends Component {
 
   renderBusinessesListRow(rowData, sectionID, rowID) {
     return (
-      <CategoryDetailView
+      <BusinessesListCell
         title={ rowData.name }
         icon={ commonStyles.stickerImages[this.props.index] }
         description={ rowData.description }
-        distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInKm(rowData._geoloc[0], rowData._geoloc[1],
+        distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
-        price={ 10}
+        price={ Number(rowData.priceTier) }
         rating={ Number(rowData.points) || 0 }
         onClick={ () => this.onPressedBusinessesCell(rowID) }
       />

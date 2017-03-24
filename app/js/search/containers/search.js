@@ -222,11 +222,11 @@ class Search extends Component {
         break;
 
       case 1://Businesses
-        Actions.BusinessesDetail();
+        // Actions.BusinessesView();
         break;
 
       case 2://Events
-        Actions.Events();
+        Actions.EventsView();
         break;
 
       // case 4://Volunteer

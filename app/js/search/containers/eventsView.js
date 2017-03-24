@@ -33,7 +33,7 @@ var dataSource = new ListView.DataSource({
 let arrayValidDate = [];
 let eventDays = [];
 
-class Events extends Component {
+class EventsView extends Component {
   constructor(props) {
     super(props);
 
@@ -118,11 +118,13 @@ class Events extends Component {
     var date = new Date(sectionData.date);
     var value = this.compareDates( date, this.state.selectedDate );
 
-    arrayValidDate[sectionId] = value;
+    // arrayValidDate[sectionId] = value;
 
-    if ( value == false) {
-      return null;
-    }
+    // if ( value == false) {
+    //   return null;
+    // }
+
+    arrayValidDate[sectionId] = true;
 
     return (
       <View style={ styles.sectionHeaderContainer }>
@@ -174,7 +176,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(Events);
+)(EventsView);
 
 const styles = StyleSheet.create({
   container: {

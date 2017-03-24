@@ -25,12 +25,12 @@ import Introduce from './introduce/containers/introduce';
 import Signup from './auth/containers/signup';
 import Login from './auth/containers/login';
 import Main from './main/containers/main';
-import CategoryView from './search/containers/categoryView';
+import BusinessesView from './search/containers/businessesView';
 import CategoryGroupedView from './search/containers/categoryGroupedView';
 import BusinessesDetail from './search/containers/businessesDetail';
 import ActionDetail from './search/containers/actionDetail';
 import EventsDetail from './search/containers/eventsDetail';
-import Events from './search/containers/events';
+import EventsView from './search/containers/eventsView';
 import SetupProfile from './profile/containers/setupProfile';
 import Settings from './profile/containers/settings';
 import CommunityPoints from './profile/containers/communityPoints';
@@ -174,12 +174,12 @@ class App extends Component {
         <Scene key="Login" component={ Login } />
         <Scene key="SetupProfile" component={ SetupProfile } />
         <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
-        <Scene key="CategoryView" component={ CategoryView } />
+        <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryGroupedView" component={ CategoryGroupedView } />
         <Scene key="BusinessesDetail" component={ BusinessesDetail } />
         <Scene key="ActionDetail" component={ ActionDetail } />
         <Scene key="EventsDetail" component={ EventsDetail } />
-        <Scene key="Events" component={ Events } />
+        <Scene key="EventsView" component={ EventsView } />
         <Scene key="Settings" component={ Settings } />
         <Scene key="CommunityPoints" component={ CommunityPoints } />
         <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />

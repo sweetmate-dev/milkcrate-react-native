@@ -22,8 +22,8 @@ import { SegmentedControls } from 'react-native-radio-buttons';
 
 import NavSearchBar from '../../components/navSearchBar';
 
-import CategoryList from './categoryList';
-import CategoryMap from './categoryMap';
+import BusinessesListView from './businessesListView';
+import BusinessesMapView from './businessesMapView';
 
 import  * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -36,7 +36,7 @@ import * as _ from 'underscore'
 import UtilService from '../../components/util'
 
 
-class CategoryView extends Component {
+class BusinessesView extends Component {
   constructor(props) {
     super(props);
 
@@ -155,9 +155,9 @@ class CategoryView extends Component {
         </View>
         {
           this.state.selectedIndex == 'List' ?
-            <CategoryList title={ title } avatar={ commonStyles.stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
+            <BusinessesListView title={ title } avatar={ commonStyles.stickerImages[index] } activities={ this.state.activities } currentLocation={ this.state.currentPosition }/>
             :
-            <CategoryMap title={ title } avatar={ commonStyles.stickerImages[index] } currentLocation={ this.state.currentPosition } />
+            <BusinessesMapView title={ title } avatar={ commonStyles.stickerImages[index] } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );
@@ -170,7 +170,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(CategoryView);
+)(BusinessesView);
 
 const styles = StyleSheet.create({
   container: {

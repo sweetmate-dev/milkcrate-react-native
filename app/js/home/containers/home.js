@@ -229,7 +229,7 @@ class Home extends Component {
 
   onRecentActivityCellPressed (rowID) {
 
-    alert("Tapped cell - " + rowID);
+    // alert("Tapped cell - " + rowID);
   }
 
   onLearnMore() {
