@@ -267,7 +267,7 @@ class Home extends Component {
           title='CHECK IN'
           activityType='business'
           location={ entry.name }
-          category_avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
+          category_avatar={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           time={ entry._bmd.createdAt }
           hearts={ Number(entry.likeCount||0) }

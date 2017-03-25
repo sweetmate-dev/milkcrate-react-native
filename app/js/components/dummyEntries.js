@@ -406,12 +406,12 @@ export const EventsEntries = [
     date: 'Wednesday, Mar 15 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 1,
       },
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 2,
       },
@@ -422,12 +422,12 @@ export const EventsEntries = [
     date: 'Friday, Mar 17 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 4,
       },
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 5,
       },
@@ -438,17 +438,17 @@ export const EventsEntries = [
     date: 'Sunday, Mar 19 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 6,
       },
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 7,
       },
       {
-        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 8,
       },
