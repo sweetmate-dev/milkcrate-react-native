@@ -268,7 +268,7 @@ class BusinessesDetail extends Component {
             </View>
             <Text style={ styles.textDescription }>{ business.description }</Text>
             {false&&<TouchableOpacity onPress={ () => this.onGetDirection() }>
-              <Text style={ styles.textTitle }>See this listing on Foursqaure</Text>
+              <Text style={ styles.textDescription }>View on Foursquare</Text>
             </TouchableOpacity>}
           </View>
           <View style={ styles.certificationsContainer }>
@@ -289,7 +289,7 @@ class BusinessesDetail extends Component {
               <Image style={ styles.imageAvatar } source={ avatar } />
               <View style={ styles.certificationsCheckSubContainer }>
                 <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
-                <Text style={ styles.textValue }>Be the first to checkin and earn double points</Text>
+                <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
               </View>
             </View>
           </View>
