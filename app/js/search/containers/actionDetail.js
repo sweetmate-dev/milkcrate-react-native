@@ -26,7 +26,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
-const icon =   require('../../../assets/imgs/stickers/bicycles.png');
+const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const background_top =   require('../../../assets/imgs/background_top_action.png');
 
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
@@ -134,7 +134,7 @@ class ActionDetail extends Component {
           {this.state.initialize&&<Image style={ styles.imageTopBackground } source={{uri:action.coverImage?action.coverImage._downloadURL:this.state.category.coverImage._downloadURL}}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategorySticker(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{action.name}</Text>
               </View>

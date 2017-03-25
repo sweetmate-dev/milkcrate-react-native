@@ -25,7 +25,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
-const icon =   require('../../../assets/imgs/stickers/bicycles.png');
+const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
 
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
@@ -64,7 +64,7 @@ class EventsDetail extends Component {
 
     }
   }
-  
+
   onBack () {
     Actions.pop()
   }
@@ -117,7 +117,7 @@ class EventsDetail extends Component {
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
-              </View>              
+              </View>
             </View>
 
             <View style={ styles.dateContinaer }>

@@ -123,7 +123,7 @@ class Profile extends Component {
     return (
       <RecentActivityListCell
         title={ rowData.activity.name||'' }
-        icon={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
+        icon={ UtilService.getCategoryIcon(cat) }
         description= { rowData.summary || '' }
         distance={ rowData.activity._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData.activity._geoloc[0], rowData.activity._geoloc[1],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : -1 }
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
   },
   textSectionTitle: {
     color: commonColors.grayMoreText,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonWrapper: {
-    backgroundColor: commonColors.theme,    
+    backgroundColor: commonColors.theme,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 9,

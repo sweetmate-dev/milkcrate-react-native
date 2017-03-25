@@ -87,7 +87,7 @@ class ActionView extends Component {
                   return
                 }
                 this.setState( (state) => {
-                  state.avatarImages[index] = UtilService.getCategorySticker(result.slug);
+                  state.avatarImages[index] = UtilService.getCategoryIcon(result.slug);
                   return state;
                 });
               })

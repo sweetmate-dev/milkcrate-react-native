@@ -126,7 +126,7 @@ class Home extends Component {
     this.loadRecentActivities()
 
     bendService.getPollQuestion( (error, question, answers, myAnswer) => {
-      
+
       if (error) {
         console.log('poll questions erroror', error);
         return;
@@ -246,7 +246,7 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
+          avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           points={ entry.activity.points ? Number(entry.activity.points) : 0 }
           link={ entry.activity.url }
         />
@@ -267,7 +267,7 @@ class Home extends Component {
           title='CHECK IN'
           activityType='business'
           location={ entry.name }
-          category_avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/stickers/transit.png') }
+          category_avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           time={ entry._bmd.createdAt }
           hearts={ Number(entry.likeCount||0) }
@@ -329,11 +329,11 @@ class Home extends Component {
   get showMainDailyPollSelectMode() {
 
     return (
-      this.state.selectedDailyPollIndex == -1 ? 
-        this.showDailyPollSelectMode  
-        : 
-        <FadeOutView> 
-          { this.showDailyPollSelectMode } 
+      this.state.selectedDailyPollIndex == -1 ?
+        this.showDailyPollSelectMode
+        :
+        <FadeOutView>
+          { this.showDailyPollSelectMode }
         </FadeOutView>
     );
   }
@@ -341,12 +341,12 @@ class Home extends Component {
   get showDailyPollSelectMode() {
     return (
       <View style={ styles.dailyPollSelectContentContainer }>
-        <RadioForm 
+        <RadioForm
           formHorizontal={ false }
           animation={ true }
           style={ styles.radioFormWrapper }
         >
-          { 
+          {
             this.state.pollQuestion.answers.map((obj, index) => {
               var onPressRadioButton = (value, index) => {
                 console.log(value, index)
@@ -379,11 +379,11 @@ class Home extends Component {
                   timer.clearInterval(this, 'DailyPollTimer');
                   this.state.pollQuestion.myAnswer = this.state.pollQuestion.answers[index]
                   this.setState({ selectedDailyPollStateMode: true });
-                }, 500);                
+                }, 500);
               }
-              
+
               return (
-                <RadioButton 
+                <RadioButton
                   labelHorizontal={ true }
                   key={ index }
                   style={ (this.state.pollQuestion.answers.length - 1) == index ? styles.radioButtonWrapper : [styles.radioButtonWrapper, styles.radioButtonBorder] }
@@ -420,7 +420,7 @@ class Home extends Component {
             }
           )}
         </RadioForm>
-      </View>      
+      </View>
     );
   }
 
@@ -507,7 +507,7 @@ class Home extends Component {
           { this.showChallenges }
           { this.showTrending }
           { this.showDailyPoll }
-          { this.showRecentActivity }          
+          { this.showRecentActivity }
         </ScrollView>
       </View>
     );
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,    
+    borderBottomColor: commonColors.line,
   },
   dailyPollTopContentContainer: {
     alignItems: 'flex-start',
@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
     textAlign: 'left',
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
   },
   radioButtonLabelWrapper: {
     flex: 1,
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
   },
   radioButtonBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,    
+    borderBottomColor: commonColors.line,
   },
   radioFormWrapper: {
     flex: 1,

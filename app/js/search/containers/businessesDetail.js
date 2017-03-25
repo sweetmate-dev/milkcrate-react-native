@@ -31,7 +31,7 @@ const dummyText = 'Luxury is something everyone deserves from time to time. Such
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
-const icon =   require('../../../assets/imgs/stickers/coffee.png');
+const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
 const avatar = require('../../../assets/imgs/avatar.png');
@@ -218,7 +218,7 @@ class BusinessesDetail extends Component {
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategorySticker(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{business.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>

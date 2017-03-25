@@ -60,7 +60,7 @@ const exploreWays = [
 ];
 
 const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-const icon =   require('../../../assets/imgs/stickers/coffee.png');
+const icon =   require('../../../assets/imgs/category-icons/coffee.png');
 const location =   require('../../../assets/imgs/weekly_location.png');
 
 export default class WeeklyRecap extends Component {
@@ -96,9 +96,9 @@ export default class WeeklyRecap extends Component {
 
   onDay( index ) {
     this.setState( (state) => {
-      state.seledtedDays[index] = !state.seledtedDays[index];      
-      return state;      
-    });    
+      state.seledtedDays[index] = !state.seledtedDays[index];
+      return state;
+    });
   }
 
   onWeelyRecapCellPressed (rowID) {
@@ -112,7 +112,7 @@ export default class WeeklyRecap extends Component {
         <View style={ styles.headerContainer }>
           <View style={ styles.bothSideWrapper }/>
           <View style={ styles.headerTitleWrapper }>
-            <Text style={ styles.textHeaderTitle }>Weekly Recap 2/16-2/22</Text>  
+            <Text style={ styles.textHeaderTitle }>Weekly Recap 2/16-2/22</Text>
           </View>
           <View style={ styles.bothSideWrapper }>
             <TouchableOpacity onPress={ () => this.onSave() }>
@@ -137,7 +137,7 @@ export default class WeeklyRecap extends Component {
               <Text style={ styles.textBottomTitle }>Total Points</Text>
             </View>
           </View>
-          
+
           <View style={ styles.exploreWaysContainer }>
             {
               exploreWays.map((item, index) => {
@@ -158,12 +158,12 @@ export default class WeeklyRecap extends Component {
                 <Text style={ styles.textTitle }>Elixr Coffee Roasters</Text>
                 <View style={ styles.checkedTimesContainer }>
                   <Image style={ styles.imageLocation } source={ location } />
-                  <Text style={ styles.textValue }>Checked in 2 times.</Text>                  
-                </View>                  
+                  <Text style={ styles.textValue }>Checked in 2 times.</Text>
+                </View>
               </View>
               <Point point={ 10 }/>
             </View>
-            <View style={ styles.daysContainer }> 
+            <View style={ styles.daysContainer }>
               {
                 days.map((item, index) => {
                   return (
@@ -171,18 +171,18 @@ export default class WeeklyRecap extends Component {
                       <View style={ this.state.seledtedDays[index] ? styles.daySelectedWrapper : styles.dayWrapper }>
                         <Text style={ this.state.seledtedDays[index] ? styles.textSelectedDay : styles.textDay }>{ item }</Text>
                       </View>
-                    </TouchableOpacity>  
+                    </TouchableOpacity>
                   );
                 })
               }
-            </View>  
+            </View>
             <Text style={ styles.textComment }>Did you go on other days? Tap to select them</Text>
           </View>
           <ListView
             dataSource={ this.state.dataSourceRecentActivity }
             renderRow={ this.renderRecentActivityRow.bind(this) }/>
 
-        </ScrollView>  
+        </ScrollView>
       </View>
     );
   }
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: commonColors.theme,
-    height: 64,    
+    height: 64,
   },
   headerTitleWrapper: {
     flex: 3,
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
   },
   exploreWaysContainer: {
     alignSelf: 'stretch',
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 10,
     fontWeight: 'bold',
-  },  
+  },
   textSelectedDay: {
     color: '#fff',
     fontFamily: 'Open Sans',

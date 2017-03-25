@@ -80,7 +80,7 @@ class BusinessesView extends Component {
                   return
                 }
                 console.log(result.slug);
-                this.avatarImages[index] = UtilService.getCategorySticker(result.slug);
+                this.avatarImages[index] = UtilService.getCategoryIcon(result.slug);
 
                 if (this.businesses.length == this.avatarImages.length ) {
                   this.setState({

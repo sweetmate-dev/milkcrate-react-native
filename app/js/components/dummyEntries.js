@@ -2,31 +2,31 @@ export const ChallengeCarouselEntries = [
   {
     title: 'Weekly Challenge 1',
     subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/stickers/transit.png'),
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
     coins: 10,
   },
   {
     title: 'Weekly Challenge 2',
     subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/stickers/transit.png'),
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
     coins: 11,
   },
   {
     title: 'Weekly Challenge 3',
     subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/stickers/transit.png'),
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
     coins: 12,
   },
   {
     title: 'Weekly Challenge 4',
     subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/stickers/transit.png'),
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
     coins: 13,
   },
   {
     title: 'Weekly Challenge 5',
     subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/stickers/transit.png'),
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
     coins: 14,
   },
 ];
@@ -81,7 +81,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/dining.png'),
+    category_avatar: require('../../assets/imgs/category-stickers/dining.png'),
     users: [
       {
         name: 'Paul A.',
@@ -131,7 +131,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/fashion.png'),
+    category_avatar: require('../../assets/imgs/category-stickers/fashion.png'),
     users: [
       {
         name: 'Paul A.',
@@ -181,7 +181,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/fashion.png'),
+    category_avatar: require('../../assets/imgs/category-stickers/fashion.png'),
     users: [
       {
         name: 'Paul A.',
@@ -231,7 +231,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/transit.png'),
+    category_avatar: require('../../assets/imgs/category-stickers/transit.png'),
     users: [
       {
         name: 'Paul A.',
@@ -281,7 +281,7 @@ export const TrendingCarouselEntries = [
   {
     title: 'Check In',
     location: 'HipCityVeg',
-    category_avatar: require('../../assets/imgs/stickers/baby.png'),
+    category_avatar: require('../../assets/imgs/category-stickers/baby.png'),
     users: [
       {
         name: 'Paul A.',
@@ -406,12 +406,12 @@ export const EventsEntries = [
     date: 'Wednesday, Mar 15 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 1,
       },
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 2,
       },
@@ -422,12 +422,12 @@ export const EventsEntries = [
     date: 'Friday, Mar 17 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 4,
       },
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 5,
       },
@@ -438,17 +438,17 @@ export const EventsEntries = [
     date: 'Sunday, Mar 19 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 6,
       },
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 7,
       },
       {
-        avatar: require('../../assets/imgs/stickers/bicycles.png'),
+        avatar: require('../../assets/imgs/category-stickers/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
         coins: 8,
       },
@@ -481,7 +481,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.0,
     price: 10,
     rating: 4.8,
@@ -489,7 +489,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.1,
     price: 11,
     rating: 4.9,
@@ -497,7 +497,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 12,
     rating: 4.8,
@@ -505,7 +505,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.3,
     price: 13,
     rating: 4.8,
@@ -513,7 +513,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.4,
     price: 14,
     rating: 5.0,
@@ -521,7 +521,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.5,
     price: 15,
     rating: 4.8,
@@ -529,7 +529,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.6,
     price: 16,
     rating: 4.9,
@@ -537,7 +537,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.7,
     price: 17,
     rating: 4.8,
@@ -545,7 +545,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.8,
     price: 18,
     rating: 4.6,
@@ -553,7 +553,7 @@ export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.9,
     price: 19,
     rating: 4.7,
@@ -564,7 +564,7 @@ export const ProfileRecentActivityEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 10,
     coins: 10,
@@ -574,7 +574,7 @@ export const ProfileRecentActivityEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great Coffee, Great People, Great Service Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 11,
     coins: 11,
@@ -584,7 +584,7 @@ export const ProfileRecentActivityEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 12,
     coins: 12,
@@ -594,7 +594,7 @@ export const ProfileRecentActivityEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 13,
     coins: 13,
@@ -604,7 +604,7 @@ export const ProfileRecentActivityEntries = [
   {
     title: 'Elixr Coffee Roasters',
     description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/stickers/coffee.png'),
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 14,
     coins: 14,
@@ -644,21 +644,21 @@ export const WeeklyRecapEntries = [
   {
     title: 'Volunteer for the Bicycle Coalition',
     date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
     coins: 10,
   },
   {
     title: 'Volunteer for the Bicycle Coalition',
     date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
     coins: 11,
   },
   {
     title: 'Volunteer for the Bicycle Coalition',
     date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/stickers/bicycles.png'),
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
     coins: 12,
   },
