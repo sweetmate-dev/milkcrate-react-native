@@ -57,8 +57,8 @@ export default class BusinessesListCell extends Component {
       mode,
     } = this.props;
 
-    let dollars = '$';
-    for (i = 1 ; i < price ; i++)
+    let dollars = '';
+    for (i = 1 ; i <= price ; i++)
       dollars += '$';
 
     return (
@@ -72,19 +72,19 @@ export default class BusinessesListCell extends Component {
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
-                  <Text style={ styles.title }>{ title }</Text>
+                  <Text numberOfLines={2} style={ styles.title }>{ title }</Text>
                 </View>
                 <View style={ styles.cellTopRatingContainer }>
-                  <Text style={ styles.text }>{ rating } </Text>
+                  <Text style={ styles.text }>{ rating.toFixed(1) } </Text>
                   <Image style={ styles.star } source={ star } />
                 </View>
               </View>
-              <Text style={ styles.text }>{ distance.toFixed(3) } Miles  { dollars }</Text>
+              <Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>
             </View>
           </View>
-          <View style={ styles.cellBottomContainer }>
+          {/*<View style={ styles.cellBottomContainer }>
             <Text numberOfLines={ 1 } style={ styles.dscription }>{ description } </Text>
-          </View>
+          </View>*/}
         </View>
       </TouchableHighlight>
     );

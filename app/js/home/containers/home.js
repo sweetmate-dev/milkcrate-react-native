@@ -195,8 +195,8 @@ class Home extends Component {
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount||0) }
         likeByMe={ rowData.likedByMe||false }
-        points={ Number(rowData.points||0) }
-        onClick={ () => this.onRecentActivityCellPressed(rowID) }
+        points={ Number(rowData.points||1) }
+        onClick={ () => this.onRecentActivityCellPressed(rowData) }
         onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
         }
       />
@@ -227,14 +227,23 @@ class Home extends Component {
     })
   }
 
-  onRecentActivityCellPressed (rowID) {
-
-    // alert("Tapped cell - " + rowID);
+  onRecentActivityCellPressed (activity) {
+    if(activity.type == 'business') {
+      Actions.BusinessesDetail({ business: activity.activity });
+    } else if(activity.type == 'action') {
+      Actions.ActionDetail({ action: activity.activity });
+    } else if(activity.type == 'event') {
+      Actions.EventsDetail({ action: activity.activity });
+    }
   }
 
   onLearnMore() {
 
     Actions.LearnMoreModal();
+  }
+
+  goChallenge(activity, type) {
+
   }
 
   getChallengeCarousel (entries) {
@@ -247,8 +256,9 @@ class Home extends Component {
           title={ entry.title }
           subtitle={entry.activity.name}
           icon={ UtilService.getCategoryIcon(cat) }
-          points={ entry.activity.points ? Number(entry.activity.points) : 0 }
+          points={ entry.activity.points ? Math.max(Number(entry.activity.points), 1) : 1 }
           link={ entry.activity.url }
+          rawData={entry}
         />
       );
     });
@@ -271,7 +281,8 @@ class Home extends Component {
           users={ entry.users }
           time={ entry._bmd.createdAt }
           hearts={ Number(entry.likeCount||0) }
-          points={ Number(entry.points||0)}
+          points={ Number(entry.points||1)}
+          rawData={entry}
         />
       );
     });

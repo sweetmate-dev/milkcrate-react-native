@@ -138,7 +138,7 @@ class ActionDetail extends Component {
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{action.name}</Text>
               </View>
-              <Point point={ action.points||0} />
+              <Point point={ Math.max(action.points||1, 1)} />
             </View>
             <Text style={ styles.textDescription }>{ action.description }</Text>
             {action.url&&<View style={ styles.buttonContainer }>

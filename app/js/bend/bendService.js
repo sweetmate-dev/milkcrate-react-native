@@ -448,7 +448,7 @@ module.exports = {
                 (questionRet, callback)=>{
                     //pollQuestionAnswer update
                     Bend.DataStore.get("pollQuestionAnswer", answer._id).then((ret)=>{
-                        ret.count = Number(ret.count)||0
+                        ret.count = Number(ret.count||0)
                         ret.count++;
                         ret.percentage = Math.round(ret.count * 100 / questionRet.responseCount)
                         Bend.DataStore.update("pollQuestionAnswer", ret).then((ret)=>{

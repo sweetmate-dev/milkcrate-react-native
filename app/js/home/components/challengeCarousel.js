@@ -9,6 +9,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 import Point from '../../components/Point';
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -24,6 +26,17 @@ export default class ChallengeCarousel extends Component {
     points: PropTypes.number,
   };
 
+  goChallengeActivityDetail() {
+    var challenge = this.props.rawData;
+    if(challenge.type == 'business') {
+      Actions.BusinessesDetail({ business: challenge.activity });
+    } else if(challenge.type == 'action') {
+      Actions.ActionDetail({ action: challenge.activity });
+    } else if(challenge.type == 'event') {
+      Actions.EventsDetail({ action: challenge.activity });
+    }
+  }
+
   render () {
     const { title, subtitle, icon, points } = this.props;
 
@@ -32,7 +45,7 @@ export default class ChallengeCarousel extends Component {
         activeOpacity={ 0.5 }
         underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
-        onPress={() => { alert(`You've clicked '${ title }'`); }}
+        onPress={() => { this.goChallengeActivityDetail()}}
         >
         <View style={ styles.contentContainer }>
           <View style={ styles.topContainer }>

@@ -96,7 +96,7 @@ export default class RecentActivityListCell extends Component {
               </View>
               <Point point={ points }/>
             </View>
-            <Text style={ styles.textDescription }>{ description }</Text>
+            <Text numberOfLines={2} style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.bottomContainer }>
               <TouchableOpacity onPress={ () => this.onLike() }>
                 <View style={ styles.heartContainer }>

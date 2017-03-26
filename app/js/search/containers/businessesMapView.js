@@ -150,7 +150,7 @@ class BusinessesMapView extends Component {
             distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[0], businesses[this.state.tappedPin]._geoloc[1],
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
-            rating={ Number(businesses[this.state.tappedPin].points) || 0 }
+            rating={ Math.max(Number(businesses[this.state.tappedPin].rating||1), 1) }
             mode={ 1 }
           />
         </View>

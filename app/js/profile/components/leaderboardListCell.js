@@ -32,7 +32,7 @@ export default class SimpleLeaderboardListCell extends Component {
     width: screenWidth,
     height: 32,
     status: 0,
-    points: 0,
+    points: 1,
     currentUser: false,
     // onClick: () => {}
   }

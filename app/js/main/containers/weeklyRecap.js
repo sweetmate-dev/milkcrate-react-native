@@ -84,7 +84,7 @@ export default class WeeklyRecap extends Component {
         date={ rowData.date }
         icon={ rowData.icon }
         time={ rowData.time }
-        points={ rowData.points }
+        points={ Math.max(Number(rowData.points||1), 1) }
         onClick={ () => this.onWeelyRecapCellPressed(rowID) }
       />
     );

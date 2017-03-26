@@ -81,7 +81,7 @@ class CategoryView extends Component {
             console.log("search failed", error)
             return
           }
-          console.log("search result", result)
+          //console.log("search result", result)
 
           // var activities = []
           // activities = activities.concat(result.data.action);
@@ -125,7 +125,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ rowData.points }
+        points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
@@ -137,10 +137,10 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         description={ rowData.description }
-        distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
+        distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
-        rating={ Number(rowData.points) || 0 }
+        rating={ Math.max(Number(rowData.rating||1), 1) }
         onClick={ () => this.onPressedBusinessesCell(rowData) }
       />
     );
@@ -151,7 +151,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ rowData.points }
+        points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );
@@ -162,7 +162,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ rowData.points }
+        points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );
@@ -173,7 +173,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ Number(rowData.points) }
+        points={ Math.max(Number(rowData.points||1), 1) }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );

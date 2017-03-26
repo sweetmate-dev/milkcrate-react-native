@@ -72,7 +72,7 @@ class CommunityPoints extends Component {
         description= { rowData.description }
         distance={ rowData.distance }
         price={ rowData.price }
-        points={ rowData.points }
+        points={ Math.max(Number(rowData.points||1), 1) }
         onClick={ () => this.onPressedRecentActivityCell(rowID) }
       />
     );

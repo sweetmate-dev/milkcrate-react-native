@@ -52,7 +52,7 @@ export default class EventsListCell extends Component {
         <View style={ styles.cellContainer }>
           <View style={ styles.mainContainer }>
             <Image style={ styles.icon } source={ icon }/>
-            <Text style={ styles.textTitle }>{ title }</Text>
+            <Text numberOfLines={2} style={ styles.textTitle }>{ title }</Text>
           </View>
           <Point point={ points }/>
         </View>

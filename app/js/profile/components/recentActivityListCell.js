@@ -22,8 +22,6 @@ export default class RecentActivityListCell extends Component {
     title: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
-    distance: PropTypes.number,
-    price: PropTypes.number,
     points: PropTypes.number,
     onClick: PropTypes.func,
     mode: PropTypes.number,
@@ -34,8 +32,6 @@ export default class RecentActivityListCell extends Component {
   static defaultProps = {
     mode: 0,
     points: 0,
-    distance: 1,
-    price: 0,
     likeByMe: false,
     hearts: 0,
     onClick: () => {}
@@ -65,9 +61,9 @@ export default class RecentActivityListCell extends Component {
   }
 
   onLike() {
-    if (this.props.onLike) {
+    /*if (this.props.onLike) {
       this.props.onLike();
-    }
+    }*/
   }
 
   render() {
@@ -77,8 +73,6 @@ export default class RecentActivityListCell extends Component {
       title,
       icon,
       description,
-      distance,
-      price,
       points,
       onClick,
       mode,
@@ -95,30 +89,24 @@ export default class RecentActivityListCell extends Component {
               <View style={ styles.cellTopTextContainer }>
                 <View style={ styles.cellTopTitleCoinContainer }>
                   <View style={ styles.cellTopTitleContainer }>
-                    <Text style={ styles.title }>{ title }</Text>
+                    <Text numberOfLines={2} style={ styles.title }>{ title }</Text>
                   </View>
                 </View>
-                <Text style={ styles.text }>{ distance< 0 ? 'Unknown':distance } Miles  $$</Text>
                 <View style={ styles.bottomContainer }>
-                  <TouchableOpacity onPress={ () => this.onLike() }>
-                    <View style={ styles.heartContainer }>
-                      <View style={ styles.likeWrapper }>
-                        <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
-                      </View>
-
-                      <Text style={ styles.textSmall }>
-                        {
-                          this.props.hearts == 0 ?
-                              "0 - Be the first to like it!"
-                              :
-                              this.props.hearts > 1 ?
-                              this.props.hearts + " Likes"
-                                  :
-                              this.props.hearts + " Like"
-                        }
-                      </Text>
+                  <View style={ styles.heartContainer }>
+                    <View style={ styles.likeWrapper }>
+                      <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
                     </View>
-                  </TouchableOpacity>
+
+                    <Text style={ styles.textSmall }>
+                      {
+                        this.props.hearts > 1 ?
+                            this.props.hearts + " Likes"
+                                :
+                            this.props.hearts + " Like"
+                      }
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>

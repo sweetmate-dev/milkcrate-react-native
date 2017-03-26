@@ -117,7 +117,7 @@ class ActionView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.avatarImages[rowID] }
-        points={ rowData.points }
+        points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );

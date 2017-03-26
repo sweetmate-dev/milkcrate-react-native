@@ -75,11 +75,11 @@ export default class BusinessRecentActivityListCell extends Component {
           <View style={ styles.mainContentContainer }>
             <View style={ styles.contentTopContainer }>
               <View style={ styles.names_timeContainer }>
-                <Text style={ styles.textName }>{ name }</Text>
+                <Text numberOfLines={2} style={ styles.textName }>{ name }</Text>
                 <Text style={ styles.textSmall }>{ time } min ago</Text>
               </View>
               <View style={ styles.ratingContainer }>
-                <Text style={ styles.textSmall }>{ rating } </Text>
+                <Text style={ styles.textSmall }>{ rating.toFixed(1) } </Text>
                 <Image style={ styles.imageStar } source={ star } />
               </View>
             </View>

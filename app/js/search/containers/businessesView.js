@@ -61,15 +61,15 @@ class BusinessesView extends Component {
           type:'business',
           offset: 0,
           limit: 20,
-          lat: position.latitude,
-          long: position.longitude
+          lat: position.coords.latitude,
+          long: position.coords.longitude
         }, (error, result)=>{
 
           if (error) {
             console.log("search failed", error)
             return
           }
-
+          console.log("business view search result", result.data.business)
           this.businesses = result.data.business;
           this.businesses.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {

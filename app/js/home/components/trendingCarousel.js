@@ -17,6 +17,7 @@ import UtilService from '../../components/util'
 
 const locationImage = require('../../../assets/imgs/location.png');
 const heart = require('../../../assets/imgs/heart.png');
+import { Actions } from 'react-native-router-flux';
 
 export const carouselHeight = commonStyles.screenHiehgt * 0.36;
 const entryBorderRadius = 5;
@@ -57,6 +58,16 @@ export default class TrendingCarousel extends Component {
     });
   }
 
+  goActivityDetail() {
+    if(this.props.activityType == 'business') {
+      Actions.BusinessesDetail({ business: this.props.rawData });
+    } else if(this.props.activityType == 'action') {
+      Actions.ActionDetail({ action: this.props.rawData });
+    } else if(this.props.activityType == 'event') {
+      Actions.EventsDetail({ action: this.props.rawData });
+    }
+  }
+
   render () {
     const { title, location, icon, users, time, hearts, points } = this.props;
 
@@ -65,7 +76,7 @@ export default class TrendingCarousel extends Component {
         activeOpacity={ 0.5 }
         underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
-        onPress={() => { alert(`You've clicked '${ title }'`); }}
+        onPress={() => { this.goActivityDetail() }}
       >
         <View style={ styles.contentContainer }>
           <View style={ styles.backgroundContainer }>

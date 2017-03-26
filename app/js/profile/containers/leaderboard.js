@@ -64,7 +64,7 @@ class Leaderboard extends Component {
         status={ rowData.status }
         index={ Number(rowID) + 1 }
         name={ rowData.name }
-        points={ rowData.points }
+        points={ Math.max(Number(rowData.points||1), 1) }
         avatar={ rowData.avatar }
         currentUser={ currentUser }
       />

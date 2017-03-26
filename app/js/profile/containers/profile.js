@@ -125,10 +125,7 @@ class Profile extends Component {
         title={ rowData.activity.name||'' }
         icon={ UtilService.getCategoryIcon(cat) }
         description= { rowData.summary || '' }
-        distance={ rowData.activity._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData.activity._geoloc[0], rowData.activity._geoloc[1],
-        this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : -1 }
-        price={ rowData.price||0 }
-        points={ Number(rowData.points||0) }
+        points={ Math.max(Number(rowData.points||1), 1) }
         hearts={ Number(rowData.likeCount||0) }
         likeByMe={ rowData.likedByMe||false }
         onClick={ () => this.onPressedRecentActivityCell(rowID)
