@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Linking,
-  Alert,  
+  Alert,
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -44,7 +44,7 @@ import ActionView from './search/containers/actionView';
 
 
 //Deep Links
-const deepLink_Generals = [
+const deepLink_General = [
   { url: '/introduce', action: Actions.Introduce },
   { url: '/signup', action: Actions.Signup },
   { url: '/main', action: Actions.Main, parameters: { tab: 'home', }},
@@ -64,10 +64,6 @@ const deepLink_Search_Activities = [
 ];
 
 const deepLink_Search_Categories = [
-  { url: '/search/fashion', action: Actions.Main, parameters: { tab: 'search', subOne: 'fashion', }},
-  { url: '/search/books', action: Actions.Main, parameters: { tab: 'search', subOne: 'books', }},
-  { url: '/search/business', action: Actions.Main, parameters: { tab: 'search', subOne: 'business', }},
-  { url: '/search/cleaning', action: Actions.Main, parameters: { tab: 'search', subOne: 'cleaning', }},
   { url: '/search/animals', action: Actions.Main, parameters: { tab: 'search', subOne: 'animals', }},
   { url: '/search/baby', action: Actions.Main, parameters: { tab: 'search', subOne: 'baby', }},
   { url: '/search/beauty', action: Actions.Main, parameters: { tab: 'search', subOne: 'beauty', }},
@@ -84,18 +80,16 @@ const deepLink_Search_Categories = [
   { url: '/search/finance', action: Actions.Main, parameters: { tab: 'search', subOne: 'finance', }},
   { url: '/search/food', action: Actions.Main, parameters: { tab: 'search', subOne: 'food', }},
   { url: '/search/garden', action: Actions.Main, parameters: { tab: 'search', subOne: 'garden', }},
-  { url: '/search/green_space', action: Actions.Main, parameters: { tab: 'search', subOne: 'green space', }},
-  { url: '/search/health_wellness', action: Actions.Main, parameters: { tab: 'search', subOne: 'health & wellness', }},
+  { url: '/search/green-space', action: Actions.Main, parameters: { tab: 'search', subOne: 'green-space', }},
+  { url: '/search/health-wellness', action: Actions.Main, parameters: { tab: 'search', subOne: 'health-wellness', }},
   { url: '/search/home', action: Actions.Main, parameters: { tab: 'search', subOne: 'home', }},
-  { url: '/search/media_communications', action: Actions.Main, parameters: { tab: 'search', subOne: 'media & communications', }},
-  { url: '/search/special_events', action: Actions.Main, parameters: { tab: 'search', subOne: 'special events', }},
-  { url: '/search/tourism_hospitality', action: Actions.Main, parameters: { tab: 'search', subOne: 'tourism & hospitality', }},
+  { url: '/search/media-communications', action: Actions.Main, parameters: { tab: 'search', subOne: 'media-communications', }},
+  { url: '/search/products', action: Actions.Main, parameters: { tab: 'search', subOne: 'products', }},
+  { url: '/search/services', action: Actions.Main, parameters: { tab: 'search', subOne: 'services', }},
+  { url: '/search/special-events', action: Actions.Main, parameters: { tab: 'search', subOne: 'special-events', }},
+  { url: '/search/tourism-hospitality', action: Actions.Main, parameters: { tab: 'search', subOne: 'tourism-hospitality', }},
   { url: '/search/transit', action: Actions.Main, parameters: { tab: 'search', subOne: 'transit', }},
   { url: '/search/waste', action: Actions.Main, parameters: { tab: 'search', subOne: 'waste', }},
-  { url: '/search/service', action: Actions.Main, parameters: { tab: 'search', subOne: 'service', }},
-  { url: '/search/vet', action: Actions.Main, parameters: { tab: 'search', subOne: 'vet', }},
-  { url: '/search/groups', action: Actions.Main, parameters: { tab: 'search', subOne: 'groups', }},
-  { url: '/search/wares', action: Actions.Main, parameters: { tab: 'search', subOne: 'wares', }},
 ];
 
 class App extends Component {
@@ -106,11 +100,11 @@ class App extends Component {
       initialize: false,
       loggedIn: false,
     };
-    
+
     bendService.init((err, activeUser)=>{
-      
-      console.log("bend init", err, activeUser)      
-      
+
+      console.log("bend init", err, activeUser)
+
       if(activeUser && activeUser._id) {
         this.setState({ loggedIn: true });
       } else {
@@ -123,10 +117,10 @@ class App extends Component {
 
   deepLinks () {
 
-    DeepLinking.addScheme('milkcrate.neusis.com://');
+    DeepLinking.addScheme('milkcrate://');
     Linking.addEventListener('url', DeepLinking.handleUrl);
 
-    deepLink_Generals.forEach((link) => {
+    deepLink_General.forEach((link) => {
       DeepLinking.addRoute(link.url, ({ scheme, path }) => {
         link.action( link.parameters );
       });
@@ -156,7 +150,7 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.deepLinks();    
+    this.deepLinks();
   }
 
   componentWillUnmount() {
