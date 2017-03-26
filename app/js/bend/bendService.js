@@ -557,6 +557,27 @@ module.exports = {
         })
     },
 
+    checkActivityAnybodyDid(id, type, cb) {
+        Bend.execute("checkActivityAnybodyDid", {
+            id:id,
+            type:type
+        }).then((ret)=>{
+            cb(null, ret.result);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    removeActivity(id, cb) {
+        Bend.execute("removeActivity", {
+            id:id
+        }).then((ret)=>{
+            cb(null, ret.result);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
     captureActivity(id, type, cb) {
         Bend.execute("capture-activity", {
             type:type,

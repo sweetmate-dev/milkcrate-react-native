@@ -74,6 +74,7 @@ export default class RecentActivityListCell extends Component {
       name,
       description,
       avatar,
+      defaultAvatar,
       time,
       hearts,
       points,
@@ -86,7 +87,7 @@ export default class RecentActivityListCell extends Component {
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
             {avatar != ''&&<Image style={ styles.avatar } source={{ uri:avatar }}/>}
-            {avatar == ''&&<Image style={ styles.avatar } source={require('../../../assets/imgs/default-avatar.png')}/>}
+            {avatar == ''&&<Image style={ styles.avatar } source={defaultAvatar}/>}
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.topContainer }>

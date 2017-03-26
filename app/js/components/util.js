@@ -1,4 +1,5 @@
 import * as moment from 'moment'
+import * as _ from 'underscore'
 
 const categoryButtons = {
     animals:require('../../assets/imgs/category-buttons/animals.png'),
@@ -113,6 +114,25 @@ const categoryIcons = {
     waste:require('../../assets/imgs/category-icons/waste.png'),
 }
 
+
+const avatarImages={
+    cat:require('../../assets/imgs/avatars/cat.png'),
+    corgi:require('../../assets/imgs/avatars/corgi.png'),
+    fish:require('../../assets/imgs/avatars/fish.png'),
+    frog:require('../../assets/imgs/avatars/frog.png'),
+    koala:require('../../assets/imgs/avatars/koala.png'),
+    lion:require('../../assets/imgs/avatars/lion.png'),
+    otter:require('../../assets/imgs/avatars/otter.png'),
+    owl:require('../../assets/imgs/avatars/owl.png'),
+    penguin:require('../../assets/imgs/avatars/penguin.png'),
+    pig:require('../../assets/imgs/avatars/pig.png'),
+    raccoon:require('../../assets/imgs/avatars/raccoon.png'),
+    rhino:require('../../assets/imgs/avatars/rhino.png'),
+    squirrel:require('../../assets/imgs/avatars/squirrel.png'),
+    turtle:require('../../assets/imgs/avatars/turtle.png'),
+    whale:require('../../assets/imgs/avatars/whale.png')
+}
+
 class UtilService {
 
     static formatDateWithFormat(ts, formatStr) {
@@ -192,6 +212,56 @@ class UtilService {
         } else {
             return file._downloadURL;
         }
+    }
+
+    static getDefaultAvatar(avatarName) {
+        return avatarImages[avatarName]
+    }
+    
+    static getPricesString(prices) {
+        var p = prices||1;
+        var ret = ""
+        for(i = 1; i <= p ; i++) {
+            ret+='$'
+        }
+        
+        return ret
+    }
+
+    static getBusinessDay(day) {
+        var temp = day.split("-");
+        var ret = []
+        _.map(temp, (o)=>{
+            ret.push(this.capitalizeFirstLetter(o.toLowerCase()))
+        })
+        return ret.join("-")
+    }
+
+    static capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    static convertWithAMPM(d) {
+        if(d == 0) {
+            return '12pm'
+        } else if(d <= 12) {
+            return d + 'am'
+        } else {
+            return (d-12) + 'pm'
+        }
+    }
+
+    static getBusinessOpen(open) {
+        var ret = []
+        if(open) {
+            _.map(open, (o)=>{
+                ret.push(this.convertWithAMPM(o.from) + '-' + this.convertWithAMPM(o.until))
+            })
+
+            return ret.join(", ")
+        }
+
+        return "";
     }
 }
 
