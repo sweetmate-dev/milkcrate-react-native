@@ -1,4 +1,5 @@
 import * as moment from 'moment'
+import * as _ from 'underscore'
 
 const categoryButtons = {
     animals:require('../../assets/imgs/category-buttons/animals.png'),
@@ -225,6 +226,42 @@ class UtilService {
         }
         
         return ret
+    }
+
+    static getBusinessDay(day) {
+        var temp = day.split("-");
+        var ret = []
+        _.map(temp, (o)=>{
+            ret.push(this.capitalizeFirstLetter(o.toLowerCase()))
+        })
+        return ret.join("-")
+    }
+
+    static capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    static convertWithAMPM(d) {
+        if(d == 0) {
+            return '12pm'
+        } else if(d <= 12) {
+            return d + 'am'
+        } else {
+            return (d-12) + 'pm'
+        }
+    }
+
+    static getBusinessOpen(open) {
+        var ret = []
+        if(open) {
+            _.map(open, (o)=>{
+                ret.push(this.convertWithAMPM(o.from) + '-' + this.convertWithAMPM(o.until))
+            })
+
+            return ret.join(", ")
+        }
+
+        return "";
     }
 }
 

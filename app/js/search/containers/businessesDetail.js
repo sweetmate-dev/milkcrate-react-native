@@ -35,7 +35,6 @@ const star = require('../../../assets/imgs/star.png');
 const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
-const avatar = require('../../../assets/imgs/avatar.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE = 37.78825;
@@ -63,6 +62,7 @@ class BusinessesDetail extends Component {
       },
       initialize:false,
       didStatus:false,
+      everDidStatus:true,
       activityId:null,
 
       currentLocation:null,
@@ -79,6 +79,7 @@ class BusinessesDetail extends Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
       },
+      user:{}
     };
   }
 
@@ -95,6 +96,16 @@ class BusinessesDetail extends Component {
 
       this.setState({
         didStatus: result==false?false:true
+      })
+    })
+
+    bendService.checkActivityAnybodyDid(business._id, 'business', (err, result)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      this.setState({
+        everDidStatus: result
       })
     })
 
@@ -121,6 +132,16 @@ class BusinessesDetail extends Component {
         },
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+
+    bendService.getUser(bendService.getActiveUser()._id, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      this.setState({
+        user:ret
+      })
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -176,6 +197,7 @@ class BusinessesDetail extends Component {
       this.state.activityId = result.activity._id;
 
       this.setState({
+        everDidStatus:true,
         didStatus:true
       })
     })
@@ -228,6 +250,8 @@ class BusinessesDetail extends Component {
   render() {
     const { status, business } = this.props;
     var rating = (business.rating||1.0).toFixed(1)
+    var avatar = this.state.user.avatar?UtilService.getSmallImage(this.state.user.avatar):null
+    var defaultAvatar = this.state.user.defaultAvatar?UtilService.getDefaultAvatar(this.state.user.defaultAvatar):null
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -300,16 +324,19 @@ class BusinessesDetail extends Component {
               </View>
             </View>
             {/*<Text style={ styles.textOpenNow }>Open Now</Text>*/}
-            <View style={ styles.openNowContentContainer }>
-              <View style={ styles.openNowCellContainer }>
-                <Text style={ styles.textInfoTitle }>Mon-Sat</Text>
-                <Text style={ styles.textValue }>7am-8pm</Text>
-              </View>
-              <View style={ styles.openNowCellContainer }>
-                <Text style={ styles.textInfoTitle }>Sun</Text>
-                <Text style={ styles.textValue }>8am-7pm</Text>
-              </View>
-            </View>
+            {business.hours&&<View style={ styles.openNowContentContainer }>
+              {
+                  business.hours.map((hour, idx)=> {
+                    return (
+                    <View key={'hour-' + idx} style={ styles.openNowCellContainer }>
+                          <Text style={ styles.textInfoTitle }>{UtilService.getBusinessDay(hour.days)}</Text>
+                          <Text style={ styles.textValue }>{UtilService.getBusinessOpen(hour.open)}</Text>
+                    </View>
+                    )
+                  }
+                )
+              }
+            </View>}
             <Text style={ styles.textDescription }>{ business.description }</Text>
             {false&&<TouchableOpacity onPress={ () => this.onGetDirection() }>
               <Text style={ styles.textDescription }>View on Foursquare</Text>
@@ -322,13 +349,6 @@ class BusinessesDetail extends Component {
                 <Text style={ styles.textCertificationsButton }>{business.certification.name}</Text>
               </View>
             </View>
-            {/*<View style={ styles.certificationsCheckContainer }>
-              <Image style={ styles.imageAvatar } source={ avatar } />
-              <View style={ styles.certificationsCheckSubContainer }>
-                <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
-                <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
-              </View>
-            </View>*/}
           </View>}
           {/*<View style={ styles.recentActivityContainer }>
             <View style={ styles.sectionTitleWrapper }>
@@ -374,17 +394,26 @@ class BusinessesDetail extends Component {
               </View>
             </TouchableOpacity>
           </View>*/}
+          {!this.state.everDidStatus && <View style={ styles.certificationsContainer }>
+            <View style={ styles.certificationsCheckContainer }>
+              {avatar&&<Image style={ styles.imageAvatar } source={{ uri:avatar }} />}
+              {!avatar && defaultAvatar&&<Image style={ styles.imageAvatar } source={ defaultAvatar } />}
+              <View style={ styles.certificationsCheckSubContainer }>
+                <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
+                <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
+              </View>
+            </View>
+          </View>}
         </ScrollView>
         {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I’m Here • Checkin</Text>
           </View>
         </TouchableOpacity>}
-        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        {this.state.didStatus&&
           <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>You’ve Checked In!</Text>
-          </View>
-        </TouchableOpacity>}
+          </View>}
       </View>
     );
   }

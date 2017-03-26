@@ -557,6 +557,17 @@ module.exports = {
         })
     },
 
+    checkActivityAnybodyDid(id, type, cb) {
+        Bend.execute("checkActivityAnybodyDid", {
+            id:id,
+            type:type
+        }).then((ret)=>{
+            cb(null, ret.result);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
     removeActivity(id, cb) {
         Bend.execute("removeActivity", {
             id:id
