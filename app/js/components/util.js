@@ -1,6 +1,6 @@
 import * as moment from 'moment'
 
-const categoryImages2 = {
+const categoryButtons = {
     animals:require('../../assets/imgs/category-buttons/animals.png'),
     animals_active:require('../../assets/imgs/category-buttons/animals_active.png'),
     baby:require('../../assets/imgs/category-buttons/baby.png'),
@@ -169,7 +169,7 @@ class UtilService {
     }
 
     static getCategoryImage(catSlug) {
-        return categoryImages2[catSlug];
+        return categoryButtons[catSlug];
     }
 
     static getCategorySticker(catSlug) {
