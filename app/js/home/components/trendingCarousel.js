@@ -49,11 +49,11 @@ export default class TrendingCarousel extends Component {
 
       if(entry.avatar)
         return (
-          <Image key={ index} style={ styles.imageUserAvatar } source={{uri:entry.avatar._downloadURL}}/>
+          <Image key={ index} style={ styles.imageUserAvatar } source={{uri:UtilService.getSmallImage(entry.avatar)}}/>
         );
       else
         return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={require('../../../assets/imgs/default-avatar.png')}/>
+            <Image key={ index} style={ styles.imageUserAvatar } source={UtilService.getDefaultAvatar(entry.defaultAvatar)}/>
         );
     });
   }

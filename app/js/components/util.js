@@ -113,6 +113,25 @@ const categoryIcons = {
     waste:require('../../assets/imgs/category-icons/waste.png'),
 }
 
+
+const avatarImages={
+    cat:require('../../assets/imgs/avatars/cat.png'),
+    corgi:require('../../assets/imgs/avatars/corgi.png'),
+    fish:require('../../assets/imgs/avatars/fish.png'),
+    frog:require('../../assets/imgs/avatars/frog.png'),
+    koala:require('../../assets/imgs/avatars/koala.png'),
+    lion:require('../../assets/imgs/avatars/lion.png'),
+    otter:require('../../assets/imgs/avatars/otter.png'),
+    owl:require('../../assets/imgs/avatars/owl.png'),
+    penguin:require('../../assets/imgs/avatars/penguin.png'),
+    pig:require('../../assets/imgs/avatars/pig.png'),
+    raccoon:require('../../assets/imgs/avatars/raccoon.png'),
+    rhino:require('../../assets/imgs/avatars/rhino.png'),
+    squirrel:require('../../assets/imgs/avatars/squirrel.png'),
+    turtle:require('../../assets/imgs/avatars/turtle.png'),
+    whale:require('../../assets/imgs/avatars/whale.png')
+}
+
 class UtilService {
 
     static formatDateWithFormat(ts, formatStr) {
@@ -192,6 +211,10 @@ class UtilService {
         } else {
             return file._downloadURL;
         }
+    }
+
+    static getDefaultAvatar(avatarName) {
+        return avatarImages[avatarName]
     }
 }
 
