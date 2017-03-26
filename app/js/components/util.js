@@ -168,7 +168,7 @@ class UtilService {
         return Number((d/1.6093).toFixed(1));
     }
 
-    static getCategoryImage(catSlug) {
+    static getCategoryButton(catSlug) {
         return categoryButtons[catSlug];
     }
 

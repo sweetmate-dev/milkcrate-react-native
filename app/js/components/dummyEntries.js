@@ -1,36 +1,3 @@
-export const ChallengeCarouselEntries = [
-  {
-    title: 'Weekly Challenge 1',
-    subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 10,
-  },
-  {
-    title: 'Weekly Challenge 2',
-    subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 11,
-  },
-  {
-    title: 'Weekly Challenge 3',
-    subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 12,
-  },
-  {
-    title: 'Weekly Challenge 4',
-    subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 13,
-  },
-  {
-    title: 'Weekly Challenge 5',
-    subtitle: 'Take public transit to work today',
-    avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 14,
-  },
-];
-
 export const LeaderboardEntries = [
   {
     name: 'Ashley S.',
@@ -77,6 +44,229 @@ export const LeaderboardEntries = [
 
 ];
 
+
+export const ProfileRecentActivityEntries = [
+  {
+    title: 'Elixr Coffee Roasters',
+    description: 'Great Coffee, Great People, Great Service',
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
+    distance: 1.2,
+    price: 10,
+    coins: 10,
+    hearts: 0,
+    likeByMe: false,
+  },
+  {
+    title: 'Elixr Coffee Roasters',
+    description: 'Great Coffee, Great People, Great Service Great Coffee, Great People, Great Service',
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
+    distance: 1.2,
+    price: 11,
+    coins: 11,
+    hearts: 1,
+    likeByMe: false,
+  },
+  {
+    title: 'Elixr Coffee Roasters',
+    description: 'Great Coffee, Great People, Great Service',
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
+    distance: 1.2,
+    price: 12,
+    coins: 12,
+    hearts: 3,
+    likeByMe: true,
+  },
+  {
+    title: 'Elixr Coffee Roasters',
+    description: 'Great Coffee, Great People, Great Service',
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
+    distance: 1.2,
+    price: 13,
+    coins: 13,
+    hearts: 4,
+    likeByMe: false,
+  },
+  {
+    title: 'Elixr Coffee Roasters',
+    description: 'Great Coffee, Great People, Great Service',
+    icon: require('../../assets/imgs/category-stickers/coffee.png'),
+    distance: 1.2,
+    price: 14,
+    coins: 14,
+    hearts: 5,
+    likeByMe: true,
+  },
+];
+
+
+export const BusinessRecentActivityEntries = [
+  {
+    name: 'Tony S.',
+    time: 1,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 0,
+    rating: 5,
+  },
+  {
+    name: 'Tony S.',
+    time: 6,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 1,
+    rating: 4,
+  },
+  {
+    name: 'Tony S.',
+    time: 7,
+    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
+    avatar: require('../../assets/imgs/avatar.png'),
+    hearts: 2,
+    rating: 4.8,
+  },
+];
+
+
+export const WeeklyRecapEntries = [
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
+    time: 2,
+    coins: 10,
+  },
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
+    time: 2,
+    coins: 11,
+  },
+  {
+    title: 'Volunteer for the Bicycle Coalition',
+    date: 'Tuesday, March 7, 2017',
+    icon: require('../../assets/imgs/category-icons/bicycles.png'),
+    time: 2,
+    coins: 12,
+  },
+
+];
+
+
+export const EventsEntries = [
+  {
+    date: 'Wednesday, Mar 15 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 1,
+      },
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 2,
+      },
+
+    ],
+  },
+  {
+    date: 'Friday, Mar 17 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 4,
+      },
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 5,
+      },
+
+    ],
+  },
+  {
+    date: 'Sunday, Mar 19 2017',
+    events: [
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 6,
+      },
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 7,
+      },
+      {
+        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        title: 'Volunteer for the Bicycle Coalition',
+        coins: 8,
+      },
+    ],
+  },
+];
+
+
+export const AlertEntries = [
+  {
+    name: 'MilkCrate',
+    time: 1,
+    description: 'New session beginning tomorrow, account for all your points today',
+    avatar: require('../../assets/imgs/avatar.png'),
+  },
+  {
+    name: 'MilkCrate',
+    time: 2,
+    description: 'Session 1 Winner!! Congrats to Melissa P. and everyone who participated these past months.',
+    avatar: require('../../assets/imgs/avatar.png'),
+  },
+  {
+    name: 'Jennifer S.',
+    time: 3,
+    description: 'Liked your activity.',
+    avatar: require('../../assets/imgs/avatar.png'),
+  },
+];
+
+
+/*
+export const ChallengeCarouselEntries = [
+  {
+    title: 'Weekly Challenge 1',
+    subtitle: 'Take public transit to work today',
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
+    coins: 10,
+  },
+  {
+    title: 'Weekly Challenge 2',
+    subtitle: 'Take public transit to work today',
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
+    coins: 11,
+  },
+  {
+    title: 'Weekly Challenge 3',
+    subtitle: 'Take public transit to work today',
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
+    coins: 12,
+  },
+  {
+    title: 'Weekly Challenge 4',
+    subtitle: 'Take public transit to work today',
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
+    coins: 13,
+  },
+  {
+    title: 'Weekly Challenge 5',
+    subtitle: 'Take public transit to work today',
+    avatar: require('../../assets/imgs/category-icons/transit.png'),
+    coins: 14,
+  },
+];
+*/
+
+/*
 export const TrendingCarouselEntries = [
   {
     title: 'Check In',
@@ -329,7 +519,9 @@ export const TrendingCarouselEntries = [
     coins: 15,
   },
 ];
+*/
 
+/*
 export const DailyPollEntries = [
   {
     label: 'I eat meat daily',
@@ -352,7 +544,9 @@ export const DailyPollEntries = [
     percent: 14,
   },
 ];
+//*/
 
+/*
 export const RecentActivityEntries = [
   {
     name: 'Tony S.',
@@ -400,83 +594,10 @@ export const RecentActivityEntries = [
     coins: 14,
   },
 ];
+//*/
 
-export const EventsEntries = [
-  {
-    date: 'Wednesday, Mar 15 2017',
-    events: [
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 1,
-      },
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 2,
-      },
 
-    ],
-  },
-  {
-    date: 'Friday, Mar 17 2017',
-    events: [
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 4,
-      },
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 5,
-      },
-
-    ],
-  },
-  {
-    date: 'Sunday, Mar 19 2017',
-    events: [
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 6,
-      },
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 7,
-      },
-      {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
-        title: 'Volunteer for the Bicycle Coalition',
-        coins: 8,
-      },
-    ],
-  },
-];
-
-export const AlertEntries = [
-  {
-    name: 'MilkCrate',
-    time: 1,
-    description: 'New session beginning tomorrow, account for all your points today',
-    avatar: require('../../assets/imgs/avatar.png'),
-  },
-  {
-    name: 'MilkCrate',
-    time: 2,
-    description: 'Session 1 Winner!! Congrats to Melissa P. and everyone who participated these past months.',
-    avatar: require('../../assets/imgs/avatar.png'),
-  },
-  {
-    name: 'Jennifer S.',
-    time: 3,
-    description: 'Liked your activity.',
-    avatar: require('../../assets/imgs/avatar.png'),
-  },
-];
-
+/*
 export const CategoryDetailEntries = [
   {
     title: 'Elixr Coffee Roasters',
@@ -559,108 +680,4 @@ export const CategoryDetailEntries = [
     rating: 4.7,
   },
 ];
-
-export const ProfileRecentActivityEntries = [
-  {
-    title: 'Elixr Coffee Roasters',
-    description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/category-stickers/coffee.png'),
-    distance: 1.2,
-    price: 10,
-    coins: 10,
-    hearts: 0,
-    likeByMe: false,
-  },
-  {
-    title: 'Elixr Coffee Roasters',
-    description: 'Great Coffee, Great People, Great Service Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/category-stickers/coffee.png'),
-    distance: 1.2,
-    price: 11,
-    coins: 11,
-    hearts: 1,
-    likeByMe: false,
-  },
-  {
-    title: 'Elixr Coffee Roasters',
-    description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/category-stickers/coffee.png'),
-    distance: 1.2,
-    price: 12,
-    coins: 12,
-    hearts: 3,
-    likeByMe: true,
-  },
-  {
-    title: 'Elixr Coffee Roasters',
-    description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/category-stickers/coffee.png'),
-    distance: 1.2,
-    price: 13,
-    coins: 13,
-    hearts: 4,
-    likeByMe: false,
-  },
-  {
-    title: 'Elixr Coffee Roasters',
-    description: 'Great Coffee, Great People, Great Service',
-    icon: require('../../assets/imgs/category-stickers/coffee.png'),
-    distance: 1.2,
-    price: 14,
-    coins: 14,
-    hearts: 5,
-    likeByMe: true,
-  },
-];
-
-export const BusinessRecentActivityEntries = [
-  {
-    name: 'Tony S.',
-    time: 1,
-    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
-    avatar: require('../../assets/imgs/avatar.png'),
-    hearts: 0,
-    rating: 5,
-  },
-  {
-    name: 'Tony S.',
-    time: 6,
-    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
-    avatar: require('../../assets/imgs/avatar.png'),
-    hearts: 1,
-    rating: 4,
-  },
-  {
-    name: 'Tony S.',
-    time: 7,
-    description: 'Don’t forget to try one of the well crafted lattes and grab a locally made biscotti.',
-    avatar: require('../../assets/imgs/avatar.png'),
-    hearts: 2,
-    rating: 4.8,
-  },
-];
-
-export const WeeklyRecapEntries = [
-  {
-    title: 'Volunteer for the Bicycle Coalition',
-    date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/category-icons/bicycles.png'),
-    time: 2,
-    coins: 10,
-  },
-  {
-    title: 'Volunteer for the Bicycle Coalition',
-    date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/category-icons/bicycles.png'),
-    time: 2,
-    coins: 11,
-  },
-  {
-    title: 'Volunteer for the Bicycle Coalition',
-    date: 'Tuesday, March 7, 2017',
-    icon: require('../../assets/imgs/category-icons/bicycles.png'),
-    time: 2,
-    coins: 12,
-  },
-
-];
+//*/

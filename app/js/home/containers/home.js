@@ -42,7 +42,7 @@ import UtilService from '../../components/util'
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
+//import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
 
 const trending = require('../../../assets/imgs/trending.png');
 
@@ -246,7 +246,7 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat ? UtilService.getCategoryImage(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
+          avatar={ cat ? UtilService.getCategoryIcon(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           points={ entry.activity.points ? Number(entry.activity.points) : 0 }
           link={ entry.activity.url }
         />

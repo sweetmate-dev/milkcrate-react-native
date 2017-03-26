@@ -124,7 +124,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.stickerImages[this.props.index] }
+        avatar={ commonStyles.categoryIcons[this.props.index] }
         coins={ rowData.points }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -135,7 +135,7 @@ class CategoryView extends Component {
     return (
       <BusinessesListCell
         title={ rowData.name }
-        icon={ commonStyles.stickerImages[this.props.index] }
+        icon={ commonStyles.categoryIcons[this.props.index] }
         description={ rowData.description }
         distance={ rowData._geoloc ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
@@ -150,7 +150,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.stickerImages[this.props.index] }
+        avatar={ commonStyles.categoryIcons[this.props.index] }
         coins={ rowData.points }
         onClick={ () => this.onPressedActionsCell(index) }
       />
@@ -161,7 +161,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.stickerImages[this.props.index] }
+        avatar={ commonStyles.categoryIcons[this.props.index] }
         coins={ rowData.points }
         onClick={ () => this.onPressedActionsCell(index) }
       />
@@ -172,7 +172,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.stickerImages[this.props.index] }
+        avatar={ commonStyles.categoryIcons[this.props.index] }
         coins={ Number(rowData.points) }
         onClick={ () => this.onPressedActionsCell(index) }
       />
@@ -193,7 +193,7 @@ class CategoryView extends Component {
             renderRow={ this.renderActionsListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }/>
         </View>
-      : 
+      :
         null
     );
   }
@@ -211,7 +211,7 @@ class CategoryView extends Component {
             renderRow={ this.renderBusinessesListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }/>
         </View>
-      : 
+      :
         null
     );
   }
@@ -249,7 +249,7 @@ class CategoryView extends Component {
             contentContainerStyle={ styles.listViewWrapper }/>
 
         </View>
-      : 
+      :
         null
     );
   }
@@ -302,14 +302,14 @@ export default connect(state => ({
   })
 )(CategoryView);
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   listViewWrapper: {
     borderStyle: 'solid',
     borderTopWidth: 1,
-    borderTopColor: commonColors.line,    
+    borderTopColor: commonColors.line,
   },
 
   sectionHeaderContainer: {
