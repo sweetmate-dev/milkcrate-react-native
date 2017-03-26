@@ -169,7 +169,7 @@ class BusinessesView extends Component {
           this.state.selectedIndex == 'List' ?
             <BusinessesListView businesses={ this.state.businesses } avatarImages={ this.state.avatarImages } currentLocation={ this.state.currentPosition }/>
             :
-            <BusinessesMapView avatar={ commonStyles.stickerImages[0] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
+            <BusinessesMapView avatar={ commonStyles.categoryIcons[0] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
         }
       </View>
     );

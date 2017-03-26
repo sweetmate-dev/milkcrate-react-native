@@ -30,7 +30,7 @@ export const NavBackButton = 1;
 export const NavFilterButton = 2;
 export const NavSettingButton = 4;
 
-
+/*
 export const stickerImages = [
   require('../../assets/imgs/category-stickers/animals.png'),
   require('../../assets/imgs/category-stickers/baby.png'),
@@ -59,6 +59,9 @@ export const stickerImages = [
   require('../../assets/imgs/category-stickers/transit.png'),
   require('../../assets/imgs/category-stickers/waste.png'),
 ];
+*/
+
+// XXX Kostas: Not crazy about this offset-based approach; slugs is more reliable.
 
 export const categoryIcons = [
   require('../../assets/imgs/category-icons/animals.png'),
