@@ -25,7 +25,7 @@ export default class WeeklyRecapListCell extends Component {
     date: PropTypes.string.isRequired,
     icon: PropTypes.number.isRequired,
     time: PropTypes.number,
-    coins: PropTypes.number,
+    points: PropTypes.number,
     onClick: PropTypes.func,
   }
 
@@ -53,7 +53,7 @@ export default class WeeklyRecapListCell extends Component {
       date,
       icon,
       time,
-      coins,
+      points,
       onClick,
     } = this.props;
 
@@ -63,9 +63,9 @@ export default class WeeklyRecapListCell extends Component {
           <Image style={ styles.imageIcon } source={ icon }/>
           <View style={ styles.mainContentContainer }>
             <Text style={ styles.textDescription }>{ date }</Text>
-            <Text style={ styles.textTitle }>{ title }</Text>            
+            <Text style={ styles.textTitle }>{ title }</Text>
           </View>
-          <Point point={ coins }/>
+          <Point point={ points }/>
         </View>
       </TouchableHighlight>
     );
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
     alignItems: 'center',
-  },  
+  },
   mainContentContainer: {
     flex: 1,
     paddingHorizontal: 10,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
     backgroundColor: 'transparent',
-  },  
+  },
   // imageCalendar: {
   //   width: 15,
   //   height: 16,

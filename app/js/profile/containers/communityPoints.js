@@ -72,7 +72,7 @@ class CommunityPoints extends Component {
         description= { rowData.description }
         distance={ rowData.distance }
         price={ rowData.price }
-        coins={ rowData.coins }
+        points={ rowData.points }
         onClick={ () => this.onPressedRecentActivityCell(rowID) }
       />
     );
@@ -94,7 +94,7 @@ class CommunityPoints extends Component {
         name={ rowData.name }
         points={ rowData.points }
         avatar={ rowData.avatar }
-        currentUserIndex={ currentUserIndex } 
+        currentUserIndex={ currentUserIndex }
       />
     );
   }
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
   },
   textSectionTitle: {
     color: commonColors.grayMoreText,

@@ -26,11 +26,11 @@ export default class TrendingCarousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     location: PropTypes.string,
-    category_avatar: PropTypes.number,
+    icon: PropTypes.number,
     users: PropTypes.array,
     time: PropTypes.number,
     hearts: PropTypes.number,
-    coins: PropTypes.number,
+    points: PropTypes.number,
   };
 
   getUsers(entries) {
@@ -58,7 +58,7 @@ export default class TrendingCarousel extends Component {
   }
 
   render () {
-    const { title, location, category_avatar, users, time, hearts, coins } = this.props;
+    const { title, location, icon, users, time, hearts, points } = this.props;
 
     return (
       <TouchableHighlight
@@ -81,7 +81,7 @@ export default class TrendingCarousel extends Component {
             </View>
           </View>
           <View style={ styles.centerContainer }>
-            <Image style={ styles.imageCategoryAvatar } source={ category_avatar }/>
+            <Image style={ styles.imageCategoryIcon } source={ icon }/>
           </View>
           <View style={ styles.bottomContainer }>
             <View style={ styles.avatarsMainContainer }>
@@ -101,7 +101,7 @@ export default class TrendingCarousel extends Component {
                 <Image style={ styles.imageLike } source={ heart }/>
                 <Text style={ styles.textSmall }> { hearts }</Text>
               </View>
-              <Point point={ coins }/>
+              <Point point={ points }/>
             </View>
           </View>
         </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderColor: commonColors.line,
     borderStyle: 'solid',
   },
-  imageCategoryAvatar: {
+  imageCategoryIcon: {
     width: 40,
     height: 40,
   },
@@ -251,5 +251,5 @@ const styles = StyleSheet.create({
   imageLike: {
     width: 16,
     height: 15,
-  },  
+  },
 });

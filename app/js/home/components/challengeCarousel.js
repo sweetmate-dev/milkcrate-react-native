@@ -20,12 +20,12 @@ export default class ChallengeCarousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     subtitle: PropTypes.string,
-    avatar: PropTypes.number,
+    icon: PropTypes.number,
     points: PropTypes.number,
   };
 
   render () {
-    const { title, subtitle, avatar, points } = this.props;
+    const { title, subtitle, icon, points } = this.props;
 
     return (
       <TouchableHighlight
@@ -39,7 +39,7 @@ export default class ChallengeCarousel extends Component {
             <Text style={ styles.textTitle }>{ title }</Text>
           </View>
           <View style={ styles.centerContainer }>
-            <Image style={ styles.avatar } source={ avatar } />
+            <Image style={ styles.icon } source={ icon } />
             <Text style={ styles.description }>{ subtitle } </Text>
           </View>
           <View style={ styles.bottomContainer }>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: 'center',
   },
-  avatar: {
+  icon: {
     width: 44,
     height: 44,
   },

@@ -16,13 +16,13 @@ export default class EventsListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    avatar: PropTypes.number,
-    coins: PropTypes.number,
+    icon: PropTypes.number,
+    points: PropTypes.number,
     onClick: PropTypes.func,
   }
 
   static defaultProps = {
-    coins: 0,
+    points: 0,
     onClick: () => {}
   }
 
@@ -42,8 +42,8 @@ export default class EventsListCell extends Component {
   render() {
     const {
       title,
-      avatar,
-      coins,
+      icon,
+      points,
       onClick,
     } = this.props;
 
@@ -51,10 +51,10 @@ export default class EventsListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.mainContainer }>
-            <Image style={ styles.avatar } source={ avatar }/>
+            <Image style={ styles.icon } source={ icon }/>
             <Text style={ styles.textTitle }>{ title }</Text>
           </View>
-          <Point point={ coins }/>
+          <Point point={ points }/>
         </View>
       </TouchableHighlight>
     );
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 10,
   },
-  avatar: {
+  icon: {
     width: 40,
     height: 40,
   },

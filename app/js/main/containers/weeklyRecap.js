@@ -84,7 +84,7 @@ export default class WeeklyRecap extends Component {
         date={ rowData.date }
         icon={ rowData.icon }
         time={ rowData.time }
-        coins={ rowData.coins }
+        points={ rowData.points }
         onClick={ () => this.onWeelyRecapCellPressed(rowID) }
       />
     );

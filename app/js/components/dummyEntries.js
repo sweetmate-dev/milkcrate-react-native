@@ -52,7 +52,7 @@ export const ProfileRecentActivityEntries = [
     icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 10,
-    coins: 10,
+    points: 10,
     hearts: 0,
     likeByMe: false,
   },
@@ -62,7 +62,7 @@ export const ProfileRecentActivityEntries = [
     icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 11,
-    coins: 11,
+    points: 11,
     hearts: 1,
     likeByMe: false,
   },
@@ -72,7 +72,7 @@ export const ProfileRecentActivityEntries = [
     icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 12,
-    coins: 12,
+    points: 12,
     hearts: 3,
     likeByMe: true,
   },
@@ -82,7 +82,7 @@ export const ProfileRecentActivityEntries = [
     icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 13,
-    coins: 13,
+    points: 13,
     hearts: 4,
     likeByMe: false,
   },
@@ -92,7 +92,7 @@ export const ProfileRecentActivityEntries = [
     icon: require('../../assets/imgs/category-stickers/coffee.png'),
     distance: 1.2,
     price: 14,
-    coins: 14,
+    points: 14,
     hearts: 5,
     likeByMe: true,
   },
@@ -133,21 +133,21 @@ export const WeeklyRecapEntries = [
     date: 'Tuesday, March 7, 2017',
     icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
-    coins: 10,
+    points: 10,
   },
   {
     title: 'Volunteer for the Bicycle Coalition',
     date: 'Tuesday, March 7, 2017',
     icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
-    coins: 11,
+    points: 11,
   },
   {
     title: 'Volunteer for the Bicycle Coalition',
     date: 'Tuesday, March 7, 2017',
     icon: require('../../assets/imgs/category-icons/bicycles.png'),
     time: 2,
-    coins: 12,
+    points: 12,
   },
 
 ];
@@ -158,14 +158,14 @@ export const EventsEntries = [
     date: 'Wednesday, Mar 15 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 1,
+        points: 1,
       },
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 2,
+        points: 2,
       },
 
     ],
@@ -174,14 +174,14 @@ export const EventsEntries = [
     date: 'Friday, Mar 17 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 4,
+        points: 4,
       },
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 5,
+        points: 5,
       },
 
     ],
@@ -190,19 +190,19 @@ export const EventsEntries = [
     date: 'Sunday, Mar 19 2017',
     events: [
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 6,
+        points: 6,
       },
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 7,
+        points: 7,
       },
       {
-        avatar: require('../../assets/imgs/category-icons/bicycles.png'),
+        icon: require('../../assets/imgs/category-icons/bicycles.png'),
         title: 'Volunteer for the Bicycle Coalition',
-        coins: 8,
+        points: 8,
       },
     ],
   },
@@ -237,31 +237,31 @@ export const ChallengeCarouselEntries = [
     title: 'Weekly Challenge 1',
     subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 10,
+    points: 10,
   },
   {
     title: 'Weekly Challenge 2',
     subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 11,
+    points: 11,
   },
   {
     title: 'Weekly Challenge 3',
     subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 12,
+    points: 12,
   },
   {
     title: 'Weekly Challenge 4',
     subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 13,
+    points: 13,
   },
   {
     title: 'Weekly Challenge 5',
     subtitle: 'Take public transit to work today',
     avatar: require('../../assets/imgs/category-icons/transit.png'),
-    coins: 14,
+    points: 14,
   },
 ];
 */
@@ -316,7 +316,7 @@ export const TrendingCarouselEntries = [
     ],
     time: 1,
     hearts : 21,
-    coins: 11,
+    points: 11,
   },
   {
     title: 'Check In',
@@ -366,7 +366,7 @@ export const TrendingCarouselEntries = [
     ],
     time: 2,
     hearts : 22,
-    coins: 12,
+    points: 12,
   },
   {
     title: 'Check In',
@@ -416,7 +416,7 @@ export const TrendingCarouselEntries = [
     ],
     time: 3,
     hearts : 23,
-    coins: 13,
+    points: 13,
   },
   {
     title: 'Check In',
@@ -466,7 +466,7 @@ export const TrendingCarouselEntries = [
     ],
     time: 4,
     hearts : 24,
-    coins: 14,
+    points: 14,
   },
   {
     title: 'Check In',
@@ -516,7 +516,7 @@ export const TrendingCarouselEntries = [
     ],
     time: 5,
     hearts : 25,
-    coins: 15,
+    points: 15,
   },
 ];
 */
@@ -555,7 +555,7 @@ export const RecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 0,
     likeByMe: false,
-    coins: 10,
+    points: 10,
   },
   {
     name: 'Tony S.',
@@ -564,7 +564,7 @@ export const RecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 1,
     likeByMe: false,
-    coins: 11,
+    points: 11,
   },
   {
     name: 'Tony S.',
@@ -573,7 +573,7 @@ export const RecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 2,
     likeByMe: true,
-    coins: 12,
+    points: 12,
   },
   {
     name: 'Tony S.',
@@ -582,7 +582,7 @@ export const RecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 3,
     likeByMe: true,
-    coins: 13,
+    points: 13,
   },
   {
     name: 'Tony S.',
@@ -591,7 +591,7 @@ export const RecentActivityEntries = [
     avatar: require('../../assets/imgs/avatar.png'),
     hearts: 4,
     likeByMe: false,
-    coins: 14,
+    points: 14,
   },
 ];
 //*/

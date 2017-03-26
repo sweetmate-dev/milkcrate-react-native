@@ -116,8 +116,8 @@ class ActionView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ this.state.avatarImages[rowID] }
-        coins={ rowData.points }
+        icon={ this.state.avatarImages[rowID] }
+        points={ rowData.points }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );

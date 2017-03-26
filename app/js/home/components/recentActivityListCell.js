@@ -44,7 +44,7 @@ export default class RecentActivityListCell extends Component {
     var image;
     if (this.props.likeByMe === true)
       image = imageRedHeart;
-    else 
+    else
       image = imageHeart;
 
     this.state = {
@@ -76,11 +76,11 @@ export default class RecentActivityListCell extends Component {
       avatar,
       time,
       hearts,
-      coins,
+      points,
       likeByMe,
       onClick,
     } = this.props;
-    
+
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
@@ -94,7 +94,7 @@ export default class RecentActivityListCell extends Component {
                 <Text style={ styles.textName }>{ name }</Text>
                 <Text style={ styles.textSmall }>{ time }</Text>
               </View>
-              <Point point={ coins }/>
+              <Point point={ points }/>
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.bottomContainer }>
@@ -200,5 +200,5 @@ const styles = StyleSheet.create({
   imageLike: {
     width: 16,
     height: 15,
-  },  
+  },
 });

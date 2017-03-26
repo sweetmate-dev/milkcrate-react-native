@@ -13,8 +13,8 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
-//added by li
 import bendService from './bend/bendService'
+
 import * as reducers from './reducers';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);

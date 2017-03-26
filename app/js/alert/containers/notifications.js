@@ -97,4 +97,3 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
   },
 });
-

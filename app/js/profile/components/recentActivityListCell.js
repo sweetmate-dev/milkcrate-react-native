@@ -24,7 +24,7 @@ export default class RecentActivityListCell extends Component {
     description: PropTypes.string.isRequired,
     distance: PropTypes.number,
     price: PropTypes.number,
-    coins: PropTypes.number,
+    points: PropTypes.number,
     onClick: PropTypes.func,
     mode: PropTypes.number,
     likeByMe: PropTypes.bool,
@@ -33,7 +33,7 @@ export default class RecentActivityListCell extends Component {
 
   static defaultProps = {
     mode: 0,
-    coins: 0,
+    points: 0,
     distance: 1,
     price: 0,
     likeByMe: false,
@@ -47,7 +47,7 @@ export default class RecentActivityListCell extends Component {
     var image;
     if (this.props.likeByMe === true)
       image = imageRedHeart;
-    else 
+    else
       image = imageHeart;
 
     this.state = {
@@ -79,7 +79,7 @@ export default class RecentActivityListCell extends Component {
       description,
       distance,
       price,
-      coins,
+      points,
       onClick,
       mode,
     } = this.props;
@@ -124,7 +124,7 @@ export default class RecentActivityListCell extends Component {
             </View>
           </View>
           <View style={ styles.rightCoinContainer }>
-            <Point point={ coins }/>
+            <Point point={ points }/>
           </View>
         </View>
       </TouchableHighlight>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-  },  
+  },
   avatar: {
     width: 44,
     height: 44,
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   imageLike: {
     width: 16,
     height: 15,
-  },  
+  },
   textSmall: {
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',

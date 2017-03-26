@@ -124,8 +124,8 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.categoryIcons[this.props.index] }
-        coins={ rowData.points }
+        icon={ commonStyles.categoryIcons[this.props.index] }
+        points={ rowData.points }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
@@ -150,8 +150,8 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.categoryIcons[this.props.index] }
-        coins={ rowData.points }
+        icon={ commonStyles.categoryIcons[this.props.index] }
+        points={ rowData.points }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );
@@ -161,8 +161,8 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.categoryIcons[this.props.index] }
-        coins={ rowData.points }
+        icon={ commonStyles.categoryIcons[this.props.index] }
+        points={ rowData.points }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );
@@ -172,8 +172,8 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        avatar={ commonStyles.categoryIcons[this.props.index] }
-        coins={ Number(rowData.points) }
+        icon={ commonStyles.categoryIcons[this.props.index] }
+        points={ Number(rowData.points) }
         onClick={ () => this.onPressedActionsCell(index) }
       />
     );

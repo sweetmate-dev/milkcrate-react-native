@@ -195,7 +195,7 @@ class Home extends Component {
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount||0) }
         likeByMe={ rowData.likedByMe||false }
-        coins={ Number(rowData.points||0) }
+        points={ Number(rowData.points||0) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
         onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
         }
@@ -246,7 +246,7 @@ class Home extends Component {
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          avatar={ cat ? UtilService.getCategoryIcon(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
+          icon={ UtilService.getCategoryIcon(cat) }
           points={ entry.activity.points ? Number(entry.activity.points) : 0 }
           link={ entry.activity.url }
         />
@@ -267,11 +267,11 @@ class Home extends Component {
           title='CHECK IN'
           activityType='business'
           location={ entry.name }
-          category_avatar={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
+          icon={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           time={ entry._bmd.createdAt }
           hearts={ Number(entry.likeCount||0) }
-          coins={ Number(entry.points||0)}
+          points={ Number(entry.points||0)}
         />
       );
     });
