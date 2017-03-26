@@ -44,61 +44,23 @@ class BusinessesView extends Component {
       selectedIndex: 'List',
       currentPosition: null,
       businesses: [],
-      avatarImages: [],
+      categoryIcons: [],
+
+      businessesQuery:{
+        offset: 0,
+        limit: 20,
+        more: true,
+        loading: false,
+      },
     };
 
-    this.avatarImages = [];
+    this.categoryIcons = [];
     this.businesses = [];
   }
 
   componentDidMount() {
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentPosition: position })
-
-        bendService.searchActivity({
-          type:'business',
-          offset: 0,
-          limit: 20,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result)=>{
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-          console.log("business view search result", result.data.business)
-          this.businesses = result.data.business;
-          this.businesses.map( (business, index) => {
-            if (business.categories && business.categories.length > 0) {
-              bendService.getCategory(business.categories[0], (error, result)=>{
-
-                if (error){
-                  console.log(error);
-                  return
-                }
-                console.log(result.slug);
-                this.avatarImages[index] = UtilService.getCategoryIcon(result.slug);
-
-                if (this.businesses.length == this.avatarImages.length ) {
-                  this.setState({
-                    businesses: this.businesses,
-                    avatarImages: this.avatarImages,
-                 });
-                }
-              })
-            }
-          });
-
-        })
-      },
-      (error) => {
-        console.log(JSON.stringify(error));
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    this.loadBusinesses();
   }
 
   componentWillReceiveProps(newProps) {
@@ -123,6 +85,78 @@ class BusinessesView extends Component {
   onCurrentLocation() {
     navigator.geolocation.getCurrentPosition( (position) => {
         this.setState({ currentPosition: position });
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+  }
+
+  loadBusinesses() {
+
+    if (this.state.businessesQuery.more === false)
+      return;
+
+    this.setState( (state) => {  
+      state.businessesQuery.loading = true;
+      return state;
+    });
+
+    navigator.geolocation.getCurrentPosition( (position) => {
+
+        this.setState({ currentPosition: position })
+
+        bendService.searchActivity({
+          type:'business',
+          offset: this.state.businessesQuery.offset,
+          limit: this.state.businessesQuery.limit,
+          lat: position.coords.latitude,
+          long: position.coords.longitude
+        }, (error, result)=>{
+
+          this.setState( (state) => {  
+            state.businessesQuery.loading = false;
+            return state;
+          });
+
+          if (error) {
+            console.log("search failed", error)
+            return
+          }
+
+          let moreBusinesses = true;
+          if (result.data.business.length < this.state.businessesQuery.limit) {
+            moreBusinesses = false;
+          }
+
+          const imageOffset = this.state.businessesQuery.offset;
+          this.businesses = this.businesses.concat(result.data.business);
+
+          this.setState( (state) => {
+            state.businesses = this.businesses;
+            state.businessesQuery.offset += this.state.businessesQuery.limit;
+            state.businessesQuery.more = moreBusinesses;
+            return state;
+          })
+
+          result.data.business.map( (business, index) => {
+            if (business.categories && business.categories.length > 0) {
+              bendService.getCategory(business.categories[0], (error, result)=>{
+
+                if (error){
+                  console.log(error);
+                  return
+                }
+
+                this.setState( (state) => {
+                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(result.slug);;
+                  return state;
+                })
+              })
+            }
+          });
+        })
       },
       (error) => {
         console.log(JSON.stringify(error));
@@ -165,11 +199,21 @@ class BusinessesView extends Component {
           </View>
         </View>*/}
         {
-
           this.state.selectedIndex == 'List' ?
-            <BusinessesListView businesses={ this.state.businesses } avatarImages={ this.state.avatarImages } currentLocation={ this.state.currentPosition }/>
+            <BusinessesListView 
+              businesses={ this.state.businesses } 
+              categoryIcons={ this.state.categoryIcons } 
+              currentLocation={ this.state.currentPosition } 
+              moreBusinesses={ this.state.businessesQuery.more }
+              loading={ this.state.businessesQuery.loading }
+              onLoadBusinesses={ () => this.loadBusinesses() }
+            />
             :
-            <BusinessesMapView avatar={ commonStyles.categoryIcons[0] } businesses={ this.state.businesses } currentLocation={ this.state.currentPosition } />
+            <BusinessesMapView 
+              categoryIcon={ commonStyles.categoryIcons[0] } 
+              businesses={ this.state.businesses } 
+              currentLocation={ this.state.currentPosition } 
+            />
         }
       </View>
     );

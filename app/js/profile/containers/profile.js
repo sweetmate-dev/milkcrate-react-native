@@ -22,6 +22,7 @@ import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
 
@@ -38,10 +39,11 @@ class Profile extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       dataSourceRecentActivity: this.dataSource.cloneWithRows([]),
-      acitivtyQuery:{
+      activityQuery:{
         createdAt: 0,
-        limit: 25,
-        more: true
+        limit: 20,
+        more: true,
+        loading: false,
       },
       currentLocation:null,
       categories:[],
@@ -85,33 +87,45 @@ class Profile extends Component {
   }
 
   loadRecentActivities() {
-    if(this.state.acitivtyQuery.more) {
-      bendService.getMyRecentActivities(this.state.acitivtyQuery.createdAt, this.state.acitivtyQuery.limit + 1, (error, result) => {
 
-        if (error) {
-          console.log(error);
-          return;
-        }
-        console.log("recent activities", result)
-        this.state.acitivtyQuery.more = (result.length == this.state.acitivtyQuery.limit + 1)
-        if(this.state.acitivtyQuery.more) {
-          //remove tail item
-          result.pop()
-        }
+    if ( this.state.activityQuery.more === false ) 
+      return;
+    
+    this.setState( (state) => {  
+      state.activityQuery.loading = true;
+      return state;
+    });
+    
+    bendService.getMyRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
 
-        if(result.length > 0) {
-          this.state.recentActivities = this.state.recentActivities.concat(result)
-          this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
-          this.setState({
-            recentActivities:this.state.recentActivities
-          })
-        }
+      this.setState( (state) => {  
+        state.activityQuery.loading = false;
+        return state;
+      });
 
+      if (error) {
+        console.log(error);
+        return;
+      }
+      console.log("recent activities", result)
+      this.state.activityQuery.more = (result.length == this.state.activityQuery.limit + 1)
+      if(this.state.activityQuery.more) {
+        //remove tail item
+        result.pop()
+      }
+
+      if(result.length > 0) {
+        this.state.recentActivities = this.state.recentActivities.concat(result)
+        this.state.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
-          acitivtyQuery:this.state.acitivtyQuery
+          recentActivities:this.state.recentActivities
         })
+      }
+
+      this.setState({
+        activityQuery:this.state.activityQuery
       })
-    }
+    })
   }
 
   onPressedRecentActivityCell(rowID) {
@@ -211,11 +225,11 @@ class Profile extends Component {
                 dataSource={ this.dataSource.cloneWithRows(this.state.recentActivities) }
                 renderRow={ this.renderRow.bind(this) }/>
           </View>
-          {this.state.acitivtyQuery.more && <View style={ styles.loadMoreButtonWrapper }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.loadRecentActivities() }>
-              <Text style={ styles.textReadMoreButton }>Load More</Text>
-            </TouchableOpacity>
-          </View>}
+          <LoadMoreSpinner
+            show={ this.state.activityQuery.more }
+            loading={ this.state.activityQuery.loading }
+            onClick={ ()=> this.loadRecentActivities() }
+          />
         </ScrollView>
       </View>
     );
@@ -299,23 +313,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 5,
   },
-  loadMoreButtonWrapper: {
-    flex: 1,
-    paddingTop: 5,
-    paddingBottom:5,
-    justifyContent: 'center',
-    alignItems:'center'
-  },
   textButton: {
     color: '#fff',
     fontFamily: 'Open Sans',
     fontSize: 14,
     fontWeight: 'bold',
-  },
-  textReadMoreButton: {
-    color: commonColors.title,
-    fontFamily: 'Open Sans',
-    fontSize: 14,
-    backgroundColor: 'transparent',
-  },
+  },  
 });

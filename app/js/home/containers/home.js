@@ -33,6 +33,7 @@ import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 //added by li, 2017/03/22
 import bendService from '../../bend/bendService'
@@ -71,10 +72,11 @@ class Home extends Component {
         answers: [],
         myAnswer: null,
       },
-      acitivtyQuery:{
+      activityQuery:{
         createdAt: 0,
-        limit: 25,
-        more: true
+        limit: 20,
+        more: true,
+        loading: false,
       }
     };
 
@@ -156,36 +158,48 @@ class Home extends Component {
   }
 
   loadRecentActivities() {
-    if(this.state.acitivtyQuery.more) {
-      bendService.getRecentActivities(this.state.acitivtyQuery.createdAt, this.state.acitivtyQuery.limit + 1, (error, result) => {
 
-        if (error) {
-          console.log(error);
-          return;
-        }
-        console.log("recent activities", result)
-        this.state.acitivtyQuery.more = (result.length == this.state.acitivtyQuery.limit + 1)
-        if(this.state.acitivtyQuery.more) {
-          //remove tail item
-          result.pop()
-        }
+    if ( this.state.activityQuery.more === false ) 
+      return;
+    
+    this.setState( (state) => {  
+      state.activityQuery.loading = true;
+      return state;
+    });
+    
+    bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
 
-        if(result.length > 0) {
-          this.state.recentActivities = this.state.recentActivities.concat(result)
-          this.state.acitivtyQuery.createdAt = result[result.length - 1]._bmd.createdAt
-          this.setState({
-            recentActivities:this.state.recentActivities
-          })
-        }
+      this.setState( (state) => {  
+        state.activityQuery.loading = false;
+        return state;
+      });
 
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      this.state.activityQuery.more = (result.length == this.state.activityQuery.limit + 1)
+      if(this.state.activityQuery.more) {
+        //remove tail item
+        result.pop()
+      }
+
+      if(result.length > 0) {
+        this.state.recentActivities = this.state.recentActivities.concat(result)
+        this.state.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
-          acitivtyQuery:this.state.acitivtyQuery
+          recentActivities:this.state.recentActivities
         })
+      }
+
+      this.setState({
+        activityQuery:this.state.activityQuery
       })
-    }
+    })
   }
 
-  renderrorecentActivityRow(rowData, sectionID, rowID) {
+  renderRecentActivityRow(rowData, sectionID, rowID) {
 
     return (
       <RecentActivityListCell
@@ -493,13 +507,13 @@ class Home extends Component {
           <ListView
               enableEmptySections={ true }
               dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
-              renderRow={ this.renderrorecentActivityRow.bind(this) }/>
+              renderRow={ this.renderRecentActivityRow.bind(this) }/>
         </View>
-        {this.state.acitivtyQuery.more && <View style={ styles.loadMoreButtonWrapper }>
-          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.loadRecentActivities() }>
-            <Text style={ styles.textReadMoreButton }>Load More</Text>
-          </TouchableOpacity>
-        </View>}
+        <LoadMoreSpinner
+          show={ this.state.activityQuery.more }
+          loading={ this.state.activityQuery.loading }
+          onClick={ ()=> this.loadRecentActivities() }
+        />
       </View>
     );
   }
@@ -618,13 +632,6 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     flex: 1,
     paddingTop: 8,
-  },
-  loadMoreButtonWrapper: {
-    flex: 1,
-    paddingTop: 5,
-    paddingBottom:5,
-    justifyContent: 'center',
-    alignItems:'center'
   },
   textReadMoreButton: {
     color: commonColors.title,

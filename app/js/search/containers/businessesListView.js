@@ -11,6 +11,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TouchableHighlight,
+  ScrollView,
   Alert,
 } from 'react-native';
 
@@ -24,6 +25,7 @@ import BusinessesListCell from '../components/businessesListCell';
 import UtilService from '../../components/util'
 
 import * as commonColors from '../../styles/commonColors';
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 class BusinessesListView extends Component {
   constructor(props) {
@@ -51,14 +53,14 @@ class BusinessesListView extends Component {
 
   renderRow(rowData, sectionID, rowID) {
     
-    const avatar = this.props.avatarImages[rowID];
+    const caetgoriIcon = this.props.categoryIcons[rowID];
 
-    // console.log ('business images : ', avatar)
+    // console.log ('business images : ', caetgoriIcon)
 
     return (
       <BusinessesListCell
         title={ rowData.name }
-        icon={ avatar }
+        icon={ caetgoriIcon }
         description={ rowData.description }
         distance={ rowData._geoloc&&this.props.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
@@ -70,16 +72,29 @@ class BusinessesListView extends Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { 
+      status,
+      businesses,
+      onLoadBusinesses,
+      moreBusinesses,
+      loading,
+    } = this.props;
 
-    console.log ('business images length : ', this.props.avatarImages);
+    console.log ('business images length : ', this.props.categoryIcons);
 
     return (
-      <ListView
-        enableEmptySections={ true }
-        dataSource={ this.dataSource.cloneWithRows(this.props.businesses) }
-        renderRow={ this.renderRow.bind(this) }
-        contentContainerStyle={ styles.categoryDetailListView }/>
+      <ScrollView>
+        <ListView
+          enableEmptySections={ true }
+          dataSource={ this.dataSource.cloneWithRows(businesses) }
+          renderRow={ this.renderRow.bind(this) }
+          contentContainerStyle={ styles.categoryDetailListView }/>
+        <LoadMoreSpinner
+          show={ moreBusinesses }
+          loading={ loading }
+          onClick={ ()=> onLoadBusinesses() }
+        />
+      </ScrollView>
     );
   }
 }
@@ -92,7 +107,7 @@ export default connect(state => ({
   })
 )(BusinessesListView);
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
   categoryDetailListView: {
     borderStyle: 'solid',
     borderTopWidth: 1,

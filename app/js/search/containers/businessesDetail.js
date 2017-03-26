@@ -34,7 +34,7 @@ const star = require('../../../assets/imgs/star.png');
 const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
-const avatar = require('../../../assets/imgs/avatar.png');
+const categoryImage = require('../../../assets/imgs/avatar.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE = 37.78825;
@@ -177,7 +177,7 @@ class BusinessesDetail extends Component {
       <BusinessRecentActivityListCell
         name={ rowData.name }
         description={ rowData.description }
-        avatar={ rowData.avatar }
+        categoryIcon={ rowData.categoryIcon }
         time={ rowData.time }
         hearts={ rowData.hearts }
         rating={ rowData.rating }
@@ -286,7 +286,7 @@ class BusinessesDetail extends Component {
               </TouchableOpacity>
             </View>
             <View style={ styles.certificationsCheckContainer }>
-              <Image style={ styles.imageAvatar } source={ avatar } />
+              <Image style={ styles.imageCategory } source={ categoryImage } />
               <View style={ styles.certificationsCheckSubContainer }>
                 <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
                 <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
@@ -304,7 +304,7 @@ class BusinessesDetail extends Component {
             </View>
           </View>
           <View style={ styles.ratingMainContainer }>
-            <Image style={ styles.imageAvatar } source={ avatar } />
+            <Image style={ styles.imageCategory } source={ categoryImage } />
             <View style={ styles.rating_commentContentContainer }>
               <View style={ styles.ratingContentContainer }>
                 <Text style={ styles.textSectionTitle }>Tap stars to rate</Text>
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
-  imageAvatar: {
+  imageCategory: {
     width: 32,
     height: 32,
     borderRadius: 3,

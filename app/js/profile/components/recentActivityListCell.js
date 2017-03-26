@@ -83,8 +83,8 @@ export default class RecentActivityListCell extends Component {
         <View style={ styles.mainContainer }>
           <View style={ styles.leftContainer }>
             <View style={ styles.cellTopContainer }>
-              <View style={ styles.avatarContainer }>
-                <Image style={ styles.avatar } source={ icon } />
+              <View style={ styles.categoryImageWrapper }>
+                <Image style={ styles.imageCategory } source={ icon } />
               </View>
               <View style={ styles.cellTopTextContainer }>
                 <View style={ styles.cellTopTitleCoinContainer }>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   cellTopContainer: {
     flexDirection: 'row',
   },
-  avatarContainer: {
+  categoryImageWrapper: {
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  avatar: {
+  imageCategory: {
     width: 44,
     height: 44,
   },

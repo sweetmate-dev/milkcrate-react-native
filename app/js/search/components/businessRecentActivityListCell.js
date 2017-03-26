@@ -23,7 +23,7 @@ export default class BusinessRecentActivityListCell extends Component {
     width: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    avatar: PropTypes.number.isRequired,
+    categoryIcon: PropTypes.number.isRequired,
     time: PropTypes.number,
     heart: PropTypes.number,
     rating: PropTypes.number,
@@ -59,7 +59,7 @@ export default class BusinessRecentActivityListCell extends Component {
       width,
       name,
       description,
-      avatar,
+      categoryIcon,
       time,
       hearts,
       rating,
@@ -69,8 +69,8 @@ export default class BusinessRecentActivityListCell extends Component {
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
-          <View style={ styles.avatarsContainer }>
-            <Image style={ styles.avatar } source={ avatar }/>
+          <View style={ styles.categoryIconWrapper }>
+            <Image style={ styles.imageCategory } source={ categoryIcon }/>
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.contentTopContainer }>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
   },
-  avatarContainer: {
+  categoryIconWrapper: {
     paddingVertical: 5,
   },
   mainContentContainer: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  avatar: {
+  imageCategory: {
     width: 32,
     height: 32,
     borderRadius: 2,

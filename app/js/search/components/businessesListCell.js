@@ -68,7 +68,7 @@ export default class BusinessesListCell extends Component {
       >
         <View style={ mode == 0 ? styles.cellContainer : styles.detailContainer }>
           <View style={ styles.cellTopContainer }>
-            <Image style={ styles.avatar } source={ icon } />
+            <Image style={ styles.imageCategory } source={ icon } />
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  avatar: {
+  imageCategory: {
     width: 44,
     height: 44,
   },

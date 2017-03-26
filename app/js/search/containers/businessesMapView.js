@@ -101,7 +101,7 @@ class BusinessesMapView extends Component {
   }
 
   render() {
-    const { status, businesses, avatar, currentLocation } = this.props;
+    const { status, businesses, categoryIcon, currentLocation } = this.props;
     let region = this.state.region;
 
     if (currentLocation != null) {
@@ -145,7 +145,7 @@ class BusinessesMapView extends Component {
           <BusinessesListCell
             width={ screenWidth - 20}
             title={ businesses[this.state.tappedPin].name }
-            icon={ avatar }
+            icon={ categoryIcon }
             description={ businesses[this.state.tappedPin].description }
             distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[0], businesses[this.state.tappedPin]._geoloc[1],
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }

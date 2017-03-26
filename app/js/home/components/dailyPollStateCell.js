@@ -44,8 +44,8 @@ export default class DailyPollStateCell extends Component {
         <View style={ [styles.cellBackgroundContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }] }>
           <View style = { [styles.cellPercentContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }, { width: screenWidth / 100 * percent }] }/>
           <View style= { styles.cellContainer }>
-            <Text style={ styles.textPercent_Select }>{ percent }%</Text>
-            <Text style={ selected == true ? styles.textPercent_Select : styles.textDescription }>{ description }</Text>
+            <Text style={ styles.textPercent }>{ percent }%</Text>
+            <Text style={ selected == true ? styles.textSelectDescription : styles.textDescription }>{ description }</Text>
           </View>
         </View>  
       </View>  
@@ -69,7 +69,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingRight: 10,
   },
-  textPercent_Select: {
+  textSelectDescription: {
+    flex: 5,
+    color: commonColors.title,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    textAlign: 'left',
+    paddingRight: 10,
+  },
+  textPercent: {
     flex: 1,
     color: commonColors.title,
     fontFamily: 'OpenSans-Semibold',

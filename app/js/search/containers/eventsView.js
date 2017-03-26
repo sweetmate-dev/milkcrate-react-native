@@ -102,7 +102,7 @@ class EventsView extends Component {
               <EventsListCell
                 key={ index }
                 title={ entry.title }
-                icon={ entry.avatar }
+                icon={ entry.icon }
                 points={ entry.points }
                 onClick={ () => this.onCellPressed(index) }
               />

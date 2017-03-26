@@ -31,6 +31,8 @@ import EventsListCell from '../components/eventsListCell';
 import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
 
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
+
 class ActionView extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +42,13 @@ class ActionView extends Component {
     this.state = {
       currentLocation: null,
       actions: [],
-      avatarImages:[],
+      categoryImages:[],
+      actionsQuery:{
+        offset: 0,
+        limit: 20,
+        more: true,
+        loading: false,
+      },
     };
   }
 
@@ -57,27 +65,66 @@ class ActionView extends Component {
 
   componentDidMount() {
 
+    this.loadActions();
+  }
+
+  onBack() {
+    Actions.pop()
+  }
+
+  onPressedActionsCell (action) {
+    Actions.ActionDetail({
+      action:action
+    })
+  }
+
+  loadActions () {
+
+    if (this.state.actionsQuery.more === false)
+      return;
+
+    this.setState( (state) => {  
+      state.actionsQuery.loading = true;
+      return state;
+    });
+
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
           type:'action',
-          offset: 0,
-          limit: 20,
+          offset: this.state.actionsQuery.offset,
+          limit: this.state.actionsQuery.limit,
           lat: position.latitude,
           long: position.longitude
         }, (error, result) => {
+
+          this.setState( (state) => {  
+            state.actionsQuery.loading = false;
+            return state;
+          });
 
           if (error) {
             console.log("search failed", error)
             return
           }
-          console.log("search result", result)
 
-          this.setState({
-            actions: result.data.action
+          if (result.data.action.length < this.state.actionsQuery.limit) {
+            this.setState( (state) => {  
+              state.actionsQuery.more = false;
+              return state;
+            });
+          }
+
+          const imageOffset = this.state.actionsQuery.offset;
+
+          this.setState( (state) => {
+            state.actions = state.actions.concat(result.data.action);
+            state.actionsQuery.offset += this.state.actionsQuery.limit;
+            return state;
           })
+
           result.data.action.map((action, index) => {
             if (action.categories && action.categories.length > 0) {
               bendService.getCategory(action.categories[0], (error, result)=>{
@@ -87,7 +134,7 @@ class ActionView extends Component {
                   return
                 }
                 this.setState( (state) => {
-                  state.avatarImages[index] = UtilService.getCategoryIcon(result.slug);
+                  state.categoryImages[imageOffset + index] = UtilService.getCategoryIcon(result.slug);
                   return state;
                 });
               })
@@ -102,21 +149,11 @@ class ActionView extends Component {
     );
   }
 
-  onBack() {
-    Actions.pop()
-  }
-
-  onPressedActionsCell (action) {
-    Actions.ActionDetail({
-      action:action
-    })
-  }
-
   renderActionsListRow(rowData, sectionID, rowID) {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ this.state.avatarImages[rowID] }
+        icon={ this.state.categoryImages[rowID] }
         points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -138,6 +175,11 @@ class ActionView extends Component {
             dataSource={ this.dataSource.cloneWithRows(this.state.actions) }
             renderRow={ this.renderActionsListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }/>
+          <LoadMoreSpinner
+            show={ this.state.actionsQuery.more }
+            loading={ this.state.actionsQuery.loading }
+            onClick={ ()=> this.loadActions() }
+          />
         </ScrollView>
       </View>
     );
