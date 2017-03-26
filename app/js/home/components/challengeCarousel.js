@@ -38,15 +38,20 @@ export default class ChallengeCarousel extends Component {
   }
 
   render () {
-    const { title, subtitle, icon, points } = this.props;
+    const { 
+      title, 
+      subtitle, 
+      icon, 
+      points 
+    } = this.props;
 
     return (
       <TouchableHighlight
         activeOpacity={ 0.5 }
         underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
-        onPress={() => { this.goChallengeActivityDetail()}}
-        >
+        onPress={ () => { this.goChallengeActivityDetail() }}
+      >
         <View style={ styles.contentContainer }>
           <View style={ styles.topContainer }>
             <Text style={ styles.textTitle }>{ title }</Text>
@@ -56,7 +61,7 @@ export default class ChallengeCarousel extends Component {
             <Text style={ styles.description }>{ subtitle } </Text>
           </View>
           <View style={ styles.bottomContainer }>
-            {points > 0 && <Point point={ points }/>}
+            { points > 0 && <Point point={ points }/> }
           </View>
         </View>
       </TouchableHighlight>
@@ -72,7 +77,7 @@ const styles = StyleSheet.create({
     width: commonStyles.carouselItemWidth,
     height: commonStyles.carouselHeight,
     paddingHorizontal: commonStyles.carouselItemHorizontalPadding,
-    marginVertical: 10,
+    marginVertical: 10,    
   },
   contentContainer: {
     flex: 1,
@@ -94,7 +99,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
   },
   bottomContainer: {
     flex: 1,

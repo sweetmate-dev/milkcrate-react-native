@@ -86,6 +86,7 @@ export default class SearchBar extends Component {
     if (this.props.onClose) {
       this.props.onClose();
     }
+    this._dismissKeyboard();
   }
 
   _onFocus() {

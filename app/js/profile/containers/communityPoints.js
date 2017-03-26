@@ -19,7 +19,7 @@ import * as communityPointsActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
@@ -108,9 +108,10 @@ class CommunityPoints extends Component {
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar
+        <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
+          title ='Your Community'
         />
         <ScrollView>
           <View style={ styles.topContainer }>

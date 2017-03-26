@@ -48,6 +48,7 @@ class ActionView extends Component {
         limit: 20,
         more: true,
         loading: false,
+        search: '',
       },
     };
   }
@@ -96,6 +97,7 @@ class ActionView extends Component {
           type:'action',
           offset: this.state.actionsQuery.offset,
           limit: this.state.actionsQuery.limit,
+          query: this.state.actionsQuery.search,
           lat: position.latitude,
           long: position.longitude
         }, (error, result) => {
@@ -160,6 +162,43 @@ class ActionView extends Component {
     );
   }
 
+  onSearchChange(text) {
+
+    this.setState( (state) => {
+      state.actionsQuery.offset = 0;
+      state.actionsQuery.more = true;
+      state.actionsQuery.search = text;
+      state.actions = [];
+      state.categoryImages = [];
+      return state;
+    })
+
+    this.loadActions();
+  }
+
+  // onSearchFocus() {
+  //   this.setState( (state) => {
+  //     state.actionsQuery.offset = 0;
+  //     state.actionsQuery.more = false;
+  //     state.actions = [];
+  //     state.categoryImages = [];
+  //     return state;
+  //   })
+  // }
+
+  // onSearchClose() {
+  //   this.setState( (state) => {
+  //     state.actionsQuery.offset = 0;
+  //     state.actionsQuery.more = true;
+  //     state.actionsQuery.search = '';
+  //     state.actions = [];
+  //     state.categoryImages = [];
+  //     return state;
+  //   })
+
+  //   this.loadActions();
+  // }
+
   render() {
     const { status } = this.props;
 
@@ -168,6 +207,8 @@ class ActionView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
+          placeholder={ 'Search actions' }
+          onSearchChange={ (text) => this.onSearchChange(text) }
         />
         <ScrollView>
           <ListView

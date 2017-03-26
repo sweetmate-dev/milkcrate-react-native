@@ -51,11 +51,9 @@ class BusinessesView extends Component {
         limit: 20,
         more: true,
         loading: false,
+        search: '',
       },
     };
-
-    this.categoryIcons = [];
-    this.businesses = [];
   }
 
   componentDidMount() {
@@ -111,6 +109,7 @@ class BusinessesView extends Component {
           type:'business',
           offset: this.state.businessesQuery.offset,
           limit: this.state.businessesQuery.limit,
+          query: this.state.businessesQuery.search,
           lat: position.coords.latitude,
           long: position.coords.longitude
         }, (error, result)=>{
@@ -131,10 +130,9 @@ class BusinessesView extends Component {
           }
 
           const imageOffset = this.state.businessesQuery.offset;
-          this.businesses = this.businesses.concat(result.data.business);
 
           this.setState( (state) => {
-            state.businesses = this.businesses;
+            state.businesses = this.state.businesses.concat(result.data.business);
             state.businessesQuery.offset += this.state.businessesQuery.limit;
             state.businessesQuery.more = moreBusinesses;
             return state;
@@ -165,6 +163,20 @@ class BusinessesView extends Component {
     );
   }
 
+  onSearchChange(text) {
+
+    this.setState( (state) => {
+      state.businessesQuery.offset = 0;
+      state.businessesQuery.more = true;
+      state.businessesQuery.search = text;
+      state.businesses = [];
+      state.categoryIcons = [];
+      return state;
+    })
+
+    this.loadBusinesses();
+  }
+
   render() {
     const { status } = this.props;
 
@@ -173,6 +185,8 @@ class BusinessesView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
+          placeholder={ 'Search businesses' }
+          onSearchChange={ (text) => this.onSearchChange(text) }
         />
         {/*<View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
