@@ -12,6 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+    Linking
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -29,7 +30,7 @@ import { BusinessRecentActivityEntries } from '../../components/dummyEntries';
 
 const dummyText = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit..';
 
-const map_pin = require('../../../assets/imgs/map_marker.png');
+const map_pin = require('../../../assets/imgs/pin.png');
 const star = require('../../../assets/imgs/star.png');
 const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
@@ -62,6 +63,8 @@ class BusinessesDetail extends Component {
       },
       initialize:false,
       didStatus:false,
+      activityId:null,
+
       currentLocation:null,
       businessRate: 0,
       businessComment: '',
@@ -82,13 +85,16 @@ class BusinessesDetail extends Component {
   componentDidMount(){
     const business = this.props.business
     console.log("business", business)
-    bendService.checkActivityDid(business._id, 'business', (err, ret)=>{
+    bendService.checkActivityDid(business._id, 'business', (err, result)=>{
       if(err) {
         console.log(err);return;
       }
 
+      if(result)
+        this.state.activityId = result;
+
       this.setState({
-        didStatus:ret
+        didStatus: result==false?false:true
       })
     })
 
@@ -137,15 +143,16 @@ class BusinessesDetail extends Component {
   }
 
   onCallPhone() {
-    alert("Tapped call button!");
+    Linking.openURL('tel:' + this.props.business.phoneNumber);
   }
 
   onGoWeb() {
-    alert("Tapped web button!");
+    Linking.openURL(this.props.business.url);
   }
 
   onGetDirection() {
-    alert("Tapped GetDirection button!");
+    var url = 'http://maps.apple.com/?ll=' + this.props.business._geoloc[1] + ',' + this.props.business._geoloc[0];
+    Linking.openURL(url);
   }
 
   onCertification(key) {
@@ -160,14 +167,31 @@ class BusinessesDetail extends Component {
     alert("Tapped RateBusiness button!");
   }
 
-  onCheckin() {
-    bendService.captureActivity(this.props.business._id, 'business', (err,ret)=>{
+  onCheckIn() {
+    bendService.captureActivity(this.props.business._id, 'business', (err,result)=>{
       if(err){
         console.log(err);return;
       }
 
+      this.state.activityId = result.activity._id;
+
       this.setState({
         didStatus:true
+      })
+    })
+  }
+
+  onUncheckIn() {
+    bendService.removeActivity(this.state.activityId, (error, result)=>{
+      if (error){
+        console.log(error);
+        return;
+      }
+
+      this.state.activityId = null;
+
+      this.setState({
+        didStatus: false
       })
     })
   }
@@ -186,9 +210,24 @@ class BusinessesDetail extends Component {
     );
   }
 
+  renderCoverImage() {
+    const { business } = this.props;
+    var coverImage;
+    if(business.coverImage) {
+      coverImage = business.coverImage._downloadURL;
+    } else {
+      coverImage = this.state.category.coverImage._versions?this.state.category.coverImage._versions.md._downloadURL:this.state.category.coverImage._downloadURL;
+    }
+
+    return (
+        <Image style={ styles.map } source={ coverImage }>
+        </Image>
+    )
+  }
+
   render() {
     const { status, business } = this.props;
-
+    var rating = (business.rating||1.0).toFixed(1)
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -197,11 +236,11 @@ class BusinessesDetail extends Component {
           title ={business.name}
         />
         <ScrollView>
-          {this.state.currentLocation&&<MapView
+          {business._geoloc&&<MapView
             style={ styles.map }
             initialRegion={ {
-        latitude: this.state.currentLocation.coords.latitude,
-        longitude: this.state.currentLocation.coords.longitude,
+        latitude: Number(business._geoloc[1]),
+        longitude: Number(business._geoloc[0]),
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       } }
@@ -211,10 +250,15 @@ class BusinessesDetail extends Component {
             {
               <MapView.Marker
                 image={ map_pin }
-                coordinate={ this.state.currentLocation.coords}
+                style={styles.map_pin}
+                coordinate={{
+                latitude: Number(business._geoloc[1]),
+                longitude: Number(business._geoloc[0]),
+                }}
               />
             }
           </MapView>}
+          {!business._geoloc&&this.renderCoverImage()}
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
@@ -222,23 +266,23 @@ class BusinessesDetail extends Component {
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{business.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>
-                  {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[0],business._geoloc[1],
-                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude):'Unknown '}
-                  Miles  $$</Text>}
+                  {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
+                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
+                    {UtilService.getPricesString(business.price)}</Text>}
               </View>
               <View style={ styles.businessInfoRatingContainer }>
-                <Text style={ styles.textValue }>{ 4.8 } </Text>
+                <Text style={ styles.textValue }>{ rating } </Text>
                 <Image style={ styles.imageStar } source={ star } />
               </View>
             </View>
 
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>{business.address1}</Text>
-                <Text style={ styles.textAddress }>{business.city}</Text>
-                {false && <TouchableOpacity onPress={ () => this.onGetDirection() }>
+                <Text style={ styles.textAddress }>{business.address1} {business.address2}</Text>
+                <Text style={ styles.textAddress }>{business.city} {business.state?', ' + business.state:''}</Text>
+                <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
-                </TouchableOpacity>}
+                </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
                 {business.phoneNumber != '' &&<TouchableOpacity onPress={ () => this.onCallPhone() }>
@@ -255,7 +299,7 @@ class BusinessesDetail extends Component {
                 </TouchableOpacity>}
               </View>
             </View>
-            <Text style={ styles.textOpenNow }>Open Now</Text>
+            {/*<Text style={ styles.textOpenNow }>Open Now</Text>*/}
             <View style={ styles.openNowContentContainer }>
               <View style={ styles.openNowCellContainer }>
                 <Text style={ styles.textInfoTitle }>Mon-Sat</Text>
@@ -271,28 +315,21 @@ class BusinessesDetail extends Component {
               <Text style={ styles.textDescription }>View on Foursquare</Text>
             </TouchableOpacity>}
           </View>
-          <View style={ styles.certificationsContainer }>
+          {business.certification && <View style={ styles.certificationsContainer }>
             <Text style={ styles.textDescription }>Certifications</Text>
             <View style={ styles.certificationsButtonContainer }>
-              <TouchableOpacity onPress={ () => this.onCertification(0) }>
-                <View style={ styles.buttonCertificationsWrapper }>
-                  <Text style={ styles.textCertificationsButton }>Certified Organic</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={ () => this.onCertification(1) }>
-                <View style={ styles.buttonCertificationsWrapper }>
-                  <Text style={ styles.textCertificationsButton }>Better Business Bureau</Text>
-                </View>
-              </TouchableOpacity>
+              <View style={ styles.buttonCertificationsWrapper }>
+                <Text style={ styles.textCertificationsButton }>{business.certification.name}</Text>
+              </View>
             </View>
-            <View style={ styles.certificationsCheckContainer }>
+            {/*<View style={ styles.certificationsCheckContainer }>
               <Image style={ styles.imageAvatar } source={ avatar } />
               <View style={ styles.certificationsCheckSubContainer }>
                 <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
                 <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
               </View>
-            </View>
-          </View>
+            </View>*/}
+          </View>}
           {/*<View style={ styles.recentActivityContainer }>
             <View style={ styles.sectionTitleWrapper }>
               <Text style={ styles.textSectionTitle }>Comments</Text>
@@ -338,14 +375,16 @@ class BusinessesDetail extends Component {
             </TouchableOpacity>
           </View>*/}
         </ScrollView>
-        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckin() }>
+        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I’m Here • Checkin</Text>
           </View>
         </TouchableOpacity>}
-        {this.state.didStatus&&<View style={ styles.buttonGrey }>
-          <Text style={ styles.textOrange }>You’ve Checked In!</Text>
-        </View>}
+        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
+          <View style={ styles.buttonGrey }>
+            <Text style={ styles.textOrange }>You’ve Checked In!</Text>
+          </View>
+        </TouchableOpacity>}
       </View>
     );
   }
@@ -443,7 +482,7 @@ const styles = StyleSheet.create({
   visitCellContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 5,
+    paddingLeft: 10,
   },
   imageVisit: {
     height: 48,

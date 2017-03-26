@@ -216,6 +216,16 @@ class UtilService {
     static getDefaultAvatar(avatarName) {
         return avatarImages[avatarName]
     }
+    
+    static getPricesString(prices) {
+        var p = prices||1;
+        var ret = ""
+        for(i = 1; i <= p ; i++) {
+            ret+='$'
+        }
+        
+        return ret
+    }
 }
 
 export default UtilService

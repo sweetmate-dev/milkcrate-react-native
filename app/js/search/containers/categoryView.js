@@ -137,7 +137,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         description={ rowData.description }
-        distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[0], rowData._geoloc[1],
+        distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
         rating={ Math.max(Number(rowData.rating||1), 1) }

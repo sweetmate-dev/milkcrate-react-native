@@ -47,7 +47,8 @@ class ActionDetail extends Component {
         }
       },
       initialize:false,
-      didStatus:false
+      didStatus:false,
+      activityId:null
     };
   }
 
@@ -62,8 +63,11 @@ class ActionDetail extends Component {
         return;
       }
 
+      if(result)
+          this.state.activityId = result;
+
       this.setState({
-        didStatus: result
+        didStatus: result==false?false:true
       })
     })
 
@@ -97,15 +101,32 @@ class ActionDetail extends Component {
     Actions.pop()
   }
 
-  onCheckin() {
+  onCheckIn() {
     bendService.captureActivity(this.props.action._id, 'action', (error, result)=>{
       if (error){
         console.log(error);
         return;
       }
 
+      this.state.activityId = result.activity._id;
+
       this.setState({
         didStatus: true
+      })
+    })
+  }
+
+  onUncheckIn() {
+    bendService.removeActivity(this.state.activityId, (error, result)=>{
+      if (error){
+        console.log(error);
+        return;
+      }
+
+      this.state.activityId = null;
+
+      this.setState({
+        didStatus: false
       })
     })
   }
@@ -150,14 +171,16 @@ class ActionDetail extends Component {
             </View>}
           </View>
         </ScrollView>
-        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckin() }>
+        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I Did This</Text>
           </View>
         </TouchableOpacity>}
-        {this.state.didStatus&&<View style={ styles.buttonGrey }>
-          <Text style={ styles.textOrange }>I Didn't Do It</Text>
-        </View>}
+        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
+            <View style={ styles.buttonGrey }>
+              <Text style={ styles.textOrange }>I Didn't Do It</Text>
+            </View>
+          </TouchableOpacity>}
       </View>
     );
   }

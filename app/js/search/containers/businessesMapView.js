@@ -147,7 +147,7 @@ class BusinessesMapView extends Component {
             title={ businesses[this.state.tappedPin].name }
             icon={ avatar }
             description={ businesses[this.state.tappedPin].description }
-            distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[0], businesses[this.state.tappedPin]._geoloc[1],
+            distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Math.max(Number(businesses[this.state.tappedPin].rating||1), 1) }
