@@ -242,8 +242,10 @@ class BusinessesDetail extends Component {
       coverImage = this.state.category.coverImage._versions?this.state.category.coverImage._versions.md._downloadURL:this.state.category.coverImage._downloadURL;
     }
 
+    if(coverImage == null) return null;
+
     return (
-        <Image style={ styles.map } source={ coverImage }>
+        <Image style={ styles.map } source={{ uri:coverImage }}>
         </Image>
     )
   }
@@ -293,7 +295,7 @@ class BusinessesDetail extends Component {
                 {this.state.currentLocation&&<Text style={ styles.textValue }>
                   {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
                   this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
-                    {UtilService.getPricesString(business.price)}</Text>}
+                    {'  ' + UtilService.getPricesString(business.price)}</Text>}
               </View>
               <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ rating } </Text>
@@ -304,7 +306,7 @@ class BusinessesDetail extends Component {
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
                 <Text style={ styles.textAddress }>{business.address1} {business.address2}</Text>
-                <Text style={ styles.textAddress }>{business.city} {business.state?', ' + business.state:''}</Text>
+                <Text style={ styles.textAddress }>{UtilService.getCityStateString(business.city, business.state)}</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>

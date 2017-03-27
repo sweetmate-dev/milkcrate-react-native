@@ -24,6 +24,9 @@ import TextField from 'react-native-md-textinput';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
 
 class ChangePassword extends Component {
 
@@ -51,7 +54,27 @@ class ChangePassword extends Component {
   }
 
   onUpdatePassword() {
-    alert( 'Tapped onUpdatePassword');
+    if(this.currentPassword == '') {
+      alert("Please input current password");return;
+    }
+    if(this.newPassword == '') {
+      alert("Please input new password");return;
+    }
+    if(this.confirmNewPassword != this.newPassword) {
+      alert("Password doesnot match");return;
+    }
+
+    bendService.updatePassword(this.currentPassword, this.newPassword, (err, ret)=>{
+      if(err) {
+        if(err == 1) {
+          alert("Unknown error")
+        } else if(err == 2) {
+          alert("Current password is incorrect")
+        }
+      } else {
+        alert("Password changed")
+      }
+    })
   }
 
   render() {

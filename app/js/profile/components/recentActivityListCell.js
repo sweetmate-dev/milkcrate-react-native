@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
@@ -153,6 +153,8 @@ const styles = StyleSheet.create({
   cellTopTitleContainer: {
     flex: 5,
     alignItems: 'flex-start',
+    justifyContent:'center',
+    height:44
   },
   rightCoinContainer: {
     flex: 1,

@@ -34,6 +34,7 @@ class Settings extends Component {
     this.state = {
       allowOthersToSeeMyActivity: true,
       pushNotifications: true,
+      user:bendService.getActiveUser(),
    };
   }
 
@@ -94,6 +95,36 @@ class Settings extends Component {
     Actions.Login()
   }
 
+  updateShareActivity(val) {
+    this.state.user.shareActivity = val;
+    this.setState({
+      shareActivity:val
+    })
+
+    bendService.updateUser(this.state.user, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      console.log("User updated")
+    })
+  }
+
+  updateAllowNotification(val) {
+    this.state.user.allowNotifications = val;
+    this.setState({
+      allowNotifications:val
+    })
+
+    bendService.updateUser(this.state.user, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      console.log("User updated")
+    })
+  }
+
   render() {
     const { status } = this.props;
 
@@ -123,11 +154,15 @@ class Settings extends Component {
 
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Allow others to see my activity</Text>
-            <Switch onValueChange={ (value) => this.setState({ allowOthersToSeeMyActivity: value })} value={ this.state.allowOthersToSeeMyActivity }/>
+            <Switch onValueChange={ (value) => {
+              this.updateShareActivity(value);
+            }} value={ this.state.user.shareActivity }/>
           </View>
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Push notifications</Text>
-            <Switch onValueChange={ (value) => this.setState({ pushNotifications: value })} value={ this.state.pushNotifications }/>
+            <Switch onValueChange={ (value) => {
+            this.updateAllowNotification(value);
+            }} value={ this.state.allowNotifications }/>
           </View>
           <View style={ styles.line }/>
 
