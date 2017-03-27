@@ -39,16 +39,20 @@ class ActionView extends Component {
 
     this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    this.actions = [];
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
     this.state = {
       currentLocation: null,
       actions: [],
-      categoryImages:[],
+      categoryIcons:[],
       actionsQuery:{
-        offset: 0,
-        limit: 20,
         more: true,
         loading: false,
-        search: '',
       },
     };
   }
@@ -81,7 +85,7 @@ class ActionView extends Component {
 
   loadActions () {
 
-    if (this.state.actionsQuery.more === false)
+    if (this.more == false)
       return;
 
     this.setState( (state) => {  
@@ -93,15 +97,17 @@ class ActionView extends Component {
 
         this.setState({ currentLocation: position })
 
+        const searchText = this.searchText;
+
         bendService.searchActivity({
           type:'action',
-          offset: this.state.actionsQuery.offset,
-          limit: this.state.actionsQuery.limit,
-          query: this.state.actionsQuery.search,
+          offset: this.offset,
+          limit: this.limit,
+          query: searchText,
           lat: position.latitude,
           long: position.longitude
         }, (error, result) => {
-
+          
           this.setState( (state) => {  
             state.actionsQuery.loading = false;
             return state;
@@ -110,22 +116,21 @@ class ActionView extends Component {
           if (error) {
             console.log("search failed", error)
             return
-          }
+          } 
 
-          if (result.data.action.length < this.state.actionsQuery.limit) {
+          if (result.data.action.length < this.limit) {
+            this.more = false;
             this.setState( (state) => {  
               state.actionsQuery.more = false;
               return state;
             });
           }
 
-          const imageOffset = this.state.actionsQuery.offset;
+          this.actions = this.actions.concat(result.data.action);
+          this.setState({ actions: this.actions });
 
-          this.setState( (state) => {
-            state.actions = state.actions.concat(result.data.action);
-            state.actionsQuery.offset += this.state.actionsQuery.limit;
-            return state;
-          })
+          const imageOffset = this.offset;
+          this.offset += this.limit;
 
           result.data.action.map((action, index) => {
             if (action.categories && action.categories.length > 0) {
@@ -136,7 +141,7 @@ class ActionView extends Component {
                   return
                 }
                 this.setState( (state) => {
-                  state.categoryImages[imageOffset + index] = UtilService.getCategoryIcon(result.slug);
+                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(result.slug);
                   return state;
                 });
               })
@@ -155,7 +160,7 @@ class ActionView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ this.state.categoryImages[rowID] }
+        icon={ this.state.categoryIcons[rowID] }
         points={ Math.max(rowData.points||1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -164,40 +169,61 @@ class ActionView extends Component {
 
   onSearchChange(text) {
 
+    console.log('onSearchChange : ', text);
+    
+    if (text === '') {
+      this.onSearchFocus();
+      return;
+    }
+
+    this.offset = 0;
+    this.searchText = text;      
+    this.more = true;
+    this.actions = [];
+
     this.setState( (state) => {
-      state.actionsQuery.offset = 0;
       state.actionsQuery.more = true;
-      state.actionsQuery.search = text;
-      state.actions = [];
-      state.categoryImages = [];
+      state.categoryIcons = [];
       return state;
     })
 
     this.loadActions();
   }
 
-  // onSearchFocus() {
-  //   this.setState( (state) => {
-  //     state.actionsQuery.offset = 0;
-  //     state.actionsQuery.more = false;
-  //     state.actions = [];
-  //     state.categoryImages = [];
-  //     return state;
-  //   })
-  // }
+  onSearchFocus() {
 
-  // onSearchClose() {
-  //   this.setState( (state) => {
-  //     state.actionsQuery.offset = 0;
-  //     state.actionsQuery.more = true;
-  //     state.actionsQuery.search = '';
-  //     state.actions = [];
-  //     state.categoryImages = [];
-  //     return state;
-  //   })
+    console.log('onSearchFocus');
 
-  //   this.loadActions();
-  // }
+    this.offset = 0;
+    this.more = false;
+    this.actions = [];
+
+    this.setState( (state) => {
+      state.actionsQuery.more = false;
+      state.actions = [];
+      state.categoryIcons = [];
+      return state;
+    })
+  }
+
+  onSearchCancel() {
+
+    console.log('onSearchCancel');
+
+    this.offset = 0;
+    this.searchText = '';
+    this.more = true;
+    this.actions = [];
+
+    this.setState( (state) => {
+      state.actionsQuery.more = true;
+      state.actions = [];
+      state.categoryIcons = [];
+      return state;
+    })
+
+    this.loadActions();
+  }
 
   render() {
     const { status } = this.props;
@@ -209,6 +235,8 @@ class ActionView extends Component {
           onBack={ this.onBack }
           placeholder={ 'Search actions' }
           onSearchChange={ (text) => this.onSearchChange(text) }
+          onFocus={ () => this.onSearchFocus() }
+          onCancel={ () => this.onSearchCancel() }
         />
         <ScrollView>
           <ListView

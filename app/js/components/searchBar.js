@@ -3,6 +3,7 @@ import {
   TextInput,
   StyleSheet,
   View,
+  Text,
   TouchableOpacity,
 } from 'react-native';
 
@@ -22,6 +23,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: 'transparent',
   },
+  cancelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textCancel: {
+    color: '#fff',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+  }
 });
 
 export default class SearchBar extends Component {
@@ -73,6 +84,7 @@ export default class SearchBar extends Component {
 
     this.state = {
       isOnFocus: false,
+      textSearch: '',
     };
     this._onFocus = this._onFocus.bind(this);
     this._onBlur = this._onBlur.bind(this);
@@ -82,15 +94,17 @@ export default class SearchBar extends Component {
   _onClose() {
 
     this._textInput.setNativeProps({ text: '' });
-    this.props.onSearchChange({ nativeEvent: { text : '' }});
+    this.props.onSearchChange('');
+    this.setState({ textSearch: '' });
+
     if (this.props.onClose) {
       this.props.onClose();
     }
-    this._dismissKeyboard();
   }
 
   _onFocus() {
 
+    this._textInput.setNativeProps({ text: '' });
     this.setState({ isOnFocus: true });
     if (this.props.onFocus) {
       this.props.onFocus();
@@ -104,6 +118,26 @@ export default class SearchBar extends Component {
       this.props.onBlur();
     }
     this._dismissKeyboard();
+  }
+
+  _onSearchChange(text) {
+    
+    this.setState({ textSearch: text });
+    if (this.props.onSearchChange) {
+      this.props.onSearchChange(text);
+    }
+  }
+
+  _onCancel() {
+
+    this._textInput.setNativeProps({ text: '' });
+    // this.props.onSearchChange('');
+    this.setState({ textSearch: '' });
+    this._dismissKeyboard();
+
+    if (this.props.onCancel) {
+      this.props.onCancel();
+    }
   }
 
   _dismissKeyboard () {
@@ -152,18 +186,10 @@ export default class SearchBar extends Component {
             ]
           }
         >
-          {
-            this.state.isOnFocus ?
-              <Icon
-                name={ iconSearchName } size={ height * 0.7 }
-                color={ iconColor }
-              />
-            :
-              <Icon
-                name={ iconSearchName } size={ height * 0.7 }
-                color={ iconColor }
-              />
-          }
+          <Icon
+            name={ iconSearchName } size={ height * 0.7 }
+            color={ iconColor }
+          />
           <TextInput
             autoCapitalize="none"
             autoCorrect={ autoCorrect === true }
@@ -171,7 +197,7 @@ export default class SearchBar extends Component {
             returnKeyType={ returnKeyType }
             onFocus={ this._onFocus }
             onBlur={ this._onBlur }
-            onChangeText={ onSearchChange }
+            onChangeText={ (text) => this._onSearchChange(text) }
             onEndEditing={ this.props.onEndEditing }
             onSubmitEditing={ this.props.onSubmitEditing }
             placeholder={ placeholder }
@@ -190,13 +216,22 @@ export default class SearchBar extends Component {
           />
           {
             this.state.isOnFocus ?
-              <TouchableOpacity onPress={ this._onClose }>
-                <Icon
-                  style={{ paddingRight: height * 0.5 }}
-                  name={ iconCloseName} size={ iconSize }
-                  color={ iconColor }
-                />
-              </TouchableOpacity>
+              <View style={ styles.cancelContainer }>
+                {
+                  (this.state.textSearch.length > 0) &&
+                  <TouchableOpacity onPress={ () => this._onClose() }>
+                    <Icon
+                      style={{ paddingHorizontal: height * 0.2 }}
+                      name={ iconCloseName} size={ iconSize }
+                      color={ iconColor }
+                    />
+                  </TouchableOpacity>
+                }
+                
+                <TouchableOpacity onPress={ () => this._onCancel() }>
+                  <Text style={ styles.textCancel }>Cancel</Text>
+                </TouchableOpacity>
+              </View>
             :
               null
           }

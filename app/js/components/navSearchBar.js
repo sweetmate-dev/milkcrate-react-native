@@ -23,6 +23,7 @@ export default class NavSearchBar extends Component {
     onSearchChange: PropTypes.func,
     onFocus: PropTypes.func,
     onClose: PropTypes.func,
+    onCancel: PropTypes.func,
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
@@ -34,6 +35,7 @@ export default class NavSearchBar extends Component {
     onSearchChange: () => {},
     onFocus: () => {},
     onClose: () => {},
+    onCancel: () => {},
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
@@ -67,6 +69,12 @@ export default class NavSearchBar extends Component {
     }
   }
 
+  onCancel() {
+    if (this.props.onCancel) {
+      this.props.onCancel();
+    }
+  }
+
   onBack() {
     if (this.props.onBack) {
       this.props.onBack();
@@ -84,6 +92,7 @@ export default class NavSearchBar extends Component {
       this.props.onSetting();
     }
   }
+
   render() {
     const {
       placeholder,
@@ -111,6 +120,7 @@ export default class NavSearchBar extends Component {
               onSearchChange={ (text) => this.onSearchChange(text) }
               onFocus={ () => this.onFocus() }
               onClose={ () => this.onClose() }
+              onCancel={ () => this.onCancel() }
               height={ 28 }
               autoCorrect={ false }
               returnKeyType={ "search" }
