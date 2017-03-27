@@ -20,8 +20,8 @@ export default class AlertListCell extends Component {
     width: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    avatar: PropTypes.number.isRequired,
-    time: PropTypes.number,
+    avatar: PropTypes.string.isRequired,
+    time: PropTypes.string,
     onClick: PropTypes.func,
   }
 
@@ -45,10 +45,7 @@ export default class AlertListCell extends Component {
 
   showTime( time ) {
     return (
-      time > 1 ?
-        <Text style={ styles.textSmall }>{ time } days ago</Text>
-        :
-        <Text style={ styles.textSmall }>{ time } day ago</Text>
+        <Text style={ styles.textSmall }>{time}</Text>
     );
   }
 
@@ -67,14 +64,15 @@ export default class AlertListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            <Image style={ styles.avatar } source={ avatar }/>
+            {avatar!=""&&<Image style={ styles.avatar } source={{uri:avatar }}/>}
+            {avatar==""&&<Image style={ styles.avatar } source={require('../../../assets/imgs/milkcrate.png')}/>}
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.names_timeContainer }>
               <Text style={ styles.textName }>{ name }</Text>
               { this.showTime (time) }
             </View>
-            <Text style={ styles.textDescription }>{ description }</Text>
+            <Text numberOfLines={2} style={ styles.textDescription }>{ description }</Text>
           </View>
         </View>
       </TouchableHighlight>

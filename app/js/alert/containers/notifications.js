@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-
+import { Actions } from 'react-native-router-flux';
 import { bindActionCreators } from 'redux';
 import * as alertActions from '../actions';
 import { connect } from 'react-redux';
@@ -22,16 +22,35 @@ import * as commonColors from '../../styles/commonColors';
 
 import { AlertEntries } from '../../components/dummyEntries';
 
+//added by li, 2017/03/24
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+
 class Notifications extends Component {
   constructor(props) {
     super(props);
 
-    var dataSourceAlert = new ListView.DataSource(
+    this.dataSourceAlert = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      dataSourceAlert: dataSourceAlert.cloneWithRows(AlertEntries),
+      alerts:[]
     };
+  }
+
+  componentDidMount(){
+    bendService.getUserAlerts((err, rets)=>{
+      if(err) {
+        console.log(err);return
+      }
+
+      console.log("alerts", rets)
+
+      this.setState({
+        alerts:rets
+      })
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -45,14 +64,32 @@ class Notifications extends Component {
     }
   }
 
+  onActivityCellPressed (a) {
+    bendService.getActivity(a._id, (err, activity)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      console.log("activity", activity)
+
+      if(activity.type == 'business') {
+        Actions.BusinessesDetail({ business: activity.activity });
+      } else if(activity.type == 'action') {
+        Actions.ActionDetail({ action: activity.activity });
+      } else if(activity.type == 'event') {
+        Actions.EventsDetail({ action: activity.activity });
+      }
+    })
+  }
+
   renderAlertRow(rowData, sectionID, rowID) {
     return (
       <AlertListCell
-        name={ rowData.name }
-        description={ rowData.description }
-        avatar={ rowData.avatar }
-        time={ rowData.time }
-        onClick={ () => this.onAlertCellPressed(rowID) }
+        name={ rowData.actor.name }
+        description={ rowData.message }
+        avatar={ rowData.actor.avatar?UtilService.getSmallImage(rowData.actor.avatar):"" }
+        time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
+        onClick={ () => this.onActivityCellPressed(rowData.activity) }
       />
     );
   }
@@ -74,8 +111,11 @@ class Notifications extends Component {
         />
         <View style={ styles.listViewWrap }>
           <ListView
-            dataSource={ this.state.dataSourceAlert }
-            renderRow={ this.renderAlertRow.bind(this) }/>
+              enableEmptySections={ true }
+              dataSource={
+                this.dataSourceAlert.cloneWithRows(this.state.alerts)
+              }
+              renderRow={ this.renderAlertRow.bind(this) }/>
         </View>
       </View>
     );

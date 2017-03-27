@@ -94,9 +94,9 @@ export default class RecentActivityListCell extends Component {
                 </View>
                 <View style={ styles.bottomContainer }>
                   <View style={ styles.heartContainer }>
-                    <View style={ styles.likeWrapper }>
+                    {/*<View style={ styles.likeWrapper }>
                       <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
-                    </View>
+                    </View>*/}
 
                     <Text style={ styles.textSmall }>
                       {
