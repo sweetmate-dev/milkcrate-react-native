@@ -26,8 +26,8 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
-const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
-const background_top =   require('../../../assets/imgs/background_top_action.png');
+//const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
+//const background_top =   require('../../../assets/imgs/background_top_action.png');
 
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
 const dummyText2 = 'With your budget in mind, it is easy to plan a chartered yacht vacation. Companies often have a fleet of sailing vessels that can accommodate parties of various sizes. You may want to make it a more intimate trip with only close family. There are charters that can be rented for as few as two people. These include either a sailboat or motorboat and can come with or without a crew and captain to sail the ship for you. If you choose not to hire a crew, you will have to show that you are knowledgeable of sailing and can handle the ship competently.';

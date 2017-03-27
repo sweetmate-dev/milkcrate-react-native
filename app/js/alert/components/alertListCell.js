@@ -11,7 +11,6 @@ import {
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const coinImage = require('../../../assets/imgs/conis.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export default class AlertListCell extends Component {
@@ -127,5 +126,5 @@ const styles = StyleSheet.create({
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
-  },  
+  },
 });
