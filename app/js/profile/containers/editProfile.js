@@ -15,6 +15,7 @@ import {
   Alert,
 } from 'react-native';
 
+
 import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
@@ -27,6 +28,10 @@ import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
@@ -35,13 +40,13 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
 
-    this.userName = '';
-    this.email = '';
-
     this.state = {
-      birthday: new Date(),
-      gender: '',
+      user:bendService.getActiveUser(),
     };
+  }
+
+  componentDidMount() {
+
   }
 
   componentWillReceiveProps(newProps) {
@@ -60,15 +65,23 @@ class EditProfile extends Component {
   }
 
   onSaveProfile() {
-    alert( 'Tapped onSaveProfile');
+    bendService.updateUser(this.state.user, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      alert("Successfully updated.")
+    })
   }
 
   onSelectGender(data) {
-    this.setState({ gender: data });
+    this.state.user.gender = data.toLowerCase()
+    this.setState({ user: this.state.user });
   }
 
   onChangeBirthday(date) {
-    this.setState({ birthday: date });
+    this.state.user.birthday = UtilService.formatDateWithFormat2(new Date(date), 'YYYY-MM-DD')
+    this.setState({ user: this.state.user });
   }
 
   render() {
@@ -92,7 +105,8 @@ class EditProfile extends Component {
             wrapperStyle={ wrapperStyle }
             highlightColor='#fff'
             borderColor='#fff'
-            onChangeText={ (text) => { this.userName = text }}
+            onChangeText={ (text) => { this.state.user.name = text }}
+            value={this.state.user.name}
           />
           <TextField
             label='Email'
@@ -104,14 +118,15 @@ class EditProfile extends Component {
             wrapperStyle={ wrapperStyle }
             highlightColor='#fff'
             borderColor='#fff'
-            onChangeText={ (text) => { this.emai = text }}
+            value={this.state.user.email}
+            onChangeText={ (text) => { this.state.user.email = text }}
           />
           <View style={ styles.cellContainer }> 
             <Text style={ styles.textCellTitle }>Gender</Text>
             <View style={ styles.dropDownWrapper }>
               <ModalDropdown
                 options={ arrayGender }
-                defaultValue={ arrayGender[2] }
+                defaultValue={ UtilService.capitalizeFirstLetter(this.state.user.gender) }
                 style={ styles.dropdown }
                 textStyle ={ styles.dropDownText }
                 dropdownStyle={ styles.dropdownStyle }
@@ -125,7 +140,7 @@ class EditProfile extends Component {
             <Text style={ styles.textCellTitle }>Date of Birth</Text>
             <DatePicker
               style={ styles.birthdayWrapper }
-              date={ this.state.birthday }
+              date={ UtilService.formatDateWithFormat2(this.state.user.birthday, "MMMM DD, YYYY")}
               mode="date"
               placeholder="Birthday"
               format="MMMM DD, YYYY"

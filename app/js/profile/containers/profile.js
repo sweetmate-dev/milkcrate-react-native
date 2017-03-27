@@ -128,6 +128,16 @@ class Profile extends Component {
     })
   }
 
+  onRecentActivityCellPressed (activity) {
+    if(activity.type == 'business') {
+      Actions.BusinessesDetail({ business: activity.activity });
+    } else if(activity.type == 'action') {
+      Actions.ActionDetail({ action: activity.activity });
+    } else if(activity.type == 'event') {
+      Actions.EventsDetail({ action: activity.activity });
+    }
+  }
+
   onPressedRecentActivityCell(rowID) {
     Actions.WeeklyRecap();
   }
@@ -142,7 +152,7 @@ class Profile extends Component {
         points={ Math.max(Number(rowData.points||1), 1) }
         hearts={ Number(rowData.likeCount||0) }
         likeByMe={ rowData.likedByMe||false }
-        onClick={ () => this.onPressedRecentActivityCell(rowID)
+        onClick={ () => this.onRecentActivityCellPressed(rowData)
         }
         onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
         }

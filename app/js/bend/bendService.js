@@ -82,11 +82,43 @@ module.exports = {
         if(userData.coverImage) {
             userData.coverImage = this.makeBendFile(userData.coverImage._id)
         }
+        if(userData.email) {
+            userData.username = userData.email
+        }
         Bend.User.update(userData).then((ret)=> {
             cb(null, ret);
+            //Bend.setActiveUser(ret)
         }, (err)=> {
             cb(err)
         })
+    },
+
+    updatePassword(oldPassword, newPassword, cb) {
+        var activeUserClone = _.clone(Bend.getActiveUser())
+        Bend.setActiveUser(null);
+        var credentials = {username:activeUserClone.username, password:oldPassword};
+        Bend.User.login(credentials).then(
+            function (res) {
+                var activeUser = Bend.getActiveUser();
+                activeUser.password = newPassword;
+                Bend.User.update(activeUser).then(function(user){
+                    credentials = {username:activeUser.username, password:newPassword};
+                    //Bend.Sync.destruct();
+                    Bend.setActiveUser(null);
+                    Bend.User.login(credentials);
+
+                    cb(null, true)
+                }, function(err){
+                    console.log(err);
+                    cb(1)   
+                });
+            },
+            function (error) {
+                console.log(error);
+                Bend.setActiveUser(activeUserClone);
+                cb(2)
+            }
+        );
     },
 
     /**

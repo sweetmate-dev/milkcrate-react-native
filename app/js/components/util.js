@@ -1,4 +1,4 @@
-import * as moment from 'moment'
+import moment from 'moment'
 import * as _ from 'underscore'
 
 const categoryButtons = {
@@ -142,6 +142,11 @@ class UtilService {
         return moment.unix(ts/1000000000).format(formatStr);
     };
 
+    static formatDateWithFormat2(date, formatStr) {
+        if(!date) return ""
+        return moment(date).format(formatStr);
+    };
+
     static formatSimpleDateTime = function(ts) {
         return moment.unix(ts/1000000000).format("MM-DD h:mm a");
     };
@@ -153,11 +158,22 @@ class UtilService {
         if (mins < 0) {
             return "just now";
         } else if (mins < 60) {
-            return mins + " minutes ago";
+            if(mins == 1)
+                return min + " minute ago";
+            else
+                return mins + " minutes ago";
         } else if (mins < 24 * 60) {
-            return this.formatDateWithFormat(ts, "h:mm a");
-        } else {
-            return this.formatSimpleDateTime(ts)
+            var hours = Math.floor(mins/60)
+            if(hours == 1)
+                return hours + " hour ago";
+            else
+                return hours + " hours ago";
+        } else if (mins >= 24 * 60) {
+            var days = Math.floor(mins/(24 * 60))
+            if(days == 1)
+                return days + " day ago";
+            else
+                return days + " days ago";
         }
     }
 
@@ -262,6 +278,14 @@ class UtilService {
         }
 
         return "";
+    }
+
+    static getCityStateString(city, state) {
+        var ret = []
+        if(city) ret.push(city)
+        if(state) ret.push(state)
+
+        return ret.join(", ")
     }
 }
 
