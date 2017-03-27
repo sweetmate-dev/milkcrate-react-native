@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
@@ -99,9 +99,10 @@ class Settings extends Component {
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar
+        <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
+          title="Settings"
         />
         <ScrollView
           style={ styles.scrollView }

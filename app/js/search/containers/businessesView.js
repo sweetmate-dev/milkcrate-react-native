@@ -40,6 +40,12 @@ class BusinessesView extends Component {
   constructor(props) {
     super(props);
 
+    this.businesses = [];
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
     this.state = {
       selectedIndex: 'List',
       currentPosition: null,
@@ -47,11 +53,8 @@ class BusinessesView extends Component {
       categoryIcons: [],
 
       businessesQuery:{
-        offset: 0,
-        limit: 20,
         more: true,
         loading: false,
-        search: '',
       },
     };
   }
@@ -93,9 +96,9 @@ class BusinessesView extends Component {
 
   loadBusinesses() {
 
-    if (this.state.businessesQuery.more === false)
+    if (this.more === false)
       return;
-
+    
     this.setState( (state) => {  
       state.businessesQuery.loading = true;
       return state;
@@ -107,9 +110,9 @@ class BusinessesView extends Component {
 
         bendService.searchActivity({
           type:'business',
-          offset: this.state.businessesQuery.offset,
-          limit: this.state.businessesQuery.limit,
-          query: this.state.businessesQuery.search,
+          offset: this.offset,
+          limit: this.limit,
+          query: this.searchText,
           lat: position.coords.latitude,
           long: position.coords.longitude
         }, (error, result)=>{
@@ -124,19 +127,21 @@ class BusinessesView extends Component {
             return
           }
 
-          let moreBusinesses = true;
-          if (result.data.business.length < this.state.businessesQuery.limit) {
-            moreBusinesses = false;
+          if (result.data.business.length < this.limit) {
+            this.more = false;
+            this.setState( (state) => {  
+              state.businessesQuery.more = false;
+              return state;
+            });
+
           }
 
-          const imageOffset = this.state.businessesQuery.offset;
 
-          this.setState( (state) => {
-            state.businesses = this.state.businesses.concat(result.data.business);
-            state.businessesQuery.offset += this.state.businessesQuery.limit;
-            state.businessesQuery.more = moreBusinesses;
-            return state;
-          })
+          this.businesses = this.businesses.concat(result.data.business);
+          this.setState({ businesses: this.businesses });
+
+          const imageOffset = this.offset;
+          this.offset += this.limit;
 
           result.data.business.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {
@@ -165,10 +170,52 @@ class BusinessesView extends Component {
 
   onSearchChange(text) {
 
+    if (text === '') {
+      this.onSearchFocus();
+      return;
+    }
+
+    this.offset = 0;
+    this.searchText = text;      
+    this.more = true;
+    this.businesses = [];
+
     this.setState( (state) => {
-      state.businessesQuery.offset = 0;
       state.businessesQuery.more = true;
-      state.businessesQuery.search = text;
+      state.categoryIcons = [];
+      return state;
+    })
+
+    this.loadBusinesses();
+  }
+
+  onSearchFocus() {
+
+    console.log('onSearchFocus');
+
+    this.offset = 0;
+    this.more = false;
+    this.businesses = [];
+
+    this.setState( (state) => {
+      state.businessesQuery.more = false;
+      state.businesses = [];
+      state.categoryIcons = [];
+      return state;
+    })
+  }
+
+  onSearchCancel() {
+
+    console.log('onSearchCancel');
+
+    this.offset = 0;
+    this.searchText = '';
+    this.more = true;
+    this.businesses = [];
+
+    this.setState( (state) => {
+      state.businessesQuery.more = true;
       state.businesses = [];
       state.categoryIcons = [];
       return state;
@@ -187,6 +234,8 @@ class BusinessesView extends Component {
           onBack={ this.onBack }
           placeholder={ 'Search businesses' }
           onSearchChange={ (text) => this.onSearchChange(text) }
+          onFocus={ () => this.onSearchFocus() }
+          onCancel={ () => this.onSearchCancel() }
         />
         {/*<View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
