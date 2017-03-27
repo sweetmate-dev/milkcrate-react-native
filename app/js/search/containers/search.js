@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 11,
     paddingTop: 8,
   },
 });
