@@ -117,7 +117,7 @@ class App extends Component {
 
   deepLinks () {
 
-    DeepLinking.addScheme('milkcrate://');
+    DeepLinking.addScheme('www.mymilkcrate.com://');
     Linking.addEventListener('url', DeepLinking.handleUrl);
 
     deepLink_General.forEach((link) => {

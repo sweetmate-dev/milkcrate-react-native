@@ -80,8 +80,6 @@ class BusinessesListView extends Component {
       loading,
     } = this.props;
 
-    console.log ('business images length : ', this.props.categoryIcons);
-
     return (
       <ScrollView>
         <ListView

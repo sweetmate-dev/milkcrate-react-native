@@ -192,6 +192,10 @@ class Profile extends Component {
     Actions.CommunityPoints();
   }
 
+  onSearchFocus() {
+    this.props.onSearch();
+  }
+
   render() {
     const { status } = this.props;
     const currentUser = bendService.getActiveUser()
@@ -200,6 +204,7 @@ class Profile extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavSettingButton }
           onSetting={ this.onSettings }
+          onFocus={ () => this.onSearchFocus() }
         />
         <ScrollView>
           <View style={ styles.topContainer }>

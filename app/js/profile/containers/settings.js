@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   Switch,
+  Linking,
   Alert,
 } from 'react-native';
 
@@ -24,6 +25,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
+var Mailer = require('NativeModules').RNMail;
 
 import bendService from '../../bend/bendService'
 
@@ -66,27 +68,54 @@ class Settings extends Component {
   }
 
   onSendUsYourFeedback() {
-    alert( 'Tapped onSendUsYourFeedback');
+    Mailer.mail({
+      subject: 'Feedback on MilkCrate for Communities',
+      recipients: ['support@mymilkcrate.com'],
+      body: '',
+    }, (error, event) => {
+      if(error) {
+        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
+      }
+    });
   }
 
   onSuggestBusinessOrEvent() {
-    alert( 'Tapped onSuggestBusinessOrEvent');
+    Mailer.mail({
+      subject: 'Activity Suggestion',
+      recipients: ['support@mymilkcrate.com'],
+      body: '',
+    }, (error, event) => {
+      if(error) {
+        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
+      }
+    });
   }
 
+  opneURL(url) {
+    Linking.canOpenURL(url).then( supported => {
+      if (supported) {
+        Linking.openURL(url);        
+      } else {
+        console.log("Can't handle url: " + url);        
+      }
+    });
+  }
   onAboutMilkCrate() {
-    alert( 'Tapped onAboutMilkCrate');
+    
+    this.opneURL('http://www.mymilkcrate.com');    
   }
 
   onPrivacyPolicy() {
-    alert( 'Tapped onPrivacyPolicy');
+
+    this.opneURL('http://mymilkcrate.com/privacy-policy/');
   }
 
   onTermsOfUse() {
-    alert( 'Tapped onTermsOfUse');
+    this.opneURL('http://mymilkcrate.com/terms-of-use/');
   }
 
   onSoftwareLicenses() {
-    alert( 'Tapped onSoftwareLicenses');
+    this.opneURL('http://mymilkcrate.com/software-licenses/');
   }
 
   onLogOut() {

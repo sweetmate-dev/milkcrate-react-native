@@ -104,7 +104,7 @@ class Signup extends Component {
   onContactUs() {
 
     Mailer.mail({
-      subject: 'Help',
+      subject: 'Feedback on MilkCrate for Communities',
       recipients: ['support@mymilkcrate.com'],
       body: '',
     }, (error, event) => {

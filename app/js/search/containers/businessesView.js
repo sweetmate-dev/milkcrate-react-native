@@ -48,7 +48,7 @@ class BusinessesView extends Component {
 
     this.state = {
       selectedIndex: 'List',
-      currentPosition: null,
+      currentLocation: null,
       businesses: [],
       categoryIcons: [],
 
@@ -85,7 +85,7 @@ class BusinessesView extends Component {
 
   onCurrentLocation() {
     navigator.geolocation.getCurrentPosition( (position) => {
-        this.setState({ currentPosition: position });
+        this.setState({ currentLocation: position });
       },
       (error) => {
         console.log(JSON.stringify(error));
@@ -106,7 +106,7 @@ class BusinessesView extends Component {
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-        this.setState({ currentPosition: position })
+        this.setState({ currentLocation: position })
 
         bendService.searchActivity({
           type:'business',
@@ -170,10 +170,10 @@ class BusinessesView extends Component {
 
   onSearchChange(text) {
 
-    if (text === '') {
-      this.onSearchFocus();
-      return;
-    }
+    // if (text === '') {
+    //   this.onSearchFocus();
+    //   return;
+    // }
 
     this.offset = 0;
     this.searchText = text;      
@@ -189,25 +189,21 @@ class BusinessesView extends Component {
     this.loadBusinesses();
   }
 
-  onSearchFocus() {
+  // onSearchFocus() {
 
-    console.log('onSearchFocus');
+  //   this.offset = 0;
+  //   this.more = false;
+  //   this.businesses = [];
 
-    this.offset = 0;
-    this.more = false;
-    this.businesses = [];
-
-    this.setState( (state) => {
-      state.businessesQuery.more = false;
-      state.businesses = [];
-      state.categoryIcons = [];
-      return state;
-    })
-  }
+  //   this.setState( (state) => {
+  //     state.businessesQuery.more = false;
+  //     state.businesses = [];
+  //     state.categoryIcons = [];
+  //     return state;
+  //   })
+  // }
 
   onSearchCancel() {
-
-    console.log('onSearchCancel');
 
     this.offset = 0;
     this.searchText = '';
@@ -234,7 +230,6 @@ class BusinessesView extends Component {
           onBack={ this.onBack }
           placeholder={ 'Search businesses' }
           onSearchChange={ (text) => this.onSearchChange(text) }
-          onFocus={ () => this.onSearchFocus() }
           onCancel={ () => this.onSearchCancel() }
         />
         {/*<View style={ styles.segmentedWrap }>
@@ -266,7 +261,7 @@ class BusinessesView extends Component {
             <BusinessesListView 
               businesses={ this.state.businesses } 
               categoryIcons={ this.state.categoryIcons } 
-              currentLocation={ this.state.currentPosition } 
+              currentLocation={ this.state.currentLocation } 
               moreBusinesses={ this.state.businessesQuery.more }
               loading={ this.state.businessesQuery.loading }
               onLoadBusinesses={ () => this.loadBusinesses() }
@@ -275,7 +270,7 @@ class BusinessesView extends Component {
             <BusinessesMapView 
               categoryIcon={ commonStyles.categoryIcons[0] } 
               businesses={ this.state.businesses } 
-              currentLocation={ this.state.currentPosition } 
+              currentLocation={ this.state.currentLocation } 
             />
         }
       </View>
