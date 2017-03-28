@@ -140,7 +140,7 @@ class CategoryView extends Component {
         distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
-        rating={ Math.max(Number(rowData.rating||1), 1) }
+        rating={ Number(rowData.rating||0) }
         onClick={ () => this.onPressedBusinessesCell(rowData) }
       />
     );

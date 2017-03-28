@@ -405,7 +405,8 @@ module.exports = {
                 activity:["action", "business", "event", "volunteer_opportunity", "service"],
                 community:"community",
                 user:"user",
-                "user.avatar":"bendFile"
+                "user.avatar":"bendFile",
+                "activity.certification":'certification'
             }
         }).then((rets)=>{
             console.log(rets);
@@ -455,7 +456,8 @@ module.exports = {
         Bend.DataStore.find("activity", query, {
             relations:{
                 activity:["action", "business", "event", "volunteer_opportunity", "service"],
-                community:"community"
+                community:"community",
+                "activity.certification":'certification'
             }
         }).then((rets)=>{
             //consider likes

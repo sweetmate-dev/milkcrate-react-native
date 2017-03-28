@@ -99,11 +99,13 @@ export default class RecentActivityListCell extends Component {
                     </View>*/}
 
                     <Text style={ styles.textSmall }>
-                      {
-                        this.props.hearts > 1 ?
-                            this.props.hearts + " Likes"
-                                :
-                            this.props.hearts + " Like"
+                      {this.props.hearts == 0 ?
+                          "0 Likes"
+                          :
+                          this.props.hearts > 1 ?
+                          this.props.hearts + " Likes"
+                              :
+                          this.props.hearts + " Like"
                       }
                     </Text>
                   </View>

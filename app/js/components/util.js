@@ -288,6 +288,14 @@ class UtilService {
 
         return ret.join(", ")
     }
+
+    static isValid(data) {
+        if(!data) return false
+
+        if(data == '') return false
+
+        return true
+    }
 }
 
 export default UtilService

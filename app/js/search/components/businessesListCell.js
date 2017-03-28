@@ -28,7 +28,7 @@ export default class BusinessesListCell extends Component {
 
   static defaultProps = {
     mode: 0,
-    rating: 5.0,
+    rating: 0.0,
     distance: 1,
     price: 0,
     onClick: () => {}
@@ -74,10 +74,10 @@ export default class BusinessesListCell extends Component {
                 <View style={ styles.cellTopTitleContainer }>
                   <Text numberOfLines={2} style={ styles.title }>{ title }</Text>
                 </View>
-                <View style={ styles.cellTopRatingContainer }>
+                {rating > 0 && <View style={ styles.cellTopRatingContainer }>
                   <Text style={ styles.text }>{ rating.toFixed(1) } </Text>
                   <Image style={ styles.star } source={ star } />
-                </View>
+                </View>}
               </View>
               <Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>
             </View>

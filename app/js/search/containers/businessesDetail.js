@@ -227,7 +227,7 @@ class BusinessesDetail extends Component {
         categoryIcon={ rowData.categoryIcon }
         time={ rowData.time }
         hearts={ rowData.hearts }
-        rating={ rowData.rating }
+        rating={ Number(rowData.rating||0) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />
     );
@@ -297,7 +297,7 @@ class BusinessesDetail extends Component {
                   this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles   ':''}
                     {UtilService.getPricesString(business.price)}</Text>}
               </View>
-              { rating != 0.0 && <View style={ styles.businessInfoRatingContainer }>
+              { rating >0 && <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ rating } </Text>
                 <Image style={ styles.imageStar } source={ star } />
               </View>}
@@ -312,13 +312,13 @@ class BusinessesDetail extends Component {
                 </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
-                {business.phoneNumber != '' &&<TouchableOpacity onPress={ () => this.onCallPhone() }>
+                {UtilService.isValid(business.phoneNumber) &&<TouchableOpacity onPress={ () => this.onCallPhone() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ phone } />
                     <Text style={ styles.textInfoTitle }>Phone</Text>
                   </View>
                 </TouchableOpacity>}
-                {business.url&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                {UtilService.isValid(business.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>

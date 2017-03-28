@@ -65,7 +65,7 @@ class BusinessesListView extends Component {
         distance={ rowData._geoloc&&this.props.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
-        rating={ Math.max(Number(rowData.rating||1) , 1) }
+        rating={ Number(rowData.rating||0) }
         onClick={ () => this.onPressedCell(rowData) }
       />
     );
