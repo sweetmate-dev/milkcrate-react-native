@@ -297,10 +297,12 @@ module.exports = {
         if(!communityId) return []
 
         var query = new Bend.Query();
-        query.equalTo("community._id", communityId)
+        query.and(new Bend.Query().equalTo("community._id", communityId)
+            .or().exists("community", false));
         query.notEqualTo("deleted", true)
         query.equalTo("enabled", true)
-        query.limit = 10
+        query.descending("activityCount")
+        query.limit(4)
 
         Bend.DataStore.find("business", query, {
             relations:{
@@ -309,71 +311,36 @@ module.exports = {
                 coverImage:"BendFile"
             }
         }).then((rets)=>{
-            //console.log("trendings", rets)
+            console.log("trendings", rets)
             //get any 2 items
             var count = rets.length;
-            var trends = []
-            if(count > 2) {
-                trends = _.sample(rets, 2);
-            } else
-                trends = rets
+            var trends = rets
 
             if(trends.length > 0) {
                 //get users
-                async.parallel([
-                    (callback)=>{
-                       var t =  trends.length > 0?trends[0]:null
-                        if(t) {
-                            var q = new Bend.Query()
-                            q.equalTo("activity._id", t._id);
-                            q.descending("_bmd.createdAt");
-                            q.limit(20)
-                            Bend.DataStore.find("activity", q, {
-                                relations:{
-                                    user:"user",
-                                    "user.avatar":"bendFile",
-                                }
-                            }).then((rets)=>{
-                                var users = []
-                                _.map(rets, (o)=>{
-                                    users.push(o.user);
-                                })
-                                t.users = users
-                                callback(null, null)
-                            }, (err)=>{
-                                callback(err, null)
+                async.map(trends,
+                    (t, callback)=>{
+                        var q = new Bend.Query()
+                        q.equalTo("activity._id", t._id);
+                        q.descending("_bmd.createdAt");
+                        q.limit(20)
+                        Bend.DataStore.find("activity", q, {
+                            relations:{
+                                user:"user",
+                                "user.avatar":"bendFile",
+                            }
+                        }).then((rets)=>{
+                            var users = []
+                            _.map(rets, (o)=>{
+                                users.push(o.user);
                             })
-                        } else {
+                            t.users = users
                             callback(null, null)
-                        }
-                    },
-                    (callback)=>{
-                        var t =  trends.length > 1?trends[1]:null
-                        if(t) {
-                            var q = new Bend.Query()
-                            q.equalTo("activity._id", t._id);
-                            q.descending("_bmd.createdAt");
-                            q.limit(20)
-                            Bend.DataStore.find("activity", q, {
-                                relations:{
-                                    user:"user",
-                                    "user.avatar":"bendFile",
-                                }
-                            }).then((rets)=>{
-                                var users = []
-                                _.map(rets, (o)=>{
-                                    users.push(o.user);
-                                })
-                                t.users = users
-                                callback(null, null)
-                            }, (err)=>{
-                                callback(err, null)
-                            })
-                        } else {
-                            callback(null, null)
-                        }
+                        }, (err)=>{
+                            callback(err, null)
+                        })
                     }
-                ], (err, rets)=>{
+                , (err, rets)=>{
                     cb(null, trends)
                 })
             } else {
