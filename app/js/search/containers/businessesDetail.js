@@ -399,8 +399,8 @@ class BusinessesDetail extends Component {
           </View>*/}
           {!this.state.everDidStatus && <View style={ styles.certificationsContainer }>
             <View style={ styles.certificationsCheckContainer }>
-              {avatar&&<Image style={ styles.imageAvatar } source={{ uri:avatar }} />}
-              {!avatar && defaultAvatar&&<Image style={ styles.imageAvatar } source={ defaultAvatar } />}
+              {avatar&&<Image style={ styles.imageIcon } source={{ uri:avatar }} />}
+              {!avatar && defaultAvatar&&<Image style={ styles.imageIcon } source={ defaultAvatar } />}
               <View style={ styles.certificationsCheckSubContainer }>
                 <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
                 <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
