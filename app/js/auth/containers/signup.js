@@ -105,11 +105,11 @@ class Signup extends Component {
 
     Mailer.mail({
       subject: 'Feedback on MilkCrate for Communities',
-      recipients: ['support@mymilkcrate.com'],
+      recipients: ['info@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
+        Alert.alert('Error', 'Could not send e-mail. Please email us at info@mymilkcrate.com');
       }
     });
   }

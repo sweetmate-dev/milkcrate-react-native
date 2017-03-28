@@ -811,7 +811,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = PXW9DZ52AV;
+						DevelopmentTeam = E4Y3VW47MT;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1403,10 +1403,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = PXW9DZ52AV;
+				DEVELOPMENT_TEAM = E4Y3VW47MT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1430,10 +1430,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.milkcratephilly.milkcrate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neusis.milkcrate;
 				PRODUCT_NAME = MilkCrate;
-				PROVISIONING_PROFILE = "f845d0de-7425-4a7b-a085-a1b9005edfce";
-				PROVISIONING_PROFILE_SPECIFIER = "MilkCrate Distribution Profile";
+				PROVISIONING_PROFILE = "2f7fcb70-3d8e-4a31-ac1f-295f7f0a7958";
+				PROVISIONING_PROFILE_SPECIFIER = "MilkCrate Development";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1443,9 +1443,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = PXW9DZ52AV;
+				DEVELOPMENT_TEAM = E4Y3VW47MT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1469,10 +1469,10 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.milkcratephilly.milkcrate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neusis.milkcrate;
 				PRODUCT_NAME = MilkCrate;
-				PROVISIONING_PROFILE = "f845d0de-7425-4a7b-a085-a1b9005edfce";
-				PROVISIONING_PROFILE_SPECIFIER = "MilkCrate Distribution Profile";
+				PROVISIONING_PROFILE = "2f7fcb70-3d8e-4a31-ac1f-295f7f0a7958";
+				PROVISIONING_PROFILE_SPECIFIER = "MilkCrate Development";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1545,7 +1545,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.milkcratephilly.milkcrate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neusis.milkcrate;
 				PRODUCT_NAME = MilkCrate;
 				PROVISIONING_PROFILE = "f845d0de-7425-4a7b-a085-a1b9005edfce";
 				PROVISIONING_PROFILE_SPECIFIER = "MilkCrate Distribution Profile";
