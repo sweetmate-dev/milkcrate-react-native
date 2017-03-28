@@ -280,10 +280,11 @@ class UtilService {
         return "";
     }
 
-    static getCityStateString(city, state) {
+    static getCityStateString(city, state, postal) {
         var ret = []
         if(city) ret.push(city)
         if(state) ret.push(state)
+        if(postal) ret.push(postal)
 
         return ret.join(", ")
     }

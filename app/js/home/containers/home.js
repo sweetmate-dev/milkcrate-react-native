@@ -166,9 +166,9 @@ class Home extends Component {
       state.activityQuery.loading = true;
       return state;
     });
-    
+    console.log("call loadRecentActivities")
     bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
-
+      console.log("getRecentActivities", error, result)
       this.setState( (state) => {  
         state.activityQuery.loading = false;
         return state;
@@ -192,6 +192,8 @@ class Home extends Component {
           recentActivities:this.state.recentActivities
         })
       }
+
+      console.log("this.state.recentActivities", this.state.recentActivities.length)
 
       this.setState({
         activityQuery:this.state.activityQuery

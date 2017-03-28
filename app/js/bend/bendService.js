@@ -122,18 +122,32 @@ module.exports = {
     },
 
     getActivity(id, cb) {
-      Bend.DataStore.get("activity", id, {
-          relations:{
-              activity:["action", "business", "event", "volunteer_opportunity", "service"],
-              community:"community",
-              user:"user",
-              "user.avatar":"bendFile"
-          }
-      }).then((ret)=>{
-          cb(null, ret)
-      }, (err)=>{
-          cb(err)
-      })
+        Bend.DataStore.get("activity", id, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community",
+                user:"user",
+                "user.avatar":"bendFile"
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getEvent(id, cb) {
+        Bend.DataStore.get("event", id, {
+            relations:{
+                certification:"certification",
+                community:"community",
+                coverImage:"BendFile"
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+        }, (err)=>{
+            cb(err)
+        })
     },
 
     //get user alerts
@@ -375,7 +389,7 @@ module.exports = {
     getRecentActivities(createdAt, limit, cb) {
         //get community of current user
         var communityId = this.getActiveUser().community._id;
-        if(!communityId) return []
+        if(!communityId) return cb(null, [])
 
         var query = new Bend.Query();
         query.equalTo("community._id", communityId)
@@ -394,6 +408,7 @@ module.exports = {
                 "user.avatar":"bendFile"
             }
         }).then((rets)=>{
+            console.log(rets);
             //consider likes
             var activityIds = []
             _.map(rets, (o)=>{
