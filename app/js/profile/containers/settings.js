@@ -70,11 +70,11 @@ class Settings extends Component {
   onSendUsYourFeedback() {
     Mailer.mail({
       subject: 'Feedback on MilkCrate for Communities',
-      recipients: ['support@mymilkcrate.com'],
+      recipients: ['info@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Cannot Send E-mail', 'Please email us directly at support@mymilkcrate.com');
+        Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
       }
     });
   }
@@ -82,11 +82,11 @@ class Settings extends Component {
   onSuggestBusinessOrEvent() {
     Mailer.mail({
       subject: 'Suggestion for directory',
-      recipients: ['support@mymilkcrate.com'],
+      recipients: ['info@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Cannot Send E-mail', 'Please email us directly at support@mymilkcrate.com');
+        Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
       }
     });
   }
