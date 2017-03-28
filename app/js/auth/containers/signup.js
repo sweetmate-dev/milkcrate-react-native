@@ -56,17 +56,17 @@ class Signup extends Component {
   onSignUp() {
 
     if (this.state.email == '') {
-      Alert.alert('Please enter your email address.');
+      Alert.alert('E-mail Required', 'Please enter your email address.');
       return;
     }
 
     if (this.state.password == '') {
-      Alert.alert('Please enter your password.');
+      Alert.alert('Password Required', 'Please enter and confirm your password.');
       return;
     }
 
     if (this.state.communityCode == '') {
-      Alert.alert('Please enter your communicy code.');
+      Alert.alert('Community Code Required', 'Please enter your Community Code. Contact us if you need assistance.');
       return;
     }
 

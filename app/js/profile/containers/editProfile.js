@@ -70,7 +70,7 @@ class EditProfile extends Component {
         console.log(err);return;
       }
 
-      alert("Successfully updated.")
+      Alert.alert("Profile Updated", "Your changes have been saved.")
     })
   }
 
@@ -121,7 +121,7 @@ class EditProfile extends Component {
             value={this.state.user.email}
             onChangeText={ (text) => { this.state.user.email = text }}
           />
-          <View style={ styles.cellContainer }> 
+          <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Gender</Text>
             <View style={ styles.dropDownWrapper }>
               <ModalDropdown
@@ -135,8 +135,8 @@ class EditProfile extends Component {
               <Image source={ triangle_down } style={ styles.imageTriangleDown }/>
             </View>
           </View>
-          
-          <View style={ styles.cellContainer }> 
+
+          <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Date of Birth</Text>
             <DatePicker
               style={ styles.birthdayWrapper }
@@ -146,7 +146,7 @@ class EditProfile extends Component {
               format="MMMM DD, YYYY"
               minDate="Jan 01, 1900"
               maxDate="Dec 31, 2200"
-              confirmBtnText="Confirm"         
+              confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               showIcon={ false }
               customStyles={{
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   saveProfileButtonWrapper: {
     width: commonStyles.screenWidth,
     height: 56,
-    backgroundColor: '#fff',    
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     borderTopWidth: 1,

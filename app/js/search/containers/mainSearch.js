@@ -49,13 +49,13 @@ const exploreWays = [
     iconWidth: 14,
     iconHeight: 21,
   },
-  {
-    title: 'Events',
-    description: 'Register for green events and add to your calendar',
-    icon: require('../../../assets/imgs/events.png'),
-    iconWidth: 23,
-    iconHeight: 25,
-  },
+  // {
+  //   title: 'Events',
+  //   description: 'Register for green events and add to your calendar',
+  //   icon: require('../../../assets/imgs/events.png'),
+  //   iconWidth: 23,
+  //   iconHeight: 25,
+  // },
   // {
   //   title: 'Volunteer Opportunities',
   //   description: 'Find one that’s right for you',
@@ -63,13 +63,13 @@ const exploreWays = [
   //   iconWidth: 26,
   //   iconHeight: 25,
   // },
-  {
-    title: 'Services',
-    description: 'Sign up for eco-friendly lifestyle services',
-    icon: require('../../../assets/imgs/services.png'),
-    iconWidth: 23,
-    iconHeight: 20,
-  },
+  // {
+  //   title: 'Services',
+  //   description: 'Sign up for eco-friendly lifestyle services',
+  //   icon: require('../../../assets/imgs/services.png'),
+  //   iconWidth: 23,
+  //   iconHeight: 20,
+  // },
 
 ];
 

@@ -88,17 +88,17 @@ class Profile extends Component {
 
   loadRecentActivities() {
 
-    if ( this.state.activityQuery.more === false ) 
+    if ( this.state.activityQuery.more === false )
       return;
-    
-    this.setState( (state) => {  
+
+    this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
-    
+
     bendService.getMyRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
 
-      this.setState( (state) => {  
+      this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
@@ -215,23 +215,23 @@ class Profile extends Component {
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>14th</Text>
+                <Text style={ styles.textValue }>–</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>8</Text>
+                <Text style={ styles.textValue }>–</Text>
                 <Text style={ styles.textSmall }>Volunteer Hours</Text>
               </View>
             </View>
           </View>
 
-          <View style={ styles.buttonContainer }>
+          {false && <View style={ styles.buttonContainer }>
             <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
               <View style={ styles.buttonWrapper }>
                 <Text style={ styles.textButton }>See Community Points</Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </View>}
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>
@@ -333,5 +333,5 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
     fontWeight: 'bold',
-  },  
+  },
 });

@@ -74,19 +74,19 @@ class Settings extends Component {
       body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
+        Alert.alert('Cannot Send E-mail', 'Please email us directly at support@mymilkcrate.com');
       }
     });
   }
 
   onSuggestBusinessOrEvent() {
     Mailer.mail({
-      subject: 'Activity Suggestion',
+      subject: 'Suggestion for directory',
       recipients: ['support@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
       if(error) {
-        Alert.alert('Error', 'Could not send e-mail. Please email us at support@mymilkcrate.com');
+        Alert.alert('Cannot Send E-mail', 'Please email us directly at support@mymilkcrate.com');
       }
     });
   }
@@ -94,15 +94,15 @@ class Settings extends Component {
   opneURL(url) {
     Linking.canOpenURL(url).then( supported => {
       if (supported) {
-        Linking.openURL(url);        
+        Linking.openURL(url);
       } else {
-        console.log("Can't handle url: " + url);        
+        console.log("Can't handle url: " + url);
       }
     });
   }
   onAboutMilkCrate() {
-    
-    this.opneURL('http://www.mymilkcrate.com');    
+
+    this.opneURL('http://www.mymilkcrate.com');
   }
 
   onPrivacyPolicy() {
@@ -198,12 +198,12 @@ class Settings extends Component {
 
           {/* Communicate */}
           <Text style={ styles.textOtherSection }>Communicate</Text>
-          <TouchableHighlight onPress={ () => this.onShareThisApp() }>
+          { false && <TouchableHighlight onPress={ () => this.onShareThisApp() }>
             <View style={ styles.cellContainer }>
               <Text style={ styles.textCellTitle }>Share this app</Text>
               <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
             </View>
-          </TouchableHighlight>
+          </TouchableHighlight>}
           <TouchableHighlight onPress={ () => this.onSendUsYourFeedback() }>
             <View style={ styles.cellContainer }>
               <Text style={ styles.textCellTitle }>Send us your feedback!</Text>

@@ -109,8 +109,9 @@ export default class TrendingCarousel extends Component {
             </View>
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
-                <Image style={ styles.imageLike } source={ heart }/>
-                <Text style={ styles.textSmall }> { hearts }</Text>
+                { false &&
+                <Image style={ styles.imageLike } source={ heart }/>}
+                { false && <Text style={ styles.textSmall }> { hearts }</Text>}
               </View>
               <Point point={ points }/>
             </View>
