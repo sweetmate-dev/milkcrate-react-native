@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
@@ -75,16 +75,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: 10,
+    justifyContent: 'flex-start'
   },
   icon: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
   },
   textTitle: {
-    flex: 1,
-    paddingLeft: 10,
+    paddingLeft: 5,
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,

@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cellContainer: {
-    width: commonStyles.screenWidth,
     height: 72,
     backgroundColor: '#fff',
     // alignItems: 'flex-start',
@@ -239,14 +238,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   dropDownWrapper: {
+    flex:1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'stretch',
   },
   dropDownText: {
-    width: commonStyles.screenWidth - 32,
     color: commonColors.grayText,
+    width: commonStyles.screenWidth - 32,
     fontFamily: 'OpenSans-Semibold',
     height: 22,
     fontSize: 14,
@@ -269,13 +269,11 @@ const styles = StyleSheet.create({
   },
 
   line: {
-    width: commonStyles.screenWidth,
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
 
   saveProfileButtonWrapper: {
-    width: commonStyles.screenWidth,
     height: 56,
     backgroundColor: '#fff',
     alignItems: 'center',

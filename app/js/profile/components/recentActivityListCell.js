@@ -129,8 +129,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderStyle: 'solid',
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line,
-    width: screenWidth,
+    borderBottomColor: commonColors.line
   },
   leftContainer: {
     flex: 9,

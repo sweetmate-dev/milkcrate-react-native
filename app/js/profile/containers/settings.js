@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
   },
   cellContainer: {
     flexDirection: 'row',
-    width: commonStyles.screenWidth,
     height: 56,
     backgroundColor: '#fff',
     paddingHorizontal: 16,
@@ -302,7 +301,6 @@ const styles = StyleSheet.create({
     borderTopColor: commonColors.line,
   },
   line: {
-    width: commonStyles.screenWidth,
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
@@ -312,7 +310,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   logoutButtonWrapper: {
-    width: commonStyles.screenWidth,
     height: 56,
     backgroundColor: '#fff',
     alignItems: 'center',

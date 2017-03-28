@@ -190,12 +190,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   line: {
-    width: commonStyles.screenWidth,
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
   updatePasswordButtonWrapper: {
-    width: commonStyles.screenWidth,
     height: 56,
     backgroundColor: '#fff',    
     alignItems: 'center',

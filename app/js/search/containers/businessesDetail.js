@@ -346,7 +346,7 @@ class BusinessesDetail extends Component {
             </TouchableOpacity>}
           </View>
           {business.certification && business.certification.name && <View style={ styles.certificationsContainer }>
-            <Text style={ styles.textDescription }>Certifications</Text>
+            <Text style={ styles.textHeading }>Certifications</Text>
             <View style={ styles.certificationsButtonContainer }>
             <View style={ styles.buttonCertificationsWrapper }>
               <Text style={ styles.textCertificationsButton }>{business.certification.name}</Text>
@@ -539,6 +539,12 @@ const styles = StyleSheet.create({
   textDescription: {
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
+    fontSize: 14,
+    paddingVertical: 10,
+  },
+  textHeading: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     paddingVertical: 10,
   },
