@@ -32,7 +32,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     paddingHorizontal: 5,
     paddingVertical: 5,
-  }
+  },
+  goButton: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+  },
 });
 
 export default class SearchBar extends Component {
@@ -92,7 +100,6 @@ export default class SearchBar extends Component {
   }
 
   _onClose() {
-
     this._textInput.setNativeProps({ text: '' });
     this.props.onSearchChange('');
     this.setState({ textSearch: '' });
@@ -103,7 +110,6 @@ export default class SearchBar extends Component {
   }
 
   _onFocus() {
-
     this._textInput.setNativeProps({ text: '' });
     this.setState({ isOnFocus: true });
     if (this.props.onFocus) {
@@ -112,7 +118,6 @@ export default class SearchBar extends Component {
   }
 
   _onBlur() {
-
     this.setState({ isOnFocus: false });
     if (this.props.onBlur) {
       this.props.onBlur();
@@ -120,8 +125,7 @@ export default class SearchBar extends Component {
     this._dismissKeyboard();
   }
 
-  _onSearchChange(text) {
-    
+  _onSearchChange(text) {    
     this.setState({ textSearch: text });
     if (this.props.onSearchChange) {
       this.props.onSearchChange(text);
@@ -129,7 +133,6 @@ export default class SearchBar extends Component {
   }
 
   _onCancel() {
-
     this._textInput.setNativeProps({ text: '' });
     // this.props.onSearchChange('');
     this.setState({ textSearch: '' });
@@ -137,6 +140,12 @@ export default class SearchBar extends Component {
 
     if (this.props.onCancel) {
       this.props.onCancel();
+    }
+  }
+
+  _onGoSearch() {
+    if (this.props.onGoSearch) {
+      this.props.onGoSearch();
     }
   }
 
@@ -163,6 +172,7 @@ export default class SearchBar extends Component {
       paddingRight,
       paddingTop,
       paddingBottom,
+      goSearch,
     } = this.props;
 
     let { iconSize } = this.props
@@ -234,6 +244,10 @@ export default class SearchBar extends Component {
               </View>
             :
               null
+          }
+
+          {
+            goSearch && <TouchableOpacity style={ styles.goButton } onPress={ () => this._onGoSearch() }/>
           }
         </View>
       </View>

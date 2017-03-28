@@ -521,7 +521,7 @@ class Home extends Component {
     );
   }
 
-  onSearchFocus() {
+  onGoSearch() {
     this.props.onSearch();
   }
 
@@ -531,7 +531,8 @@ class Home extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          onFocus={ () => this.onSearchFocus() }
+          goSearch={ true }
+          onGoSearch={ () => this.onGoSearch() }
         />
         <ScrollView
           style={ styles.scrollView }

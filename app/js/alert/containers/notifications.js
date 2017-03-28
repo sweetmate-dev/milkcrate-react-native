@@ -98,7 +98,7 @@ class Notifications extends Component {
     alert("Tapped cell - " + rowID);
   }
 
-  onSearchFocus() {
+  onGoSearch() {
     this.props.onSearch();
   }
 
@@ -107,7 +107,8 @@ class Notifications extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          onFocus={ () => this.onSearchFocus() }
+          goSearch={ true }
+          onGoSearch={ () => this.onGoSearch() }
         />
         <View style={ styles.listViewWrap }>
           <ListView

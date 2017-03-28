@@ -277,7 +277,6 @@ class BusinessesDetail extends Component {
             {
               <MapView.Marker
                 image={ map_pin }
-                style={styles.map_pin}
                 coordinate={{
                 latitude: Number(business._geoloc[1]),
                 longitude: Number(business._geoloc[0]),
@@ -438,10 +437,10 @@ const styles = StyleSheet.create({
     width: commonStyles.screenWidth,
     height: commonStyles.hp(21),
   },
-  map_pin: {
-    width: 24,
-    height: 37,
-  },
+  // map_pin: {
+  //   width: 24,
+  //   height: 37,
+  // },
   mainContentContainer: {
     paddingLeft: 20,
     paddingRight: 16,

@@ -192,7 +192,7 @@ class Profile extends Component {
     Actions.CommunityPoints();
   }
 
-  onSearchFocus() {
+  onGoSearch() {
     this.props.onSearch();
   }
 
@@ -204,7 +204,8 @@ class Profile extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavSettingButton }
           onSetting={ this.onSettings }
-          onFocus={ () => this.onSearchFocus() }
+          goSearch={ true }
+          onGoSearch={ () => this.onGoSearch() }
         />
         <ScrollView>
           <View style={ styles.topContainer }>

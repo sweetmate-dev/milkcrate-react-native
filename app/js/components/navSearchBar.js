@@ -24,11 +24,13 @@ export default class NavSearchBar extends Component {
     onFocus: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
+    onGoSearch: PropTypes.func,
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
     placeholder: PropTypes.string,
-    buttons: PropTypes.number,    
+    buttons: PropTypes.number,
+    goSearch: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -36,11 +38,13 @@ export default class NavSearchBar extends Component {
     onFocus: () => {},
     onClose: () => {},
     onCancel: () => {},
+    onGoSearch: () => {},
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
     placeholder: 'Search for activities',
     buttons: commonStyles.NavNoneButton,
+    goSearch: false,
   }
 
   constructor(props) {
@@ -49,6 +53,7 @@ export default class NavSearchBar extends Component {
     this.onBack = this.onBack.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSetting = this.onSetting.bind(this);
+    this.onGoSearch = this.onGoSearch.bind(this);
   }
 
   onSearchChange(text) {
@@ -75,6 +80,12 @@ export default class NavSearchBar extends Component {
     }
   }
 
+  onGoSearch() {
+    if (this.props.onGoSearch) {
+      this.props.onGoSearch();
+    }
+  }
+
   onBack() {
     if (this.props.onBack) {
       this.props.onBack();
@@ -97,6 +108,7 @@ export default class NavSearchBar extends Component {
     const {
       placeholder,
       buttons,
+      goSearch,
     } = this.props;
 
     return (
@@ -121,6 +133,7 @@ export default class NavSearchBar extends Component {
               onFocus={ () => this.onFocus() }
               onClose={ () => this.onClose() }
               onCancel={ () => this.onCancel() }
+              onGoSearch={ () => this.onGoSearch() }
               height={ 28 }
               autoCorrect={ false }
               returnKeyType={ "search" }
@@ -128,6 +141,7 @@ export default class NavSearchBar extends Component {
               placeholder = { placeholder }
               placeholderColor="#ffffff99"
               paddingTop={ 28 }
+              goSearch={ goSearch }
             />
           </View>
           {
