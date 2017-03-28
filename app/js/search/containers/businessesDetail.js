@@ -30,7 +30,7 @@ import { BusinessRecentActivityEntries } from '../../components/dummyEntries';
 
 const dummyText = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit..';
 
-const map_pin = require('../../../assets/imgs/pin.png');
+const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
 const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
@@ -434,13 +434,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: commonStyles.screenWidth,
+    flex: 1,
     height: commonStyles.hp(21),
   },
-  // map_pin: {
-  //   width: 24,
-  //   height: 37,
-  // },
   mainContentContainer: {
     paddingLeft: 20,
     paddingRight: 16,

@@ -204,8 +204,7 @@ class Profile extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavSettingButton }
           onSetting={ this.onSettings }
-          goSearch={ true }
-          onGoSearch={ () => this.onGoSearch() }
+          onFocus={ () => this.onGoSearch() }
         />
         <ScrollView>
           <View style={ styles.topContainer }>

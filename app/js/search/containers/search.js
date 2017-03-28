@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
+import timer from 'react-native-timer';
 import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
@@ -23,8 +24,9 @@ class Search extends Component {
     super(props);
 
     this.state = {
-      mainSearch: true,
+      mainSearchPage: true,
       searchText: '',
+      searchAutoFocus: false,
     };
   }
 
@@ -37,6 +39,17 @@ class Search extends Component {
     } else if (newProps.status == 'search_category_error') {
 
     }
+
+    if (newProps.searchAutoFocus == true){
+      this.launchKeyboard();
+    }
+  }
+
+  componentDidMount() {
+
+    if (this.props.searchAutoFocus == true){
+      this.launchKeyboard();
+    }
   }
 
   onSearchChange(text) {
@@ -47,28 +60,42 @@ class Search extends Component {
   onSearchFocus() {
 
     this.setState({ 
-      mainSearch: false,
+      mainSearchPage: false,
+      searchAutoFocus: false,
       searchText: '',
     });
   }
 
   onSearchCancel() {
 
-    this.setState({ mainSearch: true });
+    this.setState({ 
+      searchAutoFocus: false,
+      mainSearchPage: true 
+    });
+  }
+
+  launchKeyboard() {
+
+    timer.setTimeout( this, 'LaunchKeyboard', () => {
+      timer.clearInterval(this, 'LaunchKeyboard');
+      this.setState({ searchAutoFocus: true });
+      console.log('LaunchKeyboard' );
+    }, 200);
   }
 
   render() {
     const { status } = this.props;
-
+    
     return (
       <View style={ styles.container }>
         <NavSearchBar
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
           onFocus={ () => this.onSearchFocus() }
+          searchAutoFocus={ this.state.searchAutoFocus }
         />
         {
-          this.state.mainSearch ?
+          this.state.mainSearchPage ?
           <MainSearch/>
           :
           <FilterSearch 

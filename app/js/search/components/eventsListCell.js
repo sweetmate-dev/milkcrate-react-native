@@ -75,13 +75,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    paddingRight: 5,
   },
   icon: {
     width: 44,
     height: 44,
   },
   textTitle: {
+    flex: 1,
     paddingLeft: 5,
     color: commonColors.title,
     fontFamily: 'Open Sans',

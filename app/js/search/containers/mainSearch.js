@@ -343,8 +343,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryCellImage: {
-    width: categoryCellSize - 40,
-    height : categoryCellSize - 40,
+    // width: categoryCellSize - 40,
+    // height : categoryCellSize - 40,
+    width: 60,
+    height: 60,
   },
   cagegoryCellText: {
     width: categoryCellSize,

@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
   categoryDetailListView: {
     borderStyle: 'solid',
     borderTopWidth: 1,
-    borderTopColor: commonColors.line,    
+    borderTopColor: commonColors.line,
   },
 });

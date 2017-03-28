@@ -23,16 +23,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: 'transparent',
   },
-  cancelContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textCancel: {
-    color: '#fff',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-  },
   goButton: {
     position: 'absolute',
     left: 0,
@@ -47,7 +37,6 @@ export default class SearchBar extends Component {
 
   static propTypes = {
     height: PropTypes.number.isRequired,
-    autoCorrect: PropTypes.bool,
     returnKeyType: PropTypes.string,
     onSearchChange: PropTypes.func,
     onEndEditing: PropTypes.func,
@@ -76,7 +65,7 @@ export default class SearchBar extends Component {
     iconSearchName: "md-search",
     iconBackName: "md-arrow-back",
     placeholder: "Search",
-    returnKeyType: "Search",
+    returnKeyType: "search",
     padding: 0,
     paddingLeft: 0,
     paddingRight: 0,
@@ -97,6 +86,24 @@ export default class SearchBar extends Component {
     this._onFocus = this._onFocus.bind(this);
     this._onBlur = this._onBlur.bind(this);
     this._onClose = this._onClose.bind(this);
+  }
+
+  componentDidMount() {
+
+    if (this.props.searchAutoFocus == true){
+      this._textInput.focus();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.searchAutoFocus == true){
+      this._textInput.focus();
+    }
+
+    if (nextProps.isCancel == true) {
+      this._onCancel();
+    }
   }
 
   _onClose() {
@@ -137,16 +144,6 @@ export default class SearchBar extends Component {
     // this.props.onSearchChange('');
     this.setState({ textSearch: '' });
     this._dismissKeyboard();
-
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    }
-  }
-
-  _onGoSearch() {
-    if (this.props.onGoSearch) {
-      this.props.onGoSearch();
-    }
   }
 
   _dismissKeyboard () {
@@ -156,7 +153,6 @@ export default class SearchBar extends Component {
   render() {
     const {
       height,
-      autoCorrect,
       returnKeyType,
       onSearchChange,
       placeholder,
@@ -172,12 +168,10 @@ export default class SearchBar extends Component {
       paddingRight,
       paddingTop,
       paddingBottom,
-      goSearch,
     } = this.props;
 
-    let { iconSize } = this.props
-
-    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.5
+    let { iconSize } = this.props;
+    iconSize = typeof iconSize !== 'undefined' ? iconSize : height * 0.5;
 
     return (
       <View
@@ -202,7 +196,7 @@ export default class SearchBar extends Component {
           />
           <TextInput
             autoCapitalize="none"
-            autoCorrect={ autoCorrect === true }
+            autoCorrect={ false }
             ref={ (c) => (this._textInput = c) }
             returnKeyType={ returnKeyType }
             onFocus={ this._onFocus }
@@ -225,30 +219,15 @@ export default class SearchBar extends Component {
             }
           />
           {
-            this.state.isOnFocus ?
-              <View style={ styles.cancelContainer }>
-                {
-                  (this.state.textSearch.length > 0) &&
-                  <TouchableOpacity onPress={ () => this._onClose() }>
-                    <Icon
-                      style={{ paddingHorizontal: height * 0.2 }}
-                      name={ iconCloseName} size={ iconSize }
-                      color={ iconColor }
-                    />
-                  </TouchableOpacity>
-                }
-                
-                <TouchableOpacity onPress={ () => this._onCancel() }>
-                  <Text style={ styles.textCancel }>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            :
-              null
-          }
-
-          {
-            goSearch && <TouchableOpacity style={ styles.goButton } onPress={ () => this._onGoSearch() }/>
-          }
+            (this.state.isOnFocus && this.state.textSearch.length > 0) &&
+            <TouchableOpacity onPress={ () => this._onClose() }>
+              <Icon
+                style={{ paddingHorizontal: height * 0.2 }}
+                name={ iconCloseName} size={ iconSize }
+                color={ iconColor }
+              />
+            </TouchableOpacity>
+          }   
         </View>
       </View>
     );

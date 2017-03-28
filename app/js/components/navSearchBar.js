@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
   Image,
+  Text,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -24,13 +25,12 @@ export default class NavSearchBar extends Component {
     onFocus: PropTypes.func,
     onClose: PropTypes.func,
     onCancel: PropTypes.func,
-    onGoSearch: PropTypes.func,
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
     placeholder: PropTypes.string,
     buttons: PropTypes.number,
-    goSearch: PropTypes.bool,
+    searchAutoFocus: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -38,13 +38,12 @@ export default class NavSearchBar extends Component {
     onFocus: () => {},
     onClose: () => {},
     onCancel: () => {},
-    onGoSearch: () => {},
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
     placeholder: 'Search for activities',
     buttons: commonStyles.NavNoneButton,
-    goSearch: false,
+    searchAutoFocus: false,
   }
 
   constructor(props) {
@@ -53,7 +52,10 @@ export default class NavSearchBar extends Component {
     this.onBack = this.onBack.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSetting = this.onSetting.bind(this);
-    this.onGoSearch = this.onGoSearch.bind(this);
+    
+    this.state= {
+      isShowCancelButton: false,
+    };
   }
 
   onSearchChange(text) {
@@ -66,6 +68,9 @@ export default class NavSearchBar extends Component {
     if (this.props.onFocus) {
       this.props.onFocus();
     }
+    this.setState({ 
+      isShowCancelButton: true,
+     });
   }
 
   onClose() {
@@ -78,12 +83,9 @@ export default class NavSearchBar extends Component {
     if (this.props.onCancel) {
       this.props.onCancel();
     }
-  }
-
-  onGoSearch() {
-    if (this.props.onGoSearch) {
-      this.props.onGoSearch();
-    }
+    this.setState({ 
+      isShowCancelButton: false,
+    });
   }
 
   onBack() {
@@ -108,7 +110,7 @@ export default class NavSearchBar extends Component {
     const {
       placeholder,
       buttons,
-      goSearch,
+      searchAutoFocus,
     } = this.props;
 
     return (
@@ -116,54 +118,61 @@ export default class NavSearchBar extends Component {
 
         <View style={ styles.navigationBarWrap }>
           {
-            buttons & commonStyles.NavBackButton ?
-              <View style={ styles.buttonWrap }>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
-                  <View style={ styles.button }>
-                    <Image source={ back_arrow } style={ styles.image }/>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            :
-              <View style={ styles.searchBarPadding }/>
+            this.state.isShowCancelButton ?
+              null
+              :
+              buttons & commonStyles.NavBackButton ?
+                <View style={ styles.buttonWrap }>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
+                    <View style={ styles.button }>
+                      <Image source={ back_arrow } style={ styles.image }/>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                :
+                <View style={ styles.searchBarPadding }/>
           }
           <View style={ styles.searchBarWrap }>
             <SearchBar
               onSearchChange={ (text) => this.onSearchChange(text) }
               onFocus={ () => this.onFocus() }
               onClose={ () => this.onClose() }
-              onCancel={ () => this.onCancel() }
-              onGoSearch={ () => this.onGoSearch() }
+              isCancel={ !this.state.isShowCancelButton }
+              searchAutoFocus={ searchAutoFocus }
               height={ 28 }
-              autoCorrect={ false }
-              returnKeyType={ "search" }
               iconColor={ "#ffffff99" }
               placeholder = { placeholder }
               placeholderColor="#ffffff99"
               paddingTop={ 28 }
-              goSearch={ goSearch }
             />
           </View>
           {
-            buttons & commonStyles.NavFilterButton ?
-              <View style={ styles.buttonWrap }>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
-                  <View style={ styles.button }>
-                    <Image source={ filter } style={ styles.image }/>
-                  </View>
+            this.state.isShowCancelButton ?
+              <View style={ styles.cancelButtonWrap }>
+                <TouchableOpacity onPress={ () => this.onCancel() }>
+                  <Text style={ styles.textCancel }>Cancel</Text>
                 </TouchableOpacity>
               </View>
-            :
-              buttons & commonStyles.NavSettingButton ?
+              :
+              buttons & commonStyles.NavFilterButton ?
                 <View style={ styles.buttonWrap }>
-                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSetting() }>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
                     <View style={ styles.button }>
-                      <Image source={ setting } style={ styles.image }/>
+                      <Image source={ filter } style={ styles.image }/>
                     </View>
                   </TouchableOpacity>
                 </View>
-              :
-                <View style={ styles.searchBarPadding }/>
+                :
+                buttons & commonStyles.NavSettingButton ?
+                  <View style={ styles.buttonWrap }>
+                    <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSetting() }>
+                      <View style={ styles.button }>
+                        <Image source={ setting } style={ styles.image }/>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  :
+                  <View style={ styles.searchBarPadding }/>
           }
         </View>
       </View>
@@ -181,6 +190,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
     height: 64,
+    paddingHorizontal: 10,
   },
   searchBarWrap: {
     flex : 6,
@@ -195,6 +205,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
+  cancelButtonWrap: {
+    flex: 1.5,
+    paddingTop: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    backgroundColor: 'transparent',    
+  },
+
   button: {
     width: screenWidth * 0.12,
     height: 44,
@@ -204,5 +222,10 @@ const styles = StyleSheet.create({
   image: {
     width: 14,
     height: 14,
+  },
+  textCancel: {
+    color: '#fff',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
 });

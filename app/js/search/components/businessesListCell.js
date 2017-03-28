@@ -8,7 +8,6 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-import { screenWidth } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const star = require('../../../assets/imgs/star.png');
@@ -92,7 +91,7 @@ export default class BusinessesListCell extends Component {
 }
 const styles = StyleSheet.create({
   cellContainer: {
-    width: screenWidth,
+    flex: 1,
     backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 8,
@@ -101,7 +100,7 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
   },
   detailContainer: {
-    width: screenWidth,
+    flex: 1,
     backgroundColor: '#fff',
     paddingVertical: 8,
     paddingHorizontal: 8,

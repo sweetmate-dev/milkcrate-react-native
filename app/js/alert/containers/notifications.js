@@ -107,8 +107,7 @@ class Notifications extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          goSearch={ true }
-          onGoSearch={ () => this.onGoSearch() }
+          onFocus={ () => this.onGoSearch() }          
         />
         <View style={ styles.listViewWrap }>
           <ListView
