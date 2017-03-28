@@ -27,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>milkcrate.neusis.com</string>
+				<string>http://www.mymilkcrate.com</string>
 			</array>
 		</dict>
 	</array>

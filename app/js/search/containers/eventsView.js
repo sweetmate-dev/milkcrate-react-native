@@ -23,6 +23,9 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import EventsListCell from '../components/eventsListCell';
 
+import UtilService from '../../components/util'
+import bendService from '../../bend/bendService'
+
 import { EventsEntries } from '../../components/dummyEntries';
 
 var dataSource = new ListView.DataSource({
@@ -41,7 +44,21 @@ class EventsView extends Component {
       dataSource: dataSource.cloneWithRowsAndSections(EventsEntries),
       selectedDate: Date.now(),
       arrayValidDate: [],
+     
+      currentLocation: null,
+      events: [],
+      categoryIcons:[],
+      eventsQuery:{
+        more: true,
+        loading: false,
+      },
     }
+
+    this.events = [];
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
 
     EventsEntries.map((entry) => {
       arrayValidDate.push(true);
@@ -58,6 +75,11 @@ class EventsView extends Component {
     } else if (newProps.status == 'search_category_error') {
 
     }
+  }
+
+  componentDidMount() {
+
+    this.loadEvents();
   }
 
   onBack () {
@@ -84,6 +106,79 @@ class EventsView extends Component {
     var timeDiff = firstDate - secondDate;
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return diffDays < 0 ? false : true;
+  }
+
+  loadEvents () {
+
+    if (this.more == false)
+      return;
+
+    this.setState( (state) => {  
+      state.eventsQuery.loading = true;
+      return state;
+    });
+
+    navigator.geolocation.getCurrentPosition( (position) => {
+
+        this.setState({ currentLocation: position })
+
+        bendService.searchActivity({
+          type:'event',
+          offset: this.offset,
+          limit: this.limit,
+          query: this.searchText,
+          lat: position.latitude,
+          long: position.longitude
+        }, (error, result) => {
+          
+          this.setState( (state) => {  
+            state.eventsQuery.loading = false;
+            return state;
+          });
+
+          if (error) {
+            console.log("search failed", error)
+            return
+          }
+
+          console.log(result.data);
+
+          if (result.data.event.length < this.limit) {
+            this.more = false;
+            this.setState( (state) => {  
+              state.eventsQuery.more = false;
+              return state;
+            });
+          }
+
+          this.events = this.events.concat(result.data.event);
+          this.setState({ events: this.events });
+
+          const imageOffset = this.offset;
+          this.offset += this.limit;
+
+          result.data.event.map((event, index) => {
+            if (event.categories && event.categories.length > 0) {
+              bendService.getCategory(event.categories[0], (error, result)=>{
+
+                if (error){
+                  console.log(error);
+                  return
+                }
+                this.setState( (state) => {
+                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(result.slug);
+                  return state;
+                });
+              })
+            }
+          });
+        })
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   renderListRow(rowData, sectionID, rowID) {

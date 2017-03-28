@@ -521,12 +521,18 @@ class Home extends Component {
     );
   }
 
+  onSearchFocus() {
+    this.props.onSearch();
+  }
+
   render() {
     const { status } = this.props;
 
     return (
       <View style={ styles.container }>
-        <NavSearchBar/>
+        <NavSearchBar
+          onFocus={ () => this.onSearchFocus() }
+        />
         <ScrollView
           style={ styles.scrollView }
           indicatorStyle={ 'white' }

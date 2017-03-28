@@ -37,7 +37,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'search';
+      tab = 'home';
 
     this.state = {
       selectedTab: tab,
@@ -63,6 +63,10 @@ export default class Main extends Component {
     );
   }
 
+  onSelectSearch() {
+    this.setState({ selectedTab: 'search' });
+  }
+
   render() {
     const { status, subOne } = this.props;
 
@@ -80,7 +84,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ homeIcon } style={ styles.iconTabbar1 }/> }
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.setState({ selectedTab: 'home' }) }>
-            <Home subOne = { subOne }/>
+            <Home subOne={ subOne } onSearch={ () => this.onSelectSearch() }/>
           </TabNavigator.Item>
 
           {/* Search */}
@@ -92,7 +96,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.setState({ selectedTab: 'search' }) }>
-            <Search subOne = { subOne }/>
+            <Search subOne={ subOne }/>
           </TabNavigator.Item>
 
           {/* Alert */}
@@ -105,7 +109,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.setState({ selectedTab: 'alerts' }) }>
-            <Notifications subOne = { subOne }/>
+            <Notifications subOne={ subOne } onSearch={ () => this.onSelectSearch() }/>
           </TabNavigator.Item>
           
           {/* You */}
@@ -117,7 +121,7 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
             renderSelectedIcon={ () => <Image source={ youSelectedIcon } style={ styles.iconTabbar4 }/> }
             onPress={ () => this.setState({selectedTab: 'profile' }) }>
-            <Profile subOne = { subOne }/>
+            <Profile subOne={ subOne } onSearch={ () => this.onSelectSearch() }/>
           </TabNavigator.Item>
 
         </TabNavigator>

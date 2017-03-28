@@ -98,11 +98,17 @@ class Notifications extends Component {
     alert("Tapped cell - " + rowID);
   }
 
+  onSearchFocus() {
+    this.props.onSearch();
+  }
+
   render() {
     const { status } = this.props;
     return (
       <View style={ styles.container }>
-        <NavSearchBar/>
+        <NavSearchBar
+          onFocus={ () => this.onSearchFocus() }
+        />
         <View style={ styles.listViewWrap }>
           <ListView
               enableEmptySections={ true }

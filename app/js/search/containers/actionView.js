@@ -97,13 +97,11 @@ class ActionView extends Component {
 
         this.setState({ currentLocation: position })
 
-        const searchText = this.searchText;
-
         bendService.searchActivity({
           type:'action',
           offset: this.offset,
           limit: this.limit,
-          query: searchText,
+          query: this.searchText,
           lat: position.latitude,
           long: position.longitude
         }, (error, result) => {
@@ -169,12 +167,10 @@ class ActionView extends Component {
 
   onSearchChange(text) {
 
-    console.log('onSearchChange : ', text);
-    
-    if (text === '') {
-      this.onSearchFocus();
-      return;
-    }
+    // if (text === '') {
+    //   this.onSearchFocus();
+    //   return;
+    // }
 
     this.offset = 0;
     this.searchText = text;      
@@ -190,25 +186,21 @@ class ActionView extends Component {
     this.loadActions();
   }
 
-  onSearchFocus() {
+  // onSearchFocus() {
 
-    console.log('onSearchFocus');
+  //   this.offset = 0;
+  //   this.more = false;
+  //   this.actions = [];
 
-    this.offset = 0;
-    this.more = false;
-    this.actions = [];
-
-    this.setState( (state) => {
-      state.actionsQuery.more = false;
-      state.actions = [];
-      state.categoryIcons = [];
-      return state;
-    })
-  }
+  //   this.setState( (state) => {
+  //     state.actionsQuery.more = false;
+  //     state.actions = [];
+  //     state.categoryIcons = [];
+  //     return state;
+  //   })
+  // }
 
   onSearchCancel() {
-
-    console.log('onSearchCancel');
 
     this.offset = 0;
     this.searchText = '';
@@ -235,7 +227,6 @@ class ActionView extends Component {
           onBack={ this.onBack }
           placeholder={ 'Search actions' }
           onSearchChange={ (text) => this.onSearchChange(text) }
-          onFocus={ () => this.onSearchFocus() }
           onCancel={ () => this.onSearchCancel() }
         />
         <ScrollView>

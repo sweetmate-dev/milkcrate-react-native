@@ -252,7 +252,7 @@ class BusinessesDetail extends Component {
 
   render() {
     const { status, business } = this.props;
-    var rating = (business.rating||1.0).toFixed(1)
+    var rating = (business.rating||0.0).toFixed(1)
     var avatar = this.state.user.avatar?UtilService.getSmallImage(this.state.user.avatar):null
     var defaultAvatar = this.state.user.defaultAvatar?UtilService.getDefaultAvatar(this.state.user.defaultAvatar):null
     return (
@@ -294,13 +294,13 @@ class BusinessesDetail extends Component {
                 <Text style={ styles.textTitle }>{business.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>
                   {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
-                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
-                    {'  ' + UtilService.getPricesString(business.price)}</Text>}
+                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles   ':''}
+                    {UtilService.getPricesString(business.price)}</Text>}
               </View>
-              <View style={ styles.businessInfoRatingContainer }>
+              { rating != 0.0 && <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ rating } </Text>
                 <Image style={ styles.imageStar } source={ star } />
-              </View>
+              </View>}
             </View>
 
             <View style={ styles.individualInfoContainer }>
@@ -345,7 +345,7 @@ class BusinessesDetail extends Component {
               <Text style={ styles.textDescription }>View on Foursquare</Text>
             </TouchableOpacity>}
           </View>
-          {business.certification && <View style={ styles.certificationsContainer }>
+          {business.certification && business.certification.name && <View style={ styles.certificationsContainer }>
             <Text style={ styles.textDescription }>Certifications</Text>
             <View style={ styles.certificationsButtonContainer }>
             <View style={ styles.buttonCertificationsWrapper }>
