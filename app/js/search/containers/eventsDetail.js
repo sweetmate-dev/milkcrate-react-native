@@ -33,7 +33,7 @@ import UtilService from '../../components/util'
 
 const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
-
+const web = require('../../../assets/imgs/web.png');
 const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
@@ -74,7 +74,7 @@ class EventsDetail extends Component {
   }
 
   componentDidMount() {
-    const eventId = "58d95ede4bad30018d03ce1c"
+    const eventId = "58d9cdec4bad30145b000567"
     bendService.getEvent(eventId, (err, ret)=>{
       if(err) {
         console.log(err);return;
@@ -149,13 +149,14 @@ class EventsDetail extends Component {
     Actions.pop()
   }
 
-  onCheckin() {
-    alert("Tapped 'I am Going' button!");
-  }
-
   onGetDirection() {
     var url = 'http://maps.apple.com/?ll=' + this.state.event._geoloc[1] + ',' + this.state.event._geoloc[0];
     Linking.openURL(url);
+  }
+
+  onGoWeb() {
+    if(this.state.event.url)
+      Linking.openURL(this.state.event.url);
   }
 
   onCheckIn() {
@@ -170,6 +171,8 @@ class EventsDetail extends Component {
         didStatus:true
       })
     })
+
+    this.onGoWeb()
   }
 
   onUncheckIn() {
@@ -189,17 +192,17 @@ class EventsDetail extends Component {
 
   renderCoverImage() {
     var event = this.state.event;
-    var coverImage;
-    if(event.coverImage) {
-      coverImage = event.coverImage._downloadURL;
-    } else {
-      coverImage = this.state.category.coverImage._versions?this.state.category.coverImage._versions.md._downloadURL:this.state.category.coverImage._downloadURL;
+    var coverImage, backgroundColor;
+    if(this.state.initialize) {
+      var imageObj = event.coverImage?event.coverImage:this.state.category.coverImage
+      coverImage = UtilService.getMiddleImage(imageObj)
+      backgroundColor = UtilService.getBackColor(imageObj)
     }
 
     if(coverImage == null) return null;
 
     return (
-        <Image style={ styles.map } source={{ uri:coverImage }}>
+        <Image style={ [styles.map, {backgroundColor:backgroundColor}] } source={{ uri:coverImage }}>
         </Image>
     )
   }
@@ -259,26 +262,48 @@ class EventsDetail extends Component {
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
               </View>
+              <View style={ styles.visitContainer }>
+                {this.state.didStatus&&UtilService.isValid(event.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                  <View style={ styles.visitCellContainer }>
+                    <Image style={ styles.imageVisit } source={ web } />
+                    <Text style={ styles.textInfoTitle }>Web</Text>
+                  </View>
+                </TouchableOpacity>}
+              </View>
             </View>
 
-            <View style={ styles.dateContinaer }>
-              <View style={ styles.dayWrapper }>
-                <Text style={ styles.textDay }>TUE</Text>
-              </View>
-              <View style={ styles.dateSubContentContainer }>
-                <Text style={ styles.textDate }>January 17, 2017</Text>
-                <Text style={ styles.textValue }>6:30 PM-8:30 PM</Text>
-              </View>
-            </View>
+            {event.times&& <View>
+              {
+                event.times.map((time, idx)=> {
+                  return (
+                      <View key={'time-' + idx} style={ styles.dateContinaer }>
+                        <View style={ styles.dayWrapper }>
+                          <Text style={ styles.textDay }>{UtilService.getDay(time.date)}</Text>
+                        </View>
+                        <View style={ styles.dateSubContentContainer }>
+                          <Text style={ styles.textDate }>{UtilService.formatDateWithFormat2(new Date(time.date), 'MMMM DD, YYYY')}</Text>
+                          <Text style={ styles.textValue }>{UtilService.getEventTime(time.from, time.until)}</Text>
+                        </View>
+                      </View>
+                  )
+                })
+              }
+            </View>}
+
 
             <Text style={ styles.textDescription }>{ event.description }</Text>
           </View>
         </ScrollView>
-        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
+        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>Register</Text>
-            </View>
-        </TouchableOpacity>
+          </View>
+        </TouchableOpacity>}
+        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
+          <View style={ styles.buttonGrey }>
+            <Text style={ styles.textOrange }>I Can't Go</Text>
+          </View>
+        </TouchableOpacity>}
       </View>
     );
   }
@@ -345,10 +370,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
   },
+  textOrange: {
+    color: '#F59174',
+    fontFamily: 'Open Sans',
+    fontWeight: 'bold',
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 15,
+  },
   buttonCheckin: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: commonColors.bottomButton,
+    height: 40,
+  },
+  buttonGrey: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EFEFEF',
     height: 40,
   },
   individualInfoContainer: {

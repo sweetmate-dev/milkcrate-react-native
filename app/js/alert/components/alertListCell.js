@@ -58,13 +58,14 @@ export default class AlertListCell extends Component {
       avatar,
       time,
       onClick,
+        avatarBackColor
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            {avatar!=""&&<Image style={ styles.avatar } source={{uri:avatar }}/>}
+            {avatar!=""&&<Image style={[styles.avatar, {backgroundColor:avatarBackColor}] } source={{uri:avatar }}/>}
             {avatar==""&&<Image style={ styles.avatar } source={require('../../../assets/imgs/milkcrate.png')}/>}
           </View>
           <View style={ styles.mainContentContainer }>

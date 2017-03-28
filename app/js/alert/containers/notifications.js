@@ -88,6 +88,7 @@ class Notifications extends Component {
         name={ rowData.actor.name }
         description={ rowData.message }
         avatar={ rowData.actor.avatar?UtilService.getSmallImage(rowData.actor.avatar):"" }
+        avatarBackColor={UtilService.getBackColor(rowData.actor.avatar)}
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         onClick={ () => this.onActivityCellPressed(rowData.activity) }
       />
