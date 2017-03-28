@@ -143,6 +143,12 @@ class ActionDetail extends Component {
 
   render() {
     const { status, action } = this.props;
+    var backgroundImage, backgroundColor;
+    if(this.state.initialize) {
+      var imageObj = action.coverImage?action.coverImage:this.state.category.coverImage
+      backgroundImage = UtilService.getLargeImage(imageObj)
+      backgroundColor = UtilService.getBackColor(imageObj)
+    }
 
     return (
       <View style={ styles.container }>
@@ -152,7 +158,7 @@ class ActionDetail extends Component {
           title ={action.name}
         />
         <ScrollView>
-          {this.state.initialize&&<Image style={ styles.imageTopBackground } source={{uri:action.coverImage?action.coverImage._downloadURL:this.state.category.coverImage._downloadURL}}/>}
+          {this.state.initialize&&<Image style={ [styles.imageTopBackground, {backgroundColor:backgroundColor}] } source={{uri:backgroundImage}}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />

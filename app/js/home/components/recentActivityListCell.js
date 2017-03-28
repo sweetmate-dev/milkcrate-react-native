@@ -80,13 +80,14 @@ export default class RecentActivityListCell extends Component {
       points,
       likeByMe,
       onClick,
+        avatarBackColor
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            {avatar != ''&&<Image style={ styles.avatar } source={{ uri:avatar }}/>}
+            {avatar != ''&&<Image style={ [styles.avatar, {backgroundColor:avatarBackColor}] } source={{ uri:avatar }}/>}
             {avatar == ''&&<Image style={ styles.avatar } source={defaultAvatar}/>}
           </View>
           <View style={ styles.mainContentContainer }>

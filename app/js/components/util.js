@@ -230,8 +230,45 @@ class UtilService {
         }
     }
 
+    static getLargeImage(file) {
+        if(file._file)
+            file = file._file;
+
+        if(file._versions) {
+            if(file._versions.lg) {
+                return file._versions.lg._downloadURL;
+            } else
+                return file._downloadURL;
+        } else {
+            return file._downloadURL;
+        }
+    }
+
+    static getMiddleImage(file) {
+        if(file._file)
+            file = file._file;
+
+        if(file._versions) {
+            if(file._versions.md) {
+                return file._versions.md._downloadURL;
+            } else
+                return file._downloadURL;
+        } else {
+            return file._downloadURL;
+        }
+    }
+
     static getDefaultAvatar(avatarName) {
         return avatarImages[avatarName]
+    }
+
+    static getBackColor(imageObj) {
+        if(!imageObj) return 'rgb(255,255,255)';
+        var backgroundColor = imageObj._env?'rgb(' + imageObj._env['input-md-average'].r + ','
+        + imageObj._env['input-md-average'].g + ','
+        + imageObj._env['input-md-average'].b + ')':'rgb(255,255,255)'
+
+        return backgroundColor;
     }
     
     static getPricesString(prices) {
@@ -278,6 +315,14 @@ class UtilService {
         }
 
         return "";
+    }
+
+    static getEventTime(from, until) {
+        return moment(from, 'HH:mm').format('h:mm A') + '-' + moment(until, 'HH:mm').format('h:mm A')
+    }
+
+    static getDay(dateStr) {
+        return moment(dateStr).format("ddd").toUpperCase()
     }
 
     static getCityStateString(city, state, postal) {

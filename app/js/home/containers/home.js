@@ -208,6 +208,7 @@ class Home extends Component {
         name={ rowData.user.name || '' }
         description={ rowData.summary || '' }
         avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
+        avatarBackColor={UtilService.getBackColor(rowData.user.avatar)}
         defaultAvatar={UtilService.getDefaultAvatar(rowData.user.defaultAvatar)}
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         hearts={ Number(rowData.likeCount||0) }

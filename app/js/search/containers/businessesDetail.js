@@ -235,17 +235,17 @@ class BusinessesDetail extends Component {
 
   renderCoverImage() {
     const { business } = this.props;
-    var coverImage;
-    if(business.coverImage) {
-      coverImage = business.coverImage._downloadURL;
-    } else {
-      coverImage = this.state.category.coverImage._versions?this.state.category.coverImage._versions.md._downloadURL:this.state.category.coverImage._downloadURL;
+    var coverImage, backgroundColor;
+    if(this.state.initialize) {
+      var imageObj = business.coverImage?business.coverImage:this.state.category.coverImage
+      coverImage = UtilService.getMiddleImage(imageObj)
+      backgroundColor = UtilService.getBackColor(imageObj)
     }
 
     if(coverImage == null) return null;
 
     return (
-        <Image style={ styles.map } source={{ uri:coverImage }}>
+        <Image style={ [styles.map, {backgroundColor:backgroundColor}] } source={{ uri:coverImage }}>
         </Image>
     )
   }
@@ -398,7 +398,7 @@ class BusinessesDetail extends Component {
           </View>*/}
           {!this.state.everDidStatus && <View style={ styles.certificationsContainer }>
             <View style={ styles.certificationsCheckContainer }>
-              {avatar&&<Image style={ styles.imageIcon } source={{ uri:avatar }} />}
+              {avatar&&<Image style={ [styles.imageIcon, {backgroundColor:UtilService.getBackColor(avatar)} ]} source={{ uri:avatar }} />}
               {!avatar && defaultAvatar&&<Image style={ styles.imageIcon } source={ defaultAvatar } />}
               <View style={ styles.certificationsCheckSubContainer }>
                 <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
