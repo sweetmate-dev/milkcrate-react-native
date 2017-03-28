@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>4.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -27,12 +27,12 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>http://www.mymilkcrate.com</string>
+				<string>milkcrate</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>22</string>
+	<string>25</string>
 	<key>CodePushDeploymentKey</key>
 	<string>$(CODEPUSH_KEY)</string>
 	<key>Fabric</key>
@@ -64,12 +64,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>MilkCrate needs access to your calendar to let you save events and volunteer opportunities.</string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>MilkCrate needs access to your camera to let you take a profile photo.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>MilkCrate needs access to your location to show you businesses and activities nearby.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>MilkCrate needs access to your photo library to let you choose a profile photo.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Blanch.ttf</string>
@@ -103,6 +105,13 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
