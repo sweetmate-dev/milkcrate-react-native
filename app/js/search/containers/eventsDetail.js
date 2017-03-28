@@ -12,6 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+Linking
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -24,6 +25,11 @@ import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
+
+//added by li, 2017/03/22
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
 
 const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
@@ -40,6 +46,19 @@ class EventsDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      event:{},
+      category:{
+        coverImage:{
+          _downloadURL:null
+        }
+      },
+      initialize:false,
+      didStatus:false,
+      activityId:null,
+
+      user:{},
+
+      currentLocation:null,
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -52,6 +71,67 @@ class EventsDetail extends Component {
       },
 
     };
+  }
+
+  componentDidMount() {
+    const eventId = "58d95ede4bad30018d03ce1c"
+    bendService.getEvent(eventId, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
+      }
+      
+      this.state.event = ret;
+      this.setState({
+        event:ret
+      })
+
+      bendService.checkActivityDid(ret._id, 'event', (err, result)=>{
+        if(err) {
+          console.log(err);return;
+        }
+
+        if(result)
+          this.state.activityId = result;
+
+        this.setState({
+          didStatus: result==false?false:true
+        })
+      })
+
+      //console.log(action)
+      if(ret.categories&&ret.categories.length >0) {
+        bendService.getCategory(ret.categories[0], (err, ret)=>{
+          if(err){
+            console.log(err);return
+          }
+
+          this.setState({
+            category:ret,
+            initialize:true
+          })
+        })
+      }
+
+      navigator.geolocation.getCurrentPosition( (position) => {
+
+            this.setState({ currentLocation: position })
+          },
+          (error) => {
+            console.log(JSON.stringify(error));
+          },
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+
+      bendService.getUser(bendService.getActiveUser()._id, (err, ret)=>{
+        if(err) {
+          console.log(err);return;
+        }
+
+        this.setState({
+          user:ret
+        })
+      })
+    })
   }
 
   componentWillReceiveProps(newProps) {
@@ -74,46 +154,107 @@ class EventsDetail extends Component {
   }
 
   onGetDirection() {
-    alert("Tapped GetDirection button!");
+    var url = 'http://maps.apple.com/?ll=' + this.state.event._geoloc[1] + ',' + this.state.event._geoloc[0];
+    Linking.openURL(url);
+  }
+
+  onCheckIn() {
+    bendService.captureActivity(this.state.event._id, 'event', (err,result)=>{
+      if(err){
+        console.log(err);return;
+      }
+
+      this.state.activityId = result.activity._id;
+
+      this.setState({
+        didStatus:true
+      })
+    })
+  }
+
+  onUncheckIn() {
+    bendService.removeActivity(this.state.activityId, (error, result)=>{
+      if (error){
+        console.log(error);
+        return;
+      }
+
+      this.state.activityId = null;
+
+      this.setState({
+        didStatus: false
+      })
+    })
+  }
+
+  renderCoverImage() {
+    var event = this.state.event;
+    var coverImage;
+    if(event.coverImage) {
+      coverImage = event.coverImage._downloadURL;
+    } else {
+      coverImage = this.state.category.coverImage._versions?this.state.category.coverImage._versions.md._downloadURL:this.state.category.coverImage._downloadURL;
+    }
+
+    if(coverImage == null) return null;
+
+    return (
+        <Image style={ styles.map } source={{ uri:coverImage }}>
+        </Image>
+    )
   }
 
   render() {
     const { status } = this.props;
+    var event = this.state.event;
 
     return (
       <View style={ styles.container }>
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title = 'Volunteer for the Bicycle Coalition'
+          title = {this.state.event.name}
         />
         <ScrollView>
-          <MapView
-            style={ styles.map }
-            initialRegion={ this.state.region }
-            scrollEnabled={ false }
-            zoomEnabled={ false }
+          {event._geoloc&&<MapView
+              style={ styles.map }
+              initialRegion={ {
+        latitude: Number(event._geoloc[1]),
+        longitude: Number(event._geoloc[0]),
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      } }
+              scrollEnabled={ false }
+              zoomEnabled={ false }
           >
             {
               <MapView.Marker
-                image={ map_pin }
-                coordinate={ this.state.coordinate }
+                  image={ map_pin }
+                  style={styles.map_pin}
+                  coordinate={{
+                latitude: Number(event._geoloc[1]),
+                longitude: Number(event._geoloc[0]),
+                }}
               />
             }
-          </MapView>
+          </MapView>}
+          {!event._geoloc&&this.renderCoverImage()}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ icon } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
               <View style={ styles.infoSubContainer }>
-                <Text style={ styles.textTitle }>Volunteer for the Bicycle Coalition</Text>
-                <Text style={ styles.textValue }>1.2 Miles</Text>
+                <Text style={ styles.textTitle }>{event.name}</Text>
+                {this.state.currentLocation&&<Text style={ styles.textValue }>
+                  {event._geoloc?UtilService.getDistanceFromLatLonInMile(event._geoloc[1],event._geoloc[0],
+                      this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
+                  </Text>}
               </View>
-              <Point point={ 15 }/>
+              <Point point={ Math.max(event.points||1, 1)} />
             </View>
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>207 S Sydenham St</Text>
-                <Text style={ styles.textAddress }>Philadelphia, PA</Text>
+                <Text style={ styles.textAddress }>{event.address1} {event.address2}</Text>
+                <Text style={ styles.textAddress }>{UtilService.getCityStateString(event.city, event.state, event.postalCode)}</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
@@ -130,7 +271,7 @@ class EventsDetail extends Component {
               </View>
             </View>
 
-            <Text style={ styles.textDescription }>{ dummyText1 }</Text>
+            <Text style={ styles.textDescription }>{ event.description }</Text>
           </View>
         </ScrollView>
         <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCheckin() }>
