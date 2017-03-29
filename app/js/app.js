@@ -29,6 +29,7 @@ import BusinessesView from './search/containers/businessesView';
 import CategoryView from './search/containers/categoryView';
 import BusinessesDetail from './search/containers/businessesDetail';
 import ActionDetail from './search/containers/actionDetail';
+import ServiceDetail from './search/containers/serviceDetail';
 import EventsDetail from './search/containers/eventsDetail';
 import EventsView from './search/containers/eventsView';
 import SetupProfile from './profile/containers/setupProfile';
@@ -40,6 +41,7 @@ import EditProfile from './profile/containers/editProfile';
 import ChangePassword from './profile/containers/changePassword';
 import LearnMoreModal from './home/components/learnMoreModal';
 import ActionView from './search/containers/actionView';
+import ServiceView from './search/containers/serviceView';
 
 
 
@@ -175,6 +177,7 @@ class App extends Component {
         <Scene key="BusinessesDetail" component={ BusinessesDetail } />
         <Scene key="ActionDetail" component={ ActionDetail } />
         <Scene key="EventsDetail" component={ EventsDetail } />
+        <Scene key="ServiceDetail" component={ ServiceDetail } />
         <Scene key="EventsView" component={ EventsView } />
         <Scene key="Settings" component={ Settings } />
         <Scene key="CommunityPoints" component={ CommunityPoints } />
@@ -184,6 +187,7 @@ class App extends Component {
         <Scene key="ChangePassword" component={ ChangePassword } />
         <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
         <Scene key="ActionView" component={ ActionView } />
+        <Scene key="ServiceView" component={ ServiceView } />
       </Scene>
     );
 

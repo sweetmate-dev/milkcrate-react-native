@@ -234,7 +234,7 @@ class MainSearch extends Component {
       //   break;
 
       case 3://Services
-        alert("Clicked " + exploreWays[index].title);
+        Actions.ServiceView();
         break;
 
       default:

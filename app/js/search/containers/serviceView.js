@@ -33,7 +33,7 @@ import  * as commonStyles from '../../styles/commonStyles';
 
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
-class ActionView extends Component {
+class ServiceView extends Component {
   constructor(props) {
     super(props);
 
@@ -47,9 +47,9 @@ class ActionView extends Component {
 
     this.state = {
       currentLocation: null,
-      actions: [],
+      services: [],
       categoryIcons:[],
-      actionsQuery:{
+      serviceQuery:{
         more: true,
         loading: false,
       },
@@ -69,26 +69,26 @@ class ActionView extends Component {
 
   componentDidMount() {
 
-    this.loadActions();
+    this.loadList();
   }
 
   onBack() {
     Actions.pop()
   }
 
-  onPressedActionsCell (action) {
-    Actions.ActionDetail({
-      action:action
+  onPressedCell (service) {
+    Actions.ServiceDetail({
+      service:service
     })
   }
 
-  loadActions () {
+  loadList () {
 
     if (this.more == false)
       return;
 
     this.setState( (state) => {  
-      state.actionsQuery.loading = true;
+      state.serviceQuery.loading = true;
       return state;
     });
 
@@ -97,7 +97,7 @@ class ActionView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'action',
+          type:'service',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
@@ -106,7 +106,7 @@ class ActionView extends Component {
         }, (error, result) => {
           
           this.setState( (state) => {  
-            state.actionsQuery.loading = false;
+            state.serviceQuery.loading = false;
             return state;
           });
 
@@ -115,23 +115,23 @@ class ActionView extends Component {
             return
           } 
 
-          if (result.data.action.length < this.limit) {
+          if (result.data.service.length < this.limit) {
             this.more = false;
             this.setState( (state) => {  
-              state.actionsQuery.more = false;
+              state.serviceQuery.more = false;
               return state;
             });
           }
 
-          this.state.actions = this.state.actions.concat(result.data.action);
-          this.setState({ actions: this.state.actions });
+          this.state.services = this.state.services.concat(result.data.service);
+          this.setState({ services: this.state.services });
 
           const imageOffset = this.offset;
           this.offset += this.limit;
 
-          result.data.action.map((action, index) => {
-            if (action.categories && action.categories.length > 0) {
-              bendService.getCategory(action.categories[0], (error, result)=>{
+          result.data.service.map((service, index) => {
+            if (service.categories && service.categories.length > 0) {
+              bendService.getCategory(service.categories[0], (error, result)=>{
 
                 if (error){
                   console.log(error);
@@ -153,13 +153,13 @@ class ActionView extends Component {
     );
   }
 
-  renderActionsListRow(rowData, sectionID, rowID) {
+  renderListRow(rowData, sectionID, rowID) {
     return (
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.categoryIcons[rowID] }
         points={ Math.max(rowData.points||1, 1) }
-        onClick={ () => this.onPressedActionsCell(rowData) }
+        onClick={ () => this.onPressedCell(rowData) }
       />
     );
   }
@@ -176,12 +176,12 @@ class ActionView extends Component {
     this.more = true;
 
     this.setState( (state) => {
-      state.actionsQuery.more = true;
+      state.serviceQuery.more = true;
       state.categoryIcons = [];
       return state;
     })
 
-    this.loadActions();
+    this.loadList();
   }
 
   // onSearchFocus() {
@@ -191,8 +191,8 @@ class ActionView extends Component {
   //   this.actions = [];
 
   //   this.setState( (state) => {
-  //     state.actionsQuery.more = false;
-  //     state.actions = [];
+  //     state.serviceQuery.more = false;
+  //     state.services = [];
   //     state.categoryIcons = [];
   //     return state;
   //   })
@@ -205,13 +205,13 @@ class ActionView extends Component {
     this.more = true;
 
     this.setState( (state) => {
-      state.actionsQuery.more = true;
-      state.actions = [];
+      state.serviceQuery.more = true;
+      state.services = [];
       state.categoryIcons = [];
       return state;
     })
 
-    this.loadActions();
+    this.loadList();
   }
 
   render() {
@@ -222,20 +222,20 @@ class ActionView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          placeholder={ 'Search actions' }
+          placeholder={ 'Search services' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
         <ScrollView>
           <ListView
             enableEmptySections={ true }
-            dataSource={ this.dataSource.cloneWithRows(this.state.actions) }
-            renderRow={ this.renderActionsListRow.bind(this) }
+            dataSource={ this.dataSource.cloneWithRows(this.state.services) }
+            renderRow={ this.renderListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }/>
           <LoadMoreSpinner
-            show={ this.state.actionsQuery.more }
-            loading={ this.state.actionsQuery.loading }
-            onClick={ ()=> this.loadActions() }
+            show={ this.state.serviceQuery.more }
+            loading={ this.state.serviceQuery.loading }
+            onClick={ ()=> this.loadList() }
           />
         </ScrollView>
       </View>
@@ -249,7 +249,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(ActionView);
+)(ServiceView);
 
 const styles = StyleSheet.create({
   container: {
