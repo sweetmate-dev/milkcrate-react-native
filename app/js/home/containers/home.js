@@ -159,17 +159,17 @@ class Home extends Component {
 
   loadRecentActivities() {
 
-    if ( this.state.activityQuery.more === false ) 
+    if ( this.state.activityQuery.more === false )
       return;
-    
-    this.setState( (state) => {  
+
+    this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
     console.log("call loadRecentActivities")
     bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
       console.log("getRecentActivities", error, result)
-      this.setState( (state) => {  
+      this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
@@ -506,7 +506,7 @@ class Home extends Component {
   get showRecentActivity() {
     return (
       <View style={ styles.recentActivityContainer }>
-        <Text style={ styles.textTitle }>Recent Activity at { this.state.community.location }</Text>
+        <Text style={ styles.textTitle }>Recent Activity at { this.state.community.name }</Text>
         <View style={ styles.recentActivityListViewWrapper }>
           <ListView
               enableEmptySections={ true }
