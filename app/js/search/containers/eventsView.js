@@ -25,6 +25,7 @@ import EventsListCell from '../components/eventsListCell';
 
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
 
 import { EventsEntries } from '../../components/dummyEntries';
 
@@ -41,12 +42,12 @@ class EventsView extends Component {
     super(props);
 
     this.state = {
-      dataSource: dataSource.cloneWithRowsAndSections(EventsEntries),
       selectedDate: Date.now(),
       arrayValidDate: [],
      
       currentLocation: null,
       events: [],
+
       categoryIcons:[],
       eventsQuery:{
         more: true,
@@ -56,14 +57,9 @@ class EventsView extends Component {
 
     this.events = [];
     this.offset = 0;
-    this.limit = 20;
+    this.limit = 1000; //need to fetch all events
     this.searchText = '';
     this.more = true;
-
-    EventsEntries.map((entry) => {
-      arrayValidDate.push(true);
-      eventDays.push(entry.date);
-    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -90,8 +86,8 @@ class EventsView extends Component {
     alert("Tapped filter button!");
   }
 
-  onCellPressed (rowID) {
-    Actions.EventsDetail();
+  onCellPressed (event) {
+    Actions.EventsDetail({event:event});
   }
 
   onSelectDate (date) {
@@ -128,7 +124,8 @@ class EventsView extends Component {
           limit: this.limit,
           query: this.searchText,
           lat: position.latitude,
-          long: position.longitude
+          long: position.longitude,
+          from:UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
         }, (error, result) => {
           
           this.setState( (state) => {  
@@ -151,7 +148,30 @@ class EventsView extends Component {
             });
           }
 
-          this.events = this.events.concat(result.data.event);
+          //group by with date
+          var events = result.data.event
+          _.map(events, (e)=>{
+            e.date = UtilService.formatDateWithFormat(e.startsAt, "YYYY-MM-DD");
+          })
+          events = _.sortBy(events, (e)=>{
+            return e.date
+          })
+
+          _.each(events, (o)=>{
+            var exist = _.find(this.events, (e)=>{
+              return e.date == o.date
+            })
+
+            if(exist) {
+              exist.events.push(o)
+            } else {
+              this.events.push({
+                date:o.date,
+                events:[o]
+              })
+            }
+          })
+
           this.setState({ events: this.events });
 
           const imageOffset = this.offset;
@@ -166,7 +186,7 @@ class EventsView extends Component {
                   return
                 }
                 this.setState( (state) => {
-                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(result.slug);
+                  state.categoryIcons[event._id] = UtilService.getCategoryIcon(result.slug);
                   return state;
                 });
               })
@@ -182,13 +202,7 @@ class EventsView extends Component {
   }
 
   renderListRow(rowData, sectionID, rowID) {
-
-    if (rowID == 'date')
-      return null;
-
-    if (arrayValidDate[sectionID] == false)
-       return null;
-
+      if( typeof rowData == 'string') return null;
     return (
       <View>
         {
@@ -196,10 +210,10 @@ class EventsView extends Component {
             return (
               <EventsListCell
                 key={ index }
-                title={ entry.title }
-                icon={ entry.icon }
-                points={ entry.points }
-                onClick={ () => this.onCellPressed(index) }
+                title={ entry.name }
+                icon={ this.state.categoryIcons[entry._id] }
+                points={ Number(entry.points||1) }
+                onClick={ () => this.onCellPressed(entry) }
               />
             );
           })
@@ -210,20 +224,9 @@ class EventsView extends Component {
 
   renderSectionHeader (sectionData, sectionId) {
 
-    var date = new Date(sectionData.date);
-    var value = this.compareDates( date, this.state.selectedDate );
-
-    // arrayValidDate[sectionId] = value;
-
-    // if ( value == false) {
-    //   return null;
-    // }
-
-    arrayValidDate[sectionId] = true;
-
     return (
       <View style={ styles.sectionHeaderContainer }>
-        <Text style={ styles.textTitle }>{ sectionData.date }</Text>
+        <Text style={ styles.textTitle }>{ UtilService.formatDateWithFormat2(sectionData.date, "MMMM DD, YYYY") }</Text>
       </View>
     );
   }
@@ -256,7 +259,8 @@ class EventsView extends Component {
           eventDays={ eventDays }
         />*/}
         <ListView
-          dataSource={ this.state.dataSource }
+            enableEmptySections={ true }
+          dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
           renderRow={ this.renderListRow.bind(this) }
           renderSectionHeader= { this.renderSectionHeader.bind(this) }
         />

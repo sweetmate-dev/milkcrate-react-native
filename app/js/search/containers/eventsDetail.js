@@ -46,7 +46,6 @@ class EventsDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      event:{},
       category:{
         coverImage:{
           _downloadURL:null
@@ -74,62 +73,51 @@ class EventsDetail extends Component {
   }
 
   componentDidMount() {
-    const eventId = "58d9cdec4bad30145b000567"
-    bendService.getEvent(eventId, (err, ret)=>{
+    const {event} = this.props;
+    bendService.checkActivityDid(event._id, 'event', (err, result)=>{
       if(err) {
         console.log(err);return;
       }
-      
-      this.state.event = ret;
-      this.setState({
-        event:ret
-      })
 
-      bendService.checkActivityDid(ret._id, 'event', (err, result)=>{
-        if(err) {
-          console.log(err);return;
+      if(result)
+        this.state.activityId = result;
+
+      this.setState({
+        didStatus: result==false?false:true
+      })
+    })
+
+    //console.log(action)
+    if(event.categories&&event.categories.length >0) {
+      bendService.getCategory(event.categories[0], (err, ret)=>{
+        if(err){
+          console.log(err);return
         }
 
-        if(result)
-          this.state.activityId = result;
-
         this.setState({
-          didStatus: result==false?false:true
+          category:ret,
+          initialize:true
         })
       })
+    }
 
-      //console.log(action)
-      if(ret.categories&&ret.categories.length >0) {
-        bendService.getCategory(ret.categories[0], (err, ret)=>{
-          if(err){
-            console.log(err);return
-          }
+    navigator.geolocation.getCurrentPosition( (position) => {
 
-          this.setState({
-            category:ret,
-            initialize:true
-          })
-        })
+          this.setState({ currentLocation: position })
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+
+    bendService.getUser(bendService.getActiveUser()._id, (err, ret)=>{
+      if(err) {
+        console.log(err);return;
       }
 
-      navigator.geolocation.getCurrentPosition( (position) => {
-
-            this.setState({ currentLocation: position })
-          },
-          (error) => {
-            console.log(JSON.stringify(error));
-          },
-          { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
-
-      bendService.getUser(bendService.getActiveUser()._id, (err, ret)=>{
-        if(err) {
-          console.log(err);return;
-        }
-
-        this.setState({
-          user:ret
-        })
+      this.setState({
+        user:ret
       })
     })
   }
@@ -150,17 +138,17 @@ class EventsDetail extends Component {
   }
 
   onGetDirection() {
-    var url = 'http://maps.apple.com/?ll=' + this.state.event._geoloc[1] + ',' + this.state.event._geoloc[0];
+    var url = 'http://maps.apple.com/?ll=' + this.props.event._geoloc[1] + ',' + this.props.event._geoloc[0];
     Linking.openURL(url);
   }
 
   onGoWeb() {
-    if(this.state.event.url)
-      Linking.openURL(this.state.event.url);
+    if(this.props.event.url)
+      Linking.openURL(this.props.event.url);
   }
 
   onCheckIn() {
-    bendService.captureActivity(this.state.event._id, 'event', (err,result)=>{
+    bendService.captureActivity(this.props.event._id, 'event', (err,result)=>{
       if(err){
         console.log(err);return;
       }
@@ -191,7 +179,7 @@ class EventsDetail extends Component {
   }
 
   renderCoverImage() {
-    var event = this.state.event;
+    var {event} = this.props;
     var coverImage, backgroundColor;
     if(this.state.initialize) {
       var imageObj = event.coverImage?event.coverImage:this.state.category.coverImage
@@ -208,15 +196,14 @@ class EventsDetail extends Component {
   }
 
   render() {
-    const { status } = this.props;
-    var event = this.state.event;
+    const { status, event } = this.props;
 
     return (
       <View style={ styles.container }>
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title = {this.state.event.name}
+          title = {event.name}
         />
         <ScrollView>
           {event._geoloc&&<MapView

@@ -63,13 +63,13 @@ const exploreWays = [
   //   iconWidth: 26,
   //   iconHeight: 25,
   // },
-  // {
-  //   title: 'Services',
-  //   description: 'Sign up for eco-friendly lifestyle services',
-  //   icon: require('../../../assets/imgs/services.png'),
-  //   iconWidth: 23,
-  //   iconHeight: 20,
-  // },
+  {
+     title: 'Services',
+     description: 'Sign up for eco-friendly lifestyle services',
+     icon: require('../../../assets/imgs/services.png'),
+     iconWidth: 23,
+     iconHeight: 20,
+  },
 
 ];
 
@@ -233,7 +233,7 @@ class MainSearch extends Component {
       //   alert("Clicked " + exploreWays[index].title);
       //   break;
 
-      case 1://Services
+      case 3://Services
         alert("Clicked " + exploreWays[index].title);
         break;
 
