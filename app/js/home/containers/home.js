@@ -127,6 +127,32 @@ class Home extends Component {
 
     this.loadRecentActivities()
 
+    this.loadPollQuestion()
+
+    /*var currentDate = new Date().setHours(0,0,0,0);
+    setInterval(()=>{
+      var current = new Date().setHours(0,0,0,0)
+      if(current != currentDate) {
+        currentDate = current;
+
+        //update poll question
+        this.loadPollQuestion();
+      }
+    }, 1000 * 60 * 10);*/
+  }
+
+  componentWillReceiveProps(newProps) {
+
+    if (newProps.status == 'home_request') {
+
+    } else if (newProps.status == 'home_success') {
+
+    } else if (newProps.status == 'home_erroror') {
+
+    }
+  }
+
+  loadPollQuestion() {
     bendService.getPollQuestion( (error, question, answers, myAnswer) => {
 
       if (error) {
@@ -146,17 +172,6 @@ class Home extends Component {
     })
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'home_request') {
-
-    } else if (newProps.status == 'home_success') {
-
-    } else if (newProps.status == 'home_erroror') {
-
-    }
-  }
-
   loadRecentActivities() {
 
     if ( this.state.activityQuery.more === false )
@@ -166,9 +181,9 @@ class Home extends Component {
       state.activityQuery.loading = true;
       return state;
     });
-    console.log("call loadRecentActivities")
+    //console.log("call loadRecentActivities")
     bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
-      console.log("getRecentActivities", error, result)
+      //console.log("getRecentActivities", error, result)
       this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
