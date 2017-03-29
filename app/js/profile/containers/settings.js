@@ -121,7 +121,7 @@ class Settings extends Component {
   onLogOut() {
     //alert( 'Tapped onLogOut');
     bendService.logout()
-    Actions.Login()
+    Actions.Login({type:'reset'})
   }
 
   updateShareActivity(val) {
