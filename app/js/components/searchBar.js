@@ -10,29 +10,6 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
 
-const styles = StyleSheet.create({
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0000001e',
-    borderRadius: 5,
-  },
-  searchBarInput: {
-    flex: 1,
-    fontWeight: 'normal',
-    color: '#fff',
-    backgroundColor: 'transparent',
-  },
-  goButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: 'transparent',
-  },
-});
-
 export default class SearchBar extends Component {
 
   static propTypes = {
@@ -212,9 +189,7 @@ export default class SearchBar extends Component {
                 {
                   paddingLeft: height * 0.3,
                   fontSize: height * 0.5,
-                  flex: 1,
-                },
-                textStyle
+                }
               ]
             }
           />
@@ -233,3 +208,27 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0000001e',
+    borderRadius: 5,
+  },
+  searchBarInput: {
+    flex: 1,
+    fontWeight: 'normal',
+    color: '#fff',
+    backgroundColor: 'transparent',
+  },
+  goButton: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'transparent',
+  },
+});
+

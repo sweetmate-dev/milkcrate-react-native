@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   input: {
+    alignSelf: 'stretch',
     fontSize: 14,
     // color: commonColors.title,
     height: 45,
