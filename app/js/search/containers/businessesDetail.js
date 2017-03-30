@@ -317,7 +317,7 @@ class BusinessesDetail extends Component {
                     <Text style={ styles.textInfoTitle }>Phone</Text>
                   </View>
                 </TouchableOpacity>}
-                {UtilService.isValid(business.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                {UtilService.isValidURL(business.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>

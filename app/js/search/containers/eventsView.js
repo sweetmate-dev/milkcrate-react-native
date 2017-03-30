@@ -123,8 +123,8 @@ class EventsView extends Component {
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
-          lat: position.latitude,
-          long: position.longitude,
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
           from:UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
         }, (error, result) => {
           

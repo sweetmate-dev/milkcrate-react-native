@@ -73,8 +73,8 @@ class CategoryView extends Component {
           category:UtilService.convertToSlug(title),
           offset: 0,
           limit: 20,
-          lat: position.latitude,
-          long: position.longitude
+          lat: position.coords.latitude,
+          long: position.coords.longitude
         }, (error, result) => {
 
           if (error) {
@@ -186,7 +186,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         points={ Math.max(Number(rowData.points||1), 1) }
-        onClick={ () => this.onPressedEventCell(rowData) }
+        onClick={ () => this.onPressedE(rowData) }
       />
     );
   }

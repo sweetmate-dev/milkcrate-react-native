@@ -174,8 +174,8 @@ class FilterSearch extends Component {
 
         bendService.searchActivity({
           query: searchText,
-          lat: position.latitude,
-          long: position.longitude
+          lat: position.coords.latitude,
+          long: position.coords.longitude
         }, (error, result) => {
 
           if (error) {

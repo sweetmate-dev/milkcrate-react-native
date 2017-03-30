@@ -341,6 +341,14 @@ class UtilService {
 
         return true
     }
+
+    static isValidURL(data) {
+        if(!this.isValid(data)) return false
+
+        if(data == 'http://') return false
+
+        return true
+    }
 }
 
 export default UtilService

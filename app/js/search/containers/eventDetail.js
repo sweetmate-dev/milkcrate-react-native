@@ -250,7 +250,7 @@ class EventDetail extends Component {
                 </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
-                {this.state.didStatus&&UtilService.isValid(event.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                {this.state.didStatus&&UtilService.isValidURL(event.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>

@@ -101,8 +101,8 @@ class ServiceView extends Component {
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
-          lat: position.latitude,
-          long: position.longitude
+          lat: position.coords.latitude,
+          long: position.coords.longitude
         }, (error, result) => {
           
           this.setState( (state) => {  

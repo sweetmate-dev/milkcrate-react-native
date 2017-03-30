@@ -168,7 +168,7 @@ class ActionDetail extends Component {
               <Point point={ Math.max(action.points||1, 1)} />
             </View>
             <Text style={ styles.textDescription }>{ action.description }</Text>
-            {action.url&&<View style={ styles.buttonContainer }>
+            {UtilService.isValidURL(action.url)&&<View style={ styles.buttonContainer }>
               <TouchableOpacity onPress={ () => this.visitWebSite(action.url) }>
                 <View style={ styles.buttonWrapper }>
                   <Text style={ styles.urlTextButton }>Visit the Website</Text>

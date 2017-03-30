@@ -213,7 +213,7 @@ class Profile extends Component {
             <Text style={ styles.textName }>{currentUser.name}</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>129</Text>
+                <Text style={ styles.textValue }>{currentUser.points||0}</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>

@@ -171,7 +171,7 @@ class ServiceDetail extends Component {
               <Point point={ Math.max(service.points||1, 1)} />
             </View>
             <Text style={ styles.textDescription }>{ service.description }</Text>
-            {service.url&&<View style={ styles.buttonContainer }>
+            {UtilService.isValidURL(service.url)&&<View style={ styles.buttonContainer }>
               <TouchableOpacity onPress={ () => this.visitWebSite(service.url) }>
                 <View style={ styles.buttonWrapper }>
                   <Text style={ styles.urlTextButton }>Visit the Website</Text>

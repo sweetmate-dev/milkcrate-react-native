@@ -100,9 +100,7 @@ class ActionView extends Component {
           type:'action',
           offset: this.offset,
           limit: this.limit,
-          query: this.searchText,
-          lat: position.latitude,
-          long: position.longitude
+          query: this.searchText
         }, (error, result) => {
           
           this.setState( (state) => {  
