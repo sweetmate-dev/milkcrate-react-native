@@ -39,6 +39,7 @@ import LoadMoreSpinner from '../../components/loadMoreSpinner';
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -84,11 +85,13 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    bendService.getCategories((error, cats)=>{
-      this.setState({
-        categories:cats
-      })
-    })
+    Cache.init((err, ret)=>{
+      if(!err) {
+        this.setState({
+          categories:Cache.categories
+        })
+      }
+    });
 
     bendService.getWeeklyChallenges( "", (error, result)=>{
       if (error) {
@@ -269,6 +272,8 @@ class Home extends Component {
       Actions.EventDetail({ event: activity.activity });
     } else if(activity.type == 'service') {
       Actions.ServiceDetail({ service: activity.activity });
+    } else if(activity.type == 'volunteer') {
+      Actions.VolunteerDetail({ volunteer: activity.activity });
     }
   }
 

@@ -145,17 +145,10 @@ class BusinessesView extends Component {
 
           result.data.business.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {
-              bendService.getCategory(business.categories[0], (error, result)=>{
-
-                if (error){
-                  console.log(error);
-                  return
-                }
-
-                this.setState( (state) => {
-                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(result.slug);;
-                  return state;
-                })
+              var category = UtilService.getCategoryById(business.categories[0])
+              this.setState( (state) => {
+                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);;
+                return state;
               })
             }
           });

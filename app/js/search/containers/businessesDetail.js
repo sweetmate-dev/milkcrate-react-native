@@ -47,6 +47,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 
 class BusinessesDetail extends Component {
@@ -56,12 +57,7 @@ class BusinessesDetail extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      category:{
-        coverImage:{
-          _downloadURL:null
-        }
-      },
-      initialize:false,
+      initialize:true,
       didStatus:false,
       everDidStatus:true,
       activityId:null,
@@ -82,6 +78,10 @@ class BusinessesDetail extends Component {
       },
       user:{}
     };
+
+    this.category = _.find(Cache.categories, (o)=>{
+      return o._id == this.props.business.categories[0]
+    })
   }
 
   componentDidMount(){
@@ -109,20 +109,6 @@ class BusinessesDetail extends Component {
         everDidStatus: result
       })
     })
-
-    //console.log(action)
-    if(business.categories&&business.categories.length >0) {
-      bendService.getCategory(business.categories[0], (err, ret)=>{
-        if(err){
-          console.log(err);return
-        }
-
-        this.setState({
-          category:ret,
-          initialize:true
-        })
-      })
-    }
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
@@ -237,7 +223,7 @@ class BusinessesDetail extends Component {
     const { business } = this.props;
     var coverImage, backgroundColor;
     if(this.state.initialize) {
-      var imageObj = business.coverImage?business.coverImage:this.state.category.coverImage
+      var imageObj = business.coverImage?business.coverImage:this.category.coverImage
       coverImage = UtilService.getMiddleImage(imageObj)
       backgroundColor = UtilService.getBackColor(imageObj)
     }
@@ -288,7 +274,7 @@ class BusinessesDetail extends Component {
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{business.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>

@@ -36,6 +36,8 @@ export default class ChallengeCarousel extends Component {
       Actions.EventDetail({ event: challenge.activity });
     } else if(challenge.type == 'serivce') {
       Actions.ServiceDetail({ serivce: challenge.activity });
+    } else if(challenge.type == 'volunteer') {
+      Actions.VolunteerDetail({ volunteer: challenge.activity });
     }
   }
 

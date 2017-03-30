@@ -36,17 +36,13 @@ const dummyText2 = 'With your budget in mind, it is easy to plan a chartered yac
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 class ActionDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category:{
-        coverImage:{
-          _downloadURL: null
-        }
-      },
-      initialize:false,
+      initialize:true,
       didStatus:false,
       activityId:null
     };
@@ -70,20 +66,6 @@ class ActionDetail extends Component {
         didStatus: result==false?false:true
       })
     })
-
-    //console.log(action)
-    if (action.categories && action.categories.length > 0) {
-      bendService.getCategory(action.categories[0], (error, result)=>{
-
-        if (error){
-          console.log(error);return
-        }
-        this.setState({
-          category: result,
-          initialize: true,
-        })
-      })
-    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -143,12 +125,15 @@ class ActionDetail extends Component {
 
   render() {
     const { status, action } = this.props;
+
+    var category = _.find(Cache.categories, (o)=>{
+      return o._id == action.categories[0]
+    })
+
     var backgroundImage, backgroundColor;
-    if(this.state.initialize) {
-      var imageObj = action.coverImage?action.coverImage:this.state.category.coverImage
-      backgroundImage = UtilService.getLargeImage(imageObj)
-      backgroundColor = UtilService.getBackColor(imageObj)
-    }
+    var imageObj = action.coverImage?action.coverImage:category.coverImage
+    backgroundImage = UtilService.getLargeImage(imageObj)
+    backgroundColor = UtilService.getBackColor(imageObj)
 
     return (
       <View style={ styles.container }>
@@ -161,7 +146,7 @@ class ActionDetail extends Component {
           {this.state.initialize&&<Image style={ [styles.imageTopBackground, {backgroundColor:backgroundColor}] } source={{uri:backgroundImage}}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(category.slug) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{action.name}</Text>
               </View>

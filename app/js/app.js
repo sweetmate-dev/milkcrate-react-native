@@ -42,6 +42,8 @@ import ChangePassword from './profile/containers/changePassword';
 import LearnMoreModal from './home/components/learnMoreModal';
 import ActionView from './search/containers/actionView';
 import ServiceView from './search/containers/serviceView';
+import VolunteerView from './search/containers/volunteerView';
+import VolunteerDetail from './search/containers/volunteerDetail';
 
 
 
@@ -188,6 +190,8 @@ class App extends Component {
         <Scene key="LearnMoreModal" component={ LearnMoreModal } direction='vertical' />
         <Scene key="ActionView" component={ ActionView } />
         <Scene key="ServiceView" component={ ServiceView } />
+        <Scene key="VolunteerView" component={ VolunteerView } />
+        <Scene key="VolunteerDetail" component={ VolunteerDetail } />
       </Scene>
     );
 

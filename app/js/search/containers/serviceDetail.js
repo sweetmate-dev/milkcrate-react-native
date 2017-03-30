@@ -36,24 +36,22 @@ const dummyText2 = 'With your budget in mind, it is easy to plan a chartered yac
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 class ServiceDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category:{
-        coverImage:{
-          _downloadURL: null
-        }
-      },
-      initialize:false,
       didStatus:false,
       activityId:null
     };
+
+    this.category = _.find(Cache.categories, (o)=>{
+      return o._id == this.props.service.categories[0]
+    })
   }
 
   componentDidMount(){
-
     const service = this.props.service
 
     bendService.checkActivityDid(service._id,'service', (error, result)=>{
@@ -70,20 +68,6 @@ class ServiceDetail extends Component {
         didStatus: result==false?false:true
       })
     })
-
-    //console.log(action)
-    if (service.categories && service.categories.length > 0) {
-      bendService.getCategory(service.categories[0], (error, result)=>{
-
-        if (error){
-          console.log(error);return
-        }
-        this.setState({
-          category: result,
-          initialize: true,
-        })
-      })
-    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -147,11 +131,9 @@ class ServiceDetail extends Component {
   render() {
     const { status, service } = this.props;
     var backgroundImage, backgroundColor;
-    if(this.state.initialize) {
-      var imageObj = service.coverImage?service.coverImage:this.state.category.coverImage
-      backgroundImage = UtilService.getLargeImage(imageObj)
-      backgroundColor = UtilService.getBackColor(imageObj)
-    }
+    var imageObj = service.coverImage?service.coverImage:this.category.coverImage
+    backgroundImage = UtilService.getLargeImage(imageObj)
+    backgroundColor = UtilService.getBackColor(imageObj)
 
     return (
       <View style={ styles.container }>
@@ -161,10 +143,10 @@ class ServiceDetail extends Component {
           title ={service.name}
         />
         <ScrollView>
-          {this.state.initialize&&<Image style={ [styles.imageTopBackground, {backgroundColor:backgroundColor}] } source={{uri:backgroundImage}}/>}
+          <Image style={ [styles.imageTopBackground, {backgroundColor:backgroundColor}] } source={{uri:backgroundImage}}/>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.state.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{service.name}</Text>
               </View>

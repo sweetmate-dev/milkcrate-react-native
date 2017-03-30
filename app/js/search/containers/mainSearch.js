@@ -56,19 +56,19 @@ const exploreWays = [
      iconWidth: 23,
      iconHeight: 25,
    },
-  // {
-  //   title: 'Volunteer Opportunities',
-  //   description: 'Find one that’s right for you',
-  //   icon: require('../../../assets/imgs/volunteer.png'),
-  //   iconWidth: 26,
-  //   iconHeight: 25,
-  // },
   {
      title: 'Services',
      description: 'Sign up for eco-friendly lifestyle services',
      icon: require('../../../assets/imgs/services.png'),
      iconWidth: 23,
      iconHeight: 20,
+  },
+  {
+    title: 'Volunteer Opportunities',
+    description: 'Find one that’s right for you',
+    icon: require('../../../assets/imgs/volunteer.png'),
+    iconWidth: 26,
+    iconHeight: 25,
   },
 
 ];
@@ -230,13 +230,12 @@ class MainSearch extends Component {
       case 2://Events
         Actions.EventsView();
         break;
-
-      // case 4://Volunteer
-      //   alert("Clicked " + exploreWays[index].title);
-      //   break;
-
       case 3://Services
         Actions.ServiceView();
+        break;
+
+      case 4://Volunteer
+        Actions.VolunteerView();
         break;
 
       default:

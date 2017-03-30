@@ -131,6 +131,12 @@ class CategoryView extends Component {
     })
   }
 
+  onPressedVolunteerCell (volunteer) {
+    Actions.VolunteerDetail({
+      volunteer:volunteer
+    })
+  }
+
 
   renderActionsListRow(rowData, sectionID, rowID) {
     return (

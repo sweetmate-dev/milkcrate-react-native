@@ -236,7 +236,11 @@ module.exports = {
 
     //get all categories
     getCategories(cb) {
-      Bend.DataStore.find("category", new Bend.Query()).then((rets)=>{
+      Bend.DataStore.find("category", new Bend.Query(), {
+          relations:{
+              coverImage:"BendFile"
+          }
+      }).then((rets)=>{
           cb(null, rets)
       }, (err)=>{
           cb(err)
@@ -649,6 +653,17 @@ module.exports = {
         Bend.execute("capture-activity", {
             type:type,
             id:id
+        }).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+    captureActivityForVolunteer(id, type, hours, cb) {
+        Bend.execute("capture-activity-volunteer", {
+            type:type,
+            id:id,
+            hours:hours
         }).then((ret)=>{
             cb(null, ret);
         }, (err)=>{
