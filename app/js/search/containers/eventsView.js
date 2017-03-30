@@ -87,7 +87,7 @@ class EventsView extends Component {
   }
 
   onCellPressed (event) {
-    Actions.EventsDetail({event:event});
+    Actions.EventDetail({event:event});
   }
 
   onSelectDate (date) {

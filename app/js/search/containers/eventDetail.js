@@ -16,7 +16,7 @@ Linking
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as eventsDetailActions from '../actions';
+import * as eventDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -42,7 +42,7 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class EventsDetail extends Component {
+class EventDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -300,9 +300,9 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(eventsDetailActions, dispatch)
+    actions: bindActionCreators(eventDetailActions, dispatch)
   })
-)(EventsDetail);
+)(EventDetail);
 
 const styles = StyleSheet.create({
   container: {

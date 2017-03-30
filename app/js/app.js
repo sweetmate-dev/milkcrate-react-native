@@ -30,7 +30,7 @@ import CategoryView from './search/containers/categoryView';
 import BusinessesDetail from './search/containers/businessesDetail';
 import ActionDetail from './search/containers/actionDetail';
 import ServiceDetail from './search/containers/serviceDetail';
-import EventsDetail from './search/containers/eventsDetail';
+import EventDetail from './search/containers/eventDetail';
 import EventsView from './search/containers/eventsView';
 import SetupProfile from './profile/containers/setupProfile';
 import Settings from './profile/containers/settings';
@@ -176,7 +176,7 @@ class App extends Component {
         <Scene key="CategoryView" component={ CategoryView } />
         <Scene key="BusinessesDetail" component={ BusinessesDetail } />
         <Scene key="ActionDetail" component={ ActionDetail } />
-        <Scene key="EventsDetail" component={ EventsDetail } />
+        <Scene key="EventDetail" component={ EventDetail } />
         <Scene key="ServiceDetail" component={ ServiceDetail } />
         <Scene key="EventsView" component={ EventsView } />
         <Scene key="Settings" component={ Settings } />

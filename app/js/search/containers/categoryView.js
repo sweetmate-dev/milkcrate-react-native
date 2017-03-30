@@ -113,6 +113,18 @@ class CategoryView extends Component {
     })
   }
 
+  onPressedEventCell (event) {
+    Actions.EventDetail({
+      event:event
+    })
+  }
+
+  onPressedServiceCell (service) {
+    Actions.ServiceDetail({
+      service:service
+    })
+  }
+
   onPressedBusinessesCell (business) {
     Actions.BusinessesDetail({
       business:business
@@ -152,7 +164,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         points={ Math.max(rowData.points||1, 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedEventCell(rowData) }
       />
     );
   }
@@ -163,7 +175,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         points={ Math.max(rowData.points||1, 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
   }
@@ -174,7 +186,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         points={ Math.max(Number(rowData.points||1), 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedEventCell(rowData) }
       />
     );
   }

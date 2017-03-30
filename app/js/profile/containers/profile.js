@@ -134,7 +134,9 @@ class Profile extends Component {
     } else if(activity.type == 'action') {
       Actions.ActionDetail({ action: activity.activity });
     } else if(activity.type == 'event') {
-      Actions.EventsDetail({ action: activity.activity });
+      Actions.EventDetail({ event: activity.activity });
+    } else if(activity.type == 'service') {
+      Actions.ServiceDetail({ service: activity.activity });
     }
   }
 

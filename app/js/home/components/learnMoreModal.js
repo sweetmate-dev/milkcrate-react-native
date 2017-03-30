@@ -35,18 +35,18 @@ export default class LearnMoreModal extends Component {
   }
 
   render() {
-    const { status } = this.props;
+    const { status, question } = this.props;
 
     return (
       <View style={ styles.container }>
         <View style={ styles.topContainer }/>
         <View style={ styles.centerContainer }>
           <View style={ styles.titleContainer}>
-            <Text style={ styles.textTitle }>Diet</Text>
+            <Text style={ styles.textTitle }>{question.topic}</Text>
           </View>
           <View style={ styles.contentContainer }>
             <ScrollView>
-              <Text style={ styles.textDescription }>{ description }</Text>
+              <Text style={ styles.textDescription }>{ question.details }</Text>
             </ScrollView>
           </View>
         </View>

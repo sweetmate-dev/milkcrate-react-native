@@ -206,6 +206,17 @@ class FilterSearch extends Component {
     })
   }
 
+  onPressedEventCell (event) {
+    Actions.EventDetail({
+      event:event
+    })
+  }
+
+  onPressedServiceCell (service) {
+  Actions.ServiceDetail({
+    service:service
+  })
+}
 
   renderActionsListRow(rowData, sectionID, rowID) {
     return (
@@ -239,7 +250,7 @@ class FilterSearch extends Component {
         title={ rowData.name }
         icon={ this.state.icons.event[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedEventCell(rowData) }
       />
     );
   }
@@ -250,7 +261,7 @@ class FilterSearch extends Component {
         title={ rowData.name }
         icon={ this.state.icons.volunteer_opportunity[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
   }
@@ -261,7 +272,7 @@ class FilterSearch extends Component {
         title={ rowData.name }
         icon={ this.state.icons.service[rowID] }
         points={ Math.max(Number(rowData.points || 1), 1) }
-        onClick={ () => this.onPressedActionsCell(index) }
+        onClick={ () => this.onPressedServiceCell(rowData) }
       />
     );
   }
