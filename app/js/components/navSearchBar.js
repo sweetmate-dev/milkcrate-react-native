@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 
 import SearchBar from './searchBar';
@@ -143,7 +144,6 @@ export default class NavSearchBar extends Component {
               iconColor={ "#ffffff99" }
               placeholder = { placeholder }
               placeholderColor="#ffffff99"
-              paddingTop={ 28 }
             />
           </View>
           {
@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
-    height: 64,
+    height: (Platform.OS === 'android') ? 44 : 64,
+    paddingTop: (Platform.OS === 'android') ? 8 : 28,
     paddingHorizontal: 10,
   },
   searchBarWrap: {
@@ -207,10 +208,10 @@ const styles = StyleSheet.create({
   },
   cancelButtonWrap: {
     flex: 1.5,
-    paddingTop: 20,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    backgroundColor: 'transparent',    
+    backgroundColor: 'transparent',
+    height: 28,
   },
 
   button: {

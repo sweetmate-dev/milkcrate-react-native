@@ -87,10 +87,10 @@ def enableProguardInReleaseBuilds = false
 android {
     signingConfigs {
         config {
-            keyAlias 'MilkCrate'
-            keyPassword 'milkcrate'
+            keyAlias 'milkcrate'
+            keyPassword '.t,AsbFm'
             storeFile file('milkcrate.keystore')
-            storePassword 'milkcrate'
+            storePassword '.t,AsbFm'
         }
     }
     compileSdkVersion 23
@@ -98,9 +98,9 @@ android {
     defaultConfig {
         applicationId "com.milkcrate"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 23
+        versionCode 4000001
+        versionName "4.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

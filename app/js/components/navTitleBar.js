@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 
 import { screenWidth } from '../styles/commonStyles';
@@ -120,11 +121,13 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomColor: '#00000021',
-    height: 64,
+    height: (Platform.OS === 'android') ? 44 : 64,
+    paddingTop: (Platform.OS === 'android') ? 0 : 20,
   },
   titleBarWrap: {
     flex : 6,
-    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleBarPadding: {
     flex: 1,
@@ -134,7 +137,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Blanch',
     fontSize: 28,
     textAlign: 'center',
-    paddingTop: 20,
   },
   buttonWrap: {
     flex: 1,
@@ -151,6 +153,5 @@ const styles = StyleSheet.create({
   image: {
     width: 14,
     height: 14,
-    marginTop: 10,
   },
 });

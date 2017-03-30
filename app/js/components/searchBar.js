@@ -5,6 +5,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -221,6 +222,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     color: '#fff',
     backgroundColor: 'transparent',
+    height: (Platform.OS === 'android') ? 40 : 28,
   },
   goButton: {
     position: 'absolute',
