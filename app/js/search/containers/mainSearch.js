@@ -175,6 +175,8 @@ class MainSearch extends Component {
       dataSourceExploreWays: dataSourceExploreWays.cloneWithRows(exploreWays),
       dataSourceCategories: dataSourceCategories.cloneWithRows(categoryImages),
     };
+
+    this.categoryCellMargin = 0;
   }
 
   componentDidMount() {
@@ -262,7 +264,7 @@ class MainSearch extends Component {
 
   renderCategoriesRow(rowData, sectionID, rowID) {
     return (
-      <View style={ styles.categoryCellWrap }>
+      <View style={ [styles.categoryCellWrap, { marginHorizontal: this.categoryCellMargin }, ] }>
         <View style={ styles.categoryCellButtonWrapper }>
           <ImageButton
             style={ styles.categoryCellImage }
@@ -280,9 +282,17 @@ class MainSearch extends Component {
     );
   }
 
+  caculateCategoryCellMargin() {
+
+    const cellNumber = Math.round(screenWidth / categoryCellSize);
+    this.categoryCellMargin = ( screenWidth - categoryCellSize * cellNumber) / cellNumber / 2;
+  }
+
   render() {
     const { status } = this.props;
 
+    this.caculateCategoryCellMargin();
+    
     return (
       <ScrollView>
         <Text style={ styles.textTitle }>Explore Ways to Earn Points</Text>
@@ -336,7 +346,7 @@ const styles = StyleSheet.create({
   categoryCellWrap: {
     padding: 10,
     width: categoryCellSize,
-    height: categoryCellSize * 1.1,
+    height: categoryCellSize * 1.2,
   },
   categoryCellButtonWrapper: {
     justifyContent: 'flex-start',
