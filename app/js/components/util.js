@@ -1,5 +1,6 @@
 import moment from 'moment'
 import * as _ from 'underscore'
+import Cache from './Cache'
 
 const categoryButtons = {
     animals:require('../../assets/imgs/category-buttons/animals.png'),
@@ -321,8 +322,15 @@ class UtilService {
         return moment(from, 'HH:mm').format('h:mm A') + '-' + moment(until, 'HH:mm').format('h:mm A')
     }
 
+    static getEventTimeByTs(from, until) {
+        return moment(new Date(from/1000000), 'HH:mm').format('h:mm A') + '-' + moment(new Date(until/1000000), 'HH:mm').format('h:mm A')
+    }
+
     static getDay(dateStr) {
         return moment(dateStr).format("ddd").toUpperCase()
+    }
+    static getDayByTs(ts) {
+        return moment(new Date(ts/1000000)).format("ddd").toUpperCase()
     }
 
     static getCityStateString(city, state, postal) {
@@ -348,6 +356,12 @@ class UtilService {
         if(data == 'http://') return false
 
         return true
+    }
+
+    static getCategoryById(id) {
+        return _.find(Cache.categories, (o)=>{
+            return o._id == id
+        })
     }
 }
 

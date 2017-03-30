@@ -32,7 +32,7 @@ import  * as commonStyles from '../../styles/commonStyles';
 
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
-class ActionView extends Component {
+class VolunteerView extends Component {
   constructor(props) {
     super(props);
 
@@ -46,9 +46,9 @@ class ActionView extends Component {
 
     this.state = {
       currentLocation: null,
-      actions: [],
+      volunteeres: [],
       categoryIcons:[],
-      actionsQuery:{
+      volunteeresQuery:{
         more: true,
         loading: false,
       },
@@ -68,26 +68,26 @@ class ActionView extends Component {
 
   componentDidMount() {
 
-    this.loadActions();
+    this.loadList();
   }
 
   onBack() {
     Actions.pop()
   }
 
-  onPressedActionsCell (action) {
-    Actions.ActionDetail({
-      action:action
+  onPressedCell (volunteer) {
+    Actions.VolunteerDetail({
+      volunteer:volunteer
     })
   }
 
-  loadActions () {
+  loadList () {
 
     if (this.more == false)
       return;
 
     this.setState( (state) => {  
-      state.actionsQuery.loading = true;
+      state.volunteeresQuery.loading = true;
       return state;
     });
 
@@ -96,14 +96,14 @@ class ActionView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'action',
+          type:'volunteer_opportunity',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText
         }, (error, result) => {
           
           this.setState( (state) => {  
-            state.actionsQuery.loading = false;
+            state.volunteeresQuery.loading = false;
             return state;
           });
 
@@ -112,23 +112,23 @@ class ActionView extends Component {
             return
           } 
 
-          if (result.data.action.length < this.limit) {
+          if (result.data.volunteer_opportunity.length < this.limit) {
             this.more = false;
             this.setState( (state) => {  
-              state.actionsQuery.more = false;
+              state.volunteeresQuery.more = false;
               return state;
             });
           }
 
-          this.state.actions = this.state.actions.concat(result.data.action);
-          this.setState({ actions: this.state.actions });
+          this.state.volunteeres = this.state.volunteeres.concat(result.data.volunteer_opportunity);
+          this.setState({ volunteeres: this.state.volunteeres });
 
           const imageOffset = this.offset;
           this.offset += this.limit;
 
-          result.data.action.map((action, index) => {
-            if (action.categories && action.categories.length > 0) {
-              var category = UtilService.getCategoryById(action.categories[0])
+          result.data.volunteer_opportunity.map((item, index) => {
+            if (item.categories && item.categories.length > 0) {
+              var category = UtilService.getCategoryById(item.categories[0])
               this.setState( (state) => {
                 state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
                 return state;
@@ -144,13 +144,13 @@ class ActionView extends Component {
     );
   }
 
-  renderActionsListRow(rowData, sectionID, rowID) {
+  renderListRow(rowData, sectionID, rowID) {
     return (
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.categoryIcons[rowID] }
         points={ Math.max(rowData.points||1, 1) }
-        onClick={ () => this.onPressedActionsCell(rowData) }
+        onClick={ () => this.onPressedCell(rowData) }
       />
     );
   }
@@ -167,12 +167,12 @@ class ActionView extends Component {
     this.more = true;
 
     this.setState( (state) => {
-      state.actionsQuery.more = true;
+      state.volunteeresQuery.more = true;
       state.categoryIcons = [];
       return state;
     })
 
-    this.loadActions();
+    this.loadList();
   }
 
   onSearchCancel() {
@@ -182,13 +182,13 @@ class ActionView extends Component {
     this.more = true;
 
     this.setState( (state) => {
-      state.actionsQuery.more = true;
-      state.actions = [];
+      state.volunteeresQuery.more = true;
+      state.volunteeres = [];
       state.categoryIcons = [];
       return state;
     })
 
-    this.loadActions();
+    this.loadList();
   }
 
   render() {
@@ -206,13 +206,13 @@ class ActionView extends Component {
         <ScrollView>
           <ListView
             enableEmptySections={ true }
-            dataSource={ this.dataSource.cloneWithRows(this.state.actions) }
-            renderRow={ this.renderActionsListRow.bind(this) }
+            dataSource={ this.dataSource.cloneWithRows(this.state.volunteeres) }
+            renderRow={ this.renderListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }/>
           <LoadMoreSpinner
-            show={ this.state.actionsQuery.more }
-            loading={ this.state.actionsQuery.loading }
-            onClick={ ()=> this.loadActions() }
+            show={ this.state.volunteeresQuery.more }
+            loading={ this.state.volunteeresQuery.loading }
+            onClick={ ()=> this.loadList() }
           />
         </ScrollView>
       </View>
@@ -226,7 +226,7 @@ export default connect(state => ({
   (dispatch) => ({
     actions: bindActionCreators(searchActions, dispatch)
   })
-)(ActionView);
+)(VolunteerView);
 
 const styles = StyleSheet.create({
   container: {

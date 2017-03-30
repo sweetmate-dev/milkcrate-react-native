@@ -179,17 +179,11 @@ class EventsView extends Component {
 
           result.data.event.map((event, index) => {
             if (event.categories && event.categories.length > 0) {
-              bendService.getCategory(event.categories[0], (error, result)=>{
-
-                if (error){
-                  console.log(error);
-                  return
-                }
-                this.setState( (state) => {
-                  state.categoryIcons[event._id] = UtilService.getCategoryIcon(result.slug);
-                  return state;
-                });
-              })
+              var category = UtilService.getCategoryById(event.categories[0])
+              this.setState( (state) => {
+                state.categoryIcons[event._id] = UtilService.getCategoryIcon(category.slug);
+                return state;
+              });
             }
           });
         })

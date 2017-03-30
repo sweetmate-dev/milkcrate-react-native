@@ -67,6 +67,8 @@ export default class TrendingCarousel extends Component {
       Actions.EventDetail({ event: this.props.rawData });
     } else if(this.props.activityType == 'service') {
       Actions.ServiceDetail({ event: this.props.rawData });
+    } else if(this.props.activityType == 'volunteer') {
+      Actions.VolunteerDetail({ volunteer: this.props.rawData });
     }
   }
 

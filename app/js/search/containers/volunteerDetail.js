@@ -12,11 +12,12 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-Linking
+Linking,
+    Modal
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as eventDetailActions from '../actions';
+import * as volunteerDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
@@ -25,6 +26,7 @@ import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
+import TextField from 'react-native-md-textinput';
 
 //added by li, 2017/03/22
 import bendService from '../../bend/bendService'
@@ -43,7 +45,7 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class EventDetail extends Component {
+class VolunteerDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,16 +65,17 @@ class EventDetail extends Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
       },
-
+      modalVisible:false,
+      hoursNumber:"0"
     };
     this.category = _.find(Cache.categories, (o)=>{
-      return o._id == this.props.event.categories[0]
+      return o._id == this.props.volunteer.categories[0]
     })
   }
 
   componentDidMount() {
-    const {event} = this.props;
-    bendService.checkActivityDid(event._id, 'event', (err, result)=>{
+    const {volunteer} = this.props;
+    bendService.checkActivityDid(volunteer._id, 'volunteer_opportunity', (err, result)=>{
       if(err) {
         console.log(err);return;
       }
@@ -122,17 +125,28 @@ class EventDetail extends Component {
   }
 
   onGetDirection() {
-    var url = 'http://maps.apple.com/?ll=' + this.props.event._geoloc[1] + ',' + this.props.event._geoloc[0];
+    var url = 'http://maps.apple.com/?ll=' + this.props.volunteer._geoloc[1] + ',' + this.props.volunteer._geoloc[0];
     Linking.openURL(url);
   }
 
   onGoWeb() {
-    if(this.props.event.url)
-      Linking.openURL(this.props.event.url);
+    if(this.props.volunteer.url)
+      Linking.openURL(this.props.volunteer.url);
   }
 
   onCheckIn() {
-    bendService.captureActivity(this.props.event._id, 'event', (err,result)=>{
+    //Actions.HoursModal();
+    this.setState({
+      hoursNumber:"0",
+      modalVisible:true
+    })
+    /*
+
+    this.onGoWeb()*/
+  }
+
+  onCheckInDo() {
+    bendService.captureActivityForVolunteer(this.props.volunteer._id, 'volunteer_opportunity', Number(this.state.hoursNumber||0), (err,result)=>{
       if(err){
         console.log(err);return;
       }
@@ -140,11 +154,10 @@ class EventDetail extends Component {
       this.state.activityId = result.activity._id;
 
       this.setState({
+        modalVisible:false,
         didStatus:true
       })
     })
-
-    this.onGoWeb()
   }
 
   onUncheckIn() {
@@ -163,9 +176,9 @@ class EventDetail extends Component {
   }
 
   renderCoverImage() {
-    var {event} = this.props;
+    var {volunteer} = this.props;
     var coverImage, backgroundColor;
-    var imageObj = event.coverImage?event.coverImage:this.category.coverImage
+    var imageObj = volunteer.coverImage?volunteer.coverImage:this.category.coverImage
     coverImage = UtilService.getMiddleImage(imageObj)
     backgroundColor = UtilService.getBackColor(imageObj)
 
@@ -177,22 +190,26 @@ class EventDetail extends Component {
     )
   }
 
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
   render() {
-    const { status, event } = this.props;
+    const { status, volunteer } = this.props;
 
     return (
       <View style={ styles.container }>
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title = {event.name}
+          title = {volunteer.name}
         />
         <ScrollView>
-          {event._geoloc&&<MapView
+          {volunteer._geoloc&&<MapView
               style={ styles.map }
               initialRegion={ {
-        latitude: Number(event._geoloc[1]),
-        longitude: Number(event._geoloc[0]),
+        latitude: Number(volunteer._geoloc[1]),
+        longitude: Number(volunteer._geoloc[0]),
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       } }
@@ -204,35 +221,35 @@ class EventDetail extends Component {
                   image={ map_pin }
                   style={styles.map_pin}
                   coordinate={{
-                latitude: Number(event._geoloc[1]),
-                longitude: Number(event._geoloc[0]),
+                latitude: Number(volunteer._geoloc[1]),
+                longitude: Number(volunteer._geoloc[0]),
                 }}
               />
             }
           </MapView>}
-          {!event._geoloc&&this.renderCoverImage()}
+          {!volunteer._geoloc&&this.renderCoverImage()}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
               <View style={ styles.infoSubContainer }>
-                <Text style={ styles.textTitle }>{event.name}</Text>
+                <Text style={ styles.textTitle }>{volunteer.name}</Text>
                 {this.state.currentLocation&&<Text style={ styles.textValue }>
-                  {event._geoloc?UtilService.getDistanceFromLatLonInMile(event._geoloc[1],event._geoloc[0],
+                  {volunteer._geoloc?UtilService.getDistanceFromLatLonInMile(volunteer._geoloc[1],volunteer._geoloc[0],
                       this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
                   </Text>}
               </View>
-              <Point point={ Math.max(event.points||1, 1)} />
+              <Point point={ Math.max(volunteer.points||1, 1)} />
             </View>
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>{event.address1} {event.address2}</Text>
-                <Text style={ styles.textAddress }>{UtilService.getCityStateString(event.city, event.state, event.postalCode)}</Text>
+                <Text style={ styles.textAddress }>{volunteer.address1} {volunteer.address2}</Text>
+                <Text style={ styles.textAddress }>{UtilService.getCityStateString(volunteer.city, volunteer.state, volunteer.postalCode)}</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
-                {this.state.didStatus&&UtilService.isValidURL(event.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                {this.state.didStatus&&UtilService.isValidURL(volunteer.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>
@@ -241,38 +258,63 @@ class EventDetail extends Component {
               </View>
             </View>
 
-            {event.times&& <View>
-              {
-                event.times.map((time, idx)=> {
-                  return (
-                      <View key={'time-' + idx} style={ styles.dateContinaer }>
-                        <View style={ styles.dayWrapper }>
-                          <Text style={ styles.textDay }>{UtilService.getDay(time.date)}</Text>
-                        </View>
-                        <View style={ styles.dateSubContentContainer }>
-                          <Text style={ styles.textDate }>{UtilService.formatDateWithFormat2(new Date(time.date), 'MMMM DD, YYYY')}</Text>
-                          <Text style={ styles.textValue }>{UtilService.getEventTime(time.from, time.until)}</Text>
-                        </View>
-                      </View>
-                  )
-                })
-              }
+            {UtilService.isValid(volunteer.startsAt)&&UtilService.isValid(volunteer.endsAt) && <View style={ styles.dateContinaer }>
+              <View style={ styles.dayWrapper }>
+                <Text style={ styles.textDay }>{UtilService.getDayByTs(volunteer.startsAt)}</Text>
+              </View>
+              <View style={ styles.dateSubContentContainer }>
+                <Text style={ styles.textDate }>{UtilService.formatDateWithFormat2(new Date(volunteer.startsAt/1000000), 'MMMM DD, YYYY')}</Text>
+                <Text style={ styles.textValue }>{UtilService.getEventTimeByTs(volunteer.startsAt, volunteer.endsAt)}</Text>
+              </View>
             </View>}
 
 
-            <Text style={ styles.textDescription }>{ event.description }</Text>
+            <Text style={ styles.textDescription }>{ volunteer.description }</Text>
           </View>
         </ScrollView>
         {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
-            <Text style={ styles.textButton }>Register</Text>
+            <Text style={ styles.textButton }>I Did It</Text>
           </View>
         </TouchableOpacity>}
         {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
           <View style={ styles.buttonGrey }>
-            <Text style={ styles.textOrange }>I Can't Go</Text>
+            <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>
         </TouchableOpacity>}
+        <Modal
+            animationType={"slide"}
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {alert("Modal has been closed.")}}
+        >
+          <View style={ styles.modalContainer }>
+            <View style={styles.modalContentWrapper}>
+              <Text style={ styles.modalTextSettingsSection }>Number of Hours Volunteered</Text>
+              <TextField
+                  autoCorrect={ false }
+                  inputStyle={ inputStyle }
+                  wrapperStyle={ wrapperStyle }
+                  onChangeText={ (text) => { this.state.hoursNumber = text }}
+                  height={72}
+                  borderColor="transparent"
+                  value={this.state.hoursNumber}
+              />
+            </View>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity onPress={ () => this.setModalVisible(false) }>
+                <View style={ styles.modalCancelButton }>
+                  <Text style={ styles.textOrange }>Cancel</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={ () => this.onCheckInDo() }>
+                <View style={ styles.modalSubmitButton }>
+                  <Text style={ styles.modalTextWhite }>Submit</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -282,9 +324,25 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(eventDetailActions, dispatch)
+    actions: bindActionCreators(volunteerDetailActions, dispatch)
   })
-)(EventDetail);
+)(VolunteerDetail);
+
+const inputStyle = {
+  color: '#fff',
+  fontFamily: 'OpenSans-Semibold',
+  fontSize: 72,
+  backgroundColor:'transparent',
+  textAlign:'center',
+  borderWidth:0
+};
+
+const wrapperStyle={
+  height: 100,
+  backgroundColor: 'transparent',
+  borderWidth:0,
+  width:commonStyles.screenWidth
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -426,4 +484,47 @@ const styles = StyleSheet.create({
     fontSize: 12,
     backgroundColor: 'transparent',
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: '#8ED0C4',
+  },
+
+  modalContentWrapper:{
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  modalTextSettingsSection: {
+    color: 'white',
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    marginBottom: 80,
+  },
+  modalTextWhite: {
+    color: '#fff',
+    fontFamily: 'Open Sans',
+    fontWeight: 'bold',
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 15,
+  },
+  modalSubmitButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#5E8AA3',
+    height: 40,
+    width:commonStyles.screenWidth/2,
+  },
+  modalCancelButton: {
+    width:commonStyles.screenWidth/2,
+    backgroundColor: '#EFEFEF',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalButtonContainer:{
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    justifyContent: 'space-between',
+  }
 });

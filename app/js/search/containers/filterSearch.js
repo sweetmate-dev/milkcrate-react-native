@@ -213,10 +213,16 @@ class FilterSearch extends Component {
   }
 
   onPressedServiceCell (service) {
-  Actions.ServiceDetail({
-    service:service
-  })
-}
+    Actions.ServiceDetail({
+      service:service
+    })
+  }
+
+  onPressedVolunteerCell (volunteer) {
+    Actions.VolunteerDetail({
+      volunteer:volunteer
+    })
+  }
 
   renderActionsListRow(rowData, sectionID, rowID) {
     return (
