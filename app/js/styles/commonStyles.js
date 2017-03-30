@@ -23,7 +23,7 @@ export const carouselItemHorizontalPadding = wp(1);
 export const carouselItemWidth = carouselWidth + carouselItemHorizontalPadding * 2;
 
 export const activityCellSize = screenWidth * 0.22;
-export const categoryCellSize = screenWidth / 4;
+export const categoryCellSize = 90;
 
 export const NavNoneButton = 0;
 export const NavBackButton = 1;
