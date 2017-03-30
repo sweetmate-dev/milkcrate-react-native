@@ -160,7 +160,7 @@ class UtilService {
             return "just now";
         } else if (mins < 60) {
             if(mins == 1)
-                return min + " minute ago";
+                return mins + " minute ago";
             else
                 return mins + " minutes ago";
         } else if (mins < 24 * 60) {
