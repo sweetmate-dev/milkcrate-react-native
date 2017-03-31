@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -45,10 +46,13 @@ class ActionView extends Component {
     this.more = true;
 
     this.state = {
+      isRefreshing: false,
+
       currentLocation: null,
       actions: [],
-      categoryIcons:[],
-      actionsQuery:{
+      categoryIcons: [],
+
+      actionsQuery: {
         more: true,
         loading: false,
       },
@@ -68,7 +72,7 @@ class ActionView extends Component {
 
   componentDidMount() {
 
-    this.loadActions();
+    this.loadAllData();
   }
 
   onBack() {
@@ -79,6 +83,26 @@ class ActionView extends Component {
     Actions.ActionDetail({
       action:action
     })
+  }
+
+  loadAllData() {
+
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
+    this.setState({
+      currentLocation: null,
+      actions: [],
+      categoryIcons:[],
+      actionsQuery:{
+        more: true,
+        loading: false,
+      },
+    });
+
+    this.loadActions();
   }
 
   loadActions () {
@@ -106,6 +130,8 @@ class ActionView extends Component {
             state.actionsQuery.loading = false;
             return state;
           });
+
+          this.setState({ isRefreshing: false });
 
           if (error) {
             console.log("search failed", error)
@@ -191,6 +217,12 @@ class ActionView extends Component {
     this.loadActions();
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
 
@@ -203,7 +235,15 @@ class ActionView extends Component {
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <ListView
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.actions) }

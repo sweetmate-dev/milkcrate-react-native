@@ -9,6 +9,8 @@ import {
   Image,
   Dimensions,
   ListView,
+  ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -42,6 +44,8 @@ class EventsView extends Component {
     super(props);
 
     this.state = {
+      isRefreshing: false,
+
       selectedDate: Date.now(),
       arrayValidDate: [],
      
@@ -53,7 +57,7 @@ class EventsView extends Component {
         more: true,
         loading: false,
       },
-    }
+    };
 
     this.events = [];
     this.offset = 0;
@@ -74,6 +78,32 @@ class EventsView extends Component {
   }
 
   componentDidMount() {
+
+    this.loadAllData();
+  }
+
+  loadAllData() {
+
+    this.setState({
+
+      selectedDate: Date.now(),
+      arrayValidDate: [],
+     
+      currentLocation: null,
+      events: [],
+
+      categoryIcons:[],
+      eventsQuery:{
+        more: true,
+        loading: false,
+      },
+    });
+
+    this.events = [];
+    this.offset = 0;
+    this.limit = 1000; 
+    this.searchText = '';
+    this.more = true;
 
     this.loadEvents();
   }
@@ -133,12 +163,12 @@ class EventsView extends Component {
             return state;
           });
 
+          this.setState({ isRefreshing: false });
+
           if (error) {
             console.log("search failed", error)
             return
           }
-
-          console.log(result.data);
 
           if (result.data.event.length < this.limit) {
             this.more = false;
@@ -225,6 +255,12 @@ class EventsView extends Component {
     );
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
 
@@ -235,29 +271,39 @@ class EventsView extends Component {
           onBack={ this.onBack }
           placeholder ='Search for events'
         />
-        {/*<CalendarStrip
-          style={ styles.calendar }
-          selection={ 'background' }
-          calendarColor={ '#d4ebf640' }
-          dateNumberStyle={ styles.calendarDateNumber }
-          dateNameStyle={ styles.calendarDateName }
-          highlightColor={ '#d4ebf6' }
-          calendarHeaderStyle={ styles.calendarHeader }
-          iconStyle={ styles.calendarIcon }
-          iconContainer={{ flex: 0.1 }}
-          weekendDateNameStyle={ styles.calendarDateName }
-          weekendDateNumberStyle={ styles.calendarDateNumber }
-          highlightDateNameStyle={ styles.calendarDateName }
-          highlightDateNumberStyle={ styles.calendarDateNumber }
-          onDateSelected={ (date) => this.onSelectDate(date) }
-          eventDays={ eventDays }
-        />*/}
-        <ListView
-            enableEmptySections={ true }
-          dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
-          renderRow={ this.renderListRow.bind(this) }
-          renderSectionHeader= { this.renderSectionHeader.bind(this) }
-        />
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
+          {/*<CalendarStrip
+            style={ styles.calendar }
+            selection={ 'background' }
+            calendarColor={ '#d4ebf640' }
+            dateNumberStyle={ styles.calendarDateNumber }
+            dateNameStyle={ styles.calendarDateName }
+            highlightColor={ '#d4ebf6' }
+            calendarHeaderStyle={ styles.calendarHeader }
+            iconStyle={ styles.calendarIcon }
+            iconContainer={{ flex: 0.1 }}
+            weekendDateNameStyle={ styles.calendarDateName }
+            weekendDateNumberStyle={ styles.calendarDateNumber }
+            highlightDateNameStyle={ styles.calendarDateName }
+            highlightDateNumberStyle={ styles.calendarDateNumber }
+            onDateSelected={ (date) => this.onSelectDate(date) }
+            eventDays={ eventDays }
+          />*/}
+          <ListView
+              enableEmptySections={ true }
+            dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
+            renderRow={ this.renderListRow.bind(this) }
+            renderSectionHeader= { this.renderSectionHeader.bind(this) }
+          />
+        </ScrollView>
       </View>
     );
   }

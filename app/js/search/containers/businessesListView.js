@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -78,10 +79,20 @@ class BusinessesListView extends Component {
       onLoadBusinesses,
       moreBusinesses,
       loading,
+      isRefreshing,
+      onRefresh,
     } = this.props;
 
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={ isRefreshing }
+            onRefresh={ () => onRefresh() }
+            tintColor={ commonColors.theme }
+          />
+        }
+      >
         <ListView
           enableEmptySections={ true }
           dataSource={ this.dataSource.cloneWithRows(businesses) }

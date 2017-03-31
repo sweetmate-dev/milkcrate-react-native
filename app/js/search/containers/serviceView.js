@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -46,10 +47,12 @@ class ServiceView extends Component {
     this.more = true;
 
     this.state = {
+      isRefreshing: false,
+
       currentLocation: null,
       services: [],
-      categoryIcons:[],
-      serviceQuery:{
+      categoryIcons: [],
+      serviceQuery: {
         more: true,
         loading: false,
       },
@@ -69,7 +72,27 @@ class ServiceView extends Component {
 
   componentDidMount() {
 
-    this.loadList();
+    this.loadAllData();
+  }
+
+  loadAllData() {
+
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
+    this.setState({
+      currentLocation: null,
+      services: [],
+      categoryIcons:[],
+      serviceQuery:{
+        more: true,
+        loading: false,
+      },
+    });
+
+    this.loadServices();
   }
 
   onBack() {
@@ -82,7 +105,7 @@ class ServiceView extends Component {
     })
   }
 
-  loadList () {
+  loadServices () {
 
     if (this.more == false)
       return;
@@ -109,6 +132,8 @@ class ServiceView extends Component {
             state.serviceQuery.loading = false;
             return state;
           });
+
+          this.setState({ isRefreshing: false });
 
           if (error) {
             console.log("search failed", error)
@@ -175,7 +200,7 @@ class ServiceView extends Component {
       return state;
     })
 
-    this.loadList();
+    this.loadServices();
   }
 
   // onSearchFocus() {
@@ -205,7 +230,13 @@ class ServiceView extends Component {
       return state;
     })
 
-    this.loadList();
+    this.loadServices();
+  }
+
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
   }
 
   render() {
@@ -220,7 +251,15 @@ class ServiceView extends Component {
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <ListView
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.services) }
@@ -229,7 +268,7 @@ class ServiceView extends Component {
           <LoadMoreSpinner
             show={ this.state.serviceQuery.more }
             loading={ this.state.serviceQuery.loading }
-            onClick={ ()=> this.loadList() }
+            onClick={ ()=> this.loadServices() }
           />
         </ScrollView>
       </View>

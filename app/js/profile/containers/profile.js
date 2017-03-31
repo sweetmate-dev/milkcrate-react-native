@@ -10,6 +10,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ListView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -37,23 +38,62 @@ class Profile extends Component {
 
     this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
+    
     this.state = {
-      dataSourceRecentActivity: this.dataSource.cloneWithRows([]),
-      activityQuery:{
-        createdAt: 0,
-        limit: 20,
+      isRefreshing: false,
+
+      activityQuery: {
         more: true,
         loading: false,
       },
-      currentLocation:null,
-      categories:[],
-      recentActivities:[]
+      currentLocation: null,
+      categories: [],
+      recentActivities: []
     };
 
-    this.loadRecentActivities.bind(this);
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
   }
 
   componentDidMount() {
+
+    this.loadAllData();
+  }
+
+  componentWillReceiveProps(newProps) {
+
+    if (newProps.status == 'profile_request') {
+
+    } else if (newProps.status == 'profile_success') {
+
+    } else if (newProps.status == 'profile_error') {
+
+    }
+  }
+
+  loadAllData() {
+
+    this.setState({
+
+      activityQuery: {
+        more: true,
+        loading: false,
+      },
+
+      currentLocation: null,
+      categories: [],
+      recentActivities: []
+    });
+
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
+
     bendService.getCategories((error, cats)=>{
       this.setState({
         categories:cats
@@ -72,23 +112,11 @@ class Profile extends Component {
         },
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
-
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'profile_request') {
-
-    } else if (newProps.status == 'profile_success') {
-
-    } else if (newProps.status == 'profile_error') {
-
-    }
   }
 
   loadRecentActivities() {
 
-    if ( this.state.activityQuery.more === false )
+    if ( this.activityQuery.more === false )
       return;
 
     this.setState( (state) => {
@@ -96,27 +124,35 @@ class Profile extends Component {
       return state;
     });
 
-    bendService.getMyRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
+    bendService.getMyRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
 
       this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
+      this.setState({ isRefreshing: false });
+
       if (error) {
         console.log(error);
         return;
       }
-      console.log("recent activities", result)
-      this.state.activityQuery.more = (result.length == this.state.activityQuery.limit + 1)
-      if(this.state.activityQuery.more) {
+      
+      this.activityQuery.more = (result.length == this.activityQuery.limit + 1)
+
+      this.setState((state) => {
+        state.activityQuery.more = this.activityQuery.more;
+        return state;
+      });
+
+      if(this.activityQuery.more) {
         //remove tail item
         result.pop()
       }
 
       if(result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
-        this.state.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
+        this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
           recentActivities:this.state.recentActivities
         })
@@ -200,6 +236,12 @@ class Profile extends Component {
     this.props.onSearch();
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
     const currentUser = bendService.getActiveUser()
@@ -210,7 +252,15 @@ class Profile extends Component {
           onSetting={ this.onSettings }
           onFocus={ () => this.onGoSearch() }
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <View style={ styles.topContainer }>
             <Text style={ styles.textName }>{currentUser.name}</Text>
             <View style={ styles.pointContainer }>

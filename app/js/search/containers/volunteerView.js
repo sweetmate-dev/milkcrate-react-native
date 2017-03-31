@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -45,10 +46,12 @@ class VolunteerView extends Component {
     this.more = true;
 
     this.state = {
+      isRefreshing: false,
+
       currentLocation: null,
       volunteeres: [],
-      categoryIcons:[],
-      volunteeresQuery:{
+      categoryIcons: [],
+      volunteeresQuery: {
         more: true,
         loading: false,
       },
@@ -68,7 +71,27 @@ class VolunteerView extends Component {
 
   componentDidMount() {
 
-    this.loadList();
+    this.loadAllData();    
+  }
+
+  loadAllData() {
+
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
+    this.setState({
+      currentLocation: null,
+      volunteeres: [],
+      categoryIcons: [],
+      volunteeresQuery: {
+        more: true,
+        loading: false,
+      },
+    });
+
+    this.loadVolunteer();
   }
 
   onBack() {
@@ -81,7 +104,7 @@ class VolunteerView extends Component {
     })
   }
 
-  loadList () {
+  loadVolunteer () {
 
     if (this.more == false)
       return;
@@ -106,6 +129,8 @@ class VolunteerView extends Component {
             state.volunteeresQuery.loading = false;
             return state;
           });
+
+          this.setState({ isRefreshing: false });
 
           if (error) {
             console.log("search failed", error)
@@ -172,7 +197,7 @@ class VolunteerView extends Component {
       return state;
     })
 
-    this.loadList();
+    this.loadVolunteer();
   }
 
   onSearchCancel() {
@@ -188,7 +213,13 @@ class VolunteerView extends Component {
       return state;
     })
 
-    this.loadList();
+    this.loadVolunteer();
+  }
+
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
   }
 
   render() {
@@ -203,7 +234,15 @@ class VolunteerView extends Component {
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <ListView
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.volunteeres) }
@@ -212,7 +251,7 @@ class VolunteerView extends Component {
           <LoadMoreSpinner
             show={ this.state.volunteeresQuery.more }
             loading={ this.state.volunteeresQuery.loading }
-            onClick={ ()=> this.loadList() }
+            onClick={ ()=> this.loadVolunteer() }
           />
         </ScrollView>
       </View>

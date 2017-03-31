@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ListView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -44,22 +45,62 @@ class CommunityPoints extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
+      isRefreshing: false,
+
       currentUserIndex: 0,
       userList:[],
       recentActivities:[],
       activityQuery:{
-        createdAt: 0,
-        limit: 20,
         more: true,
         loading: false,
       }
     };
 
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
+
     this.totalUsers = 0;
-    this.loadRecentActivities.bind(this);
   }
 
   componentDidMount() {
+
+    this.loadAllData();
+  }
+
+  componentWillReceiveProps(newProps) {
+
+    if (newProps.status == 'profile_request') {
+
+    } else if (newProps.status == 'profile_success') {
+
+    } else if (newProps.status == 'profile_error') {
+
+    }
+  }
+
+  loadAllData() {
+
+    this.setState({
+      currentUserIndex: 0,
+      userList:[],
+      recentActivities:[],
+      activityQuery:{
+        more: true,
+        loading: false,
+      }
+    });
+
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
+
+    this.totalUsers = 0;
+
     bendService.getLeaderBoardSimpleList((err, userList, allUsers)=>{
       if(err) {
         console.log(err);return
@@ -80,17 +121,6 @@ class CommunityPoints extends Component {
     this.loadRecentActivities();
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'profile_request') {
-
-    } else if (newProps.status == 'profile_success') {
-
-    } else if (newProps.status == 'profile_error') {
-
-    }
-  }
-
   onPressedRecentActivityCell(rowID) {
     alert("Tapped cell - " + rowID);
   }
@@ -108,20 +138,28 @@ class CommunityPoints extends Component {
       state.activityQuery.loading = true;
       return state;
     });
-    //console.log("call loadRecentActivities")
-    bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
+
+    bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
       //console.log("getRecentActivities", error, result)
       this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
+      this.setState({ isRefreshing: false });
+
       if (error) {
         console.log(error);
         return;
       }
 
-      this.state.activityQuery.more = (result.length == this.state.activityQuery.limit + 1)
+      this.state.activityQuery.more = (result.length == this.activityQuery.limit + 1)
+
+      this.setState((state) => {
+        state.activityQuery.more = this.activityQuery.more;
+        return state;
+      });
+
       if(this.state.activityQuery.more) {
         //remove tail item
         result.pop()
@@ -129,7 +167,7 @@ class CommunityPoints extends Component {
 
       if(result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
-        this.state.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
+        this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
           recentActivities:this.state.recentActivities
         })
@@ -222,6 +260,11 @@ class CommunityPoints extends Component {
     Actions.pop();
   }
 
+  onRefresh() {
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
     const currentUser = bendService.getActiveUser()
@@ -233,7 +276,15 @@ class CommunityPoints extends Component {
           onBack={ this.onBack }
           title ='Your Community'
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <View style={ styles.topContainer }>
             <Text style={ styles.textName }>{Cache.community.name}</Text>
             <View style={ styles.pointContainer }>

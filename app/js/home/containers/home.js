@@ -12,6 +12,7 @@ import {
   ListView,
   TouchableOpacity,
   TouchableHighlight,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -61,6 +62,7 @@ class Home extends Component {
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
       selectedDailyPollStateMode: false,
+      isRefreshing: false,
 
       challenges: [],
       community: {},
@@ -73,17 +75,63 @@ class Home extends Component {
       },
       recentActivities:[],
       activityQuery:{
-        createdAt: 0,
-        limit: 20,
         more: true,
         loading: false,
       }
     };
 
-    this.loadRecentActivities.bind(this);
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
   }
 
   componentDidMount() {
+    
+    this.loadAllData();
+  }
+
+  componentWillReceiveProps(newProps) {
+
+    if (newProps.status == 'home_request') {
+
+    } else if (newProps.status == 'home_success') {
+
+    } else if (newProps.status == 'home_erroror') {
+
+    }
+  }
+
+  loadAllData() {
+
+    this.setState({
+      selectedDailyPollValue: '',
+      selectedDailyPollIndex: -1,
+      selectedDailyPollStateMode: false,
+
+      challenges: [],
+      community: {},
+      categories: [],
+      trendings: [],
+      pollQuestion:{
+        question: {},
+        answers: [],
+        myAnswer: null,
+      },
+      recentActivities:[],
+      activityQuery:{
+        more: true,
+        loading: false,
+      }      
+    });
+
+    this.activityQuery = { 
+      more: true,
+      createdAt: 0, 
+      limit: 20 
+    };
+
     Cache.init((err, ret)=>{
       if(!err) {
         this.setState({
@@ -143,17 +191,6 @@ class Home extends Component {
     }, 1000 * 60 * 10);*/
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'home_request') {
-
-    } else if (newProps.status == 'home_success') {
-
-    } else if (newProps.status == 'home_erroror') {
-
-    }
-  }
-
   loadPollQuestion() {
     bendService.getPollQuestion( (error, question, answers, myAnswer) => {
 
@@ -176,19 +213,23 @@ class Home extends Component {
 
   loadRecentActivities() {
 
-    if ( this.state.activityQuery.more === false )
+    if ( this.activityQuery.more === false )
       return;
 
     this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
-    //console.log("call loadRecentActivities")
-    bendService.getRecentActivities(this.state.activityQuery.createdAt, this.state.activityQuery.limit + 1, (error, result) => {
+
+    bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
       //console.log("getRecentActivities", error, result)
       this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
+      });
+
+      this.setState({
+        isRefreshing: false,
       });
 
       if (error) {
@@ -196,15 +237,21 @@ class Home extends Component {
         return;
       }
 
-      this.state.activityQuery.more = (result.length == this.state.activityQuery.limit + 1)
-      if(this.state.activityQuery.more) {
+      this.activityQuery.more = (result.length == this.activityQuery.limit + 1)
+
+      this.setState((state) => {
+        state.activityQuery.more = this.activityQuery.more;
+        return state;
+      });
+
+      if(this.activityQuery.more) {
         //remove tail item
         result.pop()
-      }
-
+      }      
+      
       if(result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
-        this.state.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
+        this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
           recentActivities:this.state.recentActivities
         })
@@ -547,6 +594,12 @@ class Home extends Component {
     this.props.onSearch();
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
 
@@ -557,8 +610,14 @@ class Home extends Component {
         />
         <ScrollView
           style={ styles.scrollView }
-          indicatorStyle={ 'white' }
-          scrollEventThrottle={ 200 }
+          showsVerticalScrollIndicator={ false }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
         >
           { this.showChallenges }
           { this.showTrending }

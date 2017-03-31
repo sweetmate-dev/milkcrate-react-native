@@ -47,6 +47,8 @@ class BusinessesView extends Component {
     this.more = true;
 
     this.state = {
+      isRefreshing: false,
+
       selectedIndex: 'List',
       currentLocation: null,
       businesses: [],
@@ -61,7 +63,7 @@ class BusinessesView extends Component {
 
   componentDidMount() {
 
-    this.loadBusinesses();
+    this.loadAllData();
   }
 
   componentWillReceiveProps(newProps) {
@@ -73,6 +75,29 @@ class BusinessesView extends Component {
     } else if (newProps.status == 'search_category_error') {
 
     }
+  }
+
+  loadAllData() {
+
+    this.businesses = [];
+    this.offset = 0;
+    this.limit = 20;
+    this.searchText = '';
+    this.more = true;
+
+    this.setState({
+      selectedIndex: 'List',
+      currentLocation: null,
+      businesses: [],
+      categoryIcons: [],
+
+      businessesQuery:{
+        more: true,
+        loading: false,
+      },
+    });
+
+    this.loadBusinesses();
   }
 
   onBack() {
@@ -121,6 +146,8 @@ class BusinessesView extends Component {
             state.businessesQuery.loading = false;
             return state;
           });
+
+          this.setState({ isRefreshing: false });
 
           if (error) {
             console.log("search failed", error)
@@ -213,6 +240,12 @@ class BusinessesView extends Component {
     this.loadBusinesses();
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
 
@@ -258,6 +291,8 @@ class BusinessesView extends Component {
               moreBusinesses={ this.state.businessesQuery.more }
               loading={ this.state.businessesQuery.loading }
               onLoadBusinesses={ () => this.loadBusinesses() }
+              isRefreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }              
             />
             :
             <BusinessesMapView 
