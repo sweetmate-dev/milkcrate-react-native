@@ -219,7 +219,7 @@ class Profile extends Component {
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{UtilService.getPositionString(currentUser.rank)}th</Text>
+                <Text style={ styles.textValue }>{UtilService.getPositionString(currentUser.rank)}</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>

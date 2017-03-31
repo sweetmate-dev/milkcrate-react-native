@@ -204,10 +204,9 @@ class CommunityPoints extends Component {
   renderLeaderboardRow(rowData, sectionID, rowID) {
 
     var previousRank = rowData.previousRank, currentRank = rowData.rank
-    if(previousRank == -1) previousRank = 10000;
     return (
       <SimpleLeaderboardListCell
-        status={ previousRank<currentRank?2:(previousRank > currentRank?1:0) }
+        status={ previousRank==-1?0:(previousRank<currentRank?2:(previousRank > currentRank?1:0)) }
         index={ rowData.rank }
         name={ rowData.name }
         points={ rowData.points }
