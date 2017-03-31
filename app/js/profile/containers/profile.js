@@ -219,17 +219,17 @@ class Profile extends Component {
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>–</Text>
+                <Text style={ styles.textValue }>{UtilService.getPositionString(currentUser.rank)}th</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>–</Text>
+                <Text style={ styles.textValue }>{currentUser.volunteerHours||0}</Text>
                 <Text style={ styles.textSmall }>Volunteer Hours</Text>
               </View>
             </View>
           </View>
 
-          {false && <View style={ styles.buttonContainer }>
+          {<View style={ styles.buttonContainer }>
             <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
               <View style={ styles.buttonWrapper }>
                 <Text style={ styles.textButton }>See Community Points</Text>

@@ -187,6 +187,17 @@ class UtilService {
             ;
     }
 
+    static getPositionString(pos) {
+        if(pos == 1) {
+            return '1st'
+        } else if(pos == 2) {
+            return '2nd'
+        } else if(pos == 3) {
+            return '3rd'
+        } else
+            return pos + 'th'
+    }
+
     static deg2rad(angle) {
         return (angle * Math.PI / 180);
     }

@@ -23,7 +23,7 @@ export default class SimpleLeaderboardListCell extends Component {
     index: PropTypes.number,
     name: PropTypes.string.isRequired,
     points: PropTypes.number.isRequired,
-    avatar: PropTypes.number.isRequired,
+    avatar: PropTypes.string.isRequired,
     currentUserIndex: PropTypes.number,
   }
 
@@ -55,9 +55,9 @@ export default class SimpleLeaderboardListCell extends Component {
     );
   }
 
-  showInfo(currentUserIndex, name, points) {
+  showInfo(isMe, name, points) {
 
-    if (currentUserIndex == 0) {
+    if (isMe) {
       return (
         <View style={ styles.activeCellInfoContainer }>
           <View style={ styles.secondContainer }>
@@ -70,7 +70,7 @@ export default class SimpleLeaderboardListCell extends Component {
           </View>
         </View>  
       );
-    } else if (currentUserIndex == 1) {
+    } else {
       return (
         <View style={ styles.secondContainer }>
           <Text style={ [styles.textName, { opacity: 0.6 }] }>{ name }</Text>
@@ -80,11 +80,11 @@ export default class SimpleLeaderboardListCell extends Component {
     }
   }
 
-  showAvatar( currentUserIndex, avatar) {
-    if (currentUserIndex == 0)
-      return (<Image style={ styles.avatar } source={ avatar }/>);
-    
-    return (<Image style={ [styles.avatar, {opacity: 0.6}] } source={ avatar }/>);
+  showAvatar( isMe, avatar, avatarBackColor, defaultAvatar) {
+    if(avatar != '')
+      return (<Image style={ [styles.avatar, {opacity: isMe?1:0.6}, {backgroundColor:avatarBackColor}] } source={{ uri : avatar }}/>);
+    else
+      return (<Image style={ [styles.avatar, {opacity: isMe?1:0.6}] } source={ defaultAvatar }/>);
   }
 
   render() {
@@ -97,6 +97,8 @@ export default class SimpleLeaderboardListCell extends Component {
       points,
       avatar,
       currentUserIndex,
+        avatarBackColor,
+        defaultAvatar,
     } = this.props;
 
     return (
@@ -104,8 +106,8 @@ export default class SimpleLeaderboardListCell extends Component {
         <View style={ styles.firstContainer }>
           { this.showStatus(status) }
           <Text style={ styles.textIndex }>{ index }</Text>
-          { this.showAvatar(currentUserIndex, avatar) }
-          { this.showInfo(currentUserIndex, name, points) }
+          { this.showAvatar(currentUserIndex==index, avatar, avatarBackColor, defaultAvatar) }
+          { this.showInfo(currentUserIndex==index, name, points) }
         </View>
       </View>
     );

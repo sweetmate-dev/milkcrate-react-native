@@ -62,17 +62,16 @@ class Home extends Component {
       selectedDailyPollIndex: -1,
       selectedDailyPollStateMode: false,
 
-      dataSourceRecentActivity: this.dataSourceRecentActivity.cloneWithRows([]),
       challenges: [],
       community: {},
       categories: [],
       trendings: [],
-      recentActivities:[],
       pollQuestion:{
         question: {},
         answers: [],
         myAnswer: null,
       },
+      recentActivities:[],
       activityQuery:{
         createdAt: 0,
         limit: 20,

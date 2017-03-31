@@ -673,6 +673,71 @@ module.exports = {
 
     //-------end of detail view ------
 
+    getLeaderBoardSimpleList(cb) {
+      var query = new Bend.Query()
+        query.equalTo("community._id", this.getActiveUser().community._id)
+        Bend.DataStore.find("leaderboard", query).then((ret)=>{
+            if(ret.length > 0) {
+                var users = ret[0].data;
+                var currentUserId = this.getActiveUser()._id
+                var idx = users.indexOf(currentUserId);
+                if(idx != -1) {
+                    var startIdx = idx -1;
+                    var endIdx = idx + 1;
+
+                    if(startIdx < 0) {
+                        startIdx++;endIdx++;
+                    } else if(endIdx > users.length - 1) {
+                        startIdx--;endIdx--;
+                    }
+
+                    startIdx = Math.max(startIdx, 0);
+                    endIdx = Math.min(endIdx, users.length - 1);
+
+                    var userIdx = []
+                    for(var i = startIdx; i <= endIdx ; i++)
+                        userIdx.push(users[i]);
+
+                    var q = new Bend.Query()
+                    q.contains('_id', userIdx);
+                    q.ascending('rank')
+                    Bend.User.find(q, {
+                        relations:{
+                            avatar:"BendFile"
+                        }
+                    }).then((userList)=>{
+                        cb(null, userList, users)
+                    }, (err)=>{
+                        cb(err)
+                    })
+                }
+            } else {
+                cb(null, null)
+            }
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getLeaderBoardPage(offset, limit, cb) {
+      var query = new Bend.Query()
+        query.equalTo("community._id", this.getActiveUser().community._id)
+        query.equalTo("enabled", true)
+        query.notEqualTo("deleted", true)
+        query.ascending('rank')
+        query.skip(offset)
+        query.limit(limit)
+        Bend.User.find(query, {
+            relations:{
+                avatar:"BendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
     //file upload api
     uploadFile(file, cb, ext){
         file._filename = Date.now() + ""

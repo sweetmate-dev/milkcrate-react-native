@@ -25,6 +25,13 @@ import * as commonStyles from '../../styles/commonStyles';
 
 import LeaderboardListCell from '../components/leaderboardListCell';
 import { LeaderboardEntries } from '../../components/dummyEntries';
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
+
+//added by li, 2017/03/31
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 const comcast =   require('../../../assets/imgs/comcast.png');
 
@@ -33,13 +40,25 @@ class Leaderboard extends Component {
   constructor(props) {
     super(props);
 
-    var dataSourceLeaderboard = new ListView.DataSource(
+    this.dataSourceLeaderboard = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      dataSourceLeaderboard: dataSourceLeaderboard.cloneWithRows(LeaderboardEntries),
       currentUserIndex: 3,
+      userList:[],
+      query:{
+        offset:0,
+        limit: 25,
+        more: true,
+        loading: false,
+      }
     };
+
+    this.loadUserPage.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadUserPage();
   }
 
   componentWillReceiveProps(newProps) {
@@ -53,20 +72,62 @@ class Leaderboard extends Component {
     }
   }
 
+  loadUserPage() {
+    if ( this.state.query.more === false )
+      return;
+
+    this.setState( (state) => {
+      state.query.loading = true;
+      return state;
+    });
+
+    bendService.getLeaderBoardPage(this.state.query.offset, this.state.query.limit + 1, (error, result) => {
+      //console.log("getRecentActivities", error, result)
+      this.setState( (state) => {
+        state.query.loading = false;
+        return state;
+      });
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      this.state.query.more = (result.length == this.state.query.limit + 1)
+      if(this.state.query.more) {
+        //remove tail item
+        result.pop()
+      }
+
+      if(result.length > 0) {
+        this.state.userList = this.state.userList.concat(result)
+        this.state.query.offset += result.length
+        this.setState({
+          userList:this.state.userList
+        })
+      }
+
+      this.setState({
+        query:this.state.query
+      })
+    })
+  }
+
   renderLeaderboardRow(rowData, sectionID, rowID) {
-    
-    let currentUser = false;
-    if (rowID == this.state.currentUserIndex)
-      currentUser = true;
+
+    var previousRank = rowData.previousRank, currentRank = rowData.rank
+    if(previousRank == -1) previousRank = 10000;
 
     return (
       <LeaderboardListCell
-        status={ rowData.status }
-        index={ Number(rowID) + 1 }
-        name={ rowData.name }
-        points={ Math.max(Number(rowData.points||1), 1) }
-        avatar={ rowData.avatar }
-        currentUser={ currentUser }
+          status={ previousRank<currentRank?2:(previousRank > currentRank?1:0) }
+          index={ rowData.rank }
+          name={ rowData.name }
+          points={ rowData.points }
+          avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
+          avatarBackColor={UtilService.getBackColor(rowData.avatar)}
+          defaultAvatar={UtilService.getDefaultAvatar(rowData.defaultAvatar)}
+          currentUser={ bendService.getActiveUser().rank==rowData.rank }
       />
     );
   }
@@ -80,8 +141,8 @@ class Leaderboard extends Component {
   }
 
   render() {
-    const { status } = this.props;
-
+    const { status, total } = this.props;
+    const currentUser = bendService.getActiveUser();
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -89,18 +150,24 @@ class Leaderboard extends Component {
           onBack={ this.onBack }
           title ='LEADERBOARD'
         />
+          <View style={ styles.orderContainer }>
+            <Image source={ comcast } style={ styles.imageComcast }/>
+            <Text style={ styles.textOrder }>{UtilService.getPositionString(currentUser.rank)} out of {total} people</Text>
+          </View>
 
-        <View style={ styles.orderContainer }>
-          <Image source={ comcast } style={ styles.imageComcast }/>
-          <Text style={ styles.textOrder }>14th out of 674 people</Text>
-        </View>
-        
-        <ListView
-          dataSource={ this.state.dataSourceLeaderboard }
-          renderRow={ this.renderLeaderboardRow.bind(this) }
-          contentContainerStyle={ styles.leaderboardListView }
-        />
-
+        <ScrollView>
+          <ListView
+              enableEmptySections={ true }
+            dataSource={ this.dataSourceLeaderboard.cloneWithRows(this.state.userList) }
+            renderRow={ this.renderLeaderboardRow.bind(this) }
+            contentContainerStyle={ styles.leaderboardListView }
+          />
+          <LoadMoreSpinner
+              show={ this.state.query.more }
+              loading={ this.state.query.loading }
+              onClick={ ()=> this.loadUserPage() }
+          />
+        </ScrollView>
       </View>
     );
   }
