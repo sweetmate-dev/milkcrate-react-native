@@ -134,6 +134,9 @@ const avatarImages={
     whale:require('../../assets/imgs/avatars/whale.png')
 }
 
+const animals = ["cat", "corgi", "fish", "frog", "koala", "lion", "otter", "owl", "penguin", "pig",
+    "raccoon", "rhino", "squirrel", "turtle", "whale"];
+
 class UtilService {
 
     static formatDateWithFormat(ts, formatStr) {
@@ -188,6 +191,9 @@ class UtilService {
     }
 
     static getPositionString(pos) {
+        if(!pos)
+            return "—"
+
         if(pos == 1) {
             return '1st'
         } else if(pos == 2) {
@@ -226,6 +232,10 @@ class UtilService {
 
     static getCategoryIcon(catSlug) {
         return categoryIcons[catSlug];
+    }
+
+    static getMilkCrateLogo() {
+        return require('../../assets/imgs/milkcrate.png')
     }
 
     static getSmallImage(file) {
@@ -373,6 +383,12 @@ class UtilService {
         return _.find(Cache.categories, (o)=>{
             return o._id == id
         })
+    }
+
+    static getRandomDefaultAvatar() {
+        var idx = _.random(0, animals.length-1)
+
+        return animals[idx]
     }
 }
 

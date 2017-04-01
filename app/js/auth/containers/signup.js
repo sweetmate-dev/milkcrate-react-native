@@ -24,6 +24,7 @@ var Mailer = require('NativeModules').RNMail;
 
 //added by li
 import bendService from '../../bend/bendService'
+import UtilService from '../../components/util'
 
 const background = require('../../../assets/imgs/background_login.png');
 const eye = require('../../../assets/imgs/eye.png');
@@ -75,7 +76,8 @@ class Signup extends Component {
           username:this.state.email,
           password:this.state.password,
           confirmPassword:this.state.confirmPassword,
-          code:this.state.communityCode
+          code:this.state.communityCode,
+          defaultAvatar:UtilService.getRandomDefaultAvatar()
       }, (err, user)=>{
           if(err) {
               if(err.name.code == 'milkcrate-app.error.common.missingInput') {

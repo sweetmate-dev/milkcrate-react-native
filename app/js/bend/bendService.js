@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as async from 'async'
 import * as _ from 'underscore'
+import Cache from '../components/Cache'
 
 var appKey = '589d36e94bad3014f50128ce';
 var appSecret = 'deduKe8DAuA1ry2cYYQXSQEFHgZy9qTvrL0D2lsc';
@@ -48,6 +49,8 @@ module.exports = {
         })
     },
     logout() {
+        Cache.setCommunity(null);
+        Cache.resetMap();
         Bend.User.logout();
         //this.clearUserInfo()
     },
@@ -61,7 +64,7 @@ module.exports = {
      *             created user is altivated already, so can logged in automatically
      */
     signup(userData, cb) {
-        console.log(userData);
+        //console.log(userData);
         Bend.executeAnonymous("signup", userData).then((ret)=>{
             //console.log("signup ret", ret);
             Bend.setActiveUser(ret.user);
@@ -87,7 +90,7 @@ module.exports = {
         }
         Bend.User.update(userData).then((ret)=> {
             cb(null, ret);
-            //Bend.setActiveUser(ret)
+            Cache.removeMapData("user");
         }, (err)=> {
             cb(err)
         })
@@ -106,7 +109,7 @@ module.exports = {
                     //Bend.Sync.destruct();
                     Bend.setActiveUser(null);
                     Bend.User.login(credentials);
-
+                    Cache.removeMapData("user");
                     cb(null, true)
                 }, function(err){
                     console.log(err);
@@ -181,7 +184,12 @@ module.exports = {
         return Bend.getActiveUser();
     },
 
-    getUser(userId, cb) {
+    getUser(cb) {
+        if(Cache.cacheMap["user"]) {
+            cb(null, Cache.cacheMap["user"])
+            return
+        }
+        var userId = this.getActiveUser()._id
         Bend.User.get(userId, {
             relations:{
                 avatar:"BendFile",
@@ -190,6 +198,7 @@ module.exports = {
             }
         }).then((ret)=>{
             cb(null, ret)
+            Cache.setMapData('user', ret)
         }, (err)=>{
             cb(err)
         })
@@ -197,7 +206,7 @@ module.exports = {
 
     setUserInfo() {
         //get user full information
-        this.getUser(this.getActiveUser()._id, (err, user)=>{
+        this.getUser((err, user)=>{
             if(err) {
                 console.log(err);return;
             }
@@ -222,11 +231,17 @@ module.exports = {
 
     //get community
     getCommunity(cb) {
+        if(Cache.community) {
+            cb(null, Cache.community);
+            return;
+        }
+
         var communityId = this.getActiveUser().community._id;
         if(!communityId) return null
 
         Bend.DataStore.get("community", communityId).then((ret)=>{
             cb(null, ret)
+            Cache.setCommunity(ret);
         }, (err)=>{
             cb(err)
         })
@@ -236,18 +251,32 @@ module.exports = {
 
     //get all categories
     getCategories(cb) {
-      Bend.DataStore.find("category", new Bend.Query(), {
-          relations:{
-              coverImage:"BendFile"
-          }
-      }).then((rets)=>{
-          cb(null, rets)
-      }, (err)=>{
-          cb(err)
-      })
+
+        if(Cache.categories) {
+            cb(null, Cache.categories);
+            return;
+        }
+
+        Bend.DataStore.find("category", new Bend.Query(), {
+            relations:{
+                coverImage:"BendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+            Cache.setCategories(rets);
+        }, (err)=>{
+            cb(err)
+        })
     },
 
     getCategory(catId, cb) {
+        if(Cache.categories) {
+            var category = _.find(Cache.categories, (o)=>{
+                return o._id == catId
+            })
+            cb(null, category);
+            return;
+        }
         Bend.DataStore.get("category", catId, {
             relations:{
                 coverImage:"BendFile"
@@ -315,7 +344,7 @@ module.exports = {
                 coverImage:"BendFile"
             }
         }).then((rets)=>{
-            console.log("trendings", rets)
+            //console.log("trendings", rets)
             //get any 2 items
             var count = rets.length;
             var trends = rets
@@ -344,9 +373,9 @@ module.exports = {
                             callback(err, null)
                         })
                     }
-                , (err, rets)=>{
-                    cb(null, trends)
-                })
+                    , (err, rets)=>{
+                        cb(null, trends)
+                    })
             } else {
                 cb(null,trends)
             }
@@ -380,7 +409,68 @@ module.exports = {
                 "activity.certification":'certification'
             }
         }).then((rets)=>{
-            console.log(rets);
+            //console.log(rets);
+            //consider likes
+            var activityIds = []
+            _.map(rets, (o)=>{
+                activityIds.push(o._id)
+            })
+
+            query = new Bend.Query();
+            query.equalTo("user._id", this.getActiveUser()._id)
+            query.notEqualTo("deleted", true)
+            query.contains("activity._id", activityIds)
+            Bend.DataStore.find("activityLike", query).then(function(likes){
+                var likedActivityIds = []
+                _.map(likes, (_o)=>{
+                    likedActivityIds.push(_o.activity._id)
+                })
+                if(likedActivityIds.length > 0) {
+                    likedActivityIds = _.uniq(likedActivityIds)
+
+                    _.map(rets, (o)=> {
+                        if(likedActivityIds.indexOf(o._id) != -1)
+                            o.likedByMe = true
+                    })
+                }
+
+                cb(null, rets)
+            }, function(err){
+                cb(err)
+            })
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    /**
+     *
+     * @param from
+     * @param cb
+     * @returns {*}
+     */
+    getLastActivities(from, cb) {
+        //get community of current user
+        var communityId = this.getActiveUser().community._id;
+        if(!communityId) return cb(null, [])
+
+        var query = new Bend.Query();
+        query.equalTo("community._id", communityId)
+        query.notEqualTo("deleted", true)
+        query.notEqualTo("hidden", true)
+        query.greaterThan("_bmd.createdAt", from)
+        query.descending("_bmd.createdAt")
+
+        Bend.DataStore.find("activity", query, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community",
+                user:"user",
+                "user.avatar":"bendFile",
+                "activity.certification":'certification'
+            }
+        }).then((rets)=>{
+            //console.log(rets);
             //consider likes
             var activityIds = []
             _.map(rets, (o)=>{
@@ -418,7 +508,7 @@ module.exports = {
         var query = new Bend.Query();
         query.equalTo("user._id", this.getActiveUser()._id)
         query.notEqualTo("deleted", true)
-        query.notEqualTo("hidden", true)
+        //query.notEqualTo("hidden", true)
         if(createdAt > 0)
             query.lessThan("_bmd.createdAt", createdAt)
         query.descending("_bmd.createdAt")
@@ -495,6 +585,11 @@ module.exports = {
                         ret.responseCount++;
                         Bend.DataStore.update("pollQuestion", ret).then((ret)=>{
                             callback(null, ret)
+
+                            //capture activity
+                            this.captureActivityForPoll(question._id, "poll", ret.points, (err, ret)=>{
+                                console.log(err,ret);
+                            })
                         }, (err)=>{
                             callback(err)
                         })
@@ -527,7 +622,7 @@ module.exports = {
                         _.map(rets, (a)=>{
                             a.percentage = Math.round(Number(a.count||0) * 100 / questionRet.responseCount)
                             Bend.DataStore.update("pollQuestionAnswer", a).then((ret)=>{
-                                console.log(ret);
+                                //console.log(ret);
                             }, (err)=>{
                                 console.log(err);
                             })
@@ -535,7 +630,7 @@ module.exports = {
                     })
                 }
             ], (err, ret)=>{
-                console.log("pollResponse result", err, ret)
+                //console.log("pollResponse result", err, ret)
                 cb(err, ret)
             })
         }, (err)=>{
@@ -644,6 +739,7 @@ module.exports = {
             id:id
         }).then((ret)=>{
             cb(null, ret.result);
+            Cache.removeMapData("user");
         }, (err)=>{
             cb(err);
         })
@@ -655,6 +751,7 @@ module.exports = {
             id:id
         }).then((ret)=>{
             cb(null, ret);
+            Cache.removeMapData("user");
         }, (err)=>{
             cb(err);
         })
@@ -666,6 +763,20 @@ module.exports = {
             hours:hours
         }).then((ret)=>{
             cb(null, ret);
+            Cache.removeMapData("user");
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    captureActivityForPoll(id, type, points, cb) {
+        Bend.execute("capture-activity-poll", {
+            type:type,
+            id:id,
+            points:points
+        }).then((ret)=>{
+            cb(null, ret);
+            Cache.removeMapData("user");
         }, (err)=>{
             cb(err);
         })
@@ -674,7 +785,7 @@ module.exports = {
     //-------end of detail view ------
 
     getLeaderBoardSimpleList(cb) {
-      var query = new Bend.Query()
+        var query = new Bend.Query()
         query.equalTo("community._id", this.getActiveUser().community._id)
         Bend.DataStore.find("leaderboard", query).then((ret)=>{
             if(ret.length > 0) {
@@ -720,7 +831,7 @@ module.exports = {
     },
 
     getLeaderBoardPage(offset, limit, cb) {
-      var query = new Bend.Query()
+        var query = new Bend.Query()
         query.equalTo("community._id", this.getActiveUser().community._id)
         query.equalTo("enabled", true)
         query.notEqualTo("deleted", true)

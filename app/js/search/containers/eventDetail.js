@@ -95,7 +95,7 @@ class EventDetail extends Component {
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser(bendService.getActiveUser()._id, (err, ret)=>{
+    bendService.getUser((err, ret)=>{
       if(err) {
         console.log(err);return;
       }

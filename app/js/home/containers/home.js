@@ -83,7 +83,7 @@ class Home extends Component {
     this.activityQuery = { 
       more: true,
       createdAt: 0, 
-      limit: 20 
+      limit: 20
     };
   }
 
@@ -101,6 +101,31 @@ class Home extends Component {
     } else if (newProps.status == 'home_erroror') {
 
     }
+
+    if(newProps.selectedTab == 'home') {
+      //get recent activity again
+      this.loadLastActivities();
+    }
+  }
+
+  loadLastActivities() {
+    var lastTime = 0;
+    if(this.state.recentActivities.length > 0) {
+      lastTime = this.state.recentActivities[0]._bmd.createdAt;
+    }
+
+    bendService.getLastActivities(lastTime, (err, rets)=>{
+      if(err) {
+        console.log(err);return
+      }
+
+      if(rets.length > 0) {
+        this.state.recentActivities = rets.concat(this.state.recentActivities);
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      }
+    })
   }
 
   loadAllData() {
@@ -132,13 +157,15 @@ class Home extends Component {
       limit: 20 
     };
 
-    Cache.init((err, ret)=>{
+    bendService.getCategories((err, rets)=>{
       if(!err) {
         this.setState({
-          categories:Cache.categories
+          categories:rets
         })
       }
-    });
+    })
+
+    bendService.getUser((err, rets)=>{})
 
     bendService.getWeeklyChallenges( "", (error, result)=>{
       if (error) {
@@ -157,7 +184,7 @@ class Home extends Component {
         return;
       }
 
-      console.log("current trending", error, result)
+      //console.log("current trending", error, result)
       this.setState({
         trendings:result
       })
@@ -257,7 +284,7 @@ class Home extends Component {
         })
       }
 
-      console.log("this.state.recentActivities", this.state.recentActivities.length)
+      //console.log("this.state.recentActivities", this.state.recentActivities.length)
 
       this.setState({
         activityQuery:this.state.activityQuery
@@ -318,7 +345,7 @@ class Home extends Component {
       Actions.EventDetail({ event: activity.activity });
     } else if(activity.type == 'service') {
       Actions.ServiceDetail({ service: activity.activity });
-    } else if(activity.type == 'volunteer') {
+    } else if(activity.type == 'volunteer_opportunity') {
       Actions.VolunteerDetail({ volunteer: activity.activity });
     }
   }
@@ -446,7 +473,7 @@ class Home extends Component {
           {
             this.state.pollQuestion.answers.map((obj, index) => {
               var onPressRadioButton = (value, index) => {
-                console.log(value, index)
+                //console.log(value, index)
                 this.setState({
                   selectedDailyPollValue: value,
                   selectedDailyPollIndex: index
@@ -702,16 +729,16 @@ const styles = StyleSheet.create({
     borderBottomColor: commonColors.line,
     paddingVertical: 10,
     paddingLeft: 25,
-    paddingRight: 15,
+    paddingRight: 10,
   },
   dailyPollTopPointContainer: {
-    alignSelf: 'stretch',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   dailyPollLearnMoreContainer: {
-    alignSelf: 'stretch',
+    flex: 1,
     justifyContent: 'center',
   },
   textQuestion: {

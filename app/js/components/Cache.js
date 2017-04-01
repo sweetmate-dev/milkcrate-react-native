@@ -1,35 +1,15 @@
-import moment from 'moment'
-import * as _ from 'underscore'
-import * as async from 'async'
-
-import bendService from '../bend/bendService'
-
 class Cache {
     constructor() {
-        this.categories = []
-        this.community = {}
+        this.categories = null
+        this.community = null
         this.cacheMap = {}
     }
 
-    init(cb) {
-        async.parallel([
-            (callback)=>{
-                bendService.getCategories((err, rets)=>{
-                    if(!err)
-                        this.categories = rets;
-                    callback(err, null)
-                })
-            },
-            (callback)=>{
-                bendService.getCommunity((err, ret)=>{
-                    if(!err)
-                        this.community = ret;
-                    callback(err, null)
-                })
-            }
-        ], (err, ret)=>{
-            cb(err, ret)
-        })
+    setCategories(categories) {
+        this.categories = categories
+    }
+    setCommunity(community) {
+        this.community = community
     }
 
     setMapData(key, val) {
@@ -38,6 +18,15 @@ class Cache {
 
     getMapData(key) {
         return this.cacheMap[key]
+    }
+
+    removeMapData(key) {
+        if(this.cacheMap[key])
+            delete this.cacheMap[key]
+    }
+
+    resetMap() {
+        this.cacheMap = {}
     }
 }
 

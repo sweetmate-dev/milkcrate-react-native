@@ -80,7 +80,7 @@ class Notifications extends Component {
         Actions.EventDetail({ event: activity.activity });
       } else if(activity.type == 'service') {
         Actions.ServiceDetail({ service: activity.activity });
-      } else if(activity.type == 'volunteer') {
+      } else if(activity.type == 'volunteer_opportunity') {
         Actions.VolunteerDetail({ volunteer: activity.activity });
       }
     })

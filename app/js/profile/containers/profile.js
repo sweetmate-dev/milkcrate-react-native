@@ -31,6 +31,7 @@ import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 class Profile extends Component {
   constructor(props) {
@@ -48,7 +49,8 @@ class Profile extends Component {
       },
       currentLocation: null,
       categories: [],
-      recentActivities: []
+      recentActivities: [],
+      currentUser:{}
     };
 
     this.activityQuery = { 
@@ -64,7 +66,6 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-
     if (newProps.status == 'profile_request') {
 
     } else if (newProps.status == 'profile_success') {
@@ -72,9 +73,21 @@ class Profile extends Component {
     } else if (newProps.status == 'profile_error') {
 
     }
+
+    if(newProps.selectedTab =='profile') {
+      if(!Cache.cacheMap['user']) {
+        this.loadAllData();
+      }
+    }
   }
 
   loadAllData() {
+
+    bendService.getUser((err, ret)=>{
+      this.setState({
+        currentUser:ret
+      })
+    })
 
     this.setState({
 
@@ -173,7 +186,7 @@ class Profile extends Component {
       Actions.EventDetail({ event: activity.activity });
     } else if(activity.type == 'service') {
       Actions.ServiceDetail({ service: activity.activity });
-    } else if(activity.type == 'volunteer') {
+    } else if(activity.type == 'volunteer_opportunity') {
       Actions.VolunteerDetail({ volunteer: activity.activity });
     }
   }
@@ -183,11 +196,16 @@ class Profile extends Component {
   }
 
   renderRow(rowData, sectionID, rowID) {
-    var cat = bendService.getActivityCategory(this.state.categories, rowData.activity)
+    var cat;
+    if(rowData.type != 'poll') {
+      cat = UtilService.getCategoryIcon(bendService.getActivityCategory(this.state.categories, rowData.activity))
+    } else {
+      cat = UtilService.getMilkCrateLogo()
+    }
     return (
       <RecentActivityListCell
-        title={ rowData.activity.name||'' }
-        icon={ UtilService.getCategoryIcon(cat) }
+        title={ rowData.activity.name||rowData.summary||'' }
+        icon={ cat }
         description= { rowData.summary || '' }
         points={ Math.max(Number(rowData.points||1), 1) }
         hearts={ Number(rowData.likeCount||0) }
@@ -244,7 +262,7 @@ class Profile extends Component {
 
   render() {
     const { status } = this.props;
-    const currentUser = bendService.getActiveUser()
+    const currentUser = this.state.currentUser
     return (
       <View style={ styles.container }>
         <NavSearchBar

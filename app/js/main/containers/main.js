@@ -97,7 +97,8 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ homeIcon } style={ styles.iconTabbar1 }/> }
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.onSelectTab('home') }>
-            <Home 
+            <Home
+                selectedTab={this.state.selectedTab}
               subOne={ subOne } 
               onSearch={ () => this.onSelectSearch() }
             />
@@ -143,8 +144,9 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ youIcon } style={ styles.iconTabbar4 }/> }
             renderSelectedIcon={ () => <Image source={ youSelectedIcon } style={ styles.iconTabbar4 }/> }
             onPress={ () => this.onSelectTab('profile') }>
-            <Profile 
-              subOne={ subOne } 
+            <Profile
+              subOne={ subOne }
+              selectedTab={this.state.selectedTab}
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>

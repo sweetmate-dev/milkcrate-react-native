@@ -53,7 +53,8 @@ class CommunityPoints extends Component {
       activityQuery:{
         more: true,
         loading: false,
-      }
+      },
+      currentUser:{}
     };
 
     this.activityQuery = { 
@@ -82,6 +83,12 @@ class CommunityPoints extends Component {
   }
 
   loadAllData() {
+
+    bendService.getUser((err, ret)=>{
+      this.setState({
+        currentUser:ret
+      })
+    })
 
     this.setState({
       currentUserIndex: 0,
@@ -210,7 +217,7 @@ class CommunityPoints extends Component {
       Actions.EventDetail({ event: activity.activity });
     } else if(activity.type == 'service') {
       Actions.ServiceDetail({ service: activity.activity });
-    } else if(activity.type == 'volunteer') {
+    } else if(activity.type == 'volunteer_opportunity') {
       Actions.VolunteerDetail({ volunteer: activity.activity });
     }
   }
@@ -267,7 +274,7 @@ class CommunityPoints extends Component {
 
   render() {
     const { status } = this.props;
-    const currentUser = bendService.getActiveUser()
+    const currentUser = this.state.currentUser
 
     return (
       <View style={ styles.container }>
