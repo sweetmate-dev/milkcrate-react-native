@@ -239,7 +239,11 @@ module.exports = {
         var communityId = this.getActiveUser().community._id;
         if(!communityId) return null
 
-        Bend.DataStore.get("community", communityId).then((ret)=>{
+        Bend.DataStore.get("community", communityId, {
+            relations:{
+                logo:"BendFile"
+            }
+        }).then((ret)=>{
             cb(null, ret)
             Cache.setCommunity(ret);
         }, (err)=>{
@@ -740,6 +744,7 @@ module.exports = {
         }).then((ret)=>{
             cb(null, ret.result);
             Cache.removeMapData("user");
+            Cache.setCommunity(null);
         }, (err)=>{
             cb(err);
         })
@@ -752,6 +757,7 @@ module.exports = {
         }).then((ret)=>{
             cb(null, ret);
             Cache.removeMapData("user");
+            Cache.setCommunity(null);
         }, (err)=>{
             cb(err);
         })
@@ -764,6 +770,7 @@ module.exports = {
         }).then((ret)=>{
             cb(null, ret);
             Cache.removeMapData("user");
+            Cache.setCommunity(null);
         }, (err)=>{
             cb(err);
         })
@@ -777,6 +784,7 @@ module.exports = {
         }).then((ret)=>{
             cb(null, ret);
             Cache.removeMapData("user");
+            Cache.setCommunity(null);
         }, (err)=>{
             cb(err);
         })

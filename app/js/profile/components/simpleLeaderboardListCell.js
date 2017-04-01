@@ -74,7 +74,7 @@ export default class SimpleLeaderboardListCell extends Component {
       return (
         <View style={ styles.secondContainer }>
           <Text style={ [styles.textName, { opacity: 0.6 }] }>{ name }</Text>
-          <Text style={ [styles.textPoints, { opacity: 0.6 }] }>{ points } points</Text>
+          <Text style={ [styles.textPoints, { opacity: 0.6 }] }>{ points==1?'1 point':points + ' points' }</Text>
         </View>
       );
     }

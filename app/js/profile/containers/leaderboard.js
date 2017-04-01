@@ -51,13 +51,20 @@ class Leaderboard extends Component {
         limit: 25,
         more: true,
         loading: false,
-      }
+      },
+      community:{}
     };
 
     this.loadUserPage.bind(this);
   }
 
   componentDidMount() {
+    bendService.getCommunity((err, ret)=>{
+      if(!err)
+          this.setState({
+            community:ret
+          })
+    })
     this.loadUserPage();
   }
 
@@ -142,6 +149,7 @@ class Leaderboard extends Component {
   render() {
     const { status, total } = this.props;
     const currentUser = bendService.getActiveUser();
+    const community = this.state.community;
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -150,7 +158,7 @@ class Leaderboard extends Component {
           title ='LEADERBOARD'
         />
           <View style={ styles.orderContainer }>
-            <Image source={ comcast } style={ styles.imageComcast }/>
+            {community.logo && <Image source={ {uri:community.logo._downloadURL} } style={ styles.imageComcast } resizeMode="contain"/>}
             <Text style={ styles.textOrder }>{UtilService.getPositionString(currentUser.rank)} out of {total} people</Text>
           </View>
 
@@ -191,9 +199,9 @@ const styles = StyleSheet.create({
     paddingBottom: 35,
   },
   imageComcast: {
-    width: 98,
-    height: 40,
-    marginBottom: 8,
+    width: 300,
+    height: 100,
+    marginBottom: 8
   },
   textOrder: {
     color: commonColors.grayText,

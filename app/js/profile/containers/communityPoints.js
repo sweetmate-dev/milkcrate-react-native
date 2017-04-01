@@ -54,7 +54,8 @@ class CommunityPoints extends Component {
         more: true,
         loading: false,
       },
-      currentUser:{}
+      currentUser:{},
+      community:{}
     };
 
     this.activityQuery = { 
@@ -88,6 +89,13 @@ class CommunityPoints extends Component {
       this.setState({
         currentUser:ret
       })
+    })
+
+    bendService.getCommunity((err, ret)=>{
+      if(!err)
+        this.setState({
+          community:ret
+        })
     })
 
     this.setState({
@@ -275,6 +283,7 @@ class CommunityPoints extends Component {
   render() {
     const { status } = this.props;
     const currentUser = this.state.currentUser
+    const community = this.state.community
 
     return (
       <View style={ styles.container }>
@@ -293,21 +302,21 @@ class CommunityPoints extends Component {
           }
         >
           <View style={ styles.topContainer }>
-            <Text style={ styles.textName }>{Cache.community.name}</Text>
+            <Text style={ styles.textName }>{community.name}</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{currentUser.points||0}</Text>
+                <Text style={ styles.textValue }>{community.points||0}</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{currentUser.volunteerHours||0}</Text>
+                <Text style={ styles.textValue }>{community.hours||0}</Text>
                 <Text style={ styles.textSmall }>Hours Volunteered</Text>
               </View>
             </View>
           </View>
 
           <View style={ styles.leaderboardContainer }>
-            <Text style={ styles.textSectionTitle }>{Cache.community.name} Leaderboard • You are in {UtilService.getPositionString(currentUser.rank)} place</Text>
+            <Text style={ styles.textSectionTitle }>{community.name} Leaderboard • You are in {UtilService.getPositionString(currentUser.rank)} place</Text>
             <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
               <View style={ styles.leaderboardListViewWrapper }>
                 <ListView
@@ -355,7 +364,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#ebf6fb',
   },
   textName: {
     color: commonColors.title,

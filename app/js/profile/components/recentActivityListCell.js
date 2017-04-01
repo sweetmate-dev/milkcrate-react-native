@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
+    paddingLeft:5
   },
   text: {
     backgroundColor: 'transparent',
@@ -180,7 +181,6 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
-    marginTop: 10,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },

@@ -89,7 +89,7 @@ export default class SimpleLeaderboardListCell extends Component {
             {avatar==''&&<Image style={ styles.imageAvatar } source={defaultAvatar}/>}
             <View style={ styles.secondContainer }>
               <Text style={ styles.textName }>{ name }</Text>
-              <Text style={ styles.textPoints }>{ points } points</Text>
+              <Text style={ styles.textPoints }>{ points==1?'1 point':points + ' points' }</Text>
             </View>
           </View>
         </View>
