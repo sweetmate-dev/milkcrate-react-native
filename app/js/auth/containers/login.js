@@ -19,8 +19,6 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
-
-//added by li
 import bendService from '../../bend/bendService'
 
 const background = require('../../../assets/imgs/background_profile.png');
@@ -61,7 +59,6 @@ class Login extends Component {
       return;
     }
 
-    //li added/changes
     bendService.login(this.state.email, this.state.password, (err, user)=>{
       console.log(err, user);
       if(err || !user.enabled) {

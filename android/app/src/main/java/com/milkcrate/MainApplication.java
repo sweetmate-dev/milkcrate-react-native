@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import com.smixx.fabric.FabricPackage;
 import com.calendarevents.CalendarEventsPackage;
 import com.chirag.RNMail.RNMail;
@@ -41,6 +42,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativePermissionsPackage(),
             new FabricPackage(),
             new CalendarEventsPackage(),
             new RNMail(),

@@ -99,7 +99,7 @@ android {
         applicationId "com.milkcrate"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4000002
+        versionCode 4000003
         versionName "4.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -156,6 +156,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-permissions')
     compile project(':react-native-fabric')
     compile project(':react-native-calendar-events')
     compile project(':react-native-mail')

@@ -38,6 +38,8 @@ class CategoryView extends Component {
     this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
+      isRefreshing: false,
+
       currentLocation: null,
       activities: {
         event: [],

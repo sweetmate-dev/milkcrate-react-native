@@ -22,7 +22,6 @@ import * as commonColors from '../../styles/commonColors';
 
 import { AlertEntries } from '../../components/dummyEntries';
 
-//added by li, 2017/03/24
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'

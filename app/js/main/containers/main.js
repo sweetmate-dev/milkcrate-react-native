@@ -14,10 +14,12 @@ import {
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
+import Permissions from 'react-native-permissions';
 import Home from '../../home/containers/home';
 import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
 import Profile from '../../profile/containers/profile';
+
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -37,7 +39,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'home';
+      tab = 'search';
 
     this.state = {
       selectedTab: tab,
@@ -56,14 +58,21 @@ export default class Main extends Component {
 
   componentDidMount() {
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-        console.log(JSON.stringify(position));
-      },
-      (error) => {
-        console.log(JSON.stringify(error));
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    if (Platform.OS === 'ios') {
+      navigator.geolocation.getCurrentPosition( (position) => {
+          console.log(JSON.stringify(position));
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
+    } else if (Platform.OS === 'android') {
+      Permissions.requestPermission('location', 'always')
+        .then(response => {
+          this.setState({ photoPermission: response })
+        });
+    } 
   }
 
   onSelectSearch() {
