@@ -6,10 +6,12 @@ import {
   Text,
   TouchableOpacity,
   Platform,
+  Alert,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
+import timer from 'react-native-timer';
 
 export default class SearchBar extends Component {
 
@@ -70,6 +72,7 @@ export default class SearchBar extends Component {
 
     if (this.props.searchAutoFocus == true){
       this._textInput.focus();
+      this.launchKeyboard();
     }
   }
 
@@ -77,12 +80,23 @@ export default class SearchBar extends Component {
 
     if (nextProps.searchAutoFocus == true){
       this._textInput.focus();
+      this.launchKeyboard();
+
     }
 
     if (nextProps.isCancel == true) {
       this._onCancel();
     }
   }
+
+  launchKeyboard() {
+
+    timer.setTimeout( this, 'LaunchKeyboard', () => {
+      timer.clearInterval(this, 'LaunchKeyboard');
+      this._textInput.focus();
+    }, 300);
+  }
+
 
   _onClose() {
     this._textInput.setNativeProps({ text: '' });
@@ -124,6 +138,12 @@ export default class SearchBar extends Component {
     this._dismissKeyboard();
   }
 
+  _onGoToSearchScreen() {
+    if (this.props.onGoSearchScreen) {
+      this.props.onGoSearchScreen();
+    }
+  }
+
   _dismissKeyboard () {
     dismissKeyboard()
   }
@@ -146,6 +166,7 @@ export default class SearchBar extends Component {
       paddingRight,
       paddingTop,
       paddingBottom,
+      searchMode,
     } = this.props;
 
     let { iconSize } = this.props;
@@ -203,7 +224,17 @@ export default class SearchBar extends Component {
                 color={ iconColor }
               />
             </TouchableOpacity>
-          }   
+          }
+          
+
+          { 
+            !searchMode && 
+            <TouchableOpacity 
+              onPress={ () => this._onGoToSearchScreen() }
+              style={ styles.goButton }
+            /> 
+          }
+      
         </View>
       </View>
     );

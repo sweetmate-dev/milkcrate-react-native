@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
-import timer from 'react-native-timer';
+// import timer from 'react-native-timer';
 import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
@@ -41,14 +41,18 @@ class Search extends Component {
     }
 
     if (newProps.searchAutoFocus == true){
-      this.launchKeyboard();
+      // this.launchKeyboard();
+       this.setState({ searchAutoFocus: true });
+
     }
   }
 
   componentDidMount() {
 
     if (this.props.searchAutoFocus == true){
-      this.launchKeyboard();
+      // this.launchKeyboard();
+      this.setState({ searchAutoFocus: true });
+
     }
   }
 
@@ -74,18 +78,19 @@ class Search extends Component {
     });
   }
 
-  launchKeyboard() {
+  // launchKeyboard() {
 
-    timer.setTimeout( this, 'LaunchKeyboard', () => {
-      timer.clearInterval(this, 'LaunchKeyboard');
-      this.setState({ searchAutoFocus: true });
-      console.log('LaunchKeyboard' );
-    }, 200);
-  }
+  //   timer.setTimeout( this, 'LaunchKeyboard', () => {
+  //     timer.clearInterval(this, 'LaunchKeyboard');
+  //     console.log('LaunchKeyboard' );
+  //     this.setState({ searchAutoFocus: true });
+  //   }, 300);
+  // }
 
   render() {
     const { status } = this.props;
-    
+    console.log( "searchAutoFocus" , this.state.searchAutoFocus );
+
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -93,6 +98,7 @@ class Search extends Component {
           onCancel={ () => this.onSearchCancel() }
           onFocus={ () => this.onSearchFocus() }
           searchAutoFocus={ this.state.searchAutoFocus }
+          searchMode={ true }
         />
         {
           this.state.mainSearchPage ?

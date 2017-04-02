@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   ScrollView,
+  RefreshControl,
   Alert,
 } from 'react-native';
 
@@ -37,6 +38,7 @@ class CategoryView extends Component {
 
     this.dataSource = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
+
     this.state = {
       isRefreshing: false,
 
@@ -63,6 +65,24 @@ class CategoryView extends Component {
   }
 
   componentDidMount() {
+
+    this.loadAllData();
+  }
+
+  loadAllData() {
+
+    this.setState({
+      currentLocation: null,
+      activities: {
+        event: [],
+        service: [],
+        action: [],
+        volunteer_opportunity: [],
+        business:[],
+      },
+    });
+
+
     const title = this.props.title;
     const  index = this.props.index;
 
@@ -78,6 +98,8 @@ class CategoryView extends Component {
           lat: position.coords.latitude,
           long: position.coords.longitude
         }, (error, result) => {
+
+          this.setState({ isRefreshing: false });
 
           if (error) {
             console.log("search failed", error)
@@ -292,6 +314,12 @@ class CategoryView extends Component {
     );
   }
 
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
+  }
+
   render() {
     const { status } = this.props;
 
@@ -302,7 +330,15 @@ class CategoryView extends Component {
           onBack={ this.onBack }
           title={ this.props.title }
         />
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           { this.showActions }
           { this.showBusinesses }
           { this.showEvents }

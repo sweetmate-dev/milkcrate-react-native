@@ -29,9 +29,11 @@ export default class NavSearchBar extends Component {
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
+    onGoSearchScreen: PropTypes.func,
     placeholder: PropTypes.string,
     buttons: PropTypes.number,
     searchAutoFocus: PropTypes.bool,
+    searchMode: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -42,9 +44,11 @@ export default class NavSearchBar extends Component {
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
+    onGoSearchScreen: () => {},
     placeholder: 'Search for activities',
     buttons: commonStyles.NavNoneButton,
     searchAutoFocus: false,
+    searchMode: false,
   }
 
   constructor(props) {
@@ -107,11 +111,18 @@ export default class NavSearchBar extends Component {
     }
   }
 
+  onGoSearchScreen() {
+    if (this.props.onGoSearchScreen) {
+      this.props.onGoSearchScreen();
+    }
+  }
+
   render() {
     const {
       placeholder,
       buttons,
       searchAutoFocus,
+      searchMode,
     } = this.props;
 
     return (
@@ -138,8 +149,10 @@ export default class NavSearchBar extends Component {
               onSearchChange={ (text) => this.onSearchChange(text) }
               onFocus={ () => this.onFocus() }
               onClose={ () => this.onClose() }
+              onGoSearchScreen={ () => this.onGoSearchScreen() }
               isCancel={ !this.state.isShowCancelButton }
               searchAutoFocus={ searchAutoFocus }
+              searchMode={ searchMode }
               height={ 28 }
               iconColor={ "#ffffff99" }
               placeholder = { placeholder }

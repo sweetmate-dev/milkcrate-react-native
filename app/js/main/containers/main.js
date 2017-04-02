@@ -39,7 +39,7 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     if (tab == null)
-      tab = 'search';
+      tab = 'alerts';
 
     this.state = {
       selectedTab: tab,
@@ -128,7 +128,7 @@ export default class Main extends Component {
             />
           </TabNavigator.Item>
 
-          {/* Alert */}
+          {/* Alerta */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'alerts' }
             title="Alerts"
