@@ -262,6 +262,20 @@ class EventDetail extends Component {
 
             <Text style={ styles.textDescription }>{ event.description }</Text>
           </View>
+          {event.tags && event.tags.length>0 && <View style={ styles.tagsContainer }>
+            <Text style={ styles.textHeading }>Tags</Text>
+            <View style={ styles.tagsButtonContainer }>
+              {
+                event.tags.map((o, index)=>{
+                  return (
+                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                        <Text style={ styles.textTagsButton }>{o}</Text>
+                      </View>
+                  )
+                })
+              }
+            </View>
+          </View>}
         </ScrollView>
         {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
@@ -425,5 +439,40 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
     backgroundColor: 'transparent',
+  },
+  tagsContainer: {
+    paddingLeft: 20,
+    paddingRight: 16,
+    paddingTop: 5,
+  },
+  tagsButtonContainer: {
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
+  },
+  buttonTagsWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: "#EFEFEF",
+    borderWidth: 5,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    marginRight: 5,
+    marginBottom: 5
+  },
+  textTagsButton: {
+    textAlign: 'center',
+    backgroundColor: "#EFEFEF",
+    color: "#A4A4A3",
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+  },
+  textHeading: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    paddingVertical: 10,
   },
 });

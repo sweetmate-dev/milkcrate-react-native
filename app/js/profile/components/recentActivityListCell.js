@@ -76,45 +76,37 @@ export default class RecentActivityListCell extends Component {
       points,
       onClick,
       mode,
+        time
     } = this.props;
 
     return (
-      <TouchableHighlight onPress={ () => onClick() } underlayColor='#dddddd'>
-        <View style={ styles.mainContainer }>
-          <View style={ styles.leftContainer }>
-            <View style={ styles.cellTopContainer }>
-              <View style={ styles.categoryImageWrapper }>
-                <Image style={ styles.imageCategory } source={ icon } />
+      <TouchableHighlight onPress={ () => onClick() }>
+        <View style={ styles.cellContainer }>
+          <View style={ styles.avatarContainer }>
+            <Image style={ styles.avatar } source={icon}/>
+          </View>
+          <View style={ styles.mainContentContainer }>
+            <View style={ styles.topContainer }>
+              <View style={ styles.names_timeContainer }>
+                <Text style={ styles.textSmall }>{ time }</Text>
               </View>
-              <View style={ styles.cellTopTextContainer }>
-                <View style={ styles.cellTopTitleCoinContainer }>
-                  <View style={ styles.cellTopTitleContainer }>
-                    <Text numberOfLines={2} style={ styles.title }>{ title }</Text>
-                  </View>
-                </View>
-                <View style={ styles.bottomContainer }>
-                  <View style={ styles.heartContainer }>
-                    {/*<View style={ styles.likeWrapper }>
-                      <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
-                    </View>*/}
-
-                    <Text style={ styles.textSmall }>
-                      {this.props.hearts == 0 ?
-                          "0 Likes"
+              <Point point={ points }/>
+            </View>
+            <Text numberOfLines={2} style={ styles.textDescription }>{ title }</Text>
+            <View style={ styles.bottomContainer }>
+              <View style={ styles.heartContainer }>
+                <Text style={ styles.textSmall }>
+                  {this.props.hearts == 0 ?
+                      "0 Likes"
+                      :
+                      this.props.hearts > 1 ?
+                      this.props.hearts + " Likes"
                           :
-                          this.props.hearts > 1 ?
-                          this.props.hearts + " Likes"
-                              :
-                          this.props.hearts + " Like"
-                      }
-                    </Text>
-                  </View>
-                </View>
+                      this.props.hearts + " Like"
+                  }
+                </Text>
               </View>
             </View>
-          </View>
-          <View style={ styles.rightCoinContainer }>
-            <Point point={ points }/>
           </View>
         </View>
       </TouchableHighlight>
@@ -122,67 +114,66 @@ export default class RecentActivityListCell extends Component {
   }
 }
 const styles = StyleSheet.create({
-  mainContainer: {
+  cellContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    borderStyle: 'solid',
+    // height: commonStyles.hp(14),
     borderBottomWidth: 1,
-    borderBottomColor: commonColors.line
+    borderBottomColor: commonColors.line,
+    borderStyle: 'solid',
   },
-  leftContainer: {
-    flex: 9,
+  avatarContainer: {
+    paddingVertical: 5,
   },
-  cellTopContainer: {
-    flexDirection: 'row',
-  },
-  categoryImageWrapper: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  cellTopTextContainer: {
+  mainContentContainer: {
     flex: 1,
-    flexDirection: 'column',
-    paddingLeft: 5,
+    paddingLeft: 10,
   },
-  cellTopTitleCoinContainer: {
+  names_timeContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  cellTopTitleContainer: {
-    flex: 5,
-    alignItems: 'flex-start',
-    justifyContent:'center',
-    height:44
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 2,
   },
-  rightCoinContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  imageCategory: {
-    width: 44,
-    height: 44,
-  },
-
-  title: {
-    color: commonColors.title,
+  textName: {
+    color: commonColors.grayText,
     fontFamily: 'Open Sans',
-    fontSize: 14,
-    paddingLeft:5
-  },
-  text: {
+    fontSize: 12,
+    fontWeight: 'bold',
     backgroundColor: 'transparent',
+  },
+  textSmall: {
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
+    backgroundColor: 'transparent'
   },
+  textDescription: {
+    flex: 1,
+    color: commonColors.grayText,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+    // marginVertical: 5,
+    marginTop: 5,
+  },
+  topContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+  },
+
   bottomContainer: {
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
+    marginTop: 5,
   },
   heartContainer: {
     flexDirection: 'row',
@@ -198,12 +189,5 @@ const styles = StyleSheet.create({
   imageLike: {
     width: 16,
     height: 15,
-  },
-  textSmall: {
-    color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
-    fontSize: 12,
-    backgroundColor: 'transparent',
-    paddingLeft: 5,
   },
 });

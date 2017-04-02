@@ -14,6 +14,7 @@ import {
   TouchableHighlight,
   RefreshControl,
   Alert,
+  WebView
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -422,6 +423,21 @@ class Home extends Component {
     );
   }
 
+  get showVideo() {
+    var delta = (Date.now() - bendService.getActiveUser()._bmd_createdAt/1000000)/1000;
+    if(delta > 14 * 3600 * 24) {
+      return null;
+    }
+
+    return (
+        <WebView
+            style={{flex:1, height:168}}
+            javaScriptEnabled={true}
+            source={{uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'}}
+        />
+    )
+  }
+
   get showTrending() {
     return (
       <View style={ styles.trendingContainer }>
@@ -645,6 +661,7 @@ class Home extends Component {
           }
         >
           { this.showChallenges }
+          {/*this.showVideo*/}
           { this.showTrending }
           { this.showDailyPoll }
           { this.showRecentActivity }

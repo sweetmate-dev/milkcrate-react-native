@@ -23,9 +23,6 @@ export default class BusinessRecentActivityListCell extends Component {
     width: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    categoryIcon: PropTypes.number.isRequired,
-    time: PropTypes.number,
-    heart: PropTypes.number,
     rating: PropTypes.number,
     onClick: PropTypes.func,
   }
@@ -59,9 +56,10 @@ export default class BusinessRecentActivityListCell extends Component {
       width,
       name,
       description,
-      categoryIcon,
+        avatar,
+        avatarBackColor,
+        defaultAvatar,
       time,
-      hearts,
       rating,
       onClick,
     } = this.props;
@@ -70,35 +68,21 @@ export default class BusinessRecentActivityListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.categoryIconWrapper }>
-            <Image style={ styles.imageCategory } source={ categoryIcon }/>
+            {avatar != ''&&<Image style={ [styles.imageCategory, {backgroundColor:avatarBackColor}] } source={{ uri:avatar }}/>}
+            {avatar == ''&&<Image style={ styles.imageCategory } source={defaultAvatar}/>}
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.contentTopContainer }>
               <View style={ styles.names_timeContainer }>
                 <Text numberOfLines={2} style={ styles.textName }>{ name }</Text>
-                <Text style={ styles.textSmall }>{ time } min ago</Text>
+                <Text style={ styles.textSmall }>{ time }</Text>
               </View>
               {rating > 0 && <View style={ styles.ratingContainer }>
-                <Text style={ styles.textSmall }>{ rating.toFixed(1) } </Text>
+                <Text style={ styles.textSmall }>{ rating} </Text>
                 <Image style={ styles.imageStar } source={ star } />
               </View>}
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
-            <View style={ styles.like_coinContainer }>
-              <TouchableOpacity onPress={ () => this.onLike() }>
-                <View style={ styles.heartContainer }>
-                  <View style={ styles.likeWrapper }>
-                    <Image style={ styles.imageLike } source={ heart }/>
-                  </View>  
-                  <Text style={ styles.textSmall }>
-
-                  {
-                    hearts != 0 ? hearts : hearts + " - Be the first to like it!"
-                  }
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
           </View>
         </View>
       </TouchableHighlight>
