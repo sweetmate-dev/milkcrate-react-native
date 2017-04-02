@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     // height: commonStyles.hp(14),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,

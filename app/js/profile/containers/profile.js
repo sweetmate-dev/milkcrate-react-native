@@ -210,6 +210,7 @@ class Profile extends Component {
         points={ Math.max(Number(rowData.points||1), 1) }
         hearts={ Number(rowData.likeCount||0) }
         likeByMe={ rowData.likedByMe||false }
+        time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         onClick={ () => this.onRecentActivityCellPressed(rowData)
         }
         onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))

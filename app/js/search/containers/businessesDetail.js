@@ -53,7 +53,7 @@ import Cache from '../../components/Cache'
 class BusinessesDetail extends Component {
   constructor(props) {
     super(props);
-    var dataSourceRecentActivity = new ListView.DataSource(
+    this.dataSourceRecentActivity = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
@@ -63,9 +63,8 @@ class BusinessesDetail extends Component {
       activityId:null,
 
       currentLocation:null,
-      businessRate: 0,
+      businessRate: 1,
       businessComment: '',
-      dataSourceRecentActivity: dataSourceRecentActivity.cloneWithRows(BusinessRecentActivityEntries),
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -76,26 +75,30 @@ class BusinessesDetail extends Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
       },
-      user:{}
+      user:{},
+      comments:[]
     };
 
     this.category = _.find(Cache.categories, (o)=>{
       return o._id == this.props.business.categories[0]
     })
+
+    this.mounted = false
   }
 
   componentDidMount(){
+    this.mounted = true
     const business = this.props.business
-    console.log("business", business)
+
     bendService.checkActivityDid(business._id, 'business', (err, result)=>{
       if(err) {
         console.log(err);return;
       }
 
       if(result)
-        this.state.activityId = result;
+        this.mounted&&(this.state.activityId = result);
 
-      this.setState({
+      this.mounted&&this.setState({
         didStatus: result==false?false:true
       })
     })
@@ -105,14 +108,23 @@ class BusinessesDetail extends Component {
         console.log(err);return;
       }
 
-      this.setState({
+      this.mounted&&this.setState({
         everDidStatus: result
+      })
+    })
+    bendService.getBusinessRating(business._id, (err, rets)=>{
+      if(err) {
+        console.log(err);return;
+      }
+
+      this.mounted&&this.setState({
+        comments: rets
       })
     })
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-          this.setState({ currentLocation: position })
+          this.mounted&&this.setState({ currentLocation: position })
         },
         (error) => {
           console.log(JSON.stringify(error));
@@ -125,10 +137,14 @@ class BusinessesDetail extends Component {
         console.log(err);return;
       }
 
-      this.setState({
+      this.mounted&&this.setState({
         user:ret
       })
     })
+  }
+
+  componentWillUnmount(){
+    this.mounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -172,7 +188,26 @@ class BusinessesDetail extends Component {
   }
 
   onRateBusiness() {
-    alert("Tapped RateBusiness button!");
+    //console.log(this.state.businessRate, this.state.businessComment)
+    if(this.state.businessRate > 0 && UtilService.isValid(this.state.businessComment)) {
+      bendService.captureBusinessRating({
+        id:this.props.business._id,
+        comment:this.state.businessComment,
+        rating:this.state.businessRate
+      }, (err, ret)=>{
+        if(err) {
+          console.log(err);
+          return
+        }
+
+        this.state.comments.unshift(ret)
+        this.setState({
+          businessRate:1,
+          businessComment:"",
+          comments:this.state.comments
+        })
+      })
+    }
   }
 
   onCheckIn() {
@@ -181,9 +216,9 @@ class BusinessesDetail extends Component {
         console.log(err);return;
       }
 
-      this.state.activityId = result.activity._id;
+      this.mounted&&(this.state.activityId = result.activity._id);
 
-      this.setState({
+      this.mounted&&this.setState({
         everDidStatus:true,
         didStatus:true
       })
@@ -197,9 +232,9 @@ class BusinessesDetail extends Component {
         return;
       }
 
-      this.state.activityId = null;
+      this.mounted&&(this.state.activityId = null);
 
-      this.setState({
+      this.mounted&&this.setState({
         didStatus: false
       })
     })
@@ -208,11 +243,12 @@ class BusinessesDetail extends Component {
   renderRecentActivityRow(rowData, sectionID, rowID) {
     return (
       <BusinessRecentActivityListCell
-        name={ rowData.name }
-        description={ rowData.description }
-        categoryIcon={ rowData.categoryIcon }
-        time={ rowData.time }
-        hearts={ rowData.hearts }
+        name={ rowData.user.name }
+        description={ rowData.comment }
+        avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
+        avatarBackColor={UtilService.getBackColor(rowData.user.avatar)}
+        defaultAvatar={UtilService.getDefaultAvatar(rowData.user.defaultAvatar)}
+        time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         rating={ Number(rowData.rating||0) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />
@@ -338,50 +374,20 @@ class BusinessesDetail extends Component {
             </View>
             </View>
           </View>}
-          {/*<View style={ styles.recentActivityContainer }>
-            <View style={ styles.sectionTitleWrapper }>
-              <Text style={ styles.textSectionTitle }>Comments</Text>
+          {business.tags && business.tags.length>0 && <View style={ styles.tagsContainer }>
+            <Text style={ styles.textHeading }>Tags</Text>
+            <View style={ styles.tagsButtonContainer }>
+              {
+                business.tags.map((o, index)=>{
+                  return (
+                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                        <Text style={ styles.textTagsButton }>{o}</Text>
+                      </View>
+                  )
+                })
+              }
             </View>
-            <View style={ styles.recentActivityListViewWrapper }>
-              <ListView
-                dataSource={ this.state.dataSourceRecentActivity }
-                renderRow={ this.renderRecentActivityRow.bind(this) }/>
-            </View>
-          </View>
-          <View style={ styles.ratingMainContainer }>
-            <Image style={ styles.imageCategory } source={ categoryImage } />
-            <View style={ styles.rating_commentContentContainer }>
-              <View style={ styles.ratingContentContainer }>
-                <Text style={ styles.textSectionTitle }>Tap stars to rate</Text>
-                <Stars
-                  isActive={ true }
-                  rateMax={ 5 }
-                  rate={ this.state.businessRate }
-                  size={ 25 }
-                  onStarpress={ (rating) => this.setState({ businessRate: rating }) }
-                />
-              </View>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={ false }
-                multiline={ true }
-                placeholder="Add a comment"
-                placeholderTextColor={ commonColors.placeholderText }
-                textAlign="left"
-                style={ styles.input }
-                underlineColorAndroid="transparent"
-                returnKeyType={ 'done' }
-                onChangeText={ (text) => this.setState({ businessComment: text }) }
-              />
-            </View>
-          </View>*
-          <View style={ styles.buttonRateBusinessWrapper }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onRateBusiness() }>
-              <View style={ styles.buttonRateBusiness }>
-                <Text style={ styles.textButton }>Rate Business</Text>
-              </View>
-            </TouchableOpacity>
-          </View>*/}
+          </View>}
           {!this.state.everDidStatus && <View style={ styles.certificationsContainer }>
             <View style={ styles.certificationsCheckContainer }>
               {avatar&&<Image style={ [styles.imageIcon, {backgroundColor:UtilService.getBackColor(avatar)} ]} source={{ uri:avatar }} />}
@@ -392,6 +398,56 @@ class BusinessesDetail extends Component {
               </View>
             </View>
           </View>}
+          <View style={ styles.recentActivityContainer }>
+            <View style={ styles.sectionTitleWrapper }>
+              <Text style={ styles.textSectionTitle }>Comments</Text>
+            </View>
+            <View style={ styles.recentActivityListViewWrapper }>
+              <ListView
+                  enableEmptySections={ true }
+                  dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.comments) }
+                  renderRow={ this.renderRecentActivityRow.bind(this) }/>
+            </View>
+          </View>
+          <View style={ styles.ratingMainContainer }>
+            {avatar&&<Image style={ [styles.imageCategory, {backgroundColor:UtilService.getBackColor(avatar)} ]} source={{ uri:avatar }} />}
+            {!avatar && defaultAvatar&&<Image style={ styles.imageCategory } source={ defaultAvatar } />}
+            <View style={ styles.rating_commentContentContainer }>
+              <View style={ styles.ratingContentContainer }>
+                <Text style={ styles.textSectionTitle }>Tap stars to rate</Text>
+                <Stars
+                    isActive={ true }
+                    rateMax={ 5 }
+                    rate={ this.state.businessRate }
+                    size={ 25 }
+                    onStarPress={ (rating) => {
+                    console.log(rating)
+                    this.setState({ businessRate: rating })
+                    } }
+                />
+              </View>
+              <TextInput
+                  autoCapitalize="none"
+                  autoCorrect={ false }
+                  multiline={ true }
+                  placeholder="Add a comment"
+                  placeholderTextColor={ commonColors.placeholderText }
+                  textAlign="left"
+                  style={ styles.input }
+                  underlineColorAndroid="transparent"
+                  returnKeyType={ 'done' }
+                  value={this.state.businessComment}
+                  onChangeText={ (text) => this.setState({ businessComment: text }) }
+              />
+            </View>
+          </View>
+          <View style={ styles.buttonRateBusinessWrapper }>
+            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onRateBusiness() }>
+              <View style={ styles.buttonRateBusiness }>
+                <Text style={ styles.textButton }>Rate Business</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
         {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
@@ -535,9 +591,11 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   certificationsButtonContainer: {
+    flex:1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    flexWrap: 'wrap'
   },
   buttonCertificationsWrapper: {
     justifyContent: 'center',
@@ -552,6 +610,35 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: commonColors.line,
     color: commonColors.detailTitle,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+  },
+  tagsContainer: {
+    paddingLeft: 20,
+    paddingRight: 16,
+    paddingTop: 5,
+  },
+  tagsButtonContainer: {
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
+  },
+  buttonTagsWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: "#EFEFEF",
+    borderWidth: 5,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    marginRight: 5,
+    marginBottom: 5
+  },
+  textTagsButton: {
+    textAlign: 'center',
+    backgroundColor: "#EFEFEF",
+    color: "#A4A4A3",
     fontFamily: 'Open Sans',
     fontSize: 12,
   },
@@ -570,7 +657,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 40,
+    paddingVertical: 30,
   },
   certificationsCheckSubContainer: {
     flex: 1,
@@ -582,6 +669,7 @@ const styles = StyleSheet.create({
   recentActivityContainer: {
     flex: 1,
     backgroundColor: '#fff',
+    marginTop:20
   },
   recentActivityListViewWrapper: {
     borderStyle: 'solid',

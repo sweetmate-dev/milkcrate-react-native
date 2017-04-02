@@ -857,6 +857,41 @@ module.exports = {
         })
     },
 
+    getBusinessRating(id, cb) {
+        var query = new Bend.Query()
+        query.equalTo("business._id", id)
+        query.descending("_bmd.createdAt")
+        Bend.DataStore.find("businessRating", query, {
+            relations:{
+                user:"user",
+                "user.avatar":"BendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+        }, err=>{
+            cb(err)
+        })
+    },
+
+    captureBusinessRating(param, cb) {
+        Bend.execute("captureBusinessRating", param).then((ret)=>{
+            console.log(ret);
+            var id = ret.result._id
+            Bend.DataStore.get("businessRating", id, {
+                relations:{
+                    user:"user",
+                    "user.avatar":"BendFile"
+                }
+            }).then((ret)=>{
+                cb(null, ret)
+            }, err=>{
+                cb(err)
+            })
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
     //file upload api
     uploadFile(file, cb, ext){
         file._filename = Date.now() + ""

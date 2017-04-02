@@ -71,26 +71,29 @@ class VolunteerDetail extends Component {
     this.category = _.find(Cache.categories, (o)=>{
       return o._id == this.props.volunteer.categories[0]
     })
+    this.mounted = false
   }
 
   componentDidMount() {
+    this.mounted = true
     const {volunteer} = this.props;
     bendService.checkActivityDid(volunteer._id, 'volunteer_opportunity', (err, result)=>{
       if(err) {
         console.log(err);return;
       }
 
-      if(result)
-        this.state.activityId = result;
+      if(result){
+        this.mounted&&(this.state.activityId = result);
+      }
 
-      this.setState({
+      this.mounted&&this.setState({
         didStatus: result==false?false:true
       })
     })
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-          this.setState({ currentLocation: position })
+          this.mounted&&this.setState({ currentLocation: position })
         },
         (error) => {
           console.log(JSON.stringify(error));
@@ -103,10 +106,14 @@ class VolunteerDetail extends Component {
         console.log(err);return;
       }
 
-      this.setState({
+      this.mounted&&this.setState({
         user:ret
       })
     })
+  }
+
+  componentWillUnmount(){
+    this.mounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -151,9 +158,9 @@ class VolunteerDetail extends Component {
         console.log(err);return;
       }
 
-      this.state.activityId = result.activity._id;
+      this.mounted&&(this.state.activityId = result.activity._id);
 
-      this.setState({
+      this.mounted&&this.setState({
         modalVisible:false,
         didStatus:true
       })
@@ -167,9 +174,9 @@ class VolunteerDetail extends Component {
         return;
       }
 
-      this.state.activityId = null;
+      this.mounted&&(this.state.activityId = null);
 
-      this.setState({
+      this.mounted&&this.setState({
         didStatus: false
       })
     })
@@ -191,7 +198,7 @@ class VolunteerDetail extends Component {
   }
 
   setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.mounted&&this.setState({modalVisible: visible});
   }
 
   render() {
@@ -244,9 +251,9 @@ class VolunteerDetail extends Component {
               <View style={ styles.addressContainer }>
                 <Text style={ styles.textAddress }>{volunteer.address1} {volunteer.address2}</Text>
                 <Text style={ styles.textAddress }>{UtilService.getCityStateString(volunteer.city, volunteer.state, volunteer.postalCode)}</Text>
-                <TouchableOpacity onPress={ () => this.onGetDirection() }>
+                {UtilService.isValid(volunteer._geoloc)&&<TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
               <View style={ styles.visitContainer }>
                 {this.state.didStatus&&UtilService.isValidURL(volunteer.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
@@ -271,6 +278,20 @@ class VolunteerDetail extends Component {
 
             <Text style={ styles.textDescription }>{ volunteer.description }</Text>
           </View>
+          {volunteer.tags && volunteer.tags.length>0 && <View style={ styles.tagsContainer }>
+            <Text style={ styles.textHeading }>Tags</Text>
+            <View style={ styles.tagsButtonContainer }>
+              {
+                volunteer.tags.map((o, index)=>{
+                  return (
+                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                        <Text style={ styles.textTagsButton }>{o}</Text>
+                      </View>
+                  )
+                })
+              }
+            </View>
+          </View>}
         </ScrollView>
         {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
@@ -526,5 +547,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'stretch',
     justifyContent: 'space-between',
-  }
+  },
+  tagsContainer: {
+    paddingLeft: 20,
+    paddingRight: 16,
+    paddingTop: 5,
+  },
+  tagsButtonContainer: {
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
+  },
+  buttonTagsWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: "#EFEFEF",
+    borderWidth: 5,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    marginRight: 5,
+    marginBottom: 5
+  },
+  textTagsButton: {
+    textAlign: 'center',
+    backgroundColor: "#EFEFEF",
+    color: "#A4A4A3",
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+  },
+  textHeading: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    paddingVertical: 10,
+  },
 });
