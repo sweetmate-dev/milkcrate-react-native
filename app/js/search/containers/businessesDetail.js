@@ -20,6 +20,7 @@ import * as businessesDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
+import Point from '../../components/Point';
 import Stars from 'react-native-stars-rating';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -63,7 +64,7 @@ class BusinessesDetail extends Component {
       activityId:null,
 
       currentLocation:null,
-      businessRate: 1,
+      businessRate: 0,
       businessComment: '',
       region: {
         latitude: LATITUDE,
@@ -76,7 +77,11 @@ class BusinessesDetail extends Component {
         longitude: LONGITUDE,
       },
       user:{},
-      comments:[]
+      comments:[],
+      trendUsers:[],
+      trendUserCount:0,
+      lastTrendTime:Date.now() * 1000000,
+      trendInit:false
     };
 
     this.category = _.find(Cache.categories, (o)=>{
@@ -141,6 +146,20 @@ class BusinessesDetail extends Component {
         user:ret
       })
     })
+
+    bendService.getBusinessTrend(business._id, (err, ret)=>{
+      if(err) {
+        console.log(err);
+        return;
+      }
+
+      this.setState({
+        trendUsers:ret.trendUsers,
+        trendUserCount:ret.trendUserCount,
+        lastTrendTime:ret.lastTrendTime,
+        trendInit:true
+      })
+    })
   }
 
   componentWillUnmount(){
@@ -189,7 +208,7 @@ class BusinessesDetail extends Component {
 
   onRateBusiness() {
     //console.log(this.state.businessRate, this.state.businessComment)
-    if(this.state.businessRate > 0 && UtilService.isValid(this.state.businessComment)) {
+    if(this.state.businessRate > 0 || UtilService.isValid(this.state.businessComment)) {
       bendService.captureBusinessRating({
         id:this.props.business._id,
         comment:this.state.businessComment,
@@ -202,7 +221,7 @@ class BusinessesDetail extends Component {
 
         this.state.comments.unshift(ret)
         this.setState({
-          businessRate:1,
+          businessRate:0,
           businessComment:"",
           comments:this.state.comments
         })
@@ -272,11 +291,42 @@ class BusinessesDetail extends Component {
     )
   }
 
+  getUsers(entries) {
+    //console.log("getUsers", entries)
+
+    if (entries.length == 0) {
+      return false;
+    }
+
+    return entries.map((entry, index) => {
+
+      if (index > 5) {
+
+        return null;
+      }
+
+      if(!entry.defaultAvatar && !entry.avatar)
+        return null;
+
+      if(entry.avatar)
+        return (
+            <Image key={ index} style={ styles.imageUserAvatar } source={{uri:UtilService.getSmallImage(entry.avatar)}}/>
+        );
+      else
+        return (
+            <Image key={ index} style={ styles.imageUserAvatar } source={UtilService.getDefaultAvatar(entry.defaultAvatar)}/>
+        );
+    });
+  }
+
   render() {
     const { status, business } = this.props;
     var rating = (business.rating||0.0).toFixed(1)
     var avatar = this.state.user.avatar?UtilService.getSmallImage(this.state.user.avatar):null
     var defaultAvatar = this.state.user.defaultAvatar?UtilService.getDefaultAvatar(this.state.user.defaultAvatar):null
+    var trendUsers = this.state.trendUsers
+    var trendUserCount = this.state.trendUserCount
+    var lastTrendTime = this.state.lastTrendTime
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -398,6 +448,25 @@ class BusinessesDetail extends Component {
               </View>
             </View>
           </View>}
+          {this.state.everDidStatus && this.state.trendInit &&
+            <View style={ styles.certificationsContainer }>
+              <View style={ styles.avatarsMainContainer }>
+                <View style={ styles.names_timeContainer }>
+                  <Text style={ styles.textName }>{ trendUsers[0].name } and {trendUserCount - 1} others</Text>
+                  <Text style={ styles.textSmall }>Latest {UtilService.getPastDateTime(lastTrendTime)}</Text>
+                </View>
+                <View style={ styles.avatarsContainer }>
+                  { this.getUsers(trendUsers) }
+                  {business.trendActivityCount && business.trendActivityCount > 6 && <View style={ styles.moreUserContainer }>
+                    <Text style={ styles.textMoreUser }>+{ business.trendActivityCount - 6 }</Text>
+                  </View>}
+                </View>
+              </View>
+              {/*<View style={ styles.like_coinContainer }>
+                <Point point={ Number(business.points||1) }/>
+              </View>*/}
+            </View>
+          }
           <View style={ styles.recentActivityContainer }>
             <View style={ styles.sectionTitleWrapper }>
               <Text style={ styles.textSectionTitle }>Comments</Text>
@@ -759,5 +828,65 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#EFEFEF',
     height: 40,
+  },
+  avatarsMainContainer: {
+    flex : 3,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+  },
+  names_timeContainer: {
+    flexDirection: 'row',
+  },
+  avatarsContainer: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+  },
+  like_coinContainer: {
+    flex : 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    marginBottom: 10,
+  },
+  textName: {
+    color: commonColors.grayText,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+    fontWeight: 'bold',
+    backgroundColor: 'transparent',
+  },
+  textSmall: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+    backgroundColor: 'transparent',
+    paddingLeft: 5,
+  },
+  imageUserAvatar: {
+    width: 32,
+    height: 32,
+  },
+  moreUserContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 32,
+    height: 32,
+    backgroundColor: '#efefef',
+  },
+  textMoreUser: {
+    color: commonColors.grayText,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+    backgroundColor: 'transparent',
+  },
+  heartContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageLike: {
+    width: 16,
+    height: 15,
   },
 });

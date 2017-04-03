@@ -35,6 +35,7 @@ export default class TrendingCarousel extends Component {
   };
 
   getUsers(entries) {
+    //console.log("getUsers", entries)
 
     if (entries.length == 0) {
       return false;
@@ -42,10 +43,13 @@ export default class TrendingCarousel extends Component {
 
     return entries.map((entry, index) => {
 
-      if (index > 6) {
+      if (index > 5) {
 
         return null;
       }
+
+      if(!entry.defaultAvatar && !entry.avatar)
+          return null;
 
       if(entry.avatar)
         return (
@@ -67,13 +71,13 @@ export default class TrendingCarousel extends Component {
       Actions.EventDetail({ event: this.props.rawData });
     } else if(this.props.activityType == 'service') {
       Actions.ServiceDetail({ event: this.props.rawData });
-    } else if(this.props.activityType == 'volunteer') {
+    } else if(this.props.activityType == 'volunteer_opportunity') {
       Actions.VolunteerDetail({ volunteer: this.props.rawData });
     }
   }
 
   render () {
-    const { title, location, icon, users, time, hearts, points } = this.props;
+    const { title, location, icon, users, time, hearts, points, userCount, activity, activityType } = this.props;
 
     return (
       <TouchableHighlight
@@ -91,7 +95,7 @@ export default class TrendingCarousel extends Component {
           <View style={ styles.topContainer }>
             <Text style={ styles.textCategory }> { title } </Text>
             <View style={ styles.locationContainer }>
-              <Image style={ styles.imageLocation } source={ locationImage }/>
+              <Image style={ styles.imageLocation } source={ UtilService.getActivityIcon(activityType) } resizeMode="contain"/>
               <Text style={ styles.textLocation }>{ location }</Text>
             </View>
           </View>
@@ -99,18 +103,18 @@ export default class TrendingCarousel extends Component {
             <Image style={ styles.imageCategoryIcon } source={ icon }/>
           </View>
           <View style={ styles.bottomContainer }>
-            <View style={ styles.avatarsMainContainer }>
+            {users.length > 0&&<View style={ styles.avatarsMainContainer }>
               <View style={ styles.names_timeContainer }>
-                <Text style={ styles.textName }>{ users[0].name } and {users.length - 1} others</Text>
+                <Text style={ styles.textName }>{ users[0].name } and {userCount - 1} others</Text>
                 <Text style={ styles.textSmall }>Latest {UtilService.getPastDateTime(time)}</Text>
               </View>
               <View style={ styles.avatarsContainer }>
                 { this.getUsers(users) }
-                {users.length > 6 && <View style={ styles.moreUserContainer }>
-                  <Text style={ styles.textMoreUser }>+{ users.length - 6 }</Text>
+                {activity.trendActivityCount > 6 && <View style={ styles.moreUserContainer }>
+                  <Text style={ styles.textMoreUser }>+{ activity.trendActivityCount - 6 }</Text>
                 </View>}
               </View>
-            </View>
+            </View>}
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
                 { false &&

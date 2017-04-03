@@ -13,6 +13,7 @@ import {
   ListView,
   RefreshControl,
   Alert,
+    Image
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -302,7 +303,10 @@ class CommunityPoints extends Component {
           }
         >
           <View style={ styles.topContainer }>
-            <Text style={ styles.textName }>{community.name}</Text>
+            <View style={ styles.logoContainer }>
+              {community.logo && <Image source={ {uri:community.logo._downloadURL} } style={ styles.imageComcast } resizeMode="contain"/>}
+              {!community.logo && <Text style={ styles.textName }>{community.name}</Text>}
+            </View>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>{community.points||0}</Text>
@@ -370,6 +374,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 24,
     backgroundColor: 'transparent',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  imageComcast: {
+    width: 300,
+    height: 100,
+    marginBottom: 8
   },
   pointContainer: {
     flex: 1,

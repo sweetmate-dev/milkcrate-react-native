@@ -65,7 +65,6 @@ class Login extends Component {
         alert("Invalid credentials. Please check your email and password and try again.")
 
         this.setState({
-          email: '',
           password: '',
         });
         return
