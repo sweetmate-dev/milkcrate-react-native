@@ -134,6 +134,15 @@ const avatarImages={
     whale:require('../../assets/imgs/avatars/whale.png')
 }
 
+const activityImages={
+    action:require('../../assets/imgs/activity-icons/action-icon.png'),
+    business:require('../../assets/imgs/activity-icons/business-icon.png'),
+    event:require('../../assets/imgs/activity-icons/event-icon.png'),
+    service:require('../../assets/imgs/activity-icons/service-icon.png'),
+    volunteer_opportunity:require('../../assets/imgs/activity-icons/volunteer_opportunity-icon.png'),
+}
+
+
 const animals = ["cat", "corgi", "fish", "frog", "koala", "lion", "otter", "owl", "penguin", "pig",
     "raccoon", "rhino", "squirrel", "turtle", "whale"];
 
@@ -389,6 +398,27 @@ class UtilService {
         var idx = _.random(0, animals.length-1)
 
         return animals[idx]
+    }
+
+    static getTrendTitle(type) {
+        switch(type) {
+            case 'business':
+                return 'Checkin';
+            case 'action':
+                return 'Achieve';
+            case 'service':
+                return 'Sign Up';
+            case 'event':
+                return 'RSVP';
+            case 'volunteer_opportunity':
+                return 'Volunteer';
+        }
+
+        return 'Checkin'
+    }
+
+    static getActivityIcon(type) {
+        return activityImages[type]
     }
 }
 

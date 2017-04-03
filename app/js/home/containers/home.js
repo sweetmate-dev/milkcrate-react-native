@@ -387,12 +387,14 @@ class Home extends Component {
       return (
         <TrendingCarousel
           key={ `carousel-entry-${index}` }
-          title='CHECK IN'
-          activityType='business'
+          title={UtilService.getTrendTitle(entry.type)}
+          activityType={ entry.type }
+          activity={ entry }
           location={ entry.name }
           icon={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
-          time={ entry._bmd.createdAt }
+          userCount={ entry.userCount }
+          time={ entry.lastTime }
           hearts={ Number(entry.likeCount||0) }
           points={ Number(entry.points||1)}
           rawData={entry}

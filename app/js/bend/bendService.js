@@ -337,58 +337,148 @@ module.exports = {
         query.and(new Bend.Query().equalTo("community._id", communityId)
             .or().exists("community", false));
         query.notEqualTo("deleted", true)
-        query.equalTo("enabled", true)
-        query.descending("activityCount")
-        query.limit(4)
+        query.and(new Bend.Query().equalTo("enabled", true).or().exists("enabled", false))
+        query.descending("trendActivityCount")
+        query.limit(1)
 
-        Bend.DataStore.find("business", query, {
-            relations:{
-                certification:"certification",
-                community:"community",
-                coverImage:"BendFile"
-            }
-        }).then((rets)=>{
-            //console.log("trendings", rets)
-            //get any 2 items
-            var count = rets.length;
-            var trends = rets
-
+        var types = ["action", "business", "event", "volunteer_opportunity", "service"]
+        var trends = []
+        async.map(types, (type, callback)=>{
+            Bend.DataStore.find(type, query, {
+                relations:{
+                    certification:"certification",
+                    community:"community",
+                    coverImage:"BendFile"
+                }
+            }).then((rets)=>{
+                if(rets.length > 0){
+                    var trend = rets[0]
+                    trend.type = type
+                    trends.push(trend)
+                }
+                callback(null, null)
+            }, (err)=>{
+                callback(err)
+            })
+        }, (err, ret)=>{
             if(trends.length > 0) {
                 //get users
                 async.map(trends,
                     (t, callback)=>{
-                        var q = new Bend.Query()
-                        q.equalTo("activity._id", t._id);
-                        q.descending("_bmd.createdAt");
-                        q.limit(20)
-                        Bend.DataStore.find("activity", q, {
-                            relations:{
-                                user:"user",
-                                "user.avatar":"bendFile",
+                        async.parallel([
+                            (callback) => {
+                                var q = new Bend.Query()
+                                q.equalTo("activity._id", t._id);
+                                q.descending("_bmd.createdAt");
+                                q.notEqualTo("deleted", true)
+                                q.exists('user._id', true)
+                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                                q.limit(6)
+                                Bend.DataStore.find("activity", q, {
+                                    relations:{
+                                        user:"user",
+                                        "user.avatar":"BendFile"
+                                    }
+                                }).then((rets)=>{
+                                    var users = []
+                                    _.map(rets, (o)=>{
+                                        users.push(o.user);
+                                    })
+                                    t.users = users
+                                    if(rets.length > 0)
+                                        t.lastTime = rets[0]._bmd.createdAt
+                                    callback(null, null)
+                                }, (err)=>{
+                                    callback(err, null)
+                                })
+                            },
+                            (callback) => {
+                                var q = new Bend.Query()
+                                q.notEqualTo("deleted", true)
+                                q.exists('user._id', true)
+                                q.equalTo("activity._id", t._id);
+                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                                var aggregation = Bend.Group.count('user._id');
+                                //aggregation.by('activity._id')
+                                aggregation.query(q);
+
+                                Bend.DataStore.group("activity", aggregation).then((rets)=>{
+                                    t.userCount = rets.length
+                                    callback(null, null)
+                                }, (err)=>{
+                                    callback(err, null)
+                                })
                             }
-                        }).then((rets)=>{
-                            var users = []
-                            _.map(rets, (o)=>{
-                                users.push(o.user);
-                            })
-                            t.users = users
-                            callback(null, null)
-                        }, (err)=>{
-                            callback(err, null)
+                        ], (err, ret)=>{
+                            callback(err, ret)
                         })
                     }
                     , (err, rets)=>{
                         cb(null, trends)
                     })
             } else {
-                cb(null,trends)
+                cb(null,[])
             }
+        })
 
-        }, (err)=>{
-            cb(err)
+    },
+    getBusinessTrend(id, cb) {
+        var trendUsers = [], trendUserCount=0,lastTrendTime=0
+        var communityId = this.getActiveUser().community._id;
+        async.parallel([
+            (callback) => {
+                var q = new Bend.Query()
+                q.equalTo("activity._id", id);
+                q.descending("_bmd.createdAt");
+                q.notEqualTo("deleted", true)
+                q.exists('user._id', true)
+                q.equalTo("community._id", communityId)
+                //q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                q.limit(6)
+                Bend.DataStore.find("activity", q, {
+                    relations:{
+                        user:"user",
+                        "user.avatar":"BendFile"
+                    }
+                }).then((rets)=>{
+                    var users = []
+                    _.map(rets, (o)=>{
+                        users.push(o.user);
+                    })
+                    trendUsers = users
+                    if(rets.length > 0)
+                        lastTrendTime = rets[0]._bmd.createdAt
+                    callback(null, null)
+                }, (err)=>{
+                    callback(err, null)
+                })
+            },
+            (callback) => {
+                var q = new Bend.Query()
+                q.notEqualTo("deleted", true)
+                q.exists('user._id', true)
+                q.equalTo("community._id", communityId)
+                q.equalTo("activity._id", id);
+                //q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                var aggregation = Bend.Group.count('user._id');
+                //aggregation.by('activity._id')
+                aggregation.query(q);
+
+                Bend.DataStore.group("activity", aggregation).then((rets)=>{
+                    trendUserCount = rets.length
+                    callback(null, null)
+                }, (err)=>{
+                    callback(err, null)
+                })
+            }
+        ], (err, ret)=>{
+            cb(err, {
+                trendUsers:trendUsers,
+                trendUserCount:trendUserCount,
+                lastTrendTime:lastTrendTime,
+            })
         })
     },
-
     //get recent activities
     getRecentActivities(createdAt, limit, cb) {
         //get community of current user
