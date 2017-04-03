@@ -268,7 +268,8 @@ class Profile extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavSettingButton }
           onSetting={ this.onSettings }
-          onGoSearchScreen={ () => this.onGoSearchScreen() }          
+          onGoSearchScreen={ () => this.onGoSearchScreen() }        
+          searchMode={ false }
         />
         <ScrollView
           refreshControl={

@@ -134,7 +134,8 @@ class Notifications extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          onGoSearchScreen={ () => this.onGoSearchScreen() }          
+          onGoSearchScreen={ () => this.onGoSearchScreen() }
+          searchMode={ false }
         />
         <ScrollView
           style={ styles.listViewWrap }

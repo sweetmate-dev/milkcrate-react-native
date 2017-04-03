@@ -48,7 +48,7 @@ export default class NavSearchBar extends Component {
     placeholder: 'Search for activities',
     buttons: commonStyles.NavNoneButton,
     searchAutoFocus: false,
-    searchMode: false,
+    searchMode: true,
   }
 
   constructor(props) {

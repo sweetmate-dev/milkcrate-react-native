@@ -98,7 +98,6 @@ class Search extends Component {
           onCancel={ () => this.onSearchCancel() }
           onFocus={ () => this.onSearchFocus() }
           searchAutoFocus={ this.state.searchAutoFocus }
-          searchMode={ true }
         />
         {
           this.state.mainSearchPage ?
