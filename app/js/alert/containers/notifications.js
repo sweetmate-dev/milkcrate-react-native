@@ -10,6 +10,8 @@ import {
   Dimensions,
   ListView,
   TouchableOpacity,
+  RefreshControl,
+  ScrollView,
   Alert,
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -22,7 +24,6 @@ import * as commonColors from '../../styles/commonColors';
 
 import { AlertEntries } from '../../components/dummyEntries';
 
-//added by li, 2017/03/24
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -35,22 +36,14 @@ class Notifications extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
+      isRefreshing: false,
       alerts:[]
     };
   }
 
   componentDidMount(){
-    bendService.getUserAlerts((err, rets)=>{
-      if(err) {
-        console.log(err);return
-      }
 
-      console.log("alerts", rets)
-
-      this.setState({
-        alerts:rets
-      })
-    })
+    this.loadAllData();
   }
 
   componentWillReceiveProps(newProps) {
@@ -64,23 +57,46 @@ class Notifications extends Component {
     }
   }
 
+  loadAllData() {
+
+    this.setState({
+      alerts:[]
+    });
+
+    bendService.getUserAlerts( (error, result)=>{
+
+      this.setState({ isRefreshing: false });
+
+      if(error) {
+        console.log(error);
+        return;
+      }
+
+      console.log("alerts", result)
+
+      this.setState({
+        alerts: result
+      })
+    })
+  }
+
   onActivityCellPressed (a) {
-    bendService.getActivity(a._id, (err, activity)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.getActivity(a._id, (error, activity)=>{
+      if (error) {
+        console.log(error);return;
       }
 
       console.log("activity", activity)
 
-      if(activity.type == 'business') {
+      if (activity.type == 'business') {
         Actions.BusinessesDetail({ business: activity.activity });
-      } else if(activity.type == 'action') {
+      } else if (activity.type == 'action') {
         Actions.ActionDetail({ action: activity.activity });
-      } else if(activity.type == 'event') {
+      } else if (activity.type == 'event') {
         Actions.EventDetail({ event: activity.activity });
-      } else if(activity.type == 'service') {
+      } else if (activity.type == 'service') {
         Actions.ServiceDetail({ service: activity.activity });
-      } else if(activity.type == 'volunteer_opportunity') {
+      } else if (activity.type == 'volunteer_opportunity') {
         Actions.VolunteerDetail({ volunteer: activity.activity });
       }
     })
@@ -91,20 +107,26 @@ class Notifications extends Component {
       <AlertListCell
         name={ rowData.actor.name }
         description={ rowData.message }
-        avatar={ rowData.actor.avatar?UtilService.getSmallImage(rowData.actor.avatar):"" }
-        avatarBackColor={UtilService.getBackColor(rowData.actor.avatar)}
+        avatar={ rowData.actor.avatar ? UtilService.getSmallImage(rowData.actor.avatar) : "" }
+        avatarBackColor={ UtilService.getBackColor(rowData.actor.avatar) }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        onClick={ () => this.onActivityCellPressed(rowData.activity) }
+        onClick={ () => this.onAlertCellPressed(rowData.activity) }
       />
     );
   }
 
   onAlertCellPressed (rowID) {
-    alert("Tapped cell - " + rowID);
+    // alert("Tapped cell - " + rowID);
   }
 
-  onGoSearch() {
+  onGoSearchScreen() {
     this.props.onSearch();
+  }
+
+  onRefresh() {
+
+    this.setState({ isRefreshing: true });
+    this.loadAllData();    
   }
 
   render() {
@@ -112,16 +134,25 @@ class Notifications extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          onFocus={ () => this.onGoSearch() }          
+          onGoSearchScreen={ () => this.onGoSearchScreen() }          
         />
-        <View style={ styles.listViewWrap }>
+        <ScrollView
+          style={ styles.listViewWrap }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
           <ListView
               enableEmptySections={ true }
               dataSource={
                 this.dataSourceAlert.cloneWithRows(this.state.alerts)
               }
               renderRow={ this.renderAlertRow.bind(this) }/>
-        </View>
+        </ScrollView>
       </View>
     );
   }

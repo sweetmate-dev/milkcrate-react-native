@@ -1,5 +1,5 @@
 {
-  "name": "Milkcrate",
+  "name": "MilkCrate",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -24,6 +24,7 @@
     "react-native-maps": "^0.13.0",
     "react-native-md-textinput": "^2.0.4",
     "react-native-modal-dropdown": "^0.4.1",
+    "react-native-permissions": "^0.2.7",
     "react-native-radio-buttons": "^0.14.0",
     "react-native-router-flux": "^3.37.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",

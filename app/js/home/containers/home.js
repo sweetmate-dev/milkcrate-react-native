@@ -47,8 +47,6 @@ import Cache from '../../components/Cache'
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-//import { ChallengeCarouselEntries, TrendingCarouselEntries, DailyPollEntries, RecentActivityEntries } from '../../components/dummyEntries';
-
 const trending = require('../../../assets/imgs/trending.png');
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
@@ -650,7 +648,7 @@ class Home extends Component {
     );
   }
 
-  onGoSearch() {
+  onGoSearchScreen() {
     this.props.onSearch();
   }
 
@@ -666,7 +664,7 @@ class Home extends Component {
     return (
       <View style={ styles.container }>
         <NavSearchBar
-          onFocus={ () => this.onGoSearch() }
+          onGoSearchScreen={ () => this.onGoSearchScreen() }          
         />
         <ScrollView
           style={ styles.scrollView }

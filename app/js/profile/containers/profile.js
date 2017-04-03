@@ -27,7 +27,6 @@ import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
 
-//added by li, 2017/03/24
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -204,16 +203,15 @@ class Profile extends Component {
     }
     return (
       <RecentActivityListCell
-        title={ rowData.activity.name||rowData.summary||'' }
+        title={ rowData.activity.name || rowData.summary || '' }
         icon={ cat }
         description= { rowData.summary || '' }
-        points={ Math.max(Number(rowData.points||1), 1) }
-        hearts={ Number(rowData.likeCount||0) }
-        likeByMe={ rowData.likedByMe||false }
+        points={ Math.max(Number(rowData.points || 1), 1) }
+        hearts={ Number(rowData.likeCount || 0) }
+        likeByMe={ rowData.likedByMe || false }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        onClick={ () => this.onRecentActivityCellPressed(rowData)
-        }
-        onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
+        onClick={ () => this.onRecentActivityCellPressed(rowData)}
+        onLike={ () => this.onLike(rowData, !(rowData.likedByMe || false))
         }
       />
     );
@@ -229,12 +227,13 @@ class Profile extends Component {
       var exist = _.find(this.state.recentActivities, (o)=>{
         return o._id == activity._id
       })
-      if(ret && exist) {
+      if (ret && exist) {
         exist.likedByMe = like
-        if(like)
-          exist.likeCount = Number(exist.likeCount||0) + 1
+        
+        if (like)
+          exist.likeCount = Number(exist.likeCount || 0) + 1
         else
-          exist.likeCount = Math.max(Number(exist.likeCount||0) - 1, 0)
+          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0)
 
         this.setState({
           recentActivities:this.state.recentActivities
@@ -251,7 +250,7 @@ class Profile extends Component {
     Actions.CommunityPoints();
   }
 
-  onGoSearch() {
+  onGoSearchScreen() {
     this.props.onSearch();
   }
 
@@ -269,7 +268,7 @@ class Profile extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavSettingButton }
           onSetting={ this.onSettings }
-          onFocus={ () => this.onGoSearch() }
+          onGoSearchScreen={ () => this.onGoSearchScreen() }          
         />
         <ScrollView
           refreshControl={
