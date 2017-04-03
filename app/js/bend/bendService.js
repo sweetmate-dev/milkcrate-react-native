@@ -424,6 +424,7 @@ module.exports = {
     },
     getBusinessTrend(id, cb) {
         var trendUsers = [], trendUserCount=0,lastTrendTime=0
+        var communityId = this.getActiveUser().community._id;
         async.parallel([
             (callback) => {
                 var q = new Bend.Query()
@@ -431,7 +432,8 @@ module.exports = {
                 q.descending("_bmd.createdAt");
                 q.notEqualTo("deleted", true)
                 q.exists('user._id', true)
-                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                q.equalTo("community._id", communityId)
+                //q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
                 q.limit(6)
                 Bend.DataStore.find("activity", q, {
                     relations:{
@@ -455,8 +457,9 @@ module.exports = {
                 var q = new Bend.Query()
                 q.notEqualTo("deleted", true)
                 q.exists('user._id', true)
+                q.equalTo("community._id", communityId)
                 q.equalTo("activity._id", id);
-                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                //q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
                 var aggregation = Bend.Group.count('user._id');
                 //aggregation.by('activity._id')
                 aggregation.query(q);

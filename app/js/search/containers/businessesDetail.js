@@ -448,7 +448,7 @@ class BusinessesDetail extends Component {
               </View>
             </View>
           </View>}
-          {this.state.everDidStatus && this.state.trendInit &&
+          {this.state.everDidStatus && this.state.trendInit && trendUsers.length > 0 &&
             <View style={ styles.certificationsContainer }>
               <View style={ styles.avatarsMainContainer }>
                 <View style={ styles.names_timeContainer }>
@@ -457,8 +457,8 @@ class BusinessesDetail extends Component {
                 </View>
                 <View style={ styles.avatarsContainer }>
                   { this.getUsers(trendUsers) }
-                  {business.trendActivityCount && business.trendActivityCount > 6 && <View style={ styles.moreUserContainer }>
-                    <Text style={ styles.textMoreUser }>+{ business.trendActivityCount - 6 }</Text>
+                  {business.trendActivityCount && business.activityCount > 6 && <View style={ styles.moreUserContainer }>
+                    <Text style={ styles.textMoreUser }>+{ business.activityCount - 6 }</Text>
                   </View>}
                 </View>
               </View>
