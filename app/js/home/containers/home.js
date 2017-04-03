@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
   ListView,
+    Linking,
   TouchableOpacity,
   TouchableHighlight,
   RefreshControl,
@@ -425,6 +426,17 @@ class Home extends Component {
     );
   }
 
+  onGoIntroVideo() {
+    var url = 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      }
+    }).catch((error)=>{
+      //console.log("URL open error");
+    });
+  }
+
   get showVideo() {
     var delta = (Date.now() - bendService.getActiveUser()._bmd_createdAt/1000000)/1000;
     if(delta > 14 * 3600 * 24) {
@@ -432,11 +444,16 @@ class Home extends Component {
     }
 
     return (
-        <WebView
-            style={{flex:1, height:168}}
-            javaScriptEnabled={true}
-            source={{uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'}}
-        />
+        <View style={ styles.trendingContainer }>
+          <View style={ styles.trendingTitleContainer }>
+            <Text style={ styles.textTitle }>Intro Video</Text>
+          </View>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
+            <View style={styles.imageVideoView}>
+              <Image style={styles.imageVideo} resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
+            </View>
+          </TouchableOpacity>
+        </View>
     )
   }
 
@@ -663,7 +680,7 @@ class Home extends Component {
           }
         >
           { this.showChallenges }
-          {/*this.showVideo*/}
+          {this.showVideo}
           { this.showTrending }
           { this.showDailyPoll }
           { this.showRecentActivity }
@@ -809,5 +826,20 @@ const styles = StyleSheet.create({
   dailyPollStateModeWrapper: {
 
   },
-
+  imageVideoWrapper: {
+    position:'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor:'red',
+  },
+  imageVideo: {
+    flexShrink:1,
+    height:200
+  },
+  imageVideoView: {
+    flexDirection:'row',
+    alignItems:'center'
+  },
 });
