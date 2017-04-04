@@ -46,17 +46,17 @@ export default class CategoryButton extends Component {
     return (
       <View style={ [styles.container, { width, height }] }>
         <TouchableOpacity
-            style={ styles.button }
-            onPress={ () => onClick() }>
+          style={ styles.button }
+          onPress={ () => onClick() }
+        >
           <Image source={ icon } style={ [{ width: width - 20 }, { height: height - 20 }] }/>
-          <Text style={ [styles.text, { width: width }, { height: 20 }] }>
-            {text}
-          </Text>
+          <Text style={ [styles.text, { width: width }, { height: 20 }] }>{ text }</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',

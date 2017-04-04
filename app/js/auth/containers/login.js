@@ -16,6 +16,7 @@ import {
 import { bindActionCreators } from 'redux';
 import * as loginActions from '../actions';
 import { connect } from 'react-redux';
+
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -36,19 +37,7 @@ class Login extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'login_request') {
-
-    } else if (newProps.status == 'login_success') {
-
-    } else if (newProps.status == 'login_error') {
-
-    }
-  }
-
   onLogin() {
-
     if (this.state.email == '') {
       Alert.alert('Please enter your email address.');
       return;
@@ -59,9 +48,9 @@ class Login extends Component {
       return;
     }
 
-    bendService.login(this.state.email, this.state.password, (err, user)=>{
-      console.log(err, user);
-      if(err || !user.enabled) {
+    bendService.login(this.state.email, this.state.password, (error, user)=>{
+      
+      if (error || !user.enabled) {
         alert("Invalid credentials. Please check your email and password and try again.")
 
         this.setState({
@@ -70,16 +59,15 @@ class Login extends Component {
         return
       }
 
-      if(!err) {
+      if (!error) {
         //check community code
-        if(!user.name) {
+        if (!user.name) {
           Actions.SetupProfile();
-        } else
+        } else {
           Actions.Main();
+        }
       }
     })
-
-    // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
   }
 
   onForgotPassword() {
@@ -95,7 +83,6 @@ class Login extends Component {
   }
 
   render() {
-    const { status } = this.props;
     return (
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">

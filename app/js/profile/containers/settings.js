@@ -20,8 +20,8 @@ import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
@@ -36,19 +36,8 @@ class Settings extends Component {
     this.state = {
       allowOthersToSeeMyActivity: true,
       pushNotifications: true,
-      user:bendService.getActiveUser(),
+      user: bendService.getActiveUser(),
    };
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'settings_request') {
-
-    } else if (newProps.status == 'settings_success') {
-
-    } else if (newProps.status == 'settings_error') {
-
-    }
   }
 
   onBack() {
@@ -100,13 +89,12 @@ class Settings extends Component {
       }
     });
   }
-  onAboutMilkCrate() {
 
+  onAboutMilkCrate() {
     this.opneURL('http://www.mymilkcrate.com');
   }
 
   onPrivacyPolicy() {
-
     this.opneURL('http://mymilkcrate.com/privacy-policy/');
   }
 
@@ -130,11 +118,11 @@ class Settings extends Component {
       shareActivity:val
     })
 
-    bendService.updateUser(this.state.user, (err, ret)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.updateUser(this.state.user, (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
       }
-
       console.log("User updated")
     })
   }
@@ -142,21 +130,19 @@ class Settings extends Component {
   updateAllowNotification(val) {
     this.state.user.allowNotifications = val;
     this.setState({
-      allowNotifications:val
+      allowNotifications: val,
     })
 
-    bendService.updateUser(this.state.user, (err, ret)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.updateUser(this.state.user, (error, result)=>{
+      if (error) {
+        console.log(error);
+        return;
       }
-
-      console.log("User updated")
+      console.log("User updated");
     })
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -184,15 +170,17 @@ class Settings extends Component {
 
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Allow others to see my activity</Text>
-            <Switch onValueChange={ (value) => {
-              this.updateShareActivity(value);
-            }} value={ this.state.user.shareActivity }/>
+            <Switch 
+              onValueChange={ (value) => { this.updateShareActivity(value) }} 
+              value={ this.state.user.shareActivity }
+            />
           </View>
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Push notifications</Text>
-            <Switch onValueChange={ (value) => {
-            this.updateAllowNotification(value);
-            }} value={ this.state.allowNotifications }/>
+            <Switch 
+              onValueChange={ (value) => { this.updateAllowNotification(value) }} 
+              value={ this.state.allowNotifications }
+            />
           </View>
           <View style={ styles.line }/>
 
@@ -326,5 +314,4 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
-
 });

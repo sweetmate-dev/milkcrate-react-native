@@ -13,11 +13,12 @@ import {
   ListView,
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 import Point from '../../components/Point';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import WeeklyRecapListCell from '../components/weeklyRecapListCell';
-import { Actions } from 'react-native-router-flux';
 
 import { WeeklyRecapEntries } from '../../components/dummyEntries';
 
@@ -77,14 +78,13 @@ export default class WeeklyRecap extends Component {
   }
 
   renderRecentActivityRow(rowData, sectionID, rowID) {
-
     return (
       <WeeklyRecapListCell
         title={ rowData.title }
         date={ rowData.date }
         icon={ rowData.icon }
         time={ rowData.time }
-        points={ Math.max(Number(rowData.points||1), 1) }
+        points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onWeelyRecapCellPressed(rowID) }
       />
     );
@@ -105,7 +105,9 @@ export default class WeeklyRecap extends Component {
     alert("Tapped cell - " + rowID);
   }
   render() {
-    const { status, subOne } = this.props;
+    const {       
+      subOne,
+    } = this.props;
 
     return (
       <View style={ styles.container }>
@@ -180,8 +182,8 @@ export default class WeeklyRecap extends Component {
           </View>
           <ListView
             dataSource={ this.state.dataSourceRecentActivity }
-            renderRow={ this.renderRecentActivityRow.bind(this) }/>
-
+            renderRow={ this.renderRecentActivityRow.bind(this) }
+          />
         </ScrollView>
       </View>
     );
@@ -376,5 +378,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     textAlign: 'left',
   },
-
 });

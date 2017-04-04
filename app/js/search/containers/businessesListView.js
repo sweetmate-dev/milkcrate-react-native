@@ -23,10 +23,10 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import BusinessesListCell from '../components/businessesListCell';
-import UtilService from '../../components/util'
-
 import * as commonColors from '../../styles/commonColors';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
+
+import UtilService from '../../components/util'
 
 class BusinessesListView extends Component {
   constructor(props) {
@@ -37,36 +37,22 @@ class BusinessesListView extends Component {
 
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-  }
-
   onPressedCell (rowData) {
     Actions.BusinessesDetail({ business: rowData });
   }
 
   renderRow(rowData, sectionID, rowID) {
-    
     const caetgoriIcon = this.props.categoryIcons[rowID];
-
-    // console.log ('business images : ', caetgoriIcon)
 
     return (
       <BusinessesListCell
         title={ rowData.name }
         icon={ caetgoriIcon }
         description={ rowData.description }
-        distance={ rowData._geoloc&&this.props.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
+        distance={ rowData._geoloc && this.props.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
-        rating={ Number(rowData.rating||0) }
+        rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedCell(rowData) }
       />
     );
@@ -74,7 +60,6 @@ class BusinessesListView extends Component {
 
   render() {
     const { 
-      status,
       businesses,
       onLoadBusinesses,
       moreBusinesses,
@@ -97,7 +82,8 @@ class BusinessesListView extends Component {
           enableEmptySections={ true }
           dataSource={ this.dataSource.cloneWithRows(businesses) }
           renderRow={ this.renderRow.bind(this) }
-          contentContainerStyle={ styles.categoryDetailListView }/>
+          contentContainerStyle={ styles.categoryDetailListView }
+        />
         <LoadMoreSpinner
           show={ moreBusinesses }
           loading={ loading }

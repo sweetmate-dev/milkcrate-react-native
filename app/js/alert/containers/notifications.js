@@ -14,15 +14,15 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+
 import { bindActionCreators } from 'redux';
 import * as alertActions from '../actions';
 import { connect } from 'react-redux';
+
+import { Actions } from 'react-native-router-flux';
 import AlertListCell from '../components/alertListCell';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
-
-import { AlertEntries } from '../../components/dummyEntries';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -37,7 +37,7 @@ class Notifications extends Component {
 
     this.state = {
       isRefreshing: false,
-      alerts:[]
+      alerts: []
     };
   }
 
@@ -46,21 +46,10 @@ class Notifications extends Component {
     this.loadAllData();
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'alert_request') {
-
-    } else if (newProps.status == 'alert_success') {
-
-    } else if (newProps.status == 'alert_error') {
-
-    }
-  }
-
   loadAllData() {
 
     this.setState({
-      alerts:[]
+      alerts: []
     });
 
     bendService.getUserAlerts( (error, result)=>{
@@ -77,28 +66,6 @@ class Notifications extends Component {
       this.setState({
         alerts: result
       })
-    })
-  }
-
-  onActivityCellPressed (a) {
-    bendService.getActivity(a._id, (error, activity)=>{
-      if (error) {
-        console.log(error);return;
-      }
-
-      console.log("activity", activity)
-
-      if (activity.type == 'business') {
-        Actions.BusinessesDetail({ business: activity.activity });
-      } else if (activity.type == 'action') {
-        Actions.ActionDetail({ action: activity.activity });
-      } else if (activity.type == 'event') {
-        Actions.EventDetail({ event: activity.activity });
-      } else if (activity.type == 'service') {
-        Actions.ServiceDetail({ service: activity.activity });
-      } else if (activity.type == 'volunteer_opportunity') {
-        Actions.VolunteerDetail({ volunteer: activity.activity });
-      }
     })
   }
 
@@ -124,13 +91,11 @@ class Notifications extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -147,12 +112,10 @@ class Notifications extends Component {
             />
           }
         >
-          <ListView
-              enableEmptySections={ true }
-              dataSource={
-                this.dataSourceAlert.cloneWithRows(this.state.alerts)
-              }
-              renderRow={ this.renderAlertRow.bind(this) }/>
+        <ListView
+          enableEmptySections={ true }
+          dataSource={ this.dataSourceAlert.cloneWithRows(this.state.alerts) }
+          renderRow={ this.renderAlertRow.bind(this) }/>
         </ScrollView>
       </View>
     );

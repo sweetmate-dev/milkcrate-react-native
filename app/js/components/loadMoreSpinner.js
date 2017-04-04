@@ -65,8 +65,7 @@ export default class LoadMoreSpinner extends Component {
 }
 
 const styles = StyleSheet.create({
- 
-  container: {
+   container: {
     flex: 1,
     paddingVertical: 10,
     justifyContent: 'center',
@@ -81,5 +80,4 @@ const styles = StyleSheet.create({
   activityIndicator: {
     
   },
-
 });

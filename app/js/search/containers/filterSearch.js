@@ -42,35 +42,25 @@ class FilterSearch extends Component {
         service: [],
         action: [],
         volunteer_opportunity: [],
-        business:[],
+        business: [],
       },
       icons: {
         event: [],
         service: [],
         action: [],
         volunteer_opportunity: [],
-        business:[],
+        business: [],
       }
     };
   }
 
   componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-
     if (newProps.searchText != this.props.searchText) {
       this.getActivities(newProps.searchText);
     }
   }
 
   getActivityIcons(activities) {
-
     this.setState( (state) => {
       state.icons.event = [];
       state.icons.service = [];
@@ -81,14 +71,15 @@ class FilterSearch extends Component {
     });
 
     //event icons
-    activities.event.map((event, index) => {
+    activities.event.map( (event, index) => {
       if (event.categories && event.categories.length > 0) {
-        bendService.getCategory(event.categories[0], (error, result)=>{
+        bendService.getCategory(event.categories[0], (error, result) => {
 
           if (error){
             console.log(error);
-            return
+            return;
           }
+
           this.setState( (state) => {
             state.icons.event[index] = UtilService.getCategoryIcon(result.slug);
             return state;
@@ -98,13 +89,13 @@ class FilterSearch extends Component {
     });
 
     //service icons
-    activities.service.map((service, index) => {
+    activities.service.map( (service, index) => {
       if (service.categories && service.categories.length > 0) {
-        bendService.getCategory(service.categories[0], (error, result)=>{
+        bendService.getCategory(service.categories[0], (error, result) => {
 
           if (error){
             console.log(error);
-            return
+            return;
           }
           this.setState( (state) => {
             state.icons.service[index] = UtilService.getCategoryIcon(result.slug);
@@ -115,13 +106,13 @@ class FilterSearch extends Component {
     });
 
     //action icons
-    activities.action.map((action, index) => {
+    activities.action.map( (action, index) => {
       if (action.categories && action.categories.length > 0) {
         bendService.getCategory(action.categories[0], (error, result)=>{
 
           if (error){
             console.log(error);
-            return
+            return;
           }
           this.setState( (state) => {
             state.icons.action[index] = UtilService.getCategoryIcon(result.slug);
@@ -132,14 +123,15 @@ class FilterSearch extends Component {
     });
 
     //volunteer_opportunity icons
-    activities.volunteer_opportunity.map((volunteer_opportunity, index) => {
+    activities.volunteer_opportunity.map( (volunteer_opportunity, index) => {
       if (volunteer_opportunity.categories && volunteer_opportunity.categories.length > 0) {
-        bendService.getCategory(volunteer_opportunity.categories[0], (error, result)=>{
+        bendService.getCategory(volunteer_opportunity.categories[0], (error, result) => {
 
           if (error){
             console.log(error);
-            return
+            return;
           }
+          
           this.setState( (state) => {
             state.icons.volunteer_opportunity[index] = UtilService.getCategoryIcon(result.slug);
             return state;
@@ -149,13 +141,13 @@ class FilterSearch extends Component {
     });
 
     //business icons
-    activities.business.map((business, index) => {
+    activities.business.map( (business, index) => {
       if (business.categories && business.categories.length > 0) {
-        bendService.getCategory(business.categories[0], (error, result)=>{
+        bendService.getCategory(business.categories[0], (error, result) => {
 
           if (error){
             console.log(error);
-            return
+            return;
           }
           this.setState( (state) => {
             state.icons.business[index] = UtilService.getCategoryIcon(result.slug);
@@ -167,7 +159,6 @@ class FilterSearch extends Component {
   }
 
   getActivities(searchText) {
-
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
@@ -180,7 +171,7 @@ class FilterSearch extends Component {
 
           if (error) {
             console.log("search failed", error);
-            return
+            return;
           }
 
           var activities = result.data;
@@ -196,31 +187,31 @@ class FilterSearch extends Component {
   }
   onPressedActionsCell (action) {
     Actions.ActionDetail({
-      action:action
+      action: action
     })
   }
 
   onPressedBusinessesCell (business) {
     Actions.BusinessesDetail({
-      business:business
+      business: business
     })
   }
 
   onPressedEventCell (event) {
     Actions.EventDetail({
-      event:event
+      event: event
     })
   }
 
   onPressedServiceCell (service) {
     Actions.ServiceDetail({
-      service:service
+      service: service
     })
   }
 
   onPressedVolunteerCell (volunteer) {
     Actions.VolunteerDetail({
-      volunteer:volunteer
+      volunteer: volunteer
     })
   }
 
@@ -295,7 +286,8 @@ class FilterSearch extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.action) }
             renderRow={ this.renderActionsListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -331,8 +323,8 @@ class FilterSearch extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.event) }
             renderRow={ this.renderEventsListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
-
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -350,8 +342,8 @@ class FilterSearch extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.volunteer_opportunity) }
             renderRow={ this.renderVolunteerListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
-
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -369,7 +361,8 @@ class FilterSearch extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.service) }
             renderRow={ this.renderServicesListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -405,7 +398,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
-
   sectionHeaderContainer: {
     flexDirection: 'row',
   },
@@ -417,5 +409,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 8,
   },
-
 });

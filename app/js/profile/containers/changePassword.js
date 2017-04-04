@@ -19,11 +19,12 @@ import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import TextField from 'react-native-md-textinput';
 
+import TextField from 'react-native-md-textinput';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
+
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -38,39 +39,31 @@ class ChangePassword extends Component {
     this.confirmNewPassword = '';
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'change_password_request') {
-
-    } else if (newProps.status == 'change_password_success') {
-
-    } else if (newProps.status == 'change_password_error') {
-
-    }
-  }
-
   onBack() {
     Actions.pop();
   }
 
   onUpdatePassword() {
-    if(this.currentPassword == '') {
-      alert("Please input current password");return;
+    if (this.currentPassword == '') {
+      alert("Please input current password");
+      return;
     }
-    if(this.newPassword == '') {
-      alert("Please input new password");return;
+    if (this.newPassword == '') {
+      alert("Please input new password");
+      return;
     }
-    if(this.confirmNewPassword != this.newPassword) {
-      alert("Password doesnot match");return;
+    if (this.confirmNewPassword != this.newPassword) {
+      alert("Password doesnot match");
+      return;
     }
 
-    bendService.updatePassword(this.currentPassword, this.newPassword, (err, ret)=>{
-      if(err) {
-        if(err == 1) {
+    bendService.updatePassword(this.currentPassword, this.newPassword, (error, result) => {      
+      if (error) {
+        if (error == 1) {
           alert("Unknown error")
-        } else if(err == 2) {
+        } else if(error == 2) {
           alert("Current password is incorrect")
-        }
+        }        
       } else {
         alert("Password changed")
       }
@@ -78,8 +71,6 @@ class ChangePassword extends Component {
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -124,7 +115,6 @@ class ChangePassword extends Component {
             onChangeText={ (text) => { this.confirmNewPassword = text }}
           />
           <View style={ styles.line }/>
-
           <TouchableOpacity onPress={ () => this.onUpdatePassword() }>
             <View style={ styles.updatePasswordButtonWrapper }>
               <Text style={ styles.textUpdatePassword }>Update Password</Text>
@@ -209,5 +199,4 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
-
 });

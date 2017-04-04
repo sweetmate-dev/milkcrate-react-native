@@ -20,6 +20,7 @@ import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+
 import TextField from 'react-native-md-textinput';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
@@ -45,29 +46,15 @@ class EditProfile extends Component {
     };
   }
 
-  componentDidMount() {
-
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'edit_profile_request') {
-
-    } else if (newProps.status == 'edit_profile_success') {
-
-    } else if (newProps.status == 'edit_profile_error') {
-
-    }
-  }
-
   onBack() {
     Actions.pop();
   }
 
   onSaveProfile() {
-    bendService.updateUser(this.state.user, (err, ret)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.updateUser(this.state.user, (error, result)=>{
+      if (error) {
+        console.log(error);
+        return;
       }
 
       Alert.alert("Profile Updated", "Your changes have been saved.")
@@ -75,18 +62,16 @@ class EditProfile extends Component {
   }
 
   onSelectGender(data) {
-    this.state.user.gender = data.toLowerCase()
+    this.state.user.gender = data.toLowerCase();
     this.setState({ user: this.state.user });
   }
 
   onChangeBirthday(date) {
-    this.state.user.birthday = UtilService.formatDateWithFormat2(new Date(date), 'YYYY-MM-DD')
+    this.state.user.birthday = UtilService.formatDateWithFormat2(new Date(date), 'YYYY-MM-DD');
     this.setState({ user: this.state.user });
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -95,7 +80,6 @@ class EditProfile extends Component {
           title ='Edit Profile'
         />
         <ScrollView style={ styles.scrollView }>
-
           <Text style={ styles.textSettingsSection }>User Profile</Text>
           <TextField
             label='First & Last Name'
@@ -106,7 +90,7 @@ class EditProfile extends Component {
             highlightColor='#fff'
             borderColor='#fff'
             onChangeText={ (text) => { this.state.user.name = text }}
-            value={this.state.user.name}
+            value={ this.state.user.name }
           />
           <TextField
             label='Email'
@@ -140,7 +124,7 @@ class EditProfile extends Component {
             <Text style={ styles.textCellTitle }>Date of Birth</Text>
             <DatePicker
               style={ styles.birthdayWrapper }
-              date={ UtilService.formatDateWithFormat2(this.state.user.birthday, "MMMM DD, YYYY")}
+              date={ UtilService.formatDateWithFormat2(this.state.user.birthday, "MMMM DD, YYYY") }
               mode="date"
               placeholder="Birthday"
               format="MMMM DD, YYYY"
@@ -267,12 +251,10 @@ const styles = StyleSheet.create({
     height: 45,
     width: commonStyles.screenWidth - 32,
   },
-
   line: {
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
-
   saveProfileButtonWrapper: {
     height: 56,
     backgroundColor: '#fff',
@@ -289,5 +271,4 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
-
 });

@@ -26,13 +26,6 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
-//const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
-//const background_top =   require('../../../assets/imgs/background_top_action.png');
-
-const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
-const dummyText2 = 'With your budget in mind, it is easy to plan a chartered yacht vacation. Companies often have a fleet of sailing vessels that can accommodate parties of various sizes. You may want to make it a more intimate trip with only close family. There are charters that can be rented for as few as two people. These include either a sailboat or motorboat and can come with or without a crew and captain to sail the ship for you. If you choose not to hire a crew, you will have to show that you are knowledgeable of sailing and can handle the ship competently.';
-
-//added by li, 2017/03/22
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -41,42 +34,31 @@ import Cache from '../../components/Cache'
 class ActionDetail extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      initialize:true,
-      didStatus:false,
-      activityId:null
+      initialize: true,
+      didStatus: false,
+      activityId: null
     };
   }
 
   componentDidMount(){
-
     const action = this.props.action
 
-    bendService.checkActivityDid(action._id,'action', (error, result)=>{
-
-      if(error) {
+    bendService.checkActivityDid(action._id,'action', (error, result) => {
+      
+      if (error) {
         console.log(error);
         return;
       }
 
-      if(result)
+      if (result)
           this.state.activityId = result;
 
       this.setState({
-        didStatus: result==false?false:true
+        didStatus: result == false ? false : true,
       })
     })
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
   }
 
   onBack () {
@@ -124,16 +106,18 @@ class ActionDetail extends Component {
   }
 
   render() {
-    const { status, action } = this.props;
+    const { 
+      action,
+    } = this.props;
 
-    var category = _.find(Cache.categories, (o)=>{
-      return o._id == action.categories[0]
+    var category = _.find(Cache.categories, (obj) => {
+      return obj._id == action.categories[0]
     })
 
     var backgroundImage, backgroundColor;
-    var imageObj = action.coverImage?action.coverImage:category.coverImage
-    backgroundImage = UtilService.getLargeImage(imageObj)
-    backgroundColor = UtilService.getBackColor(imageObj)
+    var imageObj = action.coverImage ? action.coverImage : category.coverImage;
+    backgroundImage = UtilService.getLargeImage(imageObj);
+    backgroundColor = UtilService.getBackColor(imageObj);
 
     return (
       <View style={ styles.container }>
@@ -143,49 +127,49 @@ class ActionDetail extends Component {
           title ={action.name}
         />
         <ScrollView>
-          {this.state.initialize&&<Image style={ [styles.imageTopBackground, {backgroundColor:backgroundColor}] } source={{uri:backgroundImage}}/>}
+          { this.state.initialize && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri:backgroundImage }}/> }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(category.slug) } />
               <View style={ styles.infoSubContainer }>
-                <Text style={ styles.textTitle }>{action.name}</Text>
+                <Text style={ styles.textTitle }>{ action.name }</Text>
               </View>
-              <Point point={ Math.max(action.points||1, 1)} />
+              <Point point={ Math.max(action.points || 1, 1) }/>
             </View>
             <Text style={ styles.textDescription }>{ action.description }</Text>
-            {UtilService.isValidURL(action.url)&&<View style={ styles.buttonContainer }>
+            { UtilService.isValidURL(action.url) && <View style={ styles.buttonContainer }>
               <TouchableOpacity onPress={ () => this.visitWebSite(action.url) }>
                 <View style={ styles.buttonWrapper }>
                   <Text style={ styles.urlTextButton }>Visit the Website</Text>
                 </View>
               </TouchableOpacity>
-            </View>}
+            </View> }
           </View>
-          {action.tags && action.tags.length>0 && <View style={ styles.tagsContainer }>
+          { action.tags && action.tags.length>0 && <View style={ styles.tagsContainer }>
             <Text style={ styles.textHeading }>Tags</Text>
             <View style={ styles.tagsButtonContainer }>
               {
-                action.tags.map((o, index)=>{
+                action.tags.map( (obj, index) => {
                   return (
-                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
-                        <Text style={ styles.textTagsButton }>{o}</Text>
-                      </View>
+                    <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                      <Text style={ styles.textTagsButton }>{ obj }</Text>
+                    </View>
                   )
                 })
               }
             </View>
           </View>}
         </ScrollView>
-        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I Did This</Text>
           </View>
         </TouchableOpacity>}
-        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
-            <View style={ styles.buttonGrey }>
-              <Text style={ styles.textOrange }>I Didn't Do It</Text>
-            </View>
-          </TouchableOpacity>}
+        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+          <View style={ styles.buttonGrey }>
+            <Text style={ styles.textOrange }>I Didn't Do It</Text>
+          </View>
+        </TouchableOpacity> }
       </View>
     );
   }

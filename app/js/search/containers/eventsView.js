@@ -17,8 +17,8 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
+import { Actions } from 'react-native-router-flux';
 import CalendarStrip from '../components/calendar/calendarStrip';
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
@@ -53,7 +53,7 @@ class EventsView extends Component {
       events: [],
 
       categoryIcons:[],
-      eventsQuery:{
+      eventsQuery: {
         more: true,
         loading: false,
       },
@@ -66,34 +66,20 @@ class EventsView extends Component {
     this.more = true;
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-  }
-
   componentDidMount() {
-
     this.loadAllData();
   }
 
   loadAllData() {
-
     this.setState({
-
       selectedDate: Date.now(),
       arrayValidDate: [],
      
       currentLocation: null,
       events: [],
 
-      categoryIcons:[],
-      eventsQuery:{
+      categoryIcons: [],
+      eventsQuery: {
         more: true,
         loading: false,
       },
@@ -108,20 +94,19 @@ class EventsView extends Component {
     this.loadEvents();
   }
 
-  onBack () {
+  onBack() {
     Actions.pop()
   }
 
-  onFilter () {
+  onFilter() {
     alert("Tapped filter button!");
   }
 
-  onCellPressed (event) {
+  onCellPressed(event) {
     Actions.EventDetail({event:event});
   }
 
-  onSelectDate (date) {
-
+  onSelectDate(date) {
     this.setState({ selectedDate: date });
     this.state = {
       dataSource: dataSource.cloneWithRowsAndSections(EventsEntries),
@@ -134,8 +119,7 @@ class EventsView extends Component {
     return diffDays < 0 ? false : true;
   }
 
-  loadEvents () {
-
+  loadEvents() {
     if (this.more == false)
       return;
 
@@ -149,13 +133,13 @@ class EventsView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'event',
+          type: 'event',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
           lat: position.coords.latitude,
           long: position.coords.longitude,
-          from:UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
+          from: UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
         }, (error, result) => {
           
           this.setState( (state) => {  
@@ -179,25 +163,25 @@ class EventsView extends Component {
           }
 
           //group by with date
-          var events = result.data.event
-          _.map(events, (e)=>{
-            e.date = UtilService.formatDateWithFormat(e.startsAt, "YYYY-MM-DD");
+          var events = result.data.event;
+          _.map(events, (event) => {
+            event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
           })
-          events = _.sortBy(events, (e)=>{
-            return e.date
+          events = _.sortBy(events, (event) => {
+            return event.date
           })
 
-          _.each(events, (o)=>{
-            var exist = _.find(this.events, (e)=>{
-              return e.date == o.date
+          _.each(events, (event) => {
+            var exist = _.find(this.events, (e) => {
+              return e.date == event.date;
             })
 
-            if(exist) {
-              exist.events.push(o)
+            if (exist) {
+              exist.events.push(event);
             } else {
               this.events.push({
-                date:o.date,
-                events:[o]
+                date: event.date,
+                events: [event],
               })
             }
           })
@@ -236,7 +220,7 @@ class EventsView extends Component {
                 key={ index }
                 title={ entry.name }
                 icon={ this.state.categoryIcons[entry._id] }
-                points={ Number(entry.points||1) }
+                points={ Number(entry.points || 1) }
                 onClick={ () => this.onCellPressed(entry) }
               />
             );
@@ -246,8 +230,7 @@ class EventsView extends Component {
     );
   }
 
-  renderSectionHeader (sectionData, sectionId) {
-
+  renderSectionHeader(sectionData, sectionId) {
     return (
       <View style={ styles.sectionHeaderContainer }>
         <Text style={ styles.textTitle }>{ UtilService.formatDateWithFormat2(sectionData.date, "MMMM DD, YYYY") }</Text>
@@ -256,14 +239,11 @@ class EventsView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -298,7 +278,7 @@ class EventsView extends Component {
             eventDays={ eventDays }
           />*/}
           <ListView
-              enableEmptySections={ true }
+            enableEmptySections={ true }
             dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
             renderRow={ this.renderListRow.bind(this) }
             renderSectionHeader= { this.renderSectionHeader.bind(this) }

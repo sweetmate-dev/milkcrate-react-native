@@ -26,10 +26,8 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCellForCommunity from '../components/recentActivityListCellForCommunity';
 import SimpleLeaderboardListCell from '../components/simpleLeaderboardListCell';
-
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
-//added by li, 2017/03/31
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -49,14 +47,14 @@ class CommunityPoints extends Component {
       isRefreshing: false,
 
       currentUserIndex: 0,
-      userList:[],
-      recentActivities:[],
-      activityQuery:{
+      userList: [],
+      recentActivities: [],
+      activityQuery: {
         more: true,
         loading: false,
       },
-      currentUser:{},
-      community:{}
+      currentUser: {},
+      community: {}
     };
 
     this.activityQuery = { 
@@ -69,41 +67,30 @@ class CommunityPoints extends Component {
   }
 
   componentDidMount() {
-
     this.loadAllData();
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'profile_request') {
-
-    } else if (newProps.status == 'profile_success') {
-
-    } else if (newProps.status == 'profile_error') {
-
-    }
   }
 
   loadAllData() {
 
-    bendService.getUser((err, ret)=>{
+    bendService.getUser( (error, result) => {
       this.setState({
-        currentUser:ret
+        currentUser: result,
       })
     })
 
-    bendService.getCommunity((err, ret)=>{
-      if(!err)
+    bendService.getCommunity( (error, result) => {
+      if (!error) {
         this.setState({
-          community:ret
+          community: result,
         })
+      }
     })
 
     this.setState({
       currentUserIndex: 0,
-      userList:[],
-      recentActivities:[],
-      activityQuery:{
+      userList: [],
+      recentActivities: [],
+      activityQuery: {
         more: true,
         loading: false,
       }
@@ -117,20 +104,21 @@ class CommunityPoints extends Component {
 
     this.totalUsers = 0;
 
-    bendService.getLeaderBoardSimpleList((err, userList, allUsers)=>{
-      if(err) {
-        console.log(err);return
+    bendService.getLeaderBoardSimpleList( (error, userList, allUsers) => {
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      var currentUserIndex = _.find(userList, (o)=>{
-        return o._id == bendService.getActiveUser()._id
+      var currentUserIndex = _.find(userList, (obj)=>{
+        return obj._id == bendService.getActiveUser()._id;
       })
 
       this.totalUsers = allUsers.length
 
       this.setState({
-        currentUserIndex:currentUserIndex,
-        userList:userList
+        currentUserIndex: currentUserIndex,
+        userList: userList,
       })
     })
 
@@ -142,11 +130,10 @@ class CommunityPoints extends Component {
   }
 
   onLeaderboardCellPressed () {
-    Actions.Leaderboard({total:this.totalUsers});
+    Actions.Leaderboard({ total: this.totalUsers });
   }
 
   loadRecentActivities() {
-
     if ( this.state.activityQuery.more === false )
       return;
 
@@ -171,17 +158,17 @@ class CommunityPoints extends Component {
 
       this.state.activityQuery.more = (result.length == this.activityQuery.limit + 1)
 
-      this.setState((state) => {
+      this.setState( (state) => {
         state.activityQuery.more = this.activityQuery.more;
         return state;
       });
 
-      if(this.state.activityQuery.more) {
+      if (this.state.activityQuery.more) {
         //remove tail item
         result.pop()
       }
 
-      if(result.length > 0) {
+      if (result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
@@ -189,31 +176,27 @@ class CommunityPoints extends Component {
         })
       }
 
-      console.log("this.state.recentActivities", this.state.recentActivities.length)
-
       this.setState({
-        activityQuery:this.state.activityQuery
+        activityQuery: this.state.activityQuery
       })
     })
   }
 
   renderRecentActivityRow(rowData, sectionID, rowID) {
-
     return (
-    <RecentActivityListCellForCommunity
+      <RecentActivityListCellForCommunity
         name={ rowData.user.name || '' }
         description={ rowData.summary || '' }
         avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
-        avatarBackColor={UtilService.getBackColor(rowData.user.avatar)}
-        defaultAvatar={UtilService.getDefaultAvatar(rowData.user.defaultAvatar)}
+        avatarBackColor={ UtilService.getBackColor(rowData.user.avatar) }
+        defaultAvatar={ UtilService.getDefaultAvatar(rowData.user.defaultAvatar) }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        hearts={ Number(rowData.likeCount||0) }
-        likeByMe={ rowData.likedByMe||false }
-        points={ Number(rowData.points||1) }
+        hearts={ Number(rowData.likeCount || 0) }
+        likeByMe={ rowData.likedByMe || false }
+        points={ Number(rowData.points || 1) }
         onClick={ () => this.onRecentActivityCellPressed(rowData) }
-        onLike={ () => this.onLike(rowData, !(rowData.likedByMe||false))
-        }
-    />
+        onLike={ () => this.onLike(rowData, !(rowData.likedByMe || false)) }
+      />
     );
   }
 
@@ -232,41 +215,41 @@ class CommunityPoints extends Component {
   }
 
   onLike(activity, like) {
-    bendService.likeActivity(activity, like, (err, ret)=>{
-      if(err) {
-        console.log(err);
-        return
+    bendService.likeActivity(activity, like, (error, result) => { 
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      var exist = _.find(this.state.recentActivities, (o)=>{
-        return o._id == activity._id
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == activity._id;
       })
-      if(ret && exist) {
+
+      if (result && exist) {
         exist.likedByMe = like
-        if(like)
-          exist.likeCount = Number(exist.likeCount||0) + 1
+        if (like)
+          exist.likeCount = Number(exist.likeCount || 0) + 1;
         else
-          exist.likeCount = Math.max(Number(exist.likeCount||0) - 1, 0)
+          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
 
         this.setState({
-          recentActivities:this.state.recentActivities
+          recentActivities: this.state.recentActivities,
         })
       }
     })
   }
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
-
     var previousRank = rowData.previousRank, currentRank = rowData.rank
     return (
       <SimpleLeaderboardListCell
-        status={ previousRank==-1?0:(previousRank<currentRank?2:(previousRank > currentRank?1:0)) }
+        status={ previousRank == -1 ? 0 : (previousRank<currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
         index={ rowData.rank }
         name={ rowData.name }
         points={ rowData.points }
         avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
-        avatarBackColor={UtilService.getBackColor(rowData.avatar)}
-        defaultAvatar={UtilService.getDefaultAvatar(rowData.defaultAvatar)}
+        avatarBackColor={ UtilService.getBackColor(rowData.avatar) }
+        defaultAvatar={ UtilService.getDefaultAvatar(rowData.defaultAvatar) }
         currentUserIndex={ bendService.getActiveUser().rank }
       />
     );
@@ -282,7 +265,6 @@ class CommunityPoints extends Component {
   }
 
   render() {
-    const { status } = this.props;
     const currentUser = this.state.currentUser
     const community = this.state.community
 
@@ -304,30 +286,30 @@ class CommunityPoints extends Component {
         >
           <View style={ styles.topContainer }>
             <View style={ styles.logoContainer }>
-              {community.logo && <Image source={ {uri:community.logo._downloadURL} } style={ styles.imageComcast } resizeMode="contain"/>}
-              {!community.logo && <Text style={ styles.textName }>{community.name}</Text>}
+              { community.logo && <Image source={{ uri: community.logo._downloadURL }} style={ styles.imageComcast } resizeMode="contain"/> }
+              { !community.logo && <Text style={ styles.textName }>{ community.name }</Text> }
             </View>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{community.points||0}</Text>
+                <Text style={ styles.textValue }>{ community.points || 0 }</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{community.hours||0}</Text>
+                <Text style={ styles.textValue }>{ community.hours || 0 }</Text>
                 <Text style={ styles.textSmall }>Hours Volunteered</Text>
               </View>
             </View>
           </View>
 
           <View style={ styles.leaderboardContainer }>
-            <Text style={ styles.textSectionTitle }>{community.name} Leaderboard • You are in {UtilService.getPositionString(currentUser.rank)} place</Text>
+            <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.rank) } place</Text>
             <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
               <View style={ styles.leaderboardListViewWrapper }>
                 <ListView
-                    enableEmptySections={ true }
+                  enableEmptySections={ true }
                   dataSource={ this.dataSourceLeaderboard.cloneWithRows(this.state.userList) }
                   renderRow={ this.renderLeaderboardRow.bind(this) }
-                  contentContainerStyle={ styles.leaderboardListView}
+                  contentContainerStyle={ styles.leaderboardListView }
                 />
               </View>
             </TouchableHighlight>
@@ -336,14 +318,14 @@ class CommunityPoints extends Component {
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>
             <ListView
-                enableEmptySections={ true }
+              enableEmptySections={ true }
               dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
               renderRow={ this.renderRecentActivityRow.bind(this) }/>
           </View>
           <LoadMoreSpinner
-              show={ this.state.activityQuery.more }
-              loading={ this.state.activityQuery.loading }
-              onClick={ ()=> this.loadRecentActivities() }
+            show={ this.state.activityQuery.more }
+            loading={ this.state.activityQuery.loading }
+            onClick={ ()=> this.loadRecentActivities() }
           />
         </ScrollView>
       </View>

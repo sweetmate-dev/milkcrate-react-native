@@ -19,19 +19,16 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
+import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
+import EventsListCell from '../components/eventsListCell';
+import * as commonColors from '../../styles/commonColors';
+import  * as commonStyles from '../../styles/commonStyles';
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
-
-import EventsListCell from '../components/eventsListCell';
-
-import * as commonColors from '../../styles/commonColors';
-import  * as commonStyles from '../../styles/commonStyles';
-
-import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 class VolunteerView extends Component {
   constructor(props) {
@@ -58,24 +55,11 @@ class VolunteerView extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_action_request') {
-
-    } else if (newProps.status == 'search_action_success') {
-
-    } else if (newProps.status == 'search_action_error') {
-
-    }
-  }
-
   componentDidMount() {
-
     this.loadAllData();    
   }
 
   loadAllData() {
-
     this.offset = 0;
     this.limit = 20;
     this.searchText = '';
@@ -100,12 +84,11 @@ class VolunteerView extends Component {
 
   onPressedCell (volunteer) {
     Actions.VolunteerDetail({
-      volunteer:volunteer
+      volunteer: volunteer
     })
   }
 
   loadVolunteer () {
-
     if (this.more == false)
       return;
 
@@ -119,7 +102,7 @@ class VolunteerView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'volunteer_opportunity',
+          type: 'volunteer_opportunity',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText
@@ -174,19 +157,13 @@ class VolunteerView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.categoryIcons[rowID] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedCell(rowData) }
       />
     );
   }
 
   onSearchChange(text) {
-
-    // if (text === '') {
-    //   this.onSearchFocus();
-    //   return;
-    // }
-
     this.offset = 0;
     this.searchText = text;      
     this.more = true;
@@ -201,7 +178,6 @@ class VolunteerView extends Component {
   }
 
   onSearchCancel() {
-
     this.offset = 0;
     this.searchText = '';
     this.more = true;
@@ -217,14 +193,11 @@ class VolunteerView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -247,7 +220,8 @@ class VolunteerView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.volunteeres) }
             renderRow={ this.renderListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
           <LoadMoreSpinner
             show={ this.state.volunteeresQuery.more }
             loading={ this.state.volunteeresQuery.loading }

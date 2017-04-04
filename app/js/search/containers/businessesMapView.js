@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
+
 import MapView from 'react-native-maps';
 import BusinessesListCell from '../components/businessesListCell';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -71,26 +72,13 @@ class BusinessesMapView extends Component {
   }  
 
   componentDidMount() {
-
     this.setState( ( state) => {
       state.markers[this.state.tappedPin].pin = map_selected_pin;
       return state;
     });
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-  }
-
   onPressPin (index) {
-
     this.setState( ( state) => {
       state.markers[this.state.tappedPin].pin = map_pin;
       state.markers[index].pin = map_selected_pin;
@@ -101,7 +89,12 @@ class BusinessesMapView extends Component {
   }
 
   render() {
-    const { status, businesses, categoryIcon, currentLocation } = this.props;
+    const { 
+      businesses, 
+      categoryIcon, 
+      currentLocation, 
+    } = this.props;
+
     let region = this.state.region;
 
     if (currentLocation != null) {
@@ -110,7 +103,6 @@ class BusinessesMapView extends Component {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
       });
-      
     }
 
     return (
@@ -131,14 +123,11 @@ class BusinessesMapView extends Component {
             ))            
           }
           {
-            currentLocation != null ? 
-              <MapView.Marker
-                image={ currentLocationMarker }
-                coordinate={ currentLocation.coords }
-                flat={ true }                
-              />
-            :
-              null
+            currentLocation && <MapView.Marker
+              image={ currentLocationMarker }
+              coordinate={ currentLocation.coords }
+              flat={ true }                
+            />
           }
         </MapView>
         <View style={ styles.calloutContainer } >
@@ -150,7 +139,7 @@ class BusinessesMapView extends Component {
             distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
-            rating={ Number(businesses[this.state.tappedPin].rating||0) }
+            rating={ Number(businesses[this.state.tappedPin].rating || 0) }
             mode={ 1 }
           />
         </View>

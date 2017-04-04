@@ -57,7 +57,6 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-
     if (Platform.OS === 'ios') {
       navigator.geolocation.getCurrentPosition( (position) => {
           console.log(JSON.stringify(position));
@@ -90,7 +89,9 @@ export default class Main extends Component {
   }
 
   render() {
-    const { status, subOne } = this.props;
+    const { 
+      subOne,
+    } = this.props;
 
     return (
       <View style={ styles.container }>
@@ -107,7 +108,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.onSelectTab('home') }>
             <Home
-                selectedTab={this.state.selectedTab}
+              selectedTab={this.state.selectedTab}
               subOne={ subOne } 
               onSearch={ () => this.onSelectSearch() }
             />
@@ -159,7 +160,6 @@ export default class Main extends Component {
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
-
         </TabNavigator>
       </View>
     );

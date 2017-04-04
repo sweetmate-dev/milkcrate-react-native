@@ -30,10 +30,8 @@ export default class SearchBar extends Component {
     inputStyle: PropTypes.object,
     iconCloseName: PropTypes.string,
     iconSearchName: PropTypes.string,
-    iconBackName: PropTypes.string,
     placeholderColor: PropTypes.string,
     iconColor: PropTypes.string,
-    textStyle: PropTypes.object
   }
 
   static defaultProps = {
@@ -43,7 +41,6 @@ export default class SearchBar extends Component {
     inputStyle: {},
     iconCloseName: "md-close-circle",
     iconSearchName: "md-search",
-    iconBackName: "md-arrow-back",
     placeholder: "Search",
     returnKeyType: "search",
     padding: 0,
@@ -53,7 +50,6 @@ export default class SearchBar extends Component {
     paddingBottom: 0,
     placeholderColor: "#bdbdbd",
     iconColor: "#737373",
-    textStyle: {}
   }
 
   constructor(props) {
@@ -63,13 +59,13 @@ export default class SearchBar extends Component {
       isOnFocus: false,
       textSearch: '',
     };
+    
     this._onFocus = this._onFocus.bind(this);
     this._onBlur = this._onBlur.bind(this);
     this._onClose = this._onClose.bind(this);
   }
 
   componentDidMount() {
-
     if (this.props.searchAutoFocus == true){
       this._textInput.focus();
       this.launchKeyboard();
@@ -77,11 +73,9 @@ export default class SearchBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (nextProps.searchAutoFocus == true){
       this._textInput.focus();
       this.launchKeyboard();
-
     }
 
     if (nextProps.isCancel == true) {
@@ -90,13 +84,11 @@ export default class SearchBar extends Component {
   }
 
   launchKeyboard() {
-
     timer.setTimeout( this, 'LaunchKeyboard', () => {
       timer.clearInterval(this, 'LaunchKeyboard');
       this._textInput.focus();
     }, 300);
   }
-
 
   _onClose() {
     this._textInput.setNativeProps({ text: '' });
@@ -157,11 +149,9 @@ export default class SearchBar extends Component {
       padding,
       inputStyle,
       iconColor,
-      iconBackName,
       iconSearchName,
       iconCloseName,
       placeholderColor,
-      textStyle,
       paddingLeft,
       paddingRight,
       paddingTop,

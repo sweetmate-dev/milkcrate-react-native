@@ -71,6 +71,7 @@ export default class WeeklyRecapListCell extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',

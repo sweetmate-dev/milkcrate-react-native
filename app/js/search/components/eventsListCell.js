@@ -27,13 +27,12 @@ export default class EventsListCell extends Component {
   }
 
   constructor(props) {
-
     super(props);
+
     this.onClick = this.onClick.bind(this);
   }
 
   onClick() {
-
     if (this.props.onClick) {
       this.props.onClick();
     }

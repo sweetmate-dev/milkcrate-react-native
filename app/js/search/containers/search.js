@@ -12,7 +12,6 @@ import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 
-// import timer from 'react-native-timer';
 import { Actions } from 'react-native-router-flux';
 import NavSearchBar from '../../components/navSearchBar';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
@@ -31,38 +30,22 @@ class Search extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-
     if (newProps.searchAutoFocus == true){
-      // this.launchKeyboard();
        this.setState({ searchAutoFocus: true });
-
     }
   }
 
   componentDidMount() {
-
     if (this.props.searchAutoFocus == true){
-      // this.launchKeyboard();
       this.setState({ searchAutoFocus: true });
-
     }
   }
 
   onSearchChange(text) {
-
     this.setState({ searchText: text });
   }
 
   onSearchFocus() {
-
     this.setState({ 
       mainSearchPage: false,
       searchAutoFocus: false,
@@ -71,7 +54,6 @@ class Search extends Component {
   }
 
   onSearchCancel() {
-
     this.setState({ 
       searchAutoFocus: false,
       mainSearchPage: true 
@@ -88,9 +70,6 @@ class Search extends Component {
   // }
 
   render() {
-    const { status } = this.props;
-    console.log( "searchAutoFocus" , this.state.searchAutoFocus );
-
     return (
       <View style={ styles.container }>
         <NavSearchBar

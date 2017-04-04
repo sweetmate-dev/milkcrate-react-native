@@ -18,6 +18,7 @@ Linking
 import { bindActionCreators } from 'redux';
 import * as eventDetailActions from '../actions';
 import { connect } from 'react-redux';
+
 import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
@@ -26,7 +27,6 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
 
-//added by li, 2017/03/22
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -35,7 +35,6 @@ import Cache from '../../components/Cache'
 const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const web = require('../../../assets/imgs/web.png');
-const dummyText1 = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit into your budget can be yours through yacht charter companies. These companies specialize in creating custom sailing vacations that redefine travel.';
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE = 37.78825;
@@ -46,75 +45,59 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 class EventDetail extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      didStatus:false,
-      activityId:null,
+      didStatus: false,
+      activityId: null,
 
-      user:{},
-
-      currentLocation:null,
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      coordinate: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-      },
-
+      user: {},
+      currentLocation: null,
     };
-    this.category = _.find(Cache.categories, (o)=>{
-      return o._id == this.props.event.categories[0]
+
+    this.category = _.find(Cache.categories, (obj)=>{
+      return obj._id == this.props.event.categories[0]
     })
   }
 
   componentDidMount() {
-    const {event} = this.props;
-    bendService.checkActivityDid(event._id, 'event', (err, result)=>{
-      if(err) {
-        console.log(err);return;
+    const {
+      event
+    } = this.props;
+
+    bendService.checkActivityDid(event._id, 'event', (error, result)=>{
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      if(result)
+      if (result)
         this.state.activityId = result;
 
       this.setState({
-        didStatus: result==false?false:true
+        didStatus: result == false ? false : true,
       })
     })
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-          this.setState({ currentLocation: position })
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+       this.setState({ currentLocation: position })
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser((err, ret)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.getUser( (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
       }
 
       this.setState({
-        user:ret
+        user: result,
       })
     })
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
   }
 
   onBack () {
@@ -132,23 +115,24 @@ class EventDetail extends Component {
   }
 
   onCheckIn() {
-    bendService.captureActivity(this.props.event._id, 'event', (err,result)=>{
-      if(err){
-        console.log(err);return;
+    bendService.captureActivity(this.props.event._id, 'event', (error, result) => {
+      if (error){
+        console.log(error);
+        return;
       }
 
       this.state.activityId = result.activity._id;
 
       this.setState({
-        didStatus:true
+        didStatus: true,
       })
     })
 
-    this.onGoWeb()
+    this.onGoWeb();
   }
 
   onUncheckIn() {
-    bendService.removeActivity(this.state.activityId, (error, result)=>{
+    bendService.removeActivity(this.state.activityId, (error, result) => {
       if (error){
         console.log(error);
         return;
@@ -157,28 +141,33 @@ class EventDetail extends Component {
       this.state.activityId = null;
 
       this.setState({
-        didStatus: false
+        didStatus: false,
       })
     })
   }
 
   renderCoverImage() {
-    var {event} = this.props;
-    var coverImage, backgroundColor;
-    var imageObj = event.coverImage?event.coverImage:this.category.coverImage
-    coverImage = UtilService.getMiddleImage(imageObj)
-    backgroundColor = UtilService.getBackColor(imageObj)
+    var {
+      event,
+    } = this.props;
 
-    if(coverImage == null) return null;
+    var coverImage, backgroundColor;
+    var imageObj = event.coverImage ? event.coverImage : this.category.coverImage;
+    coverImage = UtilService.getMiddleImage(imageObj);
+    backgroundColor = UtilService.getBackColor(imageObj);
+
+    if (coverImage == null) 
+      return null;
 
     return (
-        <Image style={ [styles.map, {backgroundColor:backgroundColor}] } source={{ uri:coverImage }}>
-        </Image>
+      <Image style={ [styles.map, { backgroundColor:backgroundColor }] } source={{ uri:coverImage }}/>
     )
   }
 
   render() {
-    const { status, event } = this.props;
+    const { 
+      event,
+    } = this.props;
 
     return (
       <View style={ styles.container }>
@@ -188,105 +177,105 @@ class EventDetail extends Component {
           title = {event.name}
         />
         <ScrollView>
-          {event._geoloc&&<MapView
+          {
+            event._geoloc && <MapView
               style={ styles.map }
-              initialRegion={ {
-        latitude: Number(event._geoloc[1]),
-        longitude: Number(event._geoloc[0]),
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      } }
-              scrollEnabled={ false }
-              zoomEnabled={ false }
-          >
-            {
-              <MapView.Marker
-                  image={ map_pin }
-                  style={styles.map_pin}
-                  coordinate={{
+              initialRegion={{
                 latitude: Number(event._geoloc[1]),
                 longitude: Number(event._geoloc[0]),
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,
+              }}
+              scrollEnabled={ false }
+              zoomEnabled={ false }
+            >
+            {
+              <MapView.Marker
+                image={ map_pin }
+                style={ styles.map_pin }
+                coordinate={{
+                  latitude: Number(event._geoloc[1]),
+                  longitude: Number(event._geoloc[0]),
                 }}
               />
             }
-          </MapView>}
-          {!event._geoloc&&this.renderCoverImage()}
+            </MapView>
+          }
+          { !event._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
               <View style={ styles.infoSubContainer }>
-                <Text style={ styles.textTitle }>{event.name}</Text>
-                {this.state.currentLocation&&<Text style={ styles.textValue }>
-                  {event._geoloc?UtilService.getDistanceFromLatLonInMile(event._geoloc[1],event._geoloc[0],
-                      this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles':''}
-                  </Text>}
+                <Text style={ styles.textTitle }>{ event.name }</Text>
+                { this.state.currentLocation && <Text style={ styles.textValue }>
+                  { event._geoloc ? UtilService.getDistanceFromLatLonInMile(event._geoloc[1],event._geoloc[0],
+                    this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles' : '' }
+                </Text>}
               </View>
-              <Point point={ Math.max(event.points||1, 1)} />
+              <Point point={ Math.max(event.points || 1, 1)} />
             </View>
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>{event.address1} {event.address2}</Text>
-                <Text style={ styles.textAddress }>{UtilService.getCityStateString(event.city, event.state, event.postalCode)}</Text>
+                <Text style={ styles.textAddress }>{ event.address1 } { event.address2 }</Text>
+                <Text style={ styles.textAddress }>{ UtilService.getCityStateString(event.city, event.state, event.postalCode) }</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
-                {this.state.didStatus&&UtilService.isValidURL(event.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                { this.state.didStatus && UtilService.isValidURL(event.url) && <TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>
                   </View>
-                </TouchableOpacity>}
+                </TouchableOpacity> }
               </View>
             </View>
 
-            {event.times&& <View>
+            { event.times && <View>
               {
-                event.times.map((time, idx)=> {
+                event.times.map( (time, idx)=> {
                   return (
-                      <View key={'time-' + idx} style={ styles.dateContinaer }>
-                        <View style={ styles.dayWrapper }>
-                          <Text style={ styles.textDay }>{UtilService.getDay(time.date)}</Text>
-                        </View>
-                        <View style={ styles.dateSubContentContainer }>
-                          <Text style={ styles.textDate }>{UtilService.formatDateWithFormat2(new Date(time.date), 'MMMM DD, YYYY')}</Text>
-                          <Text style={ styles.textValue }>{UtilService.getEventTime(time.from, time.until)}</Text>
-                        </View>
+                    <View key={ 'time-' + idx } style={ styles.dateContinaer }>
+                      <View style={ styles.dayWrapper }>
+                        <Text style={ styles.textDay }>{ UtilService.getDay(time.date) }</Text>
                       </View>
+                      <View style={ styles.dateSubContentContainer }>
+                        <Text style={ styles.textDate }>{ UtilService.formatDateWithFormat2(new Date(time.date), 'MMMM DD, YYYY') }</Text>
+                        <Text style={ styles.textValue }>{ UtilService.getEventTime(time.from, time.until) }</Text>
+                      </View>
+                    </View>
                   )
                 })
               }
-            </View>}
-
-
+            </View> }
             <Text style={ styles.textDescription }>{ event.description }</Text>
           </View>
-          {event.tags && event.tags.length>0 && <View style={ styles.tagsContainer }>
+          { event.tags && event.tags.length>0 && <View style={ styles.tagsContainer }>
             <Text style={ styles.textHeading }>Tags</Text>
             <View style={ styles.tagsButtonContainer }>
               {
-                event.tags.map((o, index)=>{
+                event.tags.map((obj, index)=>{
                   return (
-                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
-                        <Text style={ styles.textTagsButton }>{o}</Text>
-                      </View>
+                    <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                      <Text style={ styles.textTagsButton }>{obj}</Text>
+                    </View>
                   )
                 })
               }
             </View>
-          </View>}
+          </View> }
         </ScrollView>
-        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>Register</Text>
           </View>
-        </TouchableOpacity>}
-        {this.state.didStatus&&<TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        </TouchableOpacity> }
+        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
           <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>I Can't Go</Text>
           </View>
-        </TouchableOpacity>}
+        </TouchableOpacity> }
       </View>
     );
   }

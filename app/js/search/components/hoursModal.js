@@ -33,10 +33,6 @@ export default  class HoursModal extends Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   onSave() {
     Actions.pop();
   }
@@ -46,21 +42,19 @@ export default  class HoursModal extends Component {
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
-        <View style={styles.contentWrapper}>
-        <Text style={ styles.textSettingsSection }>Number of Hours Volunteered</Text>
-        <TextField
+        <View style={ styles.contentWrapper }>
+          <Text style={ styles.textSettingsSection }>Number of Hours Volunteered</Text>
+          <TextField
             autoCorrect={ false }
             inputStyle={ inputStyle }
             wrapperStyle={ wrapperStyle }
             onChangeText={ (text) => { this.state.hoursNumber = text }}
-            height={72}
+            height={ 72 }
             borderColor="transparent"
-            value={this.state.hoursNumber}
-        />
+            value={ this.state.hoursNumber }
+          />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={ () => this.onSave() }>

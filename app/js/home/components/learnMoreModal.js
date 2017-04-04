@@ -35,14 +35,16 @@ export default class LearnMoreModal extends Component {
   }
 
   render() {
-    const { status, question } = this.props;
+    const { 
+      question,
+    } = this.props;
 
     return (
       <View style={ styles.container }>
         <View style={ styles.topContainer }/>
         <View style={ styles.centerContainer }>
           <View style={ styles.titleContainer}>
-            <Text style={ styles.textTitle }>{question.topic}</Text>
+            <Text style={ styles.textTitle }>{ question.topic }</Text>
           </View>
           <View style={ styles.contentContainer }>
             <ScrollView>
@@ -57,15 +59,13 @@ export default class LearnMoreModal extends Component {
               <Image style={ styles.imageClose } source={ close }/>
             </TouchableOpacity>
           </View>
-        </View>  
-        
+        </View>        
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  
+const styles = StyleSheet.create({  
   container: {
     flex: 1,
     backgroundColor: '#000000c0',

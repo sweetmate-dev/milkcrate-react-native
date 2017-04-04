@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+
 import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
@@ -24,90 +25,81 @@ import DatePicker from 'react-native-datepicker'
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
-//added by li
+import moment from 'moment';
 import bendService from '../../bend/bendService'
 
 const background = require('../../../assets/imgs/background_profile.png');
 const camera = require('../../../assets/imgs/camera.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
-
-import moment from 'moment';
 const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 class SetupProfile extends Component {
   constructor(props) {
     super(props);
-    var user = bendService.getActiveUser()
+
+    var user = bendService.getActiveUser();
     
     this.state = {
       profilePhoto: null,
-      profilePhotoFile:null,
-      name: user.name?user.name:'',
-      birthday: user.birthdate?moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY'):'',
-      gender: user.gender?user.gender:'',
+      profilePhotoFile: null,
+      name: user.name ? user.name : '',
+      birthday: user.birthdate ? moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY') : '',
+      gender: user.gender ? user.gender : '',
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'profile_request') {
-
-    } else if (newProps.status == 'profile_success') {
-
-    } else if (newProps.status == 'profile_error') {
-
-    } 
-  }
-
   onSelectGender(gender) {
-    
     this.setState({
-      gender: gender
+      gender: gender,
     });
   }
 
   onCompleteProfile() {
-
     //check name
-    if(this.state.name == '') {
+    if (this.state.name == '') {
       alert("Please input your first and last name");
       return;
     }
 
-    if(this.state.profilePhotoFile) {
+    if (this.state.profilePhotoFile) {
       //upload image first
-      bendService.uploadFile(this.state.profilePhotoFile, (err, file)=>{
-        if(err) {
-          alert("Failed to upload file. Please try again later")
+      bendService.uploadFile(this.state.profilePhotoFile, (error, file)=>{
+        if (error) {
+          alert("Failed to upload file. Please try again later");
           return;
         }
 
         this.updateUserInfo(file);
-      }, {_workflow:'avatar'})
+      }, 
+      {
+        _workflow: 'avatar'
+      });
     }
     this.updateUserInfo();
   }
 
   updateUserInfo(f) {
-    var userData = bendService.getActiveUser()
-    if(f) {
+    var userData = bendService.getActiveUser();
+
+    if (f) {
       userData.avatar = bendService.makeBendFile(f._id)
     }
 
-    userData.name = this.state.name
-    if(this.state.birthday) {
-      userData.birthdate = moment(new Date(this.state.birthday)).format('YYYY-MM-DD')
+    userData.name = this.state.name;
+
+    if (this.state.birthday) {
+      userData.birthdate = moment(new Date(this.state.birthday)).format('YYYY-MM-DD');
     }
 
-    if(this.state.gender) {
+    if (this.state.gender) {
       userData.gender = this.state.gender;
     }
 
-    console.log(userData)
+    console.log(userData);
 
-    bendService.updateUser(userData, (err, ret)=>{
-      console.log(err, ret)
-      if(err) {
+    bendService.updateUser(userData, (error, result)=>{
+      console.log(error, result)
+      if (error) {
         alert("Failed to update user profile")
         return;
       }
@@ -117,7 +109,6 @@ class SetupProfile extends Component {
   }
 
   onPickProfilePhoto() {
-
     var options = {
       quality: 1.0,
       storageOptions: {
@@ -139,7 +130,7 @@ class SetupProfile extends Component {
 
         this.setState({
           profilePhoto: source,
-          profilePhotoFile:response
+          profilePhotoFile: response,
         });
       }
     });
@@ -158,7 +149,6 @@ class SetupProfile extends Component {
   }
 
   render() {
-    const { status } = this.props;
     return (
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">
@@ -215,7 +205,7 @@ class SetupProfile extends Component {
                   options={ arrayGender }
                   defaultValue='Gender'
                   style={ styles.dropdown }
-                  textStyle ={ this.state.gender==='' ? styles.dropDownPlaceholderText : styles.dropDownText }
+                  textStyle ={ this.state.gender ==='' ? styles.dropDownPlaceholderText : styles.dropDownText }
                   dropdownStyle={ styles.dropdownStyle }
                   onSelect={ (rowId, rowData) => this.onSelectGender(rowData) }
                 />
@@ -392,5 +382,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
   },
-
 });

@@ -80,15 +80,15 @@ export default class RecentActivityListCell extends Component {
       points,
       likeByMe,
       onClick,
-        avatarBackColor
+      avatarBackColor,
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            {avatar != ''&&<Image style={ [styles.avatar, {backgroundColor:avatarBackColor}] } source={{ uri:avatar }}/>}
-            {avatar == ''&&<Image style={ styles.avatar } source={defaultAvatar}/>}
+            { (avatar != '') && <Image style={ [styles.avatar, { backgroundColor: avatarBackColor }] } source={{ uri:avatar }}/> }
+            { (avatar == '') && <Image style={ styles.avatar } source={ defaultAvatar }/> }
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.topContainer }>
@@ -98,22 +98,21 @@ export default class RecentActivityListCell extends Component {
               </View>
               <Point point={ points }/>
             </View>
-            <Text numberOfLines={2} style={ styles.textDescription }>{ description }</Text>
+            <Text numberOfLines={ 2 } style={ styles.textDescription }>{ description }</Text>
             <View style={ styles.bottomContainer }>
               <TouchableOpacity onPress={ () => this.onLike() }>
                 <View style={ styles.heartContainer }>
                   <View style={ styles.likeWrapper }>
-                    <Image style={ styles.imageLike } source={ this.props.likeByMe?imageRedHeart:imageHeart }/>
+                    <Image style={ styles.imageLike } source={ this.props.likeByMe ? imageRedHeart : imageHeart }/>
                   </View>
-
                   <Text style={ styles.textSmall }>
                     {
                       this.props.hearts == 0 ?
-                          "0 - Be the first to like it!"
-                          :
-                          this.props.hearts > 1 ?
+                        "0 - Be the first to like it!"
+                        :
+                        this.props.hearts > 1 ?
                           this.props.hearts + " Likes"
-                              :
+                          :
                           this.props.hearts + " Like"
                     }
                   </Text>
@@ -126,13 +125,13 @@ export default class RecentActivityListCell extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    // height: commonStyles.hp(14),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',
@@ -172,7 +171,6 @@ const styles = StyleSheet.create({
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 14,
-    // marginVertical: 5,
     marginTop: 5,
   },
  topContainer: {
@@ -182,7 +180,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'stretch',
   },
-
   bottomContainer: {
     flex: 1,
     alignItems: 'flex-start',

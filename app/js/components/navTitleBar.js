@@ -60,6 +60,7 @@ export default class NavTitleBar extends Component {
       this.props.onSetting();
     }
   }
+
   render() {
     const {
       title,
@@ -68,7 +69,6 @@ export default class NavTitleBar extends Component {
 
     return (
       <View style={ styles.container }>
-
         <View style={ styles.navigationBarWrap }>
           {
             buttons & commonStyles.NavBackButton ?
@@ -111,6 +111,7 @@ export default class NavTitleBar extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',

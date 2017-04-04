@@ -36,27 +36,26 @@ export default class SimpleLeaderboardListCell extends Component {
   }
 
   constructor(props) {
-
     super(props);
   }
 
   showStatus (status) {
-
-    if (status == 1)
+    if (status == 1) {
       return (
         <Image style={ styles.imageStatus } source={ chevron_up }/>
       );
-    else if (status == 2)
+    } else if (status == 2) {
       return (
         <Image style={ styles.imageStatus } source={ chevron_down }/>
       );
+    }
+
     return (
       <View style={ styles.imageStatus } />
     );
   }
 
   showInfo(isMe, name, points) {
-
     if (isMe) {
       return (
         <View style={ styles.activeCellInfoContainer }>
@@ -81,10 +80,10 @@ export default class SimpleLeaderboardListCell extends Component {
   }
 
   showAvatar( isMe, avatar, avatarBackColor, defaultAvatar) {
-    if(avatar != '')
-      return (<Image style={ [styles.avatar, {opacity: isMe?1:0.6}, {backgroundColor:avatarBackColor}] } source={{ uri : avatar }}/>);
+    if (avatar != '')
+      return (<Image style={ [styles.avatar, {opacity: isMe ? 1 : 0.6}, { backgroundColor:avatarBackColor }] } source={{ uri : avatar }}/>);
     else
-      return (<Image style={ [styles.avatar, {opacity: isMe?1:0.6}] } source={ defaultAvatar }/>);
+      return (<Image style={ [styles.avatar, {opacity: isMe ? 1 : 0.6}] } source={ defaultAvatar }/>);
   }
 
   render() {
@@ -97,8 +96,8 @@ export default class SimpleLeaderboardListCell extends Component {
       points,
       avatar,
       currentUserIndex,
-        avatarBackColor,
-        defaultAvatar,
+      avatarBackColor,
+      defaultAvatar,
     } = this.props;
 
     return (

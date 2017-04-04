@@ -19,18 +19,17 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
+
 import { Actions } from 'react-native-router-flux';
 
 import NavTitleBar from '../../components/navTitleBar';
+import BusinessesListCell from '../components/businessesListCell';
+import EventsListCell from '../components/eventsListCell';
+import * as commonColors from '../../styles/commonColors';
+import  * as commonStyles from '../../styles/commonStyles';
 
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
-
-import BusinessesListCell from '../components/businessesListCell';
-import EventsListCell from '../components/eventsListCell';
-
-import * as commonColors from '../../styles/commonColors';
-import  * as commonStyles from '../../styles/commonStyles';
 
 class CategoryView extends Component {
   constructor(props) {
@@ -48,29 +47,16 @@ class CategoryView extends Component {
         service: [],
         action: [],
         volunteer_opportunity: [],
-        business:[],
+        business: [],
       },
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-  }
-
   componentDidMount() {
-
     this.loadAllData();
   }
 
   loadAllData() {
-
     this.setState({
       currentLocation: null,
       activities: {
@@ -78,10 +64,9 @@ class CategoryView extends Component {
         service: [],
         action: [],
         volunteer_opportunity: [],
-        business:[],
+        business: [],
       },
     });
-
 
     const title = this.props.title;
     const  index = this.props.index;
@@ -92,7 +77,7 @@ class CategoryView extends Component {
 
         bendService.searchActivity({
 
-          category:UtilService.convertToSlug(title),
+          category: UtilService.convertToSlug(title),
           offset: 0,
           limit: 20,
           lat: position.coords.latitude,
@@ -116,7 +101,7 @@ class CategoryView extends Component {
 
           var activities = result.data;
           this.setState({
-            activities: activities
+            activities: activities,
           })
         })
       },
@@ -133,31 +118,31 @@ class CategoryView extends Component {
 
   onPressedActionsCell (action) {
     Actions.ActionDetail({
-      action:action
+      action: action
     })
   }
 
   onPressedEventCell (event) {
     Actions.EventDetail({
-      event:event
+      event: event
     })
   }
 
   onPressedServiceCell (service) {
     Actions.ServiceDetail({
-      service:service
+      service: service
     })
   }
 
   onPressedBusinessesCell (business) {
     Actions.BusinessesDetail({
-      business:business
+      business: business
     })
   }
 
   onPressedVolunteerCell (volunteer) {
     Actions.VolunteerDetail({
-      volunteer:volunteer
+      volunteer: volunteer
     })
   }
 
@@ -167,7 +152,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
@@ -182,7 +167,7 @@ class CategoryView extends Component {
         distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
         price={ Number(rowData.priceTier) }
-        rating={ Number(rowData.rating||0) }
+        rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedBusinessesCell(rowData) }
       />
     );
@@ -193,7 +178,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
       />
     );
@@ -204,7 +189,7 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
@@ -215,12 +200,11 @@ class CategoryView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
-        points={ Math.max(Number(rowData.points||1), 1) }
+        points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedE(rowData) }
       />
     );
   }
-
 
   get showActions() {
     return(
@@ -269,8 +253,8 @@ class CategoryView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.event) }
             renderRow={ this.renderEventsListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
-
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -288,8 +272,8 @@ class CategoryView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.volunteer_opportunity) }
             renderRow={ this.renderVolunteerListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
-
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -307,7 +291,8 @@ class CategoryView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.service) }
             renderRow={ this.renderServicesListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -315,14 +300,11 @@ class CategoryView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -379,5 +361,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 8,
   },
-
 });

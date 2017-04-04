@@ -57,6 +57,7 @@ export default class BusinessesListCell extends Component {
     } = this.props;
 
     let dollars = '';
+
     for (i = 1 ; i <= price ; i++)
       dollars += '$';
 
@@ -71,12 +72,12 @@ export default class BusinessesListCell extends Component {
             <View style={ styles.cellTopTextContainer }>
               <View style={ styles.cellTopTitleRatingContainer }>
                 <View style={ styles.cellTopTitleContainer }>
-                  <Text numberOfLines={2} style={ styles.title }>{ title }</Text>
+                  <Text numberOfLines={ 2 } style={ styles.title }>{ title }</Text>
                 </View>
-                {rating > 0 && <View style={ styles.cellTopRatingContainer }>
+                { (rating > 0) && <View style={ styles.cellTopRatingContainer }>
                   <Text style={ styles.text }>{ rating.toFixed(1) } </Text>
                   <Image style={ styles.star } source={ star } />
-                </View>}
+                </View> }
               </View>
               <Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>
             </View>

@@ -28,13 +28,6 @@ import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/co
 import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
-  // {
-  //   title: 'Recent',
-  //   description: 'See your most recent activities',
-  //   icon: require('../../../assets/imgs/recent.png'),
-  //   iconWidth: 21,
-  //   iconHeight: 21,
-  // },
   {
     title: 'Take Action',
     description: 'Explore easy, self-reported lifestyle behaviors',
@@ -160,7 +153,6 @@ const categoryActiveImages = [
   require('../../../assets/imgs/category-buttons/waste_active.png'),
 ];
 
-
 class MainSearch extends Component {
   constructor(props) {
     super(props);
@@ -201,24 +193,9 @@ class MainSearch extends Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
-  }
-
   onSelectExploreWays (index) {
 
     switch (Number(index)) {
-      // case 0://Recent
-      //   alert("Clicked " + exploreWays[index].title);
-      //   break;
-
       case 0://Take Action
         Actions.ActionView();
         break;
@@ -282,14 +259,11 @@ class MainSearch extends Component {
   }
 
   caculateCategoryCellMargin() {
-
     const cellNumber = Math.round(screenWidth / categoryCellSize);
     this.categoryCellMargin = ( screenWidth - categoryCellSize * cellNumber) / cellNumber / 2;
   }
 
   render() {
-    const { status } = this.props;
-
     this.caculateCategoryCellMargin();
     
     return (

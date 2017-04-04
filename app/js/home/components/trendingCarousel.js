@@ -9,6 +9,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
@@ -17,7 +19,6 @@ import UtilService from '../../components/util'
 
 const locationImage = require('../../../assets/imgs/location.png');
 const heart = require('../../../assets/imgs/heart.png');
-import { Actions } from 'react-native-router-flux';
 
 export const carouselHeight = commonStyles.screenHiehgt * 0.36;
 const entryBorderRadius = 5;
@@ -35,8 +36,6 @@ export default class TrendingCarousel extends Component {
   };
 
   getUsers(entries) {
-    //console.log("getUsers", entries)
-
     if (entries.length == 0) {
       return false;
     }
@@ -44,26 +43,26 @@ export default class TrendingCarousel extends Component {
     return entries.map((entry, index) => {
 
       if (index > 5) {
-
         return null;
       }
 
-      if(!entry.defaultAvatar && !entry.avatar)
+      if (!entry.defaultAvatar && !entry.avatar)
           return null;
 
-      if(entry.avatar)
+      if (entry.avatar) {
         return (
-          <Image key={ index} style={ styles.imageUserAvatar } source={{uri:UtilService.getSmallImage(entry.avatar)}}/>
+          <Image key={ index } style={ styles.imageUserAvatar } source={{ uri: UtilService.getSmallImage(entry.avatar) }}/>
         );
-      else
+      } else {
         return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={UtilService.getDefaultAvatar(entry.defaultAvatar)}/>
+          <Image key={ index } style={ styles.imageUserAvatar } source={ UtilService.getDefaultAvatar(entry.defaultAvatar) }/>
         );
+      }
     });
   }
 
   goActivityDetail() {
-    if(this.props.activityType == 'business') {
+    if (this.props.activityType == 'business') {
       Actions.BusinessesDetail({ business: this.props.rawData });
     } else if(this.props.activityType == 'action') {
       Actions.ActionDetail({ action: this.props.rawData });
@@ -77,14 +76,25 @@ export default class TrendingCarousel extends Component {
   }
 
   render () {
-    const { title, location, icon, users, time, hearts, points, userCount, activity, activityType } = this.props;
+    const { 
+      title, 
+      location, 
+      icon, 
+      users, 
+      time, 
+      hearts, 
+      points, 
+      userCount, 
+      activity, 
+      activityType,
+    } = this.props;
 
     return (
       <TouchableHighlight
         activeOpacity={ 0.5 }
         underlayColor={ '#fff' }
         style={ styles.slideInnerContainer }
-        onPress={() => { this.goActivityDetail() }}
+        onPress={ () => this.goActivityDetail() }
       >
         <View style={ styles.contentContainer }>
           <View style={ styles.backgroundContainer }>
@@ -103,23 +113,26 @@ export default class TrendingCarousel extends Component {
             <Image style={ styles.imageCategoryIcon } source={ icon }/>
           </View>
           <View style={ styles.bottomContainer }>
-            {users.length > 0&&<View style={ styles.avatarsMainContainer }>
+            { (users.length > 0) && <View style={ styles.avatarsMainContainer }>
               <View style={ styles.names_timeContainer }>
-                <Text style={ styles.textName }>{ users[0].name } and {userCount - 1} others</Text>
-                <Text style={ styles.textSmall }>Latest {UtilService.getPastDateTime(time)}</Text>
+                <Text style={ styles.textName }>{ users[0].name } and { userCount - 1 } others</Text>
+                <Text style={ styles.textSmall }>Latest { UtilService.getPastDateTime(time) }</Text>
               </View>
               <View style={ styles.avatarsContainer }>
-                { this.getUsers(users) }
-                {activity.trendActivityCount > 6 && <View style={ styles.moreUserContainer }>
-                  <Text style={ styles.textMoreUser }>+{ activity.trendActivityCount - 6 }</Text>
-                </View>}
+                { 
+                  this.getUsers(users) 
+                }
+                { 
+                  (activity.trendActivityCount > 6) && <View style={ styles.moreUserContainer }>
+                    <Text style={ styles.textMoreUser }>+{ activity.trendActivityCount - 6 }</Text>
+                  </View>
+                }
               </View>
             </View>}
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
-                { false &&
-                <Image style={ styles.imageLike } source={ heart }/>}
-                { false && <Text style={ styles.textSmall }> { hearts }</Text>}
+                { false && <Image style={ styles.imageLike } source={ heart }/> }
+                { false && <Text style={ styles.textSmall }> { hearts }</Text> }
               </View>
               <Point point={ points }/>
             </View>

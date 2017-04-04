@@ -32,13 +32,7 @@ export default class Introduce extends Component {
     StatusBar.setHidden(true);
   }
 
-  componentWillReceiveProps(newProps) {
-
-  }
-
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <AppIntro

@@ -27,7 +27,6 @@ export default class DailyPollStateCell extends Component {
   }
 
   constructor(props) {
-
     super(props);
   }
 
@@ -42,8 +41,8 @@ export default class DailyPollStateCell extends Component {
     return (
       <View style={ [styles.container, bottomLine ? styles.bottomLine : null] }>
         <View style={ [styles.cellBackgroundContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }] }>
-          <View style = { [styles.cellPercentContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }, { width: screenWidth / 100 * percent }] }/>
-          <View style= { styles.cellContainer }>
+          <View style={ [styles.cellPercentContainer, { backgroundColor: selected ? commonColors.percentListCellStrongBackground : commonColors.percentListCellWeakBackground }, { width: screenWidth / 100 * percent }] }/>
+          <View style={ styles.cellContainer }>
             <Text style={ styles.textPercent }>{ percent }%</Text>
             <Text style={ selected == true ? styles.textSelectDescription : styles.textDescription }>{ description }</Text>
           </View>
@@ -52,6 +51,7 @@ export default class DailyPollStateCell extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

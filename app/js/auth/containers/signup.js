@@ -16,13 +16,13 @@ import {
 import { bindActionCreators } from 'redux';
 import * as signupActions from '../actions';
 import { connect } from 'react-redux';
+
 import { Actions } from 'react-native-router-flux';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
 var Mailer = require('NativeModules').RNMail;
 
-//added by li
 import bendService from '../../bend/bendService'
 import UtilService from '../../components/util'
 
@@ -43,19 +43,7 @@ class Signup extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'signup_request') {
-
-    } else if (newProps.status == 'signup_success') {
-
-    } else if (newProps.status == 'signup_error') {
-
-    }
-  }
-
   onSignUp() {
-
     if (this.state.email == '') {
       Alert.alert('E-mail Required', 'Please enter your email address.');
       return;
@@ -71,40 +59,37 @@ class Signup extends Component {
       return;
     }
 
-      //li added/changes
-      bendService.signup({
-          username:this.state.email,
-          password:this.state.password,
-          confirmPassword:this.state.confirmPassword,
-          code:this.state.communityCode,
-          defaultAvatar:UtilService.getRandomDefaultAvatar()
-      }, (err, user)=>{
-          if(err) {
-              if(err.name.code == 'milkcrate-app.error.common.missingInput') {
-                  alert("Please fill in all the required fields");
-              } else if(err.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
-                  alert("Please enter a valid email address")
-              } else if(err.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
-                  alert("Your password and confirmation did not match. Please check them and try again.")
-              } else if(err.name.code == 'milkcrate-app.error.signup.invalidCode') {
-                  alert("Please enter a valid community code")
-              } else if(err.name.code == 'milkcrate-app.error.signup.invalidUsername') {
-                  alert("This email address is already taken. Please sign in instead.")
-              } else if(err.name.code == 'milkcrate-app.error.common.unknown') {
-                  alert("Something's Awry. Please try again later.")
-              }
-          }
+    bendService.signup({
+      username:this.state.email,
+      password:this.state.password,
+      confirmPassword:this.state.confirmPassword,
+      code:this.state.communityCode,
+      defaultAvatar:UtilService.getRandomDefaultAvatar()
+    }, (error, user)=>{
+      
+      if (error) {
+        if (error.name.code == 'milkcrate-app.error.common.missingInput') {
+          alert("Please fill in all the required fields");
+        } else if (error.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
+          alert("Please enter a valid email address")
+        } else if (error.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
+          alert("Your password and confirmation did not match. Please check them and try again.")
+        } else if (error.name.code == 'milkcrate-app.error.signup.invalidCode') {
+          alert("Please enter a valid community code")
+        } else if (error.name.code == 'milkcrate-app.error.signup.invalidUsername') {
+          alert("This email address is already taken. Please sign in instead.")
+        } else if (error.name.code == 'milkcrate-app.error.common.unknown') {
+          alert("Something's Awry. Please try again later.")
+        }
+      }
 
-          if(!err) {
-              Actions.SetupProfile();
-          }
-      })
-
-    // this.props.signup(this.state.email, this.state.password, this.state.communityCode);
+      if (!error) {
+        Actions.SetupProfile();
+      }
+    })
   }
 
   onContactUs() {
-
     Mailer.mail({
       subject: 'Feedback on MilkCrate for Communities',
       recipients: ['info@mymilkcrate.com'],
@@ -125,7 +110,6 @@ class Signup extends Component {
   }
 
   render() {
-    const { status } = this.props;
     return (
       <View style={ styles.container }>
         <Image source={ background } style={ styles.background } resizeMode="cover">

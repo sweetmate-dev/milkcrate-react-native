@@ -25,8 +25,6 @@ import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
-import { ProfileRecentActivityEntries } from '../../components/dummyEntries';
-
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -49,7 +47,7 @@ class Profile extends Component {
       currentLocation: null,
       categories: [],
       recentActivities: [],
-      currentUser:{}
+      currentUser: {}
     };
 
     this.activityQuery = { 
@@ -60,41 +58,29 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-
     this.loadAllData();
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.status == 'profile_request') {
-
-    } else if (newProps.status == 'profile_success') {
-
-    } else if (newProps.status == 'profile_error') {
-
-    }
-
-    if(newProps.selectedTab =='profile') {
-      if(!Cache.cacheMap['user']) {
+    if (newProps.selectedTab == 'profile') {
+      if (!Cache.cacheMap['user']) {
         this.loadAllData();
       }
     }
   }
 
   loadAllData() {
-
-    bendService.getUser((err, ret)=>{
+    bendService.getUser( (error, result) => {
       this.setState({
-        currentUser:ret
+        currentUser: result,
       })
     })
 
     this.setState({
-
       activityQuery: {
         more: true,
         loading: false,
       },
-
       currentLocation: null,
       categories: [],
       recentActivities: []
@@ -106,9 +92,9 @@ class Profile extends Component {
       limit: 20 
     };
 
-    bendService.getCategories((error, cats)=>{
+    bendService.getCategories((error, result)=>{
       this.setState({
-        categories:cats
+        categories: result,
       })
     })
 
@@ -127,7 +113,6 @@ class Profile extends Component {
   }
 
   loadRecentActivities() {
-
     if ( this.activityQuery.more === false )
       return;
 
@@ -157,12 +142,12 @@ class Profile extends Component {
         return state;
       });
 
-      if(this.activityQuery.more) {
+      if (this.activityQuery.more) {
         //remove tail item
         result.pop()
       }
 
-      if(result.length > 0) {
+      if (result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.setState({
@@ -177,7 +162,7 @@ class Profile extends Component {
   }
 
   onRecentActivityCellPressed (activity) {
-    if(activity.type == 'business') {
+    if (activity.type == 'business') {
       Actions.BusinessesDetail({ business: activity.activity });
     } else if(activity.type == 'action') {
       Actions.ActionDetail({ action: activity.activity });
@@ -196,10 +181,10 @@ class Profile extends Component {
 
   renderRow(rowData, sectionID, rowID) {
     var cat;
-    if(rowData.type != 'poll') {
-      cat = UtilService.getCategoryIcon(bendService.getActivityCategory(this.state.categories, rowData.activity))
+    if (rowData.type != 'poll') {
+      cat = UtilService.getCategoryIcon(bendService.getActivityCategory(this.state.categories, rowData.activity));
     } else {
-      cat = UtilService.getMilkCrateLogo()
+      cat = UtilService.getMilkCrateLogo();
     }
     return (
       <RecentActivityListCell
@@ -218,25 +203,26 @@ class Profile extends Component {
   }
 
   onLike(activity, like) {
-    bendService.likeActivity(activity, like, (err, ret)=>{
-      if(err) {
+    bendService.likeActivity(activity, like, (error, result)=>{
+      if (error) {
         console.log(err);
-        return
+        return;
       }
 
-      var exist = _.find(this.state.recentActivities, (o)=>{
-        return o._id == activity._id
+      var exist = _.find(this.state.recentActivities, (obj)=>{
+        return obj._id == activity._id;
       })
-      if (ret && exist) {
-        exist.likedByMe = like
+
+      if (result && exist) {
+        exist.likedByMe = like;
         
         if (like)
-          exist.likeCount = Number(exist.likeCount || 0) + 1
+          exist.likeCount = Number(exist.likeCount || 0) + 1;
         else
-          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0)
+          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
 
         this.setState({
-          recentActivities:this.state.recentActivities
+          recentActivities:this.state.recentActivities,
         })
       }
     })
@@ -255,14 +241,13 @@ class Profile extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-    const currentUser = this.state.currentUser
+    const currentUser = this.state.currentUser;
+
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -281,37 +266,38 @@ class Profile extends Component {
           }
         >
           <View style={ styles.topContainer }>
-            <Text style={ styles.textName }>{currentUser.name}</Text>
+            <Text style={ styles.textName }>{ currentUser.name }</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{currentUser.points||0}</Text>
+                <Text style={ styles.textValue }>{ currentUser.points || 0 }</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{UtilService.getPositionString(currentUser.rank)}</Text>
+                <Text style={ styles.textValue }>{ UtilService.getPositionString(currentUser.rank) }</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{currentUser.volunteerHours||0}</Text>
+                <Text style={ styles.textValue }>{ currentUser.volunteerHours || 0 }</Text>
                 <Text style={ styles.textSmall }>Volunteer Hours</Text>
               </View>
             </View>
           </View>
 
-          {<View style={ styles.buttonContainer }>
+          <View style={ styles.buttonContainer }>
             <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
               <View style={ styles.buttonWrapper }>
                 <Text style={ styles.textButton }>See Community Points</Text>
               </View>
             </TouchableOpacity>
-          </View>}
+          </View>
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>
             <ListView
-                enableEmptySections={ true }
-                dataSource={ this.dataSource.cloneWithRows(this.state.recentActivities) }
-                renderRow={ this.renderRow.bind(this) }/>
+              enableEmptySections={ true }
+              dataSource={ this.dataSource.cloneWithRows(this.state.recentActivities) }
+              renderRow={ this.renderRow.bind(this) }
+            />
           </View>
           <LoadMoreSpinner
             show={ this.state.activityQuery.more }

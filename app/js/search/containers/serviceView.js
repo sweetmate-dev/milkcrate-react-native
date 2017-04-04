@@ -59,24 +59,11 @@ class ServiceView extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_action_request') {
-
-    } else if (newProps.status == 'search_action_success') {
-
-    } else if (newProps.status == 'search_action_error') {
-
-    }
-  }
-
   componentDidMount() {
-
     this.loadAllData();
   }
 
   loadAllData() {
-
     this.offset = 0;
     this.limit = 20;
     this.searchText = '';
@@ -85,8 +72,8 @@ class ServiceView extends Component {
     this.setState({
       currentLocation: null,
       services: [],
-      categoryIcons:[],
-      serviceQuery:{
+      categoryIcons: [],
+      serviceQuery: {
         more: true,
         loading: false,
       },
@@ -101,12 +88,11 @@ class ServiceView extends Component {
 
   onPressedCell (service) {
     Actions.ServiceDetail({
-      service:service
+      service: service
     })
   }
 
   loadServices () {
-
     if (this.more == false)
       return;
 
@@ -120,7 +106,7 @@ class ServiceView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'service',
+          type: 'service',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
@@ -154,7 +140,7 @@ class ServiceView extends Component {
           const imageOffset = this.offset;
           this.offset += this.limit;
 
-          result.data.service.map((service, index) => {
+          result.data.service.map( (service, index) => {
             if (service.categories && service.categories.length > 0) {
               var category = UtilService.getCategoryById(service.categories[0])
               this.setState( (state) => {
@@ -177,19 +163,13 @@ class ServiceView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.categoryIcons[rowID] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedCell(rowData) }
       />
     );
   }
 
   onSearchChange(text) {
-
-    // if (text === '') {
-    //   this.onSearchFocus();
-    //   return;
-    // }
-
     this.offset = 0;
     this.searchText = text;      
     this.more = true;
@@ -218,7 +198,6 @@ class ServiceView extends Component {
   // }
 
   onSearchCancel() {
-
     this.offset = 0;
     this.searchText = '';
     this.more = true;
@@ -234,14 +213,11 @@ class ServiceView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -264,7 +240,8 @@ class ServiceView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.services) }
             renderRow={ this.renderListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
           <LoadMoreSpinner
             show={ this.state.serviceQuery.more }
             loading={ this.state.serviceQuery.loading }

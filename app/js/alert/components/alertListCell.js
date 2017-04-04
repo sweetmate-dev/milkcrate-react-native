@@ -64,15 +64,15 @@ export default class AlertListCell extends Component {
       <TouchableHighlight onPress={ () => this.onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            {avatar!=""&&<Image style={[styles.avatar, {backgroundColor:avatarBackColor}] } source={{uri:avatar }}/>}
-            {avatar==""&&<Image style={ styles.avatar } source={require('../../../assets/imgs/milkcrate.png')}/>}
+            { (avatar != "") && <Image style={ [styles.avatar, { backgroundColor:avatarBackColor }] } source={{ uri:avatar }}/> }
+            { (avatar == "") && <Image style={ styles.avatar } source={ require('../../../assets/imgs/milkcrate.png') }/> }
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.names_timeContainer }>
               <Text style={ styles.textName }>{ name }</Text>
               { this.showTime (time) }
             </View>
-            <Text numberOfLines={2} style={ styles.textDescription }>{ description }</Text>
+            <Text numberOfLines={ 2 } style={ styles.textDescription }>{ description }</Text>
           </View>
         </View>
       </TouchableHighlight>

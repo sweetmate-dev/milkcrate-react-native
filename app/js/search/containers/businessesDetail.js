@@ -19,6 +19,7 @@ import { bindActionCreators } from 'redux';
 import * as businessesDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+
 import MapView from 'react-native-maps';
 import Point from '../../components/Point';
 import Stars from 'react-native-stars-rating';
@@ -27,16 +28,11 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import BusinessRecentActivityListCell from '../components/businessRecentActivityListCell';
 
-import { BusinessRecentActivityEntries } from '../../components/dummyEntries';
-
-const dummyText = 'Luxury is something everyone deserves from time to time. Such an indulgence can make a vacation a truly rejuvenating experience. One of the best ways to get the luxury of the rich and famous to fit..';
-
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
 const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
-// const categoryImage = require('../../../assets/imgs/avatar.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE = 37.78825;
@@ -44,7 +40,6 @@ const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-//added by li, 2017/03/22
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
@@ -58,12 +53,12 @@ class BusinessesDetail extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      initialize:true,
-      didStatus:false,
-      everDidStatus:true,
-      activityId:null,
+      initialize: true,
+      didStatus: false,
+      everDidStatus: true,
+      activityId: null,
 
-      currentLocation:null,
+      currentLocation: null,
       businessRate: 0,
       businessComment: '',
       region: {
@@ -76,12 +71,12 @@ class BusinessesDetail extends Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
       },
-      user:{},
-      comments:[],
-      trendUsers:[],
-      trendUserCount:0,
-      lastTrendTime:Date.now() * 1000000,
-      trendInit:false
+      user: {},
+      comments: [],
+      trendUsers: [],
+      trendUserCount: 0,
+      lastTrendTime: Date.now() * 1000000,
+      trendInit: false,
     };
 
     this.category = _.find(Cache.categories, (o)=>{
@@ -92,89 +87,83 @@ class BusinessesDetail extends Component {
   }
 
   componentDidMount(){
-    this.mounted = true
-    const business = this.props.business
+    this.mounted = true;
+    const business = this.props.business;
 
-    bendService.checkActivityDid(business._id, 'business', (err, result)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.checkActivityDid(business._id, 'business', (error, result) => {
+      if (error) {
+        console.log(err);
+        return;
       }
 
-      if(result)
-        this.mounted&&(this.state.activityId = result);
+      if (result)
+        this.mounted && (this.state.activityId = result);
 
-      this.mounted&&this.setState({
-        didStatus: result==false?false:true
+      this.mounted && this.setState({
+        didStatus: result == false ? false : true,
       })
     })
 
-    bendService.checkActivityAnybodyDid(business._id, 'business', (err, result)=>{
-      if(err) {
-        console.log(err);return;
+    bendService.checkActivityAnybodyDid(business._id, 'business', (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      this.mounted&&this.setState({
-        everDidStatus: result
+      this.mounted && this.setState({
+        everDidStatus: result,
       })
     })
-    bendService.getBusinessRating(business._id, (err, rets)=>{
-      if(err) {
-        console.log(err);return;
+
+    bendService.getBusinessRating(business._id, (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      this.mounted&&this.setState({
-        comments: rets
+      this.mounted && this.setState({
+        comments: result
       })
     })
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-          this.mounted&&this.setState({ currentLocation: position })
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        this.mounted && this.setState({ currentLocation: position })
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser((err, ret)=>{
-      if(err) {
-        console.log(err);return;
-      }
-
-      this.mounted&&this.setState({
-        user:ret
-      })
-    })
-
-    bendService.getBusinessTrend(business._id, (err, ret)=>{
-      if(err) {
+    bendService.getUser( (error, result)=>{
+      if (error) {
         console.log(err);
         return;
       }
 
+      this.mounted && this.setState({
+        user: result,
+      })
+    })
+
+    bendService.getBusinessTrend(business._id, (error, result)=>{
+      if (error) {
+        console.log(error);
+        return;
+      }
+
       this.setState({
-        trendUsers:ret.trendUsers,
-        trendUserCount:ret.trendUserCount,
-        lastTrendTime:ret.lastTrendTime,
-        trendInit:true
+        trendUsers: result.trendUsers,
+        trendUserCount: result.trendUserCount,
+        lastTrendTime: result.lastTrendTime,
+        trendInit: true,
       })
     })
   }
 
   componentWillUnmount(){
     this.mounted = false
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
   }
 
   onBack () {
@@ -208,53 +197,55 @@ class BusinessesDetail extends Component {
 
   onRateBusiness() {
     //console.log(this.state.businessRate, this.state.businessComment)
-    if(this.state.businessRate > 0 || UtilService.isValid(this.state.businessComment)) {
+    if (this.state.businessRate > 0 || UtilService.isValid(this.state.businessComment)) {
       bendService.captureBusinessRating({
-        id:this.props.business._id,
-        comment:this.state.businessComment,
-        rating:this.state.businessRate
-      }, (err, ret)=>{
-        if(err) {
-          console.log(err);
-          return
+        id: this.props.business._id,
+        comment: this.state.businessComment,
+        rating: this.state.businessRate,
+      }, (error, result)=>{
+        if (error) {
+          console.log(error);
+          return;
         }
 
-        this.state.comments.unshift(ret)
+        this.state.comments.unshift(result);
+
         this.setState({
-          businessRate:0,
-          businessComment:"",
-          comments:this.state.comments
+          businessRate: 0,
+          businessComment: "",
+          comments: this.state.comments,
         })
       })
     }
   }
 
   onCheckIn() {
-    bendService.captureActivity(this.props.business._id, 'business', (err,result)=>{
-      if(err){
-        console.log(err);return;
+    bendService.captureActivity(this.props.business._id, 'business', (error, result) => {
+      if (error) {
+        console.log(error);
+        return;
       }
 
-      this.mounted&&(this.state.activityId = result.activity._id);
+      this.mounted && (this.state.activityId = result.activity._id);
 
-      this.mounted&&this.setState({
-        everDidStatus:true,
-        didStatus:true
+      this.mounted && this.setState({
+        everDidStatus: true,
+        didStatus: true,
       })
     })
   }
 
   onUncheckIn() {
-    bendService.removeActivity(this.state.activityId, (error, result)=>{
+    bendService.removeActivity(this.state.activityId, (error, result) => {
       if (error){
         console.log(error);
         return;
       }
 
-      this.mounted&&(this.state.activityId = null);
+      this.mounted && (this.state.activityId = null);
 
-      this.mounted&&this.setState({
-        didStatus: false
+      this.mounted && this.setState({
+        didStatus: false,
       })
     })
   }
@@ -265,10 +256,10 @@ class BusinessesDetail extends Component {
         name={ rowData.user.name }
         description={ rowData.comment }
         avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
-        avatarBackColor={UtilService.getBackColor(rowData.user.avatar)}
-        defaultAvatar={UtilService.getDefaultAvatar(rowData.user.defaultAvatar)}
+        avatarBackColor={ UtilService.getBackColor(rowData.user.avatar) }
+        defaultAvatar={ UtilService.getDefaultAvatar(rowData.user.defaultAvatar) }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        rating={ Number(rowData.rating||0) }
+        rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onRecentActivityCellPressed(rowID) }
       />
     );
@@ -277,72 +268,72 @@ class BusinessesDetail extends Component {
   renderCoverImage() {
     const { business } = this.props;
     var coverImage, backgroundColor;
-    if(this.state.initialize) {
-      var imageObj = business.coverImage?business.coverImage:this.category.coverImage
-      coverImage = UtilService.getMiddleImage(imageObj)
-      backgroundColor = UtilService.getBackColor(imageObj)
+    if (this.state.initialize) {
+      var imageObj = business.coverImage ? business.coverImage : this.category.coverImage;
+      coverImage = UtilService.getMiddleImage(imageObj);
+      backgroundColor = UtilService.getBackColor(imageObj);
     }
 
-    if(coverImage == null) return null;
+    if (coverImage == null) 
+      return null;
 
     return (
-        <Image style={ [styles.map, {backgroundColor:backgroundColor}] } source={{ uri:coverImage }}>
-        </Image>
+        <Image style={ [styles.map, { backgroundColor:backgroundColor }] } source={{ uri:coverImage }}/>        
     )
   }
 
   getUsers(entries) {
-    //console.log("getUsers", entries)
-
     if (entries.length == 0) {
       return false;
     }
 
-    return entries.map((entry, index) => {
+    return entries.map( (entry, index) => {
 
-      if (index > 5) {
-
+      if (index > 5)
         return null;
+      
+      if (!entry.defaultAvatar && !entry.avatar)
+        return null;
+
+      if (entry.avatar) {
+        return (
+            <Image key={ index} style={ styles.imageUserAvatar } source={{ uri:UtilService.getSmallImage(entry.avatar) }}/>
+        );
+      } else {
+        return (
+            <Image key={ index} style={ styles.imageUserAvatar } source={ UtilService.getDefaultAvatar(entry.defaultAvatar) }/>
+        );
       }
-
-      if(!entry.defaultAvatar && !entry.avatar)
-        return null;
-
-      if(entry.avatar)
-        return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={{uri:UtilService.getSmallImage(entry.avatar)}}/>
-        );
-      else
-        return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={UtilService.getDefaultAvatar(entry.defaultAvatar)}/>
-        );
     });
   }
 
   render() {
-    const { status, business } = this.props;
-    var rating = (business.rating||0.0).toFixed(1)
-    var avatar = this.state.user.avatar?UtilService.getSmallImage(this.state.user.avatar):null
-    var defaultAvatar = this.state.user.defaultAvatar?UtilService.getDefaultAvatar(this.state.user.defaultAvatar):null
-    var trendUsers = this.state.trendUsers
-    var trendUserCount = this.state.trendUserCount
-    var lastTrendTime = this.state.lastTrendTime
+    const { 
+      business,
+    } = this.props;
+
+    var rating = (business.rating || 0.0).toFixed(1);
+    var avatar = this.state.user.avatar ? UtilService.getSmallImage(this.state.user.avatar) : null;
+    var defaultAvatar = this.state.user.defaultAvatar ? UtilService.getDefaultAvatar(this.state.user.defaultAvatar) : null;
+    var trendUsers = this.state.trendUsers;
+    var trendUserCount = this.state.trendUserCount;
+    var lastTrendTime = this.state.lastTrendTime;
     return (
       <View style={ styles.container }>
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title ={business.name}
+          title={ business.name }
         />
         <ScrollView>
-          {business._geoloc&&<MapView
+          { business._geoloc &&<MapView
             style={ styles.map }
-            initialRegion={ {
-        latitude: Number(business._geoloc[1]),
-        longitude: Number(business._geoloc[0]),
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      } }
+            initialRegion={{
+              latitude: Number(business._geoloc[1]),
+              longitude: Number(business._geoloc[0]),
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            }}
             scrollEnabled={ false }
             zoomEnabled={ false }
           >
@@ -350,114 +341,118 @@ class BusinessesDetail extends Component {
               <MapView.Marker
                 image={ map_pin }
                 coordinate={{
-                latitude: Number(business._geoloc[1]),
-                longitude: Number(business._geoloc[0]),
+                  latitude: Number(business._geoloc[1]),
+                  longitude: Number(business._geoloc[0]),
                 }}
               />
             }
           </MapView>}
-          {!business._geoloc&&this.renderCoverImage()}
+          { !business._geoloc && this.renderCoverImage() }
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
               <View style={ styles.businessInfoSubContainer }>
-                <Text style={ styles.textTitle }>{business.name}</Text>
-                {this.state.currentLocation&&<Text style={ styles.textValue }>
-                  {business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
+                <Text style={ styles.textTitle }>{ business.name }</Text>
+                { this.state.currentLocation && <Text style={ styles.textValue }>
+                  { business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
                   this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles   ':''}
-                    {UtilService.getPricesString(business.price)}</Text>}
+                  { UtilService.getPricesString(business.price) }</Text> 
+                }
               </View>
-              { rating >0 && <View style={ styles.businessInfoRatingContainer }>
+              { (rating > 0) && <View style={ styles.businessInfoRatingContainer }>
                 <Text style={ styles.textValue }>{ rating } </Text>
                 <Image style={ styles.imageStar } source={ star } />
-              </View>}
+              </View> }
             </View>
 
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>{business.address1} {business.address2}</Text>
-                <Text style={ styles.textAddress }>{UtilService.getCityStateString(business.city, business.state)}</Text>
+                <Text style={ styles.textAddress }>{ business.address1 } { business.address2 }</Text>
+                <Text style={ styles.textAddress }>{ UtilService.getCityStateString(business.city, business.state) }</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
                 </TouchableOpacity>
               </View>
               <View style={ styles.visitContainer }>
-                {UtilService.isValid(business.phoneNumber) &&<TouchableOpacity onPress={ () => this.onCallPhone() }>
+                { UtilService.isValid(business.phoneNumber) &&< TouchableOpacity onPress={ () => this.onCallPhone() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ phone } />
                     <Text style={ styles.textInfoTitle }>Phone</Text>
                   </View>
-                </TouchableOpacity>}
-                {UtilService.isValidURL(business.url)&&<TouchableOpacity onPress={ () => this.onGoWeb() }>
+                </TouchableOpacity> }
+                { UtilService.isValidURL(business.url) && <TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>
                   </View>
-                </TouchableOpacity>}
+                </TouchableOpacity> }
               </View>
             </View>
             {/*<Text style={ styles.textOpenNow }>Open Now</Text>*/}
-            {business.hours&&<View style={ styles.openNowContentContainer }>
+            { business.hours && <View style={ styles.openNowContentContainer }>
               {
-                  business.hours.map((hour, idx)=> {
+                  business.hours.map( (hour, idx) => {
                     return (
-                    <View key={'hour-' + idx} style={ styles.openNowCellContainer }>
-                          <Text style={ styles.textInfoTitle }>{UtilService.getBusinessDay(hour.days)}</Text>
-                          <Text style={ styles.textValue }>{UtilService.getBusinessOpen(hour.open)}</Text>
-                    </View>
+                      <View key={'hour-' + idx} style={ styles.openNowCellContainer }>
+                        <Text style={ styles.textInfoTitle }>{ UtilService.getBusinessDay(hour.days) }</Text>
+                        <Text style={ styles.textValue }>{ UtilService.getBusinessOpen(hour.open) }</Text>
+                      </View>
                     )
                   }
                 )
               }
             </View>}
             <Text style={ styles.textDescription }>{ business.description }</Text>
-            {false&&<TouchableOpacity onPress={ () => this.onGetDirection() }>
+            { false && <TouchableOpacity onPress={ () => this.onGetDirection() }>
               <Text style={ styles.textDescription }>View on Foursquare</Text>
-            </TouchableOpacity>}
+            </TouchableOpacity> }
           </View>
-          {business.certification && business.certification.name && <View style={ styles.certificationsContainer }>
+          { business.certification && business.certification.name && <View style={ styles.certificationsContainer }>
             <Text style={ styles.textHeading }>Certifications</Text>
             <View style={ styles.certificationsButtonContainer }>
             <View style={ styles.buttonCertificationsWrapper }>
-              <Text style={ styles.textCertificationsButton }>{business.certification.name}</Text>
+              <Text style={ styles.textCertificationsButton }>{ business.certification.name }</Text>
             </View>
             </View>
-          </View>}
-          {business.tags && business.tags.length>0 && <View style={ styles.tagsContainer }>
+          </View> }
+          { business.tags && (business.tags.length > 0) && <View style={ styles.tagsContainer }>
             <Text style={ styles.textHeading }>Tags</Text>
             <View style={ styles.tagsButtonContainer }>
               {
-                business.tags.map((o, index)=>{
+                business.tags.map( (obj, index) => {
                   return (
-                      <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
-                        <Text style={ styles.textTagsButton }>{o}</Text>
-                      </View>
+                    <View key={'tag-' + index} style={ styles.buttonTagsWrapper }>
+                      <Text style={ styles.textTagsButton }>{ obj }</Text>
+                    </View>
                   )
                 })
               }
             </View>
           </View>}
-          {!this.state.everDidStatus && <View style={ styles.certificationsContainer }>
-            <View style={ styles.certificationsCheckContainer }>
-              {avatar&&<Image style={ [styles.imageIcon, {backgroundColor:UtilService.getBackColor(avatar)} ]} source={{ uri:avatar }} />}
-              {!avatar && defaultAvatar&&<Image style={ styles.imageIcon } source={ defaultAvatar } />}
-              <View style={ styles.certificationsCheckSubContainer }>
-                <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
-                <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
+          { 
+            !this.state.everDidStatus && <View style={ styles.certificationsContainer }>
+              <View style={ styles.certificationsCheckContainer }>
+                { avatar && <Image style={ [styles.imageIcon, { backgroundColor:UtilService.getBackColor(avatar) }] } source={{ uri:avatar }} />}
+                { !avatar && defaultAvatar && <Image style={ styles.imageIcon } source={ defaultAvatar }/> }
+                <View style={ styles.certificationsCheckSubContainer }>
+                  <Text style={ styles.textCertficationsTitle }>No one has checked in here yet</Text>
+                  <Text style={ styles.textValue }>Be the first to check in and earn double points</Text>
+                </View>
               </View>
-            </View>
-          </View>}
-          {this.state.everDidStatus && this.state.trendInit && trendUsers.length > 0 &&
+            </View> 
+          }
+          { 
+            this.state.everDidStatus && this.state.trendInit && (trendUsers.length > 0) &&
             <View style={ styles.certificationsContainer }>
               <View style={ styles.avatarsMainContainer }>
                 <View style={ styles.names_timeContainer }>
                   <Text style={ styles.textName }>{ trendUsers[0].name } and {trendUserCount - 1} others</Text>
-                  <Text style={ styles.textSmall }>Latest {UtilService.getPastDateTime(lastTrendTime)}</Text>
+                  <Text style={ styles.textSmall }>Latest { UtilService.getPastDateTime(lastTrendTime) }</Text>
                 </View>
                 <View style={ styles.avatarsContainer }>
                   { this.getUsers(trendUsers) }
-                  {business.trendActivityCount && business.activityCount > 6 && <View style={ styles.moreUserContainer }>
+                  { business.trendActivityCount && business.activityCount > 6 && <View style={ styles.moreUserContainer }>
                     <Text style={ styles.textMoreUser }>+{ business.activityCount - 6 }</Text>
                   </View>}
                 </View>
@@ -473,40 +468,41 @@ class BusinessesDetail extends Component {
             </View>
             <View style={ styles.recentActivityListViewWrapper }>
               <ListView
-                  enableEmptySections={ true }
-                  dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.comments) }
-                  renderRow={ this.renderRecentActivityRow.bind(this) }/>
+                enableEmptySections={ true }
+                dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.comments) }
+                renderRow={ this.renderRecentActivityRow.bind(this) }
+              />
             </View>
           </View>
           <View style={ styles.ratingMainContainer }>
-            {avatar&&<Image style={ [styles.imageCategory, {backgroundColor:UtilService.getBackColor(avatar)} ]} source={{ uri:avatar }} />}
-            {!avatar && defaultAvatar&&<Image style={ styles.imageCategory } source={ defaultAvatar } />}
+            { avatar && <Image style={ [styles.imageCategory, { backgroundColor:UtilService.getBackColor(avatar) }]} source={{ uri:avatar }} /> }
+            { !avatar && defaultAvatar && <Image style={ styles.imageCategory } source={ defaultAvatar }/> }
             <View style={ styles.rating_commentContentContainer }>
               <View style={ styles.ratingContentContainer }>
                 <Text style={ styles.textSectionTitle }>Tap stars to rate</Text>
                 <Stars
-                    isActive={ true }
-                    rateMax={ 5 }
-                    rate={ this.state.businessRate }
-                    size={ 25 }
-                    onStarPress={ (rating) => {
+                  isActive={ true }
+                  rateMax={ 5 }
+                  rate={ this.state.businessRate }
+                  size={ 25 }
+                  onStarPress={ (rating) => {
                     console.log(rating)
                     this.setState({ businessRate: rating })
-                    } }
+                  }}
                 />
               </View>
               <TextInput
-                  autoCapitalize="none"
-                  autoCorrect={ false }
-                  multiline={ true }
-                  placeholder="Add a comment"
-                  placeholderTextColor={ commonColors.placeholderText }
-                  textAlign="left"
-                  style={ styles.input }
-                  underlineColorAndroid="transparent"
-                  returnKeyType={ 'done' }
-                  value={this.state.businessComment}
-                  onChangeText={ (text) => this.setState({ businessComment: text }) }
+                autoCapitalize="none"
+                autoCorrect={ false }
+                multiline={ true }
+                placeholder="Add a comment"
+                placeholderTextColor={ commonColors.placeholderText }
+                textAlign="left"
+                style={ styles.input }
+                underlineColorAndroid="transparent"
+                returnKeyType={ 'done' }
+                value={this.state.businessComment}
+                onChangeText={ (text) => this.setState({ businessComment: text }) }
               />
             </View>
           </View>
@@ -518,15 +514,18 @@ class BusinessesDetail extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        {!this.state.didStatus&&<TouchableOpacity onPress={ () => this.onCheckIn() }>
-          <View style={ styles.buttonCheckin }>
-            <Text style={ styles.textButton }>I’m Here • Checkin</Text>
-          </View>
-        </TouchableOpacity>}
-        {this.state.didStatus&&
-          <View style={ styles.buttonGrey }>
+        { 
+          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+            <View style={ styles.buttonCheckin }>
+              <Text style={ styles.textButton }>I’m Here • Checkin</Text>
+            </View>
+          </TouchableOpacity>
+        }
+        {
+          this.state.didStatus && <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>You’ve Checked In!</Text>
-          </View>}
+          </View>
+        }
       </View>
     );
   }

@@ -76,7 +76,7 @@ export default class RecentActivityListCell extends Component {
       points,
       onClick,
       mode,
-        time
+      time,
     } = this.props;
 
     return (
@@ -92,16 +92,16 @@ export default class RecentActivityListCell extends Component {
               </View>
               <Point point={ points }/>
             </View>
-            <Text numberOfLines={2} style={ styles.textDescription }>{ title }</Text>
+            <Text numberOfLines={ 2 } style={ styles.textDescription }>{ title }</Text>
             <View style={ styles.bottomContainer }>
               <View style={ styles.heartContainer }>
                 <Text style={ styles.textSmall }>
                   {this.props.hearts == 0 ?
-                      "0 Likes"
-                      :
-                      this.props.hearts > 1 ?
+                    "0 Likes"
+                    :
+                    this.props.hearts > 1 ?
                       this.props.hearts + " Likes"
-                          :
+                      :
                       this.props.hearts + " Like"
                   }
                 </Text>
@@ -113,6 +113,7 @@ export default class RecentActivityListCell extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
@@ -168,7 +169,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'stretch',
   },
-
   bottomContainer: {
     flex: 1,
     alignItems: 'flex-start',

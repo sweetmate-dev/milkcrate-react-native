@@ -21,7 +21,6 @@ import { Actions } from 'react-native-router-flux';
 import { SegmentedControls } from 'react-native-radio-buttons';
 
 import NavSearchBar from '../../components/navSearchBar';
-
 import BusinessesListView from './businessesListView';
 import BusinessesMapView from './businessesMapView';
 
@@ -30,11 +29,9 @@ import * as commonColors from '../../styles/commonColors';
 
 const currentLocation = require('../../../assets/imgs/current_location_button.png');
 
-//added by li, 2017/03/23
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
-
 
 class BusinessesView extends Component {
   constructor(props) {
@@ -62,19 +59,7 @@ class BusinessesView extends Component {
   }
 
   componentDidMount() {
-
     this.loadAllData();
-  }
-
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_category_request') {
-
-    } else if (newProps.status == 'search_category_success') {
-
-    } else if (newProps.status == 'search_category_error') {
-
-    }
   }
 
   loadAllData() {
@@ -120,7 +105,6 @@ class BusinessesView extends Component {
   }
 
   loadBusinesses() {
-
     if (this.more === false)
       return;
     
@@ -134,14 +118,13 @@ class BusinessesView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'business',
+          type: 'business',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText,
           lat: position.coords.latitude,
           long: position.coords.longitude
         }, (error, result)=>{
-
           this.setState( (state) => {  
             state.businessesQuery.loading = false;
             return state;
@@ -160,12 +143,12 @@ class BusinessesView extends Component {
               state.businessesQuery.more = false;
               return state;
             });
-
           }
 
-
           this.businesses = this.businesses.concat(result.data.business);
-          this.setState({ businesses: this.businesses });
+          this.setState({ 
+            businesses: this.businesses,
+          });
 
           const imageOffset = this.offset;
           this.offset += this.limit;
@@ -173,8 +156,9 @@ class BusinessesView extends Component {
           result.data.business.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {
               var category = UtilService.getCategoryById(business.categories[0])
+              
               this.setState( (state) => {
-                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);;
+                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
                 return state;
               })
             }
@@ -189,12 +173,6 @@ class BusinessesView extends Component {
   }
 
   onSearchChange(text) {
-
-    // if (text === '') {
-    //   this.onSearchFocus();
-    //   return;
-    // }
-
     this.offset = 0;
     this.searchText = text;      
     this.more = true;
@@ -224,7 +202,6 @@ class BusinessesView extends Component {
   // }
 
   onSearchCancel() {
-
     this.offset = 0;
     this.searchText = '';
     this.more = true;
@@ -241,14 +218,11 @@ class BusinessesView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar

@@ -50,15 +50,16 @@ export default class SimpleLeaderboardListCell extends Component {
   // }
 
   showStatus (status) {
-
-    if (status == 1)
+    if (status == 1) {
       return (
         <Image style={ styles.imageStatus } source={ chevron_up }/>
       );
-    else if (status == 2)
+    } else if (status == 2) {
       return (
         <Image style={ styles.imageStatus } source={ chevron_down }/>
       );
+    }
+
     return (
       <View style={ styles.imageStatus } />
     );
@@ -75,8 +76,8 @@ export default class SimpleLeaderboardListCell extends Component {
       avatar,
       currentUser,
       onClick,
-        avatarBackColor,
-        defaultAvatar,
+      avatarBackColor,
+      defaultAvatar,
     } = this.props;
 
     return (
@@ -85,11 +86,11 @@ export default class SimpleLeaderboardListCell extends Component {
           <View style={ styles.firstContainer }>
             { this.showStatus(status) }
             <Text style={ styles.textIndex }>{ index }</Text>
-            {avatar!=''&&<Image style={ [styles.imageAvatar, {backgroundColor:avatarBackColor} ]} source={{ uri:avatar }}/>}
-            {avatar==''&&<Image style={ styles.imageAvatar } source={defaultAvatar}/>}
+            { (avatar != '') && <Image style={ [styles.imageAvatar, { backgroundColor:avatarBackColor }] } source={{ uri:avatar }}/> }
+            { (avatar == '') && <Image style={ styles.imageAvatar } source={ defaultAvatar }/> }
             <View style={ styles.secondContainer }>
               <Text style={ styles.textName }>{ name }</Text>
-              <Text style={ styles.textPoints }>{ points==1?'1 point':points + ' points' }</Text>
+              <Text style={ styles.textPoints }>{ points == 1 ? '1 point' : points + ' points' }</Text>
             </View>
           </View>
         </View>

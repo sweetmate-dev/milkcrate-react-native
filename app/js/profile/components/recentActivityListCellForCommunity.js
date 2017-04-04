@@ -80,15 +80,15 @@ export default class RecentActivityListCellForCommunity extends Component {
       points,
       likeByMe,
       onClick,
-        avatarBackColor
+      avatarBackColor,
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            {avatar != ''&&<Image style={ [styles.avatar, {backgroundColor:avatarBackColor}] } source={{ uri:avatar }}/>}
-            {avatar == ''&&<Image style={ styles.avatar } source={defaultAvatar}/>}
+            { (avatar != '') && <Image style={ [styles.avatar, { backgroundColor:avatarBackColor }] } source={{ uri:avatar }}/>}
+            { (avatar == '') && <Image style={ styles.avatar } source={ defaultAvatar }/> }
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.topContainer }>
@@ -126,6 +126,7 @@ export default class RecentActivityListCellForCommunity extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',

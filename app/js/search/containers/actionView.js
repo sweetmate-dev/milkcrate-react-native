@@ -22,16 +22,13 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import NavSearchBar from '../../components/navSearchBar';
-
-import UtilService from '../../components/util'
-import bendService from '../../bend/bendService'
-
 import EventsListCell from '../components/eventsListCell';
-
+import LoadMoreSpinner from '../../components/loadMoreSpinner';
 import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
 
-import LoadMoreSpinner from '../../components/loadMoreSpinner';
+import UtilService from '../../components/util'
+import bendService from '../../bend/bendService'
 
 class ActionView extends Component {
   constructor(props) {
@@ -59,19 +56,7 @@ class ActionView extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-
-    if (newProps.status == 'search_action_request') {
-
-    } else if (newProps.status == 'search_action_success') {
-
-    } else if (newProps.status == 'search_action_error') {
-
-    }
-  }
-
   componentDidMount() {
-
     this.loadAllData();
   }
 
@@ -81,12 +66,11 @@ class ActionView extends Component {
 
   onPressedActionsCell (action) {
     Actions.ActionDetail({
-      action:action
+      action: action
     })
   }
 
   loadAllData() {
-
     this.offset = 0;
     this.limit = 20;
     this.searchText = '';
@@ -95,8 +79,8 @@ class ActionView extends Component {
     this.setState({
       currentLocation: null,
       actions: [],
-      categoryIcons:[],
-      actionsQuery:{
+      categoryIcons: [],
+      actionsQuery: {
         more: true,
         loading: false,
       },
@@ -106,7 +90,6 @@ class ActionView extends Component {
   }
 
   loadActions () {
-
     if (this.more == false)
       return;
 
@@ -120,7 +103,7 @@ class ActionView extends Component {
         this.setState({ currentLocation: position })
 
         bendService.searchActivity({
-          type:'action',
+          type: 'action',
           offset: this.offset,
           limit: this.limit,
           query: this.searchText
@@ -152,7 +135,7 @@ class ActionView extends Component {
           const imageOffset = this.offset;
           this.offset += this.limit;
 
-          result.data.action.map((action, index) => {
+          result.data.action.map( (action, index) => {
             if (action.categories && action.categories.length > 0) {
               var category = UtilService.getCategoryById(action.categories[0])
               this.setState( (state) => {
@@ -175,19 +158,13 @@ class ActionView extends Component {
       <EventsListCell
         title={ rowData.name }
         icon={ this.state.categoryIcons[rowID] }
-        points={ Math.max(rowData.points||1, 1) }
+        points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
     );
   }
 
   onSearchChange(text) {
-
-    // if (text === '') {
-    //   this.onSearchFocus();
-    //   return;
-    // }
-
     this.offset = 0;
     this.searchText = text;      
     this.more = true;
@@ -202,7 +179,6 @@ class ActionView extends Component {
   }
 
   onSearchCancel() {
-
     this.offset = 0;
     this.searchText = '';
     this.more = true;
@@ -218,14 +194,11 @@ class ActionView extends Component {
   }
 
   onRefresh() {
-
     this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
   render() {
-    const { status } = this.props;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -248,7 +221,8 @@ class ActionView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.actions) }
             renderRow={ this.renderActionsListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
           <LoadMoreSpinner
             show={ this.state.actionsQuery.more }
             loading={ this.state.actionsQuery.loading }

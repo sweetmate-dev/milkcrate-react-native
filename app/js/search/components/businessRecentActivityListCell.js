@@ -56,9 +56,9 @@ export default class BusinessRecentActivityListCell extends Component {
       width,
       name,
       description,
-        avatar,
-        avatarBackColor,
-        defaultAvatar,
+      avatar,
+      avatarBackColor,
+      defaultAvatar,
       time,
       rating,
       onClick,
@@ -68,19 +68,19 @@ export default class BusinessRecentActivityListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.categoryIconWrapper }>
-            {avatar != ''&&<Image style={ [styles.imageCategory, {backgroundColor:avatarBackColor}] } source={{ uri:avatar }}/>}
-            {avatar == ''&&<Image style={ styles.imageCategory } source={defaultAvatar}/>}
+            { (avatar != '') && <Image style={ [styles.imageCategory, { backgroundColor: avatarBackColor }] } source={{ uri: avatar }}/> }
+            { (avatar == '') && <Image style={ styles.imageCategory } source={ defaultAvatar }/> }
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.contentTopContainer }>
               <View style={ styles.names_timeContainer }>
-                <Text numberOfLines={2} style={ styles.textName }>{ name }</Text>
+                <Text numberOfLines={ 2 } style={ styles.textName }>{ name }</Text>
                 <Text style={ styles.textSmall }>{ time }</Text>
               </View>
-              {rating > 0 && <View style={ styles.ratingContainer }>
+              { (rating > 0) && <View style={ styles.ratingContainer }>
                 <Text style={ styles.textSmall }>{ rating} </Text>
                 <Image style={ styles.imageStar } source={ star } />
-              </View>}
+              </View> }
             </View>
             <Text style={ styles.textDescription }>{ description }</Text>
           </View>
@@ -89,6 +89,7 @@ export default class BusinessRecentActivityListCell extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
