@@ -103,13 +103,14 @@ class Home extends Component {
     var lastTime = 0;
     if (this.state.recentActivities.length > 0) {
       lastTime = this.state.recentActivities[0]._bmd.createdAt;
-    }
+    } else
+        return;
 
     bendService.getLastActivities(lastTime, (error, result)=>{
       if (error) {
         console.log(error);return
       }
-
+      console.log("getLastActivities", result.length)
       if(result.length > 0) {
         this.state.recentActivities = result.concat(this.state.recentActivities);
         this.setState({
@@ -275,6 +276,8 @@ class Home extends Component {
       this.setState({
         activityQuery: this.state.activityQuery
       })
+
+      console.log("activity count", this.state.recentActivities.length);
     })
   }
 

@@ -37,13 +37,12 @@ class Notifications extends Component {
 
     this.state = {
       isRefreshing: false,
-      alerts: []
     };
   }
 
   componentDidMount(){
 
-    this.loadAllData();
+    //this.loadAllData();
   }
 
   loadAllData() {
@@ -61,7 +60,7 @@ class Notifications extends Component {
         return;
       }
 
-      console.log("alerts", result)
+      //console.log("alerts", result)
 
       this.setState({
         alerts: result
@@ -82,7 +81,7 @@ class Notifications extends Component {
     );
   }
 
-  onAlertCellPressed (rowID) {
+  onAlertCellPressed (activity) {
     // alert("Tapped cell - " + rowID);
   }
 
@@ -91,7 +90,7 @@ class Notifications extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    //this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
@@ -103,18 +102,18 @@ class Notifications extends Component {
           searchMode={ false }
         />
         <ScrollView
-          style={ styles.listViewWrap }
-          refreshControl={
-            <RefreshControl
-              refreshing={ this.state.isRefreshing }
-              onRefresh={ () => this.onRefresh() }
-              tintColor={ commonColors.theme }
-            />
-          }
+            style={ styles.listViewWrap }
+            refreshControl={
+             <RefreshControl
+             refreshing={ this.state.isRefreshing }
+             onRefresh={ () => this.onRefresh() }
+             tintColor={ commonColors.theme }
+             />
+             }
         >
         <ListView
           enableEmptySections={ true }
-          dataSource={ this.dataSourceAlert.cloneWithRows(this.state.alerts) }
+          dataSource={ this.dataSourceAlert.cloneWithRows(this.props.alerts) }
           renderRow={ this.renderAlertRow.bind(this) }/>
         </ScrollView>
       </View>

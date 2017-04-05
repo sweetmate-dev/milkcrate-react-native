@@ -29,9 +29,14 @@ const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png'
 const searchIcon = require('../../../assets/imgs/tabbar_search.png');
 const searchSelectedIcon = require('../../../assets/imgs/tabbar_search_selected.png');
 const alertIcon = require('../../../assets/imgs/tabbar_alert.png');
+const alertIconRed = require('../../../assets/imgs/icon-alert-red.png');
 const alertSelectedIcon = require('../../../assets/imgs/tabbar_alert_selected.png');
 const youIcon = require('../../../assets/imgs/tabbar_you.png');
 const youSelectedIcon = require('../../../assets/imgs/tabbar_you_selected.png');
+
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
+import UtilService from '../../components/util'
 
 export default class Main extends Component {
   constructor(props) {
@@ -45,6 +50,9 @@ export default class Main extends Component {
       selectedTab: tab,
       badge: 0,
       searchAutoFocus: false,
+      alerts:[],
+      lastAlertTime:0,
+      hasNewAlert:false
     };
 
     StatusBar.setHidden(false);
@@ -71,7 +79,44 @@ export default class Main extends Component {
         .then(response => {
           this.setState({ photoPermission: response })
         });
-    } 
+    }
+
+    this.loadAlerts()
+  }
+
+  loadAlerts() {
+    //first load alerts
+    bendService.getUserAlerts( (error, result)=>{
+      if(error) {
+        console.log(error);
+        return;
+      }
+
+      if(result.length > 0) {
+        this.setState({
+          alerts: result,
+          lastAlertTime:result[0]._bmd.createdAt
+        })
+      }
+    })
+
+    setInterval(()=>{
+      bendService.getLastAlerts(this.state.lastAlertTime, (err, rets)=>{
+        if(err) {
+          console.log(err);
+          return;
+        }
+
+        if(rets.length > 0) {
+          this.state.alerts = rets.concat(this.state.alerts)
+          this.setState({
+            alerts: this.state.alerts,
+            lastAlertTime:rets[0]._bmd.createdAt,
+            hasNewAlert:true
+          })
+        }
+      })
+    }, 3000)
   }
 
   onSelectSearch() {
@@ -84,8 +129,14 @@ export default class Main extends Component {
   onSelectTab( tab ) {
     this.setState({ 
       selectedTab: tab,
-      searchAutoFocus: false,
+      hasNewAlert:false
     });
+
+    if(tab == 'alerts') {
+      this.setState({
+        hasNewAlert:false
+      });
+    }
   }
 
   render() {
@@ -135,12 +186,13 @@ export default class Main extends Component {
             title="Alerts"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
-            renderIcon={ () => <Image source={ alertIcon } style={ styles.iconTabbar3 }/> }
+            renderIcon={ () => <Image source={ this.state.hasNewAlert?alertIconRed:alertIcon } style={ this.state.hasNewAlert?styles.iconTabbar3_2:styles.iconTabbar3 } resizeMode="contain"/> }
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.onSelectTab('alerts') }>
             <Notifications 
-              subOne={ subOne } 
+              subOne={ subOne }
+              alerts={this.state.alerts}
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
@@ -185,6 +237,10 @@ const styles = StyleSheet.create({
   iconTabbar3: {
     width: 20,
     height: 21,
+  },
+  iconTabbar3_2: {
+    width: 20,
+    height: 24,
   },
   iconTabbar4: {
     width: 15,

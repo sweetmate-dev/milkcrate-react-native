@@ -161,6 +161,29 @@ module.exports = {
         qq.exists("actor", false)
         query.and(new Bend.Query().equalTo("user._id", this.getActiveUser()._id).or(qq));
         query.contains("type", ["activity-like", "notification"])
+        query.descending("_bmd.createdAt");
+        Bend.DataStore.find("alert", query, {
+            relations:{
+                activity:"activity",
+                actor:"actor",
+                "actor.avatar":"BendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getLastAlerts(lastTime, cb) {
+        var query = new Bend.Query()
+        var qq = new Bend.Query();
+        qq.equalTo("community._id", this.getActiveUser().community._id);
+        qq.exists("actor", false)
+        query.and(new Bend.Query().equalTo("user._id", this.getActiveUser()._id).or(qq));
+        query.contains("type", ["activity-like", "notification"])
+        query.greaterThan("_bmd.createdAt", lastTime);
+        query.descending("_bmd.createdAt");
 
         Bend.DataStore.find("alert", query, {
             relations:{
@@ -499,11 +522,11 @@ module.exports = {
                 activity:["action", "business", "event", "volunteer_opportunity", "service"],
                 community:"community",
                 user:"user",
-                "user.avatar":"bendFile",
+                "user.avatar":"BendFile",
                 "activity.certification":'certification'
             }
         }).then((rets)=>{
-            //console.log(rets);
+
             //consider likes
             var activityIds = []
             _.map(rets, (o)=>{

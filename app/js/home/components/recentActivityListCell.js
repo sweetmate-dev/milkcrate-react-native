@@ -24,7 +24,7 @@ export default class RecentActivityListCell extends Component {
     width: PropTypes.number,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
+    avatar: PropTypes.string,
     time: PropTypes.string,
     hearts: PropTypes.number,
     likeByMe: PropTypes.bool,
