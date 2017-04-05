@@ -10,6 +10,7 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
   Alert,
 } from 'react-native';
 
@@ -115,10 +116,11 @@ class Signup extends Component {
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
             <Text style={ styles.textTitle }>Getting Started</Text>
-            <Text style={ styles.textDescription }>Your administrator should have sent you an access code.</Text>
+            <Text style={ styles.textDescription }>Your administrator should have sent you an </Text>
+            <Text style={ styles.textDescription }>access code.</Text>
             <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
           </View>
-          <View style={ styles.inputContainer }>
+          <KeyboardAvoidingView style={ styles.inputContainer } behavior={ 'padding' }>
             <TextInput
               ref="email"
               autoCapitalize="none"
@@ -189,7 +191,7 @@ class Signup extends Component {
               onChangeText={ (text) => this.setState({ communityCode: text }) }
               onSubmitEditing={ () => this.onSignUp() }
             />
-          </View>
+          </KeyboardAvoidingView>
           <View style={ styles.bottomContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
               <View style={ styles.buttonSubmit }>
@@ -242,6 +244,7 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
+    paddingTop: 10,
     justifyContent: 'flex-start',
   },
   bottomContentWrap: {

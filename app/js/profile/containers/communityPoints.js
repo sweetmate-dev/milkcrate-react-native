@@ -118,7 +118,7 @@ class CommunityPoints extends Component {
 
       this.setState({
         currentUserIndex: currentUserIndex,
-        userList: userList,
+        // userList: userList,
       })
     })
 
@@ -301,7 +301,7 @@ class CommunityPoints extends Component {
             </View>
           </View>
 
-          <View style={ styles.leaderboardContainer }>
+          { (this.state.userList.length > 0) && <View style={ styles.leaderboardContainer }>
             <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.rank) } place</Text>
             <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
               <View style={ styles.leaderboardListViewWrapper }>
@@ -313,7 +313,7 @@ class CommunityPoints extends Component {
                 />
               </View>
             </TouchableHighlight>
-          </View>
+          </View> }
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
           <View style={ styles.recentActivityListViewWrapper }>

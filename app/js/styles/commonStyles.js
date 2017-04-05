@@ -16,6 +16,14 @@ export function hp (percentage) {
   return Math.round(value);
 }
 
+export function scaleScreen() {
+  
+  if (screenWidth > 320)
+    return 1;
+  
+  return 0.85;
+}
+
 export const carouselHeight = screenHiehgt * 0.3;
 export const carouselWidth = wp(88);
 export const carouselerWidth = screenWidth;
@@ -23,7 +31,7 @@ export const carouselItemHorizontalPadding = wp(1);
 export const carouselItemWidth = carouselWidth + carouselItemHorizontalPadding * 2;
 
 export const activityCellSize = screenWidth * 0.22;
-export const categoryCellSize = 90;
+export const categoryCellSize = 100;
 
 export const NavNoneButton = 0;
 export const NavBackButton = 1;

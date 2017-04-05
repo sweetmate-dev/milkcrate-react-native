@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 5,
-    height: commonStyles.hp(7.2),
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     borderStyle: 'solid',

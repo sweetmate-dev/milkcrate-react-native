@@ -15,7 +15,7 @@ import {
 import AppIntro from '../components/AppIntro';
 import Login from '../../auth/containers/login';
 
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
 const background1 = require('../../../assets/imgs/introduce/background_introduce1.png');
@@ -80,7 +80,7 @@ export default class Introduce extends Component {
               </View>
               <View style={ styles.paddingBottom }></View>
             </Image>
-          </View>
+          </View> 
           <View style={ styles.slide }>
             <Image source={ background4 } style={ styles.background } resizeMode="cover">
               <View style={ styles.paddingTop }></View>
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   background: {
-    width: screenWidth,
-    height: screenHiehgt,
+    width: commonStyles.screenWidth,
+    height: commonStyles.screenHiehgt,
   },
   slide: {
     flex: 1,
@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
   title: {
     color: commonColors.title,
     fontFamily: 'Blanch',
-    fontSize: 48,
+    fontSize: 48 * commonStyles.scaleScreen(),
   },
   description: {
     color: commonColors.title,
     fontFamily: 'OpenSans-Semibold',
-    fontSize: 14,
+    fontSize: 14 * commonStyles.scaleScreen(),
     paddingVertical: 2,
   },
 });

@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontWeight: 'bold',
-    fontSize: 11,
+    fontSize: 12,
     paddingTop: 8,
   },
 });

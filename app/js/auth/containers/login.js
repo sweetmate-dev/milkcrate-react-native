@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   inputContainer: {
-    flex: 1,
+    flex: 1.3,
     justifyContent: 'center',
     alignItems: 'center',
   },
