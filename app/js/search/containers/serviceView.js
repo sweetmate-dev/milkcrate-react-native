@@ -162,7 +162,7 @@ class ServiceView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ this.state.categoryIcons[rowID] }
+        icon={ this.state.categoryIcons[rowID]||UtilService.getMilkCrateLogo() }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedCell(rowData) }
       />

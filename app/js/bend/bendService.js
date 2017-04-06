@@ -784,27 +784,28 @@ module.exports = {
                     var questions = []
                     _.map(rets, (o)=>{
                         questions.push(o.question._id)
-                        //query
-                        query = new Bend.Query();
-                        query.equalTo("enabled", true)
-                        query.notContainedIn("_id", questions)
-                        query.and(new Bend.Query().equalTo("community._id", this.getActiveUser().community._id)
-                            .or(new Bend.Query().exists("community", false)));
-                        Bend.DataStore.find("pollQuestion", query).then((rets)=>{
-                            if(rets.length > 0) {
-                                //get related answers
-                                query = new Bend.Query();
-                                query.equalTo("question._id", rets[0]._id)
-                                query.ascending("position")
-                                Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
-                                    cb(null, rets[0], answers, null);
-                                }, (err)=>{
-                                    cb(err)
-                                })
-                            } else {
-                                cb("no data");
-                            }
-                        })
+                    })
+
+                    //query
+                    query = new Bend.Query();
+                    query.equalTo("enabled", true)
+                    query.notContainedIn("_id", questions)
+                    query.and(new Bend.Query().equalTo("community._id", this.getActiveUser().community._id)
+                        .or(new Bend.Query().exists("community", false)));
+                    Bend.DataStore.find("pollQuestion", query).then((rets)=>{
+                        if(rets.length > 0) {
+                            //get related answers
+                            query = new Bend.Query();
+                            query.equalTo("question._id", rets[0]._id)
+                            query.ascending("position")
+                            Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
+                                cb(null, rets[0], answers, null);
+                            }, (err)=>{
+                                cb(err)
+                            })
+                        } else {
+                            cb("no data");
+                        }
                     })
                 }, (err)=>{
                     cb(err)

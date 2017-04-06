@@ -43,7 +43,7 @@ class ServiceDetail extends Component {
     console.log('this.props.service : ', this.props.service);
     this.category = null;
 
-    if (this.props.service != null ) {
+    if (this.props.service != null && this.props.service.categories) {
       this.category = _.find(Cache.categories, (obj)=>{
         return obj._id == this.props.service.categories[0]
       })
@@ -124,8 +124,10 @@ class ServiceDetail extends Component {
 
     var backgroundImage, backgroundColor;
     var imageObj = service && service.coverImage ? service.coverImage : this.category && this.category.coverImage;
-    backgroundImage = UtilService.getLargeImage(imageObj);
-    backgroundColor = UtilService.getBackColor(imageObj);
+    if(imageObj) {
+      backgroundImage = UtilService.getLargeImage(imageObj);
+      backgroundColor = UtilService.getBackColor(imageObj);
+    }
 
     return (
       <View style={ styles.container }>
@@ -135,10 +137,11 @@ class ServiceDetail extends Component {
           title ={ service.name }
         />
         <ScrollView>
-          <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri: backgroundImage }}/>
+          {imageObj && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri: backgroundImage }}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ this.category && UtilService.getCategoryIcon(this.category.slug) } />
+              {this.category && <Image style={ styles.imageIcon } source={ this.category && UtilService.getCategoryIcon(this.category.slug) } />}
+              {!this.category && <Image style={ styles.imageIcon } source={ UtilService.getMilkCrateLogo() } />}
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{ service.name }</Text>
               </View>
