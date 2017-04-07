@@ -101,21 +101,23 @@ export default class Main extends Component {
     })
 
     setInterval(()=>{
-      bendService.getLastAlerts(this.state.lastAlertTime, (err, rets)=>{
-        if(err) {
-          console.log(err);
-          return;
-        }
+      if(bendService.getActiveUser()) {
+        bendService.getLastAlerts(this.state.lastAlertTime, (err, rets)=>{
+          if(err) {
+            console.log(err);
+            return;
+          }
 
-        if(rets.length > 0) {
-          this.state.alerts = rets.concat(this.state.alerts)
-          this.setState({
-            alerts: this.state.alerts,
-            lastAlertTime:rets[0]._bmd.createdAt,
-            hasNewAlert:true
-          })
-        }
-      })
+          if(rets.length > 0) {
+            this.state.alerts = rets.concat(this.state.alerts)
+            this.setState({
+              alerts: this.state.alerts,
+              lastAlertTime:rets[0]._bmd.createdAt,
+              hasNewAlert:true
+            })
+          }
+        })
+      }
     }, 3000)
   }
 
