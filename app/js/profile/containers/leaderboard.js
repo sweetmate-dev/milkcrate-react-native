@@ -116,7 +116,7 @@ class Leaderboard extends Component {
       <LeaderboardListCell
         status={ previousRank == -1?0 : (previousRank < currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
         index={ rowData.rank }
-        name={ rowData.name }
+        name={ rowData.name||rowData.username }
         points={ rowData.points }
         avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
         avatarBackColor={ UtilService.getBackColor(rowData.avatar) }
