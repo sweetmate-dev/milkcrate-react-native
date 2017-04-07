@@ -20,6 +20,8 @@ import MapView from 'react-native-maps';
 import BusinessesListCell from '../components/businessesListCell';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
+import UtilService from '../../components/util'
+
 const ASPECT_RATIO = screenWidth / screenHiehgt;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
@@ -36,35 +38,8 @@ class BusinessesMapView extends Component {
     super(props);
 
     this.state = {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      markers: [
-        {
-          pin: map_pin,
-          coordinate: {
-            latitude: LATITUDE + SPACE,
-            longitude: LONGITUDE + SPACE,
-          },
-        },
-        {
-          pin: map_pin,
-          coordinate: {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-          },
-        },
-        {
-          pin: map_pin,
-          coordinate: {
-            latitude: LATITUDE + SPACE,
-            longitude: LONGITUDE - SPACE,
-          },
-        },
-      ],
+      currentLocation: null,
+      markers: [],
       tappedPin: 0,
     };
 
@@ -73,9 +48,23 @@ class BusinessesMapView extends Component {
 
   componentDidMount() {
     this.setState( ( state) => {
+      this.props.businesses.map( (business, index) => {
+        state.markers[index] = {
+          pin: map_pin,
+          coordinate: {
+            latitude: business._geoloc[1],
+            longitude: business._geoloc[0],
+          },
+        };
+      })
       state.markers[this.state.tappedPin].pin = map_selected_pin;
       return state;
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+
+    this.setState({ currentLocation: nextProps.currentLocation });
   }
 
   onPressPin (index) {
@@ -85,56 +74,67 @@ class BusinessesMapView extends Component {
       return state;
     });
 
-    this.setState({ tappedPin: index });
+    this.setState({ 
+      tappedPin: index,
+      currentLocation: null 
+    });
   }
 
   render() {
     const { 
       businesses, 
-      categoryIcon, 
-      currentLocation, 
+      categoryIcons, 
     } = this.props;
 
-    let region = this.state.region;
+    let region = null;
 
-    if (currentLocation != null) {
-
-      region=Object.assign({}, region, {
-        latitude: currentLocation.coords.latitude,
-        longitude: currentLocation.coords.longitude,
+    if (this.state.currentLocation != null) {
+      region = new MapView.AnimatedRegion({
+        latitude: this.state.currentLocation.coords.latitude,
+        longitude: this.state.currentLocation.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      });
+    } else {
+      region = new MapView.AnimatedRegion({
+        latitude: businesses[this.state.tappedPin]._geoloc[1],
+        longitude: businesses[this.state.tappedPin]._geoloc[0],
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
       });
     }
 
+    console.log('business : ', businesses[this.state.tappedPin]);
+
     return (
       <View style={ styles.container }>
-        <MapView
+        <MapView.Animated
           style={ styles.map }
           region={ region }
         >
           {
+            this.props.currentLocation && <MapView.Marker.Animated
+              image={ currentLocationMarker }
+              coordinate={ this.props.currentLocation.coords }
+              flat={ true }                
+            />
+          }
+          {
             this.state.markers.map( (marker, index) => (
-              <MapView.Marker
-                image={ marker.pin }
+              <MapView.Marker.Animated
                 key={ index }
+                image={ marker.pin }
                 coordinate={ marker.coordinate }
                 flat={ true }
                 onPress={ () => this.onPressPin(index) }
               />
             ))            
-          }
-          {
-            currentLocation && <MapView.Marker
-              image={ currentLocationMarker }
-              coordinate={ currentLocation.coords }
-              flat={ true }                
-            />
-          }
-        </MapView>
+          }          
+        </MapView.Animated>
         <View style={ styles.calloutContainer } >
           <BusinessesListCell
-            width={ screenWidth - 20}
             title={ businesses[this.state.tappedPin].name }
-            icon={ categoryIcon }
+            icon={ categoryIcons[this.state.tappedPin] }
             description={ businesses[this.state.tappedPin].description }
             distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
