@@ -156,11 +156,18 @@ class BusinessesView extends Component {
           result.data.business.map( (business, index) => {
             if (business.categories && business.categories.length > 0) {
               var category = UtilService.getCategoryById(business.categories[0])
-              
-              this.setState( (state) => {
-                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
-                return state;
-              })
+
+              if (category === undefined) {
+                this.setState( (state) => {
+                  state.categoryIcons[imageOffset + index] = null;
+                  return state;
+                })
+              } else {
+                this.setState( (state) => {
+                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
+                  return state;
+                })
+              }
             }
           });
         })

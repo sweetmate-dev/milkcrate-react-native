@@ -38,12 +38,6 @@ class BusinessesMapView extends Component {
     super(props);
 
     this.state = {
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
       currentLocation: null,
       markers: [],
       tappedPin: 0,
@@ -70,7 +64,7 @@ class BusinessesMapView extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    // this.setState({ currentLocation: nextProps.currentLocation });
+    this.setState({ currentLocation: nextProps.currentLocation });
   }
 
   onPressPin (index) {
@@ -92,17 +86,21 @@ class BusinessesMapView extends Component {
       categoryIcons, 
     } = this.props;
 
-    let region = this.state.region;
+    let region = null;
 
     if (this.state.currentLocation != null) {
-      region=Object.assign({}, region, {
+      region = new MapView.AnimatedRegion({
         latitude: this.state.currentLocation.coords.latitude,
         longitude: this.state.currentLocation.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
       });
     } else {
-      region=Object.assign({}, region, {
+      region = new MapView.AnimatedRegion({
         latitude: businesses[this.state.tappedPin]._geoloc[1],
         longitude: businesses[this.state.tappedPin]._geoloc[0],
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
       });
     }
 
@@ -110,20 +108,20 @@ class BusinessesMapView extends Component {
 
     return (
       <View style={ styles.container }>
-        <MapView
+        <MapView.Animated
           style={ styles.map }
           region={ region }
         >
           {
-            this.state.currentLocation && <MapView.Marker
+            this.props.currentLocation && <MapView.Marker.Animated
               image={ currentLocationMarker }
-              coordinate={ this.state.currentLocation.coords }
+              coordinate={ this.props.currentLocation.coords }
               flat={ true }                
             />
           }
           {
             this.state.markers.map( (marker, index) => (
-              <MapView.Marker
+              <MapView.Marker.Animated
                 key={ index }
                 image={ marker.pin }
                 coordinate={ marker.coordinate }
@@ -132,7 +130,7 @@ class BusinessesMapView extends Component {
               />
             ))            
           }          
-        </MapView>
+        </MapView.Animated>
         <View style={ styles.calloutContainer } >
           <BusinessesListCell
             title={ businesses[this.state.tappedPin].name }
