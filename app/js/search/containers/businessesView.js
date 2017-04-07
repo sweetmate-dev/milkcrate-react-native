@@ -124,7 +124,7 @@ class BusinessesView extends Component {
           query: this.searchText,
           lat: position.coords.latitude,
           long: position.coords.longitude
-        }, (error, result)=>{
+        }, (error, result) => {
           this.setState( (state) => {  
             state.businessesQuery.loading = false;
             return state;
@@ -232,7 +232,7 @@ class BusinessesView extends Component {
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
-        {/*<View style={ styles.segmentedWrap }>
+        <View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
           <View style={ styles.segmented }>
             <SegmentedControls
@@ -255,24 +255,24 @@ class BusinessesView extends Component {
                 null
             }
           </View>
-        </View>*/}
+        </View>
         {
           this.state.selectedIndex == 'List' ?
             <BusinessesListView 
-              businesses={ this.state.businesses } 
-              categoryIcons={ this.state.categoryIcons } 
-              currentLocation={ this.state.currentLocation } 
+              businesses={ this.state.businesses }
+              categoryIcons={ this.state.categoryIcons }
+              currentLocation={ this.state.currentLocation }
               moreBusinesses={ this.state.businessesQuery.more }
               loading={ this.state.businessesQuery.loading }
               onLoadBusinesses={ () => this.loadBusinesses() }
               isRefreshing={ this.state.isRefreshing }
-              onRefresh={ () => this.onRefresh() }              
+              onRefresh={ () => this.onRefresh() }
             />
             :
             <BusinessesMapView 
-              categoryIcon={ commonStyles.categoryIcons[0] } 
-              businesses={ this.state.businesses } 
-              currentLocation={ this.state.currentLocation } 
+              categoryIcons={ this.state.categoryIcons }
+              businesses={ this.state.businesses }
+              currentLocation={ this.state.currentLocation }
             />
         }
       </View>
