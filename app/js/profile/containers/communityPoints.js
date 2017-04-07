@@ -104,7 +104,9 @@ class CommunityPoints extends Component {
 
     this.totalUsers = 0;
 
+    console.log("here-getLeaderBoardSimpleList");
     bendService.getLeaderBoardSimpleList( (error, userList, allUsers) => {
+      console.log("getLeaderBoardSimpleList", userList)
       if (error) {
         console.log(error);
         return;
@@ -118,7 +120,7 @@ class CommunityPoints extends Component {
 
       this.setState({
         currentUserIndex: currentUserIndex,
-        // userList: userList,
+        userList: userList,
       })
     })
 

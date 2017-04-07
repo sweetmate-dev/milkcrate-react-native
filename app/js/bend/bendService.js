@@ -906,7 +906,6 @@ module.exports = {
     },
 
     //-------end of detail view ------
-
     getLeaderBoardSimpleList(cb) {
         var query = new Bend.Query()
         query.equalTo("community._id", this.getActiveUser().community._id)
