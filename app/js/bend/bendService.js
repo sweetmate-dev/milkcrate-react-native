@@ -366,7 +366,7 @@ module.exports = {
         query.greaterThan("trendActivity." + communityId, 0)
         query.limit(1)
 
-        var types = ["action", "business", "event", "volunteer_opportunity", "service"]
+        var types = ["action", "business", "event", "service", "volunteer_opportunity"]
         var trends = []
         async.map(types, (type, callback)=>{
             Bend.DataStore.find(type, query, {
@@ -379,6 +379,7 @@ module.exports = {
                 if(rets.length > 0){
                     var trend = rets[0]
                     trend.type = type
+                    trend.seq = types.indexOf(type)
                     trends.push(trend)
                 }
                 callback(null, null)
@@ -441,6 +442,9 @@ module.exports = {
                         })
                     }
                     , (err, rets)=>{
+                        trends = _.sortBy(trends, (o)=>{
+                            return o.seq
+                        })
                         cb(null, trends)
                     })
             } else {

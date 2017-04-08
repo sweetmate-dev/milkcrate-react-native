@@ -448,7 +448,7 @@ class Home extends Component {
 
   get showTrending() {
     return (
-      <View style={ styles.trendingContainer }>
+    this.state.trendings.length > 0 && <View style={ styles.trendingContainer }>
         <View style={ styles.trendingTitleContainer }>
           <Text style={ styles.textTitle }>Currently Trending</Text>
           <Image style={ styles.imageTrending } source={ trending }/>
