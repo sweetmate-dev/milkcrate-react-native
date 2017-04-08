@@ -359,9 +359,11 @@ module.exports = {
         var query = new Bend.Query();
         query.and(new Bend.Query().equalTo("community._id", communityId)
             .or().exists("community", false));
+
         query.notEqualTo("deleted", true)
         query.and(new Bend.Query().equalTo("enabled", true).or().exists("enabled", false))
-        query.descending("trendActivityCount")
+        query.descending("trendActivity." + communityId)
+        query.greaterThan("trendActivity." + communityId, 0)
         query.limit(1)
 
         var types = ["action", "business", "event", "volunteer_opportunity", "service"]
@@ -394,6 +396,7 @@ module.exports = {
                                 q.equalTo("activity._id", t._id);
                                 q.descending("_bmd.createdAt");
                                 q.notEqualTo("deleted", true)
+                                q.equalTo("community._id", communityId);
                                 q.exists('user._id', true)
                                 q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
                                 q.limit(6)
@@ -419,6 +422,7 @@ module.exports = {
                                 var q = new Bend.Query()
                                 q.notEqualTo("deleted", true)
                                 q.exists('user._id', true)
+                                q.equalTo("community._id", communityId);
                                 q.equalTo("activity._id", t._id);
                                 q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
                                 var aggregation = Bend.Group.count('user._id');
