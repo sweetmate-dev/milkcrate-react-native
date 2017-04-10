@@ -25,6 +25,8 @@ import { Actions } from 'react-native-router-flux';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
+import VideoPlayer from 'react-native-video-player';
+
 
 import NavSearchBar from '../../components/navSearchBar';
 
@@ -437,11 +439,15 @@ class Home extends Component {
         <View style={ styles.trendingTitleContainer }>
           <Text style={ styles.textTitle }>Intro Video</Text>
         </View>
-        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
+        {/*<TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
           <View style={styles.imageVideoView}>
             <Image style={styles.imageVideo} resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
+        <VideoPlayer
+            thumbnail={require('../../../assets/imgs/vid.png')}
+            video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
+        />
       </View>
     )
   }
