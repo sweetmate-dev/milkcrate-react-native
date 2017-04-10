@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
 import BusinessesListCell from '../components/businessesListCell';
@@ -80,6 +81,10 @@ class BusinessesMapView extends Component {
     });
   }
 
+  onPressedCell (rowData) {
+    Actions.BusinessesDetail({ business: rowData });
+  }
+
   render() {
     const { 
       businesses, 
@@ -103,8 +108,6 @@ class BusinessesMapView extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       });
     }
-
-    console.log('business : ', businesses[this.state.tappedPin]);
 
     return (
       <View style={ styles.container }>
@@ -140,6 +143,7 @@ class BusinessesMapView extends Component {
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Number(businesses[this.state.tappedPin].rating || 0) }
+            onClick={ () => this.onPressedCell(businesses[this.state.tappedPin]) }
             mode={ 1 }
           />
         </View>

@@ -12,7 +12,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-    Linking
+  KeyboardAvoidingView,
+  Linking,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -30,7 +31,6 @@ import BusinessRecentActivityListCell from '../components/businessRecentActivity
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
-const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
 
@@ -318,6 +318,13 @@ class BusinessesDetail extends Component {
     var trendUsers = this.state.trendUsers;
     var trendUserCount = this.state.trendUserCount;
     var lastTrendTime = this.state.lastTrendTime;
+
+    let icon = null;
+
+    if (this.category !== undefined) {
+      icon = UtilService.getCategoryIcon(this.category.slug);
+    }
+
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -325,6 +332,7 @@ class BusinessesDetail extends Component {
           onBack={ this.onBack }
           title={ business.name }
         />
+        <KeyboardAvoidingView style={ styles.keyboardAvoidingViewContainer } behavior={ 'padding' }>
         <ScrollView>
           { business._geoloc &&<MapView
             style={ styles.map }
@@ -351,7 +359,7 @@ class BusinessesDetail extends Component {
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
+              <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{ business.name }</Text>
                 { this.state.currentLocation && <Text style={ styles.textValue }>
@@ -514,6 +522,7 @@ class BusinessesDetail extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
+        </KeyboardAvoidingView>
         { 
           !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
             <View style={ styles.buttonCheckin }>
@@ -543,6 +552,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  keyboardAvoidingViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',    
+  },
+
   map: {
     flex: 1,
     height: commonStyles.hp(21),
