@@ -11,7 +11,10 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+    Platform
 } from 'react-native';
+
+import Permissions from 'react-native-permissions';
 
 import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
@@ -46,6 +49,15 @@ class SetupProfile extends Component {
       birthday: user.birthdate ? moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY') : '',
       gender: user.gender ? user.gender : '',
     };
+  }
+
+  componentDidMount() {
+    if (Platform.OS === 'ios') {
+      Permissions.requestPermission('notification')
+          .then(response => {
+            console.log(response)
+          });
+    }
   }
 
   onSelectGender(gender) {
