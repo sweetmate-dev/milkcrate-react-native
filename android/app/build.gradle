@@ -156,6 +156,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-mauron85-background-geolocation')
     compile project(':react-native-device-info')
     compile project(':react-native-video')
     compile project(':react-native-permissions')

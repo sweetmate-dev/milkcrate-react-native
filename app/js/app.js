@@ -15,6 +15,7 @@ import thunk from 'redux-thunk';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
 import DeviceInfo from 'react-native-device-info';
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 
 import bendService from './bend/bendService'
 import * as _ from 'underscore'
@@ -107,6 +108,8 @@ class App extends Component {
       loggedIn: false,
     };
 
+    this.last = null;
+
     bendService.init((err, activeUser)=>{
 
       console.log("bend init", err, activeUser)
@@ -164,6 +167,41 @@ class App extends Component {
             AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
           }
         })
+
+        BackgroundGeolocation.configure({
+          desiredAccuracy: 10,
+          stationaryRadius: 50,
+          distanceFilter: 50,
+          debug: false,
+          stopOnTerminate: false,
+          interval: 10000
+        }, function () {});
+
+        BackgroundGeolocation.on('location', (location) => {
+          if(this.last) {
+            if(this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
+              return;
+            }
+          }
+
+          this.last = location
+          console.log('[DEBUG] BackgroundGeolocation location', location);
+
+          //save to bend
+          bendService.saveGeoLocation({
+            latitude:location.latitude,
+            longitude:location.longitude,
+            speed:location.speed,
+            altitude:location.altitude,
+            accuracy:location.accuracy
+          }, (err, ret)=>{
+            console.log(err, ret);
+          })
+        });
+
+        BackgroundGeolocation.start(() => {
+          console.log('[DEBUG] BackgroundGeolocation started successfully');
+        });
       });
     });
   }

@@ -1023,6 +1023,14 @@ module.exports = {
         })
     },
 
+    saveGeoLocation(param, cb) {
+        Bend.execute("save-geo-location", param).then(function(result){
+            cb(null, result);
+        },function(error) {
+            cb(error)
+        })
+    },
+
     //file upload api
     uploadFile(file, cb, ext){
         file._filename = Date.now() + ""
