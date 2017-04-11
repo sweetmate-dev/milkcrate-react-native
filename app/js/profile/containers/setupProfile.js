@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions,
   TextInput,
+  Platform,
   TouchableOpacity,
   Alert,
 } from 'react-native';
@@ -21,6 +22,8 @@ import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
+
+import Permissions from 'react-native-permissions';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -46,6 +49,15 @@ class SetupProfile extends Component {
       birthday: user.birthdate ? moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY') : '',
       gender: user.gender ? user.gender : '',
     };
+  }
+
+  componentDidMount() {
+    if (Platform.OS === 'ios') {
+      Permissions.requestPermission('notification')
+          .then(response => {
+            console.log(response)
+          });
+    }
   }
 
   onSelectGender(gender) {

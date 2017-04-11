@@ -799,8 +799,8 @@ module.exports = {
                     query.equalTo("enabled", true)
                     query.notEqualTo("deleted", true)
                     query.notContainedIn("_id", questions)
-                    query.and(new Bend.Query().equalTo("community._id", this.getActiveUser().community._id)
-                        .or().exists("community", false));
+                    query.and(new Bend.Query().containsAll("communities", [this.getActiveUser().community._id])
+                        .or().exists("communities", false));
                     Bend.DataStore.find("pollQuestion", query).then((rets)=>{
                         if(rets.length > 0) {
                             //get related answers

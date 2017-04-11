@@ -219,7 +219,14 @@ class BusinessesDetail extends Component {
     }
   }
 
-  onCheckIn() {
+  onCheckIn(distanceMeter) {
+    if(distanceMeter == null) {
+      Alert.alert('Location Access is Required', 'To check in, you must give MilkCrate access to your location. You can do this from your phone\'s privacy settings.');
+      return;
+    } else if(distanceMeter > 150) {
+      Alert.alert('Invalid Location', 'You must be near this business to check in. Your current location is too far way.');
+      return;
+    }
     bendService.captureActivity(this.props.business._id, 'business', (error, result) => {
       if (error) {
         console.log(error);
@@ -325,6 +332,14 @@ class BusinessesDetail extends Component {
       icon = UtilService.getCategoryIcon(this.category.slug);
     }
 
+    var distance = null;
+    var distanceMeter = null;
+    if(this.state.currentLocation && business._geoloc) {
+      distance = UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
+          this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude);
+      distanceMeter = 1609.3 * distance
+    }
+
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -362,9 +377,8 @@ class BusinessesDetail extends Component {
               <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{ business.name }</Text>
-                { this.state.currentLocation && <Text style={ styles.textValue }>
-                  { business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
-                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles   ':''}
+                { distance && <Text style={ styles.textValue }>
+                  { business._geoloc?distance + ' Miles   ':''}
                   { UtilService.getPricesString(business.price) }</Text> 
                 }
               </View>
@@ -524,9 +538,9 @@ class BusinessesDetail extends Component {
         </ScrollView>
         </KeyboardAvoidingView>
         { 
-          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
-              <Text style={ styles.textButton }>I’m Here • Checkin</Text>
+              <Text style={ [styles.textButton, {opacity:(distanceMeter&&distanceMeter<=150)?1:0.6}] }>I’m Here • Checkin</Text>
             </View>
           </TouchableOpacity>
         }
