@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Linking,
   Alert,
+    AsyncStorage
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -13,7 +14,10 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
+import DeviceInfo from 'react-native-device-info';
+
 import bendService from './bend/bendService'
+import * as _ from 'underscore'
 
 import * as reducers from './reducers';
 
@@ -44,8 +48,6 @@ import ActionView from './search/containers/actionView';
 import ServiceView from './search/containers/serviceView';
 import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
-
-
 
 //Deep Links
 const deepLink_General = [
@@ -116,6 +118,53 @@ class App extends Component {
       }
 
       this.setState({ initialize: true });
+
+      /*
+       - appVersion
+       - bundleId (this is the package name for  android)
+       - user – if a user is logged in
+       - deviceName  – "Kostas' iPhone"
+       - deviceModel – "iPhone"
+       - deviceVersion – "iPhone7,2"
+       - systemName – the OS ("iOS")
+       - systemVersion – the OS version
+       - deviceId – the vendorID on iOS, unique device id on android
+       - buildType – "release" or "development" or "staging"
+       - apnsToken – iOS only, the push token
+       - gcmRegistrationId – Android only, the android push token
+       */
+
+      AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
+        var installInfo = ret
+        console.log("installationInfo", installInfo)
+        if(installInfo) {
+          installInfo = JSON.parse(installInfo)
+        } else {
+          installInfo = {}
+        }
+        _.extend(installInfo, {
+          appVersion:DeviceInfo.getVersion(),
+          bundleId:DeviceInfo.getBundleId(),
+          user:activeUser?{
+            "_type": "BendRef",
+            "_id": activeUser._id,
+            "_collection": "user"
+          }:null,
+          deviceName:DeviceInfo.getDeviceName(),
+          deviceModel:DeviceInfo.getModel(),
+          deviceVersion:DeviceInfo.getDeviceId(),
+          systemName:DeviceInfo.getSystemName(),
+          systemVersion:DeviceInfo.getSystemVersion(),
+          deviceId:DeviceInfo.getUniqueID(),
+          buildType:"development",
+        })
+
+        bendService.saveInstallInformation(installInfo, (err, ret)=>{
+          if(!err) {
+            AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
+          }
+        })
+      });
     });
   }
 

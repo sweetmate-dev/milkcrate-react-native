@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.brentvatne.react.ReactVideoPackage;
 import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
 import com.smixx.fabric.FabricPackage;
@@ -43,6 +44,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
             new ReactVideoPackage(),
             new ReactNativePermissionsPackage(),
             new FabricPackage(),

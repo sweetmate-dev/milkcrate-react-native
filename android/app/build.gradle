@@ -156,6 +156,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-device-info')
     compile project(':react-native-video')
     compile project(':react-native-permissions')
     compile project(':react-native-fabric')
