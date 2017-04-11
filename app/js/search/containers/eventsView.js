@@ -36,9 +36,6 @@ var dataSource = new ListView.DataSource({
   sectionHeaderHasChanged: (s1, s2) => s1 !== s2
 });
 
-let arrayValidDate = [];
-let eventDays = [];
-
 class EventsView extends Component {
   constructor(props) {
     super(props);
@@ -46,8 +43,8 @@ class EventsView extends Component {
     this.state = {
       isRefreshing: false,
 
-      selectedDate: Date.now(),
       arrayValidDate: [],
+      eventDays: [],
      
       currentLocation: null,
       events: [],
@@ -59,6 +56,7 @@ class EventsView extends Component {
       },
     };
 
+    this.eventDays = [];
     this.events = [];
     this.offset = 0;
     this.limit = 1000; //need to fetch all events
@@ -72,9 +70,9 @@ class EventsView extends Component {
 
   loadAllData() {
     this.setState({
-      selectedDate: Date.now(),
       arrayValidDate: [],
-     
+      eventDays: [],
+
       currentLocation: null,
       events: [],
 
@@ -85,6 +83,7 @@ class EventsView extends Component {
       },
     });
 
+    this.eventDays = [];
     this.events = [];
     this.offset = 0;
     this.limit = 1000; 
@@ -106,15 +105,25 @@ class EventsView extends Component {
     Actions.EventDetail({event:event});
   }
 
-  onSelectDate(date) {
-    this.setState({ selectedDate: date });
-    this.state = {
-      dataSource: dataSource.cloneWithRowsAndSections(EventsEntries),
-    };
+  onSelectDate(selectedDate) {
+    let newEvents = [];
+
+    _.each(this.events, (event) => {
+
+      if (this.compareDates(event.date, selectedDate) == false)
+        return;
+      
+      newEvents.push(event);
+    })
+
+    this.setState({ events: newEvents });
   }
 
   compareDates( firstDate, secondDate) {
-    var timeDiff = firstDate - secondDate;
+    const date1 = new Date(firstDate);
+    const date2 = new Date(secondDate);
+
+    var timeDiff = date1 - date2;
     var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return diffDays < 0 ? false : true;
   }
@@ -172,8 +181,8 @@ class EventsView extends Component {
           })
 
           _.each(events, (event) => {
-            var exist = _.find(this.events, (e) => {
-              return e.date == event.date;
+            var exist = _.find(this.events, (entry) => {
+              return entry.date == event.date;
             })
 
             if (exist) {
@@ -188,14 +197,24 @@ class EventsView extends Component {
 
           this.setState({ events: this.events });
 
+          this.events.map( (entry) => {
+            this.eventDays.push( entry.date );
+          });
+          
+          this.setState({ eventDays: this.eventDays });
+
           const imageOffset = this.offset;
           this.offset += this.limit;
 
           result.data.event.map((event, index) => {
             if (event.categories && event.categories.length > 0) {
-              var category = UtilService.getCategoryById(event.categories[0])
+              let category = UtilService.getCategoryById(event.categories[0])
+              let icon = null;
+              if (category != undefined)
+                icon = UtilService.getCategoryIcon(category.slug);
+                
               this.setState( (state) => {
-                state.categoryIcons[event._id] = UtilService.getCategoryIcon(category.slug);
+                state.categoryIcons[event._id] = icon;
                 return state;
               });
             }
@@ -210,7 +229,9 @@ class EventsView extends Component {
   }
 
   renderListRow(rowData, sectionID, rowID) {
-      if( typeof rowData == 'string') return null;
+    if( typeof rowData == 'string') 
+      return null;
+
     return (
       <View>
         {
@@ -244,6 +265,7 @@ class EventsView extends Component {
   }
 
   render() {
+
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -260,7 +282,7 @@ class EventsView extends Component {
             />
           }
         >
-          {/*<CalendarStrip
+          <CalendarStrip
             style={ styles.calendar }
             selection={ 'background' }
             calendarColor={ '#d4ebf640' }
@@ -275,8 +297,8 @@ class EventsView extends Component {
             highlightDateNameStyle={ styles.calendarDateName }
             highlightDateNumberStyle={ styles.calendarDateNumber }
             onDateSelected={ (date) => this.onSelectDate(date) }
-            eventDays={ eventDays }
-          />*/}
+            eventDays={ this.state.eventDays }
+          />
           <ListView
             enableEmptySections={ true }
             dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
