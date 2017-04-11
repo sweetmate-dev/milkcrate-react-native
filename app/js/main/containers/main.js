@@ -131,7 +131,6 @@ export default class Main extends Component {
   onSelectTab( tab ) {
     this.setState({ 
       selectedTab: tab,
-      hasNewAlert:false
     });
 
     if(tab == 'alerts') {
