@@ -66,9 +66,9 @@ export default class Main extends Component {
 
   componentDidMount() {
     if (Platform.OS === 'ios') {
-      Permissions.requestPermission('location')
+      Permissions.requestPermission('notification')
           .then(response => {
-            this.setState({ photoPermission: response })
+            console.log(response)
           });
 
       navigator.geolocation.getCurrentPosition( (position) => {
