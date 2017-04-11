@@ -92,12 +92,12 @@ export default class Main extends Component {
   loadAlerts() {
     //first load alerts
     bendService.getUserAlerts( (error, result)=>{
-      if(error) {
+      if (error) {
         console.log(error);
         return;
       }
 
-      if(result.length > 0) {
+      if (result.length > 0) {
         this.setState({
           alerts: result,
           lastAlertTime:result[0]._bmd.createdAt
@@ -106,19 +106,19 @@ export default class Main extends Component {
     })
 
     setInterval(()=>{
-      if(bendService.getActiveUser()) {
-        bendService.getLastAlerts(this.state.lastAlertTime, (err, rets)=>{
-          if(err) {
-            console.log(err);
+      if (bendService.getActiveUser()) {
+        bendService.getLastAlerts(this.state.lastAlertTime, (error, result) => {
+          if (error) {
+            console.log(error);
             return;
           }
 
-          if(rets.length > 0) {
-            this.state.alerts = rets.concat(this.state.alerts)
+          if (result.length > 0) {
+            this.state.alerts = result.concat(this.state.alerts)
             this.setState({
               alerts: this.state.alerts,
-              lastAlertTime:rets[0]._bmd.createdAt,
-              hasNewAlert:true
+              lastAlertTime: result[0]._bmd.createdAt,
+              hasNewAlert: true
             })
           }
         })
@@ -198,7 +198,7 @@ export default class Main extends Component {
             onPress={ () => this.onSelectTab('alerts') }>
             <Notifications 
               subOne={ subOne }
-              alerts={this.state.alerts}
+              alerts={ this.state.alerts }
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
@@ -214,7 +214,7 @@ export default class Main extends Component {
             onPress={ () => this.onSelectTab('profile') }>
             <Profile
               subOne={ subOne }
-              selectedTab={this.state.selectedTab}
+              selectedTab={ this.state.selectedTab }
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>

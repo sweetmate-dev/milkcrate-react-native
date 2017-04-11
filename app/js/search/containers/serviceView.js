@@ -223,7 +223,7 @@ class ServiceView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          placeholder={ 'Search services' }
+          placeholder={ 'Search for services' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />

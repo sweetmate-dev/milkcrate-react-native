@@ -237,7 +237,7 @@ class BusinessesView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          placeholder={ 'Search businesses' }
+          placeholder={ 'Search for businesses' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />

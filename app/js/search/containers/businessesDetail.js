@@ -12,7 +12,6 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  KeyboardAvoidingView,
   Linking,
 } from 'react-native';
 
@@ -22,6 +21,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Point from '../../components/Point';
 import Stars from 'react-native-stars-rating';
 import NavTitleBar from '../../components/navTitleBar';
@@ -347,8 +347,7 @@ class BusinessesDetail extends Component {
           onBack={ this.onBack }
           title={ business.name }
         />
-        <KeyboardAvoidingView style={ styles.keyboardAvoidingViewContainer } behavior={ 'padding' }>
-        <ScrollView>
+        <KeyboardAwareScrollView>
           { business._geoloc &&<MapView
             style={ styles.map }
             initialRegion={{
@@ -525,7 +524,7 @@ class BusinessesDetail extends Component {
                 returnKeyType={ 'done' }
                 value={this.state.businessComment}
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
-              />
+              />              
             </View>
           </View>
           <View style={ styles.buttonRateBusinessWrapper }>
@@ -535,8 +534,7 @@ class BusinessesDetail extends Component {
               </View>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
         { 
           !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
@@ -625,6 +623,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   addressContainer: {
+    flex: 2,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
@@ -634,9 +633,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   visitContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   textInfoTitle: {
     color: commonColors.grayMoreText,
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
   visitCellContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 10,
+    paddingLeft: 8,
   },
   imageVisit: {
     height: 48,

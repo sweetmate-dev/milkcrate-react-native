@@ -10,15 +10,15 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
   Alert,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import * as signupActions from '../actions';
 import { connect } from 'react-redux';
-
 import { Actions } from 'react-native-router-flux';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 
@@ -113,6 +113,7 @@ class Signup extends Component {
   render() {
     return (
       <View style={ styles.container }>
+        <KeyboardAwareScrollView>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
             <Text style={ styles.textTitle }>Getting Started</Text>
@@ -120,7 +121,7 @@ class Signup extends Component {
             <Text style={ styles.textDescription }>access code.</Text>
             <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
           </View>
-          <KeyboardAvoidingView style={ styles.inputContainer } behavior={ 'padding' }>
+          <View style={ styles.inputContainer }>
             <TextInput
               ref="email"
               autoCapitalize="none"
@@ -191,7 +192,7 @@ class Signup extends Component {
               onChangeText={ (text) => this.setState({ communityCode: text }) }
               onSubmitEditing={ () => this.onSignUp() }
             />
-          </KeyboardAvoidingView>
+          </View>
           <View style={ styles.bottomContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
               <View style={ styles.buttonSubmit }>
@@ -210,6 +211,7 @@ class Signup extends Component {
             </View>
           </View>
         </Image>
+        </KeyboardAwareScrollView>
       </View>
     );
   }

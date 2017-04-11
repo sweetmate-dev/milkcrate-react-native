@@ -204,7 +204,7 @@ class ActionView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          placeholder={ 'Search actions' }
+          placeholder={ 'Search for actions' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />
