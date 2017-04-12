@@ -13,7 +13,7 @@ import {
   ListView,
   RefreshControl,
   Alert,
-    Image
+  Image,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -27,6 +27,7 @@ import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCellForCommunity from '../components/recentActivityListCellForCommunity';
 import SimpleLeaderboardListCell from '../components/simpleLeaderboardListCell';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -245,7 +246,7 @@ class CommunityPoints extends Component {
     var previousRank = rowData.previousRank, currentRank = rowData.rank
     return (
       <SimpleLeaderboardListCell
-        status={ previousRank == -1 ? 0 : (previousRank<currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
+        status={ previousRank == -1 ? 0 : (previousRank < currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
         index={ rowData.rank }
         name={ rowData.name }
         points={ rowData.points }
@@ -305,7 +306,10 @@ class CommunityPoints extends Component {
 
           { (this.state.userList.length > 0) && <View style={ styles.leaderboardContainer }>
             <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.rank) } place</Text>
-            <TouchableHighlight onPress={ () => this.onLeaderboardCellPressed() }>
+            <TouchableOpacity 
+              onPress={ () => this.onLeaderboardCellPressed() }
+              activeOpacity={ 0.5 }
+            >
               <View style={ styles.leaderboardListViewWrapper }>
                 <ListView
                   enableEmptySections={ true }
@@ -313,8 +317,12 @@ class CommunityPoints extends Component {
                   renderRow={ this.renderLeaderboardRow.bind(this) }
                   contentContainerStyle={ styles.leaderboardListView }
                 />
+                <View style={ styles.viewMoreContainer }>
+                  <Text style={ styles.textViewMore }>View More</Text>
+                  <EntypoIcon style={ styles.rightIcon } name="chevron-thin-right" size={ 15 } color={ commonColors.grayMoreText }/>
+                </View>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View> }
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
@@ -322,7 +330,8 @@ class CommunityPoints extends Component {
             <ListView
               enableEmptySections={ true }
               dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
-              renderRow={ this.renderRecentActivityRow.bind(this) }/>
+              renderRow={ this.renderRecentActivityRow.bind(this) }
+            />
           </View>
           <LoadMoreSpinner
             show={ this.state.activityQuery.more }
@@ -409,6 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   leaderboardListViewWrapper: {
+    flexDirection: 'row',
     borderStyle: 'solid',
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
@@ -419,5 +429,20 @@ const styles = StyleSheet.create({
   leaderboardListView: {
     flex: 1,
     justifyContent: 'center',
+  },
+  viewMoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  textViewMore: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+  },
+  rightIcon: {
+    paddingTop: 2.5,
+    alignSelf: 'center',
   },
 });

@@ -203,7 +203,7 @@ class VolunteerView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          placeholder={ 'Search volunteer opportunities' }
+          placeholder={ 'Search for volunteer opportunities' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
         />

@@ -376,10 +376,10 @@ class Home extends Component {
       return (
         <TrendingCarousel
           key={ index }
-          title={ UtilService.getTrendTitle(entry.type) }
+          type={ UtilService.getTrendTitle(entry.type) }
           activityType={ entry.type }
           activity={ entry }
-          location={ entry.name }
+          title={ entry.name }
           icon={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           userCount={ entry.userCount }

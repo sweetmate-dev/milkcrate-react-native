@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import TextField from 'react-native-md-textinput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
@@ -78,7 +79,7 @@ class ChangePassword extends Component {
           onBack={ this.onBack }
           title ='Change Password'
         />
-        <ScrollView style={ styles.scrollView }>
+        <KeyboardAwareScrollView style={ styles.scrollView }>
           <Text style={ styles.textSettingsSection }>Current Password</Text>
           <TextField
             label='Current Password'
@@ -120,7 +121,7 @@ class ChangePassword extends Component {
               <Text style={ styles.textUpdatePassword }>Update Password</Text>
             </View>
           </TouchableOpacity>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     );
   }

@@ -9,7 +9,6 @@ import {
 
 import { screenWidth } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 
 const chevron_down = require('../../../assets/imgs/chevron_down.png');
 const chevron_up = require('../../../assets/imgs/chevron_up.png');
@@ -62,10 +61,6 @@ export default class SimpleLeaderboardListCell extends Component {
           <View style={ styles.secondContainer }>
             <Text style={ styles.textName }>{ name }</Text>
             <Text style={ styles.textPoints }>{ points } points</Text>
-          </View>
-          <View style={ styles.viewMoreContainer }>
-            <Text style={ styles.textViewMore }>View More</Text>
-            <EntypoIcon style={ styles.rightIcon } name="chevron-thin-right" size={ 15 } color={ commonColors.grayMoreText }/>
           </View>
         </View>  
       );
@@ -163,17 +158,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  viewMoreContainer: {
-    flexDirection: 'row',
-  },
-  textViewMore: {
-    color: commonColors.grayMoreText,
-    fontFamily: 'Open Sans',
-    fontSize: 14,
-  },
-  rightIcon: {
-    paddingTop: 2.5,
-    alignSelf: 'center',
   },
 });

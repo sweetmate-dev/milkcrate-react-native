@@ -17,7 +17,6 @@ import Point from '../../components/Point';
 
 import UtilService from '../../components/util'
 
-const locationImage = require('../../../assets/imgs/location.png');
 const heart = require('../../../assets/imgs/heart.png');
 
 export const carouselHeight = commonStyles.screenHiehgt * 0.36;
@@ -26,8 +25,8 @@ const entryBorderRadius = 5;
 export default class TrendingCarousel extends Component {
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    location: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string,
     icon: PropTypes.number,
     users: PropTypes.array,
     time: PropTypes.number,
@@ -77,8 +76,8 @@ export default class TrendingCarousel extends Component {
 
   render () {
     const { 
+      type, 
       title, 
-      location, 
       icon, 
       users, 
       time, 
@@ -103,10 +102,10 @@ export default class TrendingCarousel extends Component {
             </View>
           </View>
           <View style={ styles.topContainer }>
-            <Text style={ styles.textCategory }> { title } </Text>
-            <View style={ styles.locationContainer }>
-              <Image style={ styles.imageLocation } source={ UtilService.getActivityIcon(activityType) } resizeMode="contain"/>
-              <Text style={ styles.textLocation }>{ location }</Text>
+            <Text style={ styles.textCategory }> { type } </Text>
+            <View style={ styles.titleContainer }>
+              <Image style={ styles.imageTitle } source={ UtilService.getActivityIcon(activityType) } resizeMode="contain"/>
+              <Text numberOfLines={ 1 } style={ styles.textTitle }>{ title }</Text>
             </View>
           </View>
           <View style={ styles.centerContainer }>
@@ -115,8 +114,9 @@ export default class TrendingCarousel extends Component {
           <View style={ styles.bottomContainer }>
             { (users.length > 0) && <View style={ styles.avatarsMainContainer }>
               <View style={ styles.names_timeContainer }>
-                <Text style={ styles.textName }>{ users[0].name } and { userCount - 1 } others</Text>
-                <Text style={ styles.textSmall }>Latest { UtilService.getPastDateTime(time) }</Text>
+                <Text style={ styles.textName }>{ users[0].name }</Text>
+                { (userCount > 1) && <Text style={ styles.textName }> and { userCount - 1 } others</Text> }
+                <Text numberOfLines={ 1 } style={ styles.textSmall }>Latest { UtilService.getPastDateTime(time) }</Text>
               </View>
               <View style={ styles.avatarsContainer }>
                 { 
@@ -128,7 +128,7 @@ export default class TrendingCarousel extends Component {
                   </View>
                 }
               </View>
-            </View>}
+            </View> }
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
                 { false && <Image style={ styles.imageLike } source={ heart }/> }
@@ -208,16 +208,16 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     backgroundColor: 'transparent',
   },
-  locationContainer: {
+  titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  imageLocation: {
-    width: 20,
+  imageTitle: {
+    width: 10,
     height: 16,
   },
-  textLocation: {
+  textTitle: {
     color: '#fff',
     fontFamily: 'Open Sans',
     fontSize: 16,
@@ -253,11 +253,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   textSmall: {
+    flex: 1,
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
-    fontSize: 12,
-    backgroundColor: 'transparent',
+    fontSize: 12,    
     paddingLeft: 5,
+    backgroundColor: 'transparent',
   },
   imageUserAvatar: {
     width: 32,
