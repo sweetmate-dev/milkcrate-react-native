@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageTitle: {
-    width: 10,
+    width: 20,
     height: 16,
   },
   textTitle: {
