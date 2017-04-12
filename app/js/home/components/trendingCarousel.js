@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageLocation: {
-    width: 10,
+    width: 20,
     height: 16,
   },
   textLocation: {
