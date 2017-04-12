@@ -71,20 +71,12 @@ export default class Main extends Component {
             console.log(response)
           });
 
-      navigator.geolocation.getCurrentPosition( (position) => {
-          console.log(JSON.stringify(position));
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
-    } else if (Platform.OS === 'android') {
-      Permissions.requestPermission('location', 'always')
-        .then(response => {
-          this.setState({ photoPermission: response })
-        });
-    }
+    } 
+
+    Permissions.requestPermission('location', 'always')
+      .then(response => {
+        this.setState({ photoPermission: response })
+      });
 
     this.loadAlerts()
   }
@@ -118,7 +110,7 @@ export default class Main extends Component {
             this.setState({
               alerts: this.state.alerts,
               lastAlertTime: result[0]._bmd.createdAt,
-              hasNewAlert: true
+              hasNewAlert:true
             })
           }
         })
