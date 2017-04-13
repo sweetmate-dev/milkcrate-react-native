@@ -82,6 +82,7 @@ class Signup extends Component {
         } else if (error.name.code == 'milkcrate-app.error.common.unknown') {
           alert("Something's Awry. Please try again later.")
         }
+        return;
       }
 
       if (!error) {
@@ -187,7 +188,7 @@ class Signup extends Component {
               textAlign="center"
               style={ styles.input }
               underlineColorAndroid="transparent"
-              returnKeyType={ 'go' }
+              returnKeyType={ 'done' }
               value={ this.state.communityCode }
               onChangeText={ (text) => this.setState({ communityCode: text }) }
               onSubmitEditing={ () => this.onSignUp() }
