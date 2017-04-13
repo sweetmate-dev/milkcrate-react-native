@@ -27,6 +27,7 @@ import Login from './auth/containers/login';
 import Main from './main/containers/main';
 import BusinessesView from './search/containers/businessesView';
 import CategoryView from './search/containers/categoryView';
+import RecentView from './search/containers/recentView';
 import BusinessesDetail from './search/containers/businessesDetail';
 import ActionDetail from './search/containers/actionDetail';
 import ServiceDetail from './search/containers/serviceDetail';
@@ -176,6 +177,7 @@ class App extends Component {
         <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />
+        <Scene key="RecentView" component={ RecentView } />
         <Scene key="BusinessesDetail" component={ BusinessesDetail } />
         <Scene key="ActionDetail" component={ ActionDetail } />
         <Scene key="EventDetail" component={ EventDetail } />

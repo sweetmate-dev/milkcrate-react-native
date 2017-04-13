@@ -28,6 +28,13 @@ import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/co
 import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
+  // {
+  //   title: 'Recent',
+  //   description: 'See your most recent activities',
+  //   icon: require('../../../assets/imgs/recent.png'),
+  //   iconWidth: 21,
+  //   iconHeight: 21,
+  // },
   {
     title: 'Take Action',
     description: 'Explore easy, self-reported lifestyle behaviors',
@@ -195,32 +202,38 @@ class MainSearch extends Component {
 
   onSelectExploreWays (index) {
 
+    index ++;//temporary for Recent
+
     switch (Number(index)) {
-      case 0://Take Action
+      // case 0://Recent
+        
+      //   break;
+
+      case 1://Take Action
         Actions.ActionView();
         break;
 
-      case 1://Businesses
+      case 2://Businesses
         Actions.BusinessesView();
         break;
 
-      case 2://Events
+      case 3://Events
         Actions.EventsView();
         break;
-      case 3://Services
+      case 4://Services
         Actions.ServiceView();
         break;
 
-      case 4://Volunteer
+      case 5://Volunteer
         Actions.VolunteerView();
         break;
 
       default:
-
     }
   }
 
   onSelectCategory (rowID) {
+
     Actions.CategoryView({ title: categoryTitles[rowID], index: rowID });
   }
 
@@ -240,7 +253,7 @@ class MainSearch extends Component {
 
   renderCategoriesRow(rowData, sectionID, rowID) {
     return (
-      <View style={ [styles.categoryCellWrap, { marginHorizontal: this.categoryCellMargin }, ] }>
+      <View style={ [styles.categoryCellWrap, { marginHorizontal: this.categoryCellMargin },] }>
         <View style={ styles.categoryCellButtonWrapper }>
           <ImageButton
             style={ styles.categoryCellImage }

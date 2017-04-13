@@ -38,8 +38,6 @@ const map_pin = require('../../../assets/imgs/map_marker.png');
 const web = require('../../../assets/imgs/web.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 

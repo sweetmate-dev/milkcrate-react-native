@@ -18,10 +18,10 @@ Linking
 import { bindActionCreators } from 'redux';
 import * as eventDetailActions from '../actions';
 import { connect } from 'react-redux';
-
 import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
+import RNCalendarEvents from 'react-native-calendar-events';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
@@ -37,8 +37,6 @@ const map_pin = require('../../../assets/imgs/map_marker.png');
 const web = require('../../../assets/imgs/web.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -48,11 +46,12 @@ class EventDetail extends Component {
     
     this.state = {
       didStatus: false,
-      activityId: null,
 
       user: {},
       currentLocation: null,
     };
+    
+    this.activityId = null;
 
     this.category = _.find(Cache.categories, (obj)=>{
       return obj._id == this.props.event.categories[0]
@@ -71,7 +70,7 @@ class EventDetail extends Component {
       }
 
       if (result)
-        this.state.activityId = result;
+        this.activityId = result;
 
       this.setState({
         didStatus: result == false ? false : true,
@@ -115,30 +114,65 @@ class EventDetail extends Component {
   }
 
   onCheckIn() {
+
+    const {
+      event
+    } = this.props; 
+
+    console.log('event : ', event);
+
+    const address = event.address1 + " " + event.address2 + ", " + UtilService.getCityStateString(event.city, event.state, event.postalCode);
+
     bendService.captureActivity(this.props.event._id, 'event', (error, result) => {
       if (error){
         console.log(error);
         return;
       }
 
-      this.state.activityId = result.activity._id;
+      this.activityId = result.activity._id;
 
       this.setState({
         didStatus: true,
       })
+
+      // register event to Calendar
+      // RNCalendarEvents.authorizeEventStore()
+      //     .then(status => {
+      //       if (status === 'authorized') {
+      //         event.times.map( (time, entry)=> {
+
+      //           RNCalendarEvents.saveEvent(event.name, {
+      //               location: address,
+      //               notes: event.description,
+      //               startDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.from), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+      //               endDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.until), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+      //             })
+      //             .then( id => {
+      //               console.log('success : ', id);
+
+      //             })
+      //             .catch( error => {
+      //               console.log('error : ', error);
+      //             });
+      //         });
+      //       }
+      //     })
+      //     .catch( error => {
+      //       console.log('error : ', error);
+      // });
     })
 
     this.onGoWeb();
   }
 
   onUncheckIn() {
-    bendService.removeActivity(this.state.activityId, (error, result) => {
+    bendService.removeActivity(this.activityId, (error, result) => {
       if (error){
         console.log(error);
         return;
       }
 
-      this.state.activityId = null;
+      this.activityId = null;
 
       this.setState({
         didStatus: false,

@@ -35,8 +35,6 @@ const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -60,17 +58,7 @@ class BusinessesDetail extends Component {
 
       currentLocation: null,
       businessRate: 0,
-      businessComment: '',
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      coordinate: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-      },
+      businessComment: '',      
       user: {},
       comments: [],
       trendUsers: [],
@@ -79,8 +67,8 @@ class BusinessesDetail extends Component {
       trendInit: false,
     };
 
-    this.category = _.find(Cache.categories, (o)=>{
-      return o._id == this.props.business.categories[0]
+    this.category = _.find(Cache.categories, (entry) => {
+      return entry._id == this.props.business.categories[0]
     })
 
     this.mounted = false
@@ -136,7 +124,7 @@ class BusinessesDetail extends Component {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser( (error, result)=>{
+    bendService.getUser( (error, result) => {
       if (error) {
         console.log(err);
         return;
@@ -147,7 +135,7 @@ class BusinessesDetail extends Component {
       })
     })
 
-    bendService.getBusinessTrend(business._id, (error, result)=>{
+    bendService.getBusinessTrend(business._id, (error, result) => {
       if (error) {
         console.log(error);
         return;
