@@ -112,11 +112,16 @@ class App extends Component {
 
       if(activeUser && activeUser._id) {
         this.setState({ loggedIn: true });
+
       } else {
         this.setState({ loggedIn: false });
       }
 
       this.setState({ initialize: true });
+
+      if(activeUser && !activeUser.name) {
+        Actions.SetupProfile();
+      }
     });
   }
 

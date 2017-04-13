@@ -58,7 +58,12 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -71,12 +76,12 @@ class Profile extends Component {
 
   loadAllData() {
     bendService.getUser( (error, result) => {
-      this.setState({
+      this.hasMounted&&this.setState({
         currentUser: result,
       })
     })
 
-    this.setState({
+    this.hasMounted&&this.setState({
       activityQuery: {
         more: true,
         loading: false,
@@ -93,7 +98,7 @@ class Profile extends Component {
     };
 
     bendService.getCategories((error, result)=>{
-      this.setState({
+      this.hasMounted&&this.setState({
         categories: result,
       })
     })
@@ -102,8 +107,8 @@ class Profile extends Component {
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-        console.log("position", position)
-          this.setState({ currentLocation: position })
+        //console.log("position", position)
+          this.hasMounted&&this.setState({ currentLocation: position })
         },
         (error) => {
           console.log(JSON.stringify(error));
@@ -116,19 +121,19 @@ class Profile extends Component {
     if ( this.activityQuery.more === false )
       return;
 
-    this.setState( (state) => {
+    this.hasMounted&&this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
 
     bendService.getMyRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
 
-      this.setState( (state) => {
+      this.hasMounted&&this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted&&this.setState({ isRefreshing: false });
 
       if (error) {
         console.log(error);
