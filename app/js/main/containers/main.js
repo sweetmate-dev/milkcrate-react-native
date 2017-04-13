@@ -65,20 +65,24 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-    if (Platform.OS === 'ios') {
+    this.hasMounted = true
+    /*if (Platform.OS === 'ios') {
       Permissions.requestPermission('notification')
           .then(response => {
             console.log(response)
           });
 
-    } 
+    } */
 
     Permissions.requestPermission('location', 'always')
       .then(response => {
-        this.setState({ photoPermission: response })
+        this.hasMounted&&this.setState({ photoPermission: response })
       });
 
     this.loadAlerts()
+  }
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   loadAlerts() {
@@ -90,14 +94,18 @@ export default class Main extends Component {
       }
 
       if (result.length > 0) {
-        this.setState({
+        this.hasMounted&&this.setState({
           alerts: result,
           lastAlertTime:result[0]._bmd.createdAt
         })
       }
     })
 
-    setInterval(()=>{
+    var intervalHandler = setInterval(()=>{
+      if(!this.hasMounted) {
+        clearInterval(intervalHandler);
+        return;
+      }
       if (bendService.getActiveUser()) {
         bendService.getLastAlerts(this.state.lastAlertTime, (error, result) => {
           if (error) {
@@ -107,7 +115,7 @@ export default class Main extends Component {
 
           if (result.length > 0) {
             this.state.alerts = result.concat(this.state.alerts)
-            this.setState({
+            this.hasMounted && this.setState({
               alerts: this.state.alerts,
               lastAlertTime: result[0]._bmd.createdAt,
               hasNewAlert:true
@@ -119,19 +127,19 @@ export default class Main extends Component {
   }
 
   onSelectSearch() {
-    this.setState({ 
+    this.hasMounted&&this.setState({
       selectedTab: 'search',
       searchAutoFocus: true,
     });
   }
 
   onSelectTab( tab ) {
-    this.setState({ 
+    this.hasMounted&&this.setState({
       selectedTab: tab,
     });
 
     if(tab == 'alerts') {
-      this.setState({
+      this.hasMounted&&this.setState({
         hasNewAlert:false
       });
     }
