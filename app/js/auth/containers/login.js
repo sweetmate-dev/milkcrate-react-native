@@ -119,7 +119,7 @@ class Login extends Component {
                 textAlign="center"
                 style={ styles.input }
                 underlineColorAndroid="transparent"
-                returnKeyType={ 'go' }
+                returnKeyType={ 'done' }
                 value={ this.state.password }
                 onChangeText={ (text) => this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }
