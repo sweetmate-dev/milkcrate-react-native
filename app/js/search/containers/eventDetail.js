@@ -18,10 +18,11 @@ Linking
 import { bindActionCreators } from 'redux';
 import * as eventDetailActions from '../actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
+import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import RNCalendarEvents from 'react-native-calendar-events';
+import localStorage from 'react-native-local-storage';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
@@ -52,6 +53,7 @@ class EventDetail extends Component {
     };
     
     this.activityId = null;
+    this.calendarEventIds = [];
 
     this.category = _.find(Cache.categories, (obj)=>{
       return obj._id == this.props.event.categories[0]
@@ -144,7 +146,7 @@ class EventDetail extends Component {
     RNCalendarEvents.authorizeEventStore()
         .then(status => {
           if (status === 'authorized') {
-            event.times.map( (time, entry)=> {
+            event.times.map( (time, index)=> {
 
               RNCalendarEvents.saveEvent(event.name, {
                   location: address,
@@ -153,13 +155,16 @@ class EventDetail extends Component {
                   endDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.until), "YYYY-MM-DDTHH:mm:ss.sssZ"),
                 })
                 .then( id => {
-                  console.log('success : ', id);
-
+                  this.calendarEventIds[index] = id;
                 })
                 .catch( error => {
                   console.log('error : ', error);
                 });
             });
+
+            if (this.calendarEventIds.length > 0) {
+              localStorage.save(this.activityId, this.calendarEventIds);
+            }
           }
         })
         .catch( error => {
