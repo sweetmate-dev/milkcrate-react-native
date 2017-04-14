@@ -191,8 +191,8 @@ class Profile extends Component {
     } else {
       cat = UtilService.getMilkCrateLogo();
     }
-    if(cat == null)
-        return null;
+    /*if(cat == null)
+        return null;*/
     return (
       <RecentActivityListCell
         title={ rowData.activity.name || rowData.summary || '' }
