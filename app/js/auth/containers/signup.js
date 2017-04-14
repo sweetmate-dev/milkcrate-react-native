@@ -114,7 +114,7 @@ class Signup extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
             <Text style={ styles.textTitle }>Getting Started</Text>

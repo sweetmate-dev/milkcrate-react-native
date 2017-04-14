@@ -356,6 +356,7 @@ class Home extends Component {
   getChallengeCarousel (entries) {
     return entries.map( (entry, index) => {
       var cat = bendService.getActivityCategory(this.state.categories, entry.activity)
+      if(cat == null) return null;
       return (
         <ChallengeCarousel
           key={ index }
@@ -377,6 +378,7 @@ class Home extends Component {
 
     return entries.map((entry, index) => {
       var cat = bendService.getActivityCategory(this.state.categories, entry)
+      if(cat == null) return null;
       return (
         <TrendingCarousel
           key={ index }

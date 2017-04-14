@@ -201,7 +201,7 @@ class CategoryView extends Component {
         title={ rowData.name }
         icon={ commonStyles.categoryIcons[this.props.index] }
         points={ Math.max(Number(rowData.points || 1), 1) }
-        onClick={ () => this.onPressedE(rowData) }
+        onClick={ () => this.onPressedServiceCell(rowData) }
       />
     );
   }
