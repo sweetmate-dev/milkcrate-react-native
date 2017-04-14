@@ -89,8 +89,12 @@ class Home extends Component {
   }
 
   componentDidMount() {
-
+    this.hasMounted = true
     this.loadAllData();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -115,7 +119,7 @@ class Home extends Component {
       console.log("getLastActivities", result.length)
       if(result.length > 0) {
         this.state.recentActivities = result.concat(this.state.recentActivities);
-        this.setState({
+        this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
         })
       }
@@ -124,7 +128,7 @@ class Home extends Component {
 
   loadAllData() {
 
-    this.setState({
+    this.hasMounted&&this.setState({
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
       selectedDailyPollStateMode: false,
@@ -154,7 +158,7 @@ class Home extends Component {
     bendService.getCategories( (error, result) => {
 
       if (!error) {
-        this.setState({
+        this.hasMounted&&this.setState({
           categories: result
         })
       }
@@ -168,7 +172,7 @@ class Home extends Component {
         return;
       }
 
-      this.setState({ challenges: result });
+      this.hasMounted&&this.setState({ challenges: result });
     })
 
     bendService.getTrending( (error, result) => {
@@ -178,7 +182,7 @@ class Home extends Component {
         return;
       }
 
-      this.setState({
+      this.hasMounted&&this.setState({
         trendings: result
       })
     })
@@ -189,8 +193,8 @@ class Home extends Component {
         console.log(error);
         return;
       }
-      
-      this.setState({
+
+      this.hasMounted&&this.setState({
         community: result
       })
     })
@@ -219,7 +223,7 @@ class Home extends Component {
         return;
       }
 
-      this.setState({
+      this.hasMounted&&this.setState({
         pollQuestion: {
           question: question,
           answers: answers,
@@ -234,19 +238,19 @@ class Home extends Component {
     if ( this.activityQuery.more === false )
       return;
 
-    this.setState( (state) => {
+    this.hasMounted&&this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
 
     bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
 
-      this.setState( (state) => {
+      this.hasMounted&&this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
-      this.setState({
+      this.hasMounted&&this.setState({
         isRefreshing: false,
       });
 
@@ -257,7 +261,7 @@ class Home extends Component {
 
       this.activityQuery.more = (result.length == this.activityQuery.limit + 1)
 
-      this.setState((state) => {
+      this.hasMounted&&this.setState((state) => {
         state.activityQuery.more = this.activityQuery.more;
         return state;
       });
@@ -270,12 +274,12 @@ class Home extends Component {
       if (result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
-        this.setState({
+        this.hasMounted&&this.setState({
           recentActivities: this.state.recentActivities,
         })
       }
 
-      this.setState({
+      this.hasMounted&&this.setState({
         activityQuery: this.state.activityQuery
       })
 
@@ -354,6 +358,7 @@ class Home extends Component {
   getChallengeCarousel (entries) {
     return entries.map( (entry, index) => {
       var cat = bendService.getActivityCategory(this.state.categories, entry.activity)
+      if(cat == null) return null;
       return (
         <ChallengeCarousel
           key={ index }
@@ -375,13 +380,14 @@ class Home extends Component {
 
     return entries.map((entry, index) => {
       var cat = bendService.getActivityCategory(this.state.categories, entry)
+      if(cat == null) return null;
       return (
         <TrendingCarousel
           key={ index }
-          title={ UtilService.getTrendTitle(entry.type) }
+          type={ UtilService.getTrendTitle(entry.type) }
           activityType={ entry.type }
           activity={ entry }
-          location={ entry.name }
+          title={ entry.name }
           icon={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           userCount={ entry.userCount }
@@ -501,7 +507,7 @@ class Home extends Component {
             this.state.pollQuestion.answers.map( (obj, index) => {
               var onPressRadioButton = (value, index) => {
                 //console.log(value, index)
-                this.setState({
+                this.hasMounted&&this.setState({
                   selectedDailyPollValue: value,
                   selectedDailyPollIndex: index
                 });
@@ -522,7 +528,7 @@ class Home extends Component {
                     obj.percentage = Math.round(obj.count * 100 / this.state.pollQuestion.question.responseCount);
                   })
 
-                  this.setState({
+                  this.hasMounted&&this.setState({
                     pullQuestion:this.state.pollQuestion
                   })
                 })
@@ -530,7 +536,7 @@ class Home extends Component {
                 timer.setTimeout( this, 'DailyPollTimer', () => {
                   timer.clearInterval(this, 'DailyPollTimer');
                   this.state.pollQuestion.myAnswer = this.state.pollQuestion.answers[index]
-                  this.setState({ selectedDailyPollStateMode: true });
+                  this.hasMounted&&this.setState({ selectedDailyPollStateMode: true });
                 }, 500);
               }
 
@@ -651,7 +657,7 @@ class Home extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted&&this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

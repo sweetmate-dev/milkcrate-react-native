@@ -966,6 +966,7 @@ module.exports = {
         query.equalTo("enabled", true)
         query.notEqualTo("deleted", true)
         query.ascending('rank')
+        query.greaterThan('rank', 0)
         query.skip(offset)
         query.limit(limit)
         Bend.User.find(query, {

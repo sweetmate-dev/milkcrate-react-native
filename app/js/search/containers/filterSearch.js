@@ -52,12 +52,28 @@ class FilterSearch extends Component {
         business: [],
       }
     };
+    this.searchText = ""
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition( (position) => {
+
+        this.setState({ currentLocation: position })
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.searchText != this.props.searchText) {
-      this.getActivities(newProps.searchText);
-    }
+    this.searchText = newProps.searchText
+    setTimeout((searchText)=>{
+      if(searchText == this.searchText) {
+        this.getActivities(searchText);
+      }
+    }, 300, newProps.searchText)
   }
 
   getActivityIcons(activities) {
@@ -159,31 +175,24 @@ class FilterSearch extends Component {
   }
 
   getActivities(searchText) {
-    navigator.geolocation.getCurrentPosition( (position) => {
+    var param = {
+      query: searchText
+    }
 
-        this.setState({ currentLocation: position })
+    if(this.state.currentLocation) {
+      param.lat = this.state.currentLocation.coords.latitude;
+      param.long = this.state.currentLocation.coords.longitude;
+    }
+    bendService.searchActivity(param, (error, result) => {
+      if (error) {
+        console.log("search failed", error);
+        return;
+      }
 
-        bendService.searchActivity({
-          query: searchText,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result) => {
-
-          if (error) {
-            console.log("search failed", error);
-            return;
-          }
-
-          var activities = result.data;
-          this.setState({ activities: activities });
-          this.getActivityIcons(activities);
-        })
-      },
-      (error) => {
-        console.log(JSON.stringify(error));
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+      var activities = result.data;
+      this.setState({ activities: activities });
+      this.getActivityIcons(activities);
+    })
   }
   onPressedActionsCell (action) {
     Actions.ActionDetail({

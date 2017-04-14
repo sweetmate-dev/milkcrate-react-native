@@ -12,7 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-    Linking
+  Linking,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Point from '../../components/Point';
 import Stars from 'react-native-stars-rating';
 import NavTitleBar from '../../components/navTitleBar';
@@ -30,13 +31,10 @@ import BusinessRecentActivityListCell from '../components/businessRecentActivity
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const star = require('../../../assets/imgs/star.png');
-const icon =   require('../../../assets/imgs/category-stickers/coffee.png');
 const phone = require('../../../assets/imgs/phone.png');
 const web = require('../../../assets/imgs/web.png');
 
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -60,17 +58,7 @@ class BusinessesDetail extends Component {
 
       currentLocation: null,
       businessRate: 0,
-      businessComment: '',
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      coordinate: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-      },
+      businessComment: '',      
       user: {},
       comments: [],
       trendUsers: [],
@@ -79,8 +67,8 @@ class BusinessesDetail extends Component {
       trendInit: false,
     };
 
-    this.category = _.find(Cache.categories, (o)=>{
-      return o._id == this.props.business.categories[0]
+    this.category = _.find(Cache.categories, (entry) => {
+      return entry._id == this.props.business.categories[0]
     })
 
     this.mounted = false
@@ -136,7 +124,7 @@ class BusinessesDetail extends Component {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser( (error, result)=>{
+    bendService.getUser( (error, result) => {
       if (error) {
         console.log(err);
         return;
@@ -147,7 +135,7 @@ class BusinessesDetail extends Component {
       })
     })
 
-    bendService.getBusinessTrend(business._id, (error, result)=>{
+    bendService.getBusinessTrend(business._id, (error, result) => {
       if (error) {
         console.log(error);
         return;
@@ -219,7 +207,14 @@ class BusinessesDetail extends Component {
     }
   }
 
-  onCheckIn() {
+  onCheckIn(distanceMeter) {
+    if(distanceMeter == null) {
+      Alert.alert('Location Access is Required', 'To check in, you must give MilkCrate access to your location. You can do this from your phone\'s privacy settings.');
+      return;
+    } else if(distanceMeter > 150) {
+      Alert.alert('Invalid Location', 'You must be near this business to check in. Your current location is too far way.');
+      return;
+    }
     bendService.captureActivity(this.props.business._id, 'business', (error, result) => {
       if (error) {
         console.log(error);
@@ -318,6 +313,21 @@ class BusinessesDetail extends Component {
     var trendUsers = this.state.trendUsers;
     var trendUserCount = this.state.trendUserCount;
     var lastTrendTime = this.state.lastTrendTime;
+
+    let icon = null;
+
+    if (this.category !== undefined) {
+      icon = UtilService.getCategoryIcon(this.category.slug);
+    }
+
+    var distance = null;
+    var distanceMeter = null;
+    if(this.state.currentLocation && business._geoloc) {
+      distance = UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
+          this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude);
+      distanceMeter = 1609.3 * distance
+    }
+
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -325,7 +335,7 @@ class BusinessesDetail extends Component {
           onBack={ this.onBack }
           title={ business.name }
         />
-        <ScrollView>
+        <KeyboardAwareScrollView>
           { business._geoloc &&<MapView
             style={ styles.map }
             initialRegion={{
@@ -351,12 +361,11 @@ class BusinessesDetail extends Component {
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
+              <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{ business.name }</Text>
-                { this.state.currentLocation && <Text style={ styles.textValue }>
-                  { business._geoloc?UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
-                  this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles   ':''}
+                { distance && <Text style={ styles.textValue }>
+                  { business._geoloc?distance + ' Miles   ':''}
                   { UtilService.getPricesString(business.price) }</Text> 
                 }
               </View>
@@ -503,7 +512,7 @@ class BusinessesDetail extends Component {
                 returnKeyType={ 'done' }
                 value={this.state.businessComment}
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
-              />
+              />              
             </View>
           </View>
           <View style={ styles.buttonRateBusinessWrapper }>
@@ -513,11 +522,11 @@ class BusinessesDetail extends Component {
               </View>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
         { 
-          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
-              <Text style={ styles.textButton }>I’m Here • Checkin</Text>
+              <Text style={ [styles.textButton, {opacity:(distanceMeter&&distanceMeter<=150)?1:0.6}] }>I’m Here • Checkin</Text>
             </View>
           </TouchableOpacity>
         }
@@ -543,6 +552,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  keyboardAvoidingViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',    
+  },
+
   map: {
     flex: 1,
     height: commonStyles.hp(21),
@@ -596,6 +611,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   addressContainer: {
+    flex: 2,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
@@ -605,9 +621,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   visitContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   textInfoTitle: {
     color: commonColors.grayMoreText,
@@ -619,7 +636,7 @@ const styles = StyleSheet.create({
   visitCellContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 10,
+    paddingLeft: 8,
   },
   imageVisit: {
     height: 48,

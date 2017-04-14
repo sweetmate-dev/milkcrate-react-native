@@ -15,6 +15,7 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
 import BusinessesListCell from '../components/businessesListCell';
@@ -23,11 +24,8 @@ import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 import UtilService from '../../components/util'
 
 const ASPECT_RATIO = screenWidth / screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.005;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const map_selected_pin = require('../../../assets/imgs/map_marker_selected.png');
@@ -80,6 +78,10 @@ class BusinessesMapView extends Component {
     });
   }
 
+  onPressedCell (rowData) {
+    Actions.BusinessesDetail({ business: rowData });
+  }
+
   render() {
     const { 
       businesses, 
@@ -103,8 +105,6 @@ class BusinessesMapView extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       });
     }
-
-    console.log('business : ', businesses[this.state.tappedPin]);
 
     return (
       <View style={ styles.container }>
@@ -131,7 +131,7 @@ class BusinessesMapView extends Component {
             ))            
           }          
         </MapView.Animated>
-        <View style={ styles.calloutContainer } >
+        <View style={ styles.calloutContainer }>
           <BusinessesListCell
             title={ businesses[this.state.tappedPin].name }
             icon={ categoryIcons[this.state.tappedPin] }
@@ -140,6 +140,7 @@ class BusinessesMapView extends Component {
             this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Number(businesses[this.state.tappedPin].rating || 0) }
+            onClick={ () => this.onPressedCell(businesses[this.state.tappedPin]) }
             mode={ 1 }
           />
         </View>

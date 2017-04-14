@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+    findNodeHandle
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -84,7 +85,7 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={ styles.container }>
+      <View style={ styles.container } >
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
             <Text style={ styles.textTitle }>Log In</Text>
@@ -119,7 +120,7 @@ class Login extends Component {
                 textAlign="center"
                 style={ styles.input }
                 underlineColorAndroid="transparent"
-                returnKeyType={ 'go' }
+                returnKeyType={ 'done' }
                 value={ this.state.password }
                 onChangeText={ (text) => this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }

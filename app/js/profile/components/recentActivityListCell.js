@@ -20,7 +20,7 @@ export default class RecentActivityListCell extends Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    icon: PropTypes.number.isRequired,
+    icon: PropTypes.number,
     description: PropTypes.string.isRequired,
     points: PropTypes.number,
     onClick: PropTypes.func,
@@ -83,7 +83,7 @@ export default class RecentActivityListCell extends Component {
       <TouchableHighlight onPress={ () => onClick() }>
         <View style={ styles.cellContainer }>
           <View style={ styles.avatarContainer }>
-            <Image style={ styles.avatar } source={icon}/>
+            {icon&&<Image style={ styles.avatar } source={icon}/>}
           </View>
           <View style={ styles.mainContentContainer }>
             <View style={ styles.topContainer }>

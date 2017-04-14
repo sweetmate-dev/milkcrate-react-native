@@ -66,10 +66,6 @@ export default class Main extends Component {
 
   componentDidMount() {
     if (Platform.OS === 'ios') {
-      Permissions.requestPermission('notification')
-          .then(response => {
-            console.log(response)
-          });
       navigator.geolocation.getCurrentPosition( (position) => {
           console.log(JSON.stringify(position));
         },
@@ -134,7 +130,8 @@ export default class Main extends Component {
 
   onSelectTab( tab ) {
     this.setState({ 
-      selectedTab: tab
+      selectedTab: tab,
+      hasNewAlert:false
     });
 
     if(tab == 'alerts') {

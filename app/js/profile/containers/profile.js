@@ -58,7 +58,12 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -71,12 +76,12 @@ class Profile extends Component {
 
   loadAllData() {
     bendService.getUser( (error, result) => {
-      this.setState({
+      this.hasMounted&&this.setState({
         currentUser: result,
       })
     })
 
-    this.setState({
+    this.hasMounted&&this.setState({
       activityQuery: {
         more: true,
         loading: false,
@@ -93,7 +98,7 @@ class Profile extends Component {
     };
 
     bendService.getCategories((error, result)=>{
-      this.setState({
+      this.hasMounted&&this.setState({
         categories: result,
       })
     })
@@ -102,8 +107,8 @@ class Profile extends Component {
 
     navigator.geolocation.getCurrentPosition( (position) => {
 
-        console.log("position", position)
-          this.setState({ currentLocation: position })
+        //console.log("position", position)
+          this.hasMounted&&this.setState({ currentLocation: position })
         },
         (error) => {
           console.log(JSON.stringify(error));
@@ -116,19 +121,19 @@ class Profile extends Component {
     if ( this.activityQuery.more === false )
       return;
 
-    this.setState( (state) => {
+    this.hasMounted&&this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
 
     bendService.getMyRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
 
-      this.setState( (state) => {
+      this.hasMounted&&this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted&&this.setState({ isRefreshing: false });
 
       if (error) {
         console.log(error);
@@ -137,7 +142,7 @@ class Profile extends Component {
       
       this.activityQuery.more = (result.length == this.activityQuery.limit + 1)
 
-      this.setState((state) => {
+      this.hasMounted&&this.setState((state) => {
         state.activityQuery.more = this.activityQuery.more;
         return state;
       });
@@ -150,12 +155,12 @@ class Profile extends Component {
       if (result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
-        this.setState({
+        this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
         })
       }
 
-      this.setState({
+      this.hasMounted&&this.setState({
         activityQuery:this.state.activityQuery
       })
     })
@@ -186,6 +191,8 @@ class Profile extends Component {
     } else {
       cat = UtilService.getMilkCrateLogo();
     }
+    /*if(cat == null)
+        return null;*/
     return (
       <RecentActivityListCell
         title={ rowData.activity.name || rowData.summary || '' }
@@ -221,7 +228,7 @@ class Profile extends Component {
         else
           exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
 
-        this.setState({
+        this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities,
         })
       }
@@ -241,7 +248,7 @@ class Profile extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted&&this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

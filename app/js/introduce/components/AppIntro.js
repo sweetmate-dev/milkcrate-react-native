@@ -379,6 +379,7 @@ export default class AppIntro extends Component {
           onScroll={Animated.event(
             [{ x: this.state.parallax }]
           )}
+          keyboardShouldPersistTaps={'always'}
         >
           { pages }
         </Swiper>

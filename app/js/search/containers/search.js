@@ -60,15 +60,6 @@ class Search extends Component {
     });
   }
 
-  // launchKeyboard() {
-
-  //   timer.setTimeout( this, 'LaunchKeyboard', () => {
-  //     timer.clearInterval(this, 'LaunchKeyboard');
-  //     console.log('LaunchKeyboard' );
-  //     this.setState({ searchAutoFocus: true });
-  //   }, 300);
-  // }
-
   render() {
     return (
       <View style={ styles.container }>
