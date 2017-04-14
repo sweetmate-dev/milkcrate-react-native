@@ -220,7 +220,7 @@ class VolunteerDetail extends Component {
           { !volunteer._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(volunteer) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{volunteer.name}</Text>
                 { this.state.currentLocation && <Text style={ styles.textValue }>

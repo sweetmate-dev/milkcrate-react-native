@@ -140,7 +140,7 @@ class ServiceDetail extends Component {
           {imageObj && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri: backgroundImage }}/>}
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              {this.category && <Image style={ styles.imageIcon } source={ this.category && UtilService.getCategoryIcon(this.category.slug) } />}
+              {this.category && <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(service) } />}
               {!this.category && <Image style={ styles.imageIcon } source={ UtilService.getMilkCrateLogo() } />}
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{ service.name }</Text>

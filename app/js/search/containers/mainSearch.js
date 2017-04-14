@@ -28,13 +28,13 @@ import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/co
 import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
-  // {
-  //   title: 'Recent',
-  //   description: 'See your most recent activities',
-  //   icon: require('../../../assets/imgs/recent.png'),
-  //   iconWidth: 21,
-  //   iconHeight: 21,
-  // },
+  {
+    title: 'Recent',
+    description: 'See your most recent activities',
+    icon: require('../../../assets/imgs/recent.png'),
+    iconWidth: 21,
+    iconHeight: 21,
+  },
   {
     title: 'Take Action',
     description: 'Explore easy, self-reported lifestyle behaviors',
@@ -202,12 +202,10 @@ class MainSearch extends Component {
 
   onSelectExploreWays (index) {
 
-    index ++;//temporary for Recent
-
     switch (Number(index)) {
-      // case 0://Recent
-        
-      //   break;
+      case 0://Recent
+        Actions.RecentView();
+        break;
 
       case 1://Take Action
         Actions.ActionView();

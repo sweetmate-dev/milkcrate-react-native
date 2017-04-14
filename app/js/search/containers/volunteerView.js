@@ -135,13 +135,10 @@ class VolunteerView extends Component {
           this.offset += this.limit;
 
           result.data.volunteer_opportunity.map((item, index) => {
-            if (item.categories && item.categories.length > 0) {
-              var category = UtilService.getCategoryById(item.categories[0])
-              this.setState( (state) => {
-                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
-                return state;
-              });
-            }
+            this.setState( (state) => {
+              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(item);
+              return state;
+            });
           });
         })
       },

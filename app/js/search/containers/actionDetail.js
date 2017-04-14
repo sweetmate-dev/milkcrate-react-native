@@ -130,7 +130,7 @@ class ActionDetail extends Component {
           { this.state.initialize && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri:backgroundImage }}/> }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(category.slug) } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(action) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{ action.name }</Text>
               </View>

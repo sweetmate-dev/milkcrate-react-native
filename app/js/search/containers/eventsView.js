@@ -207,17 +207,10 @@ class EventsView extends Component {
           this.offset += this.limit;
 
           result.data.event.map((event, index) => {
-            if (event.categories && event.categories.length > 0) {
-              let category = UtilService.getCategoryById(event.categories[0])
-              let icon = null;
-              if (category != undefined)
-                icon = UtilService.getCategoryIcon(category.slug);
-                
-              this.setState( (state) => {
-                state.categoryIcons[event._id] = icon;
-                return state;
-              });
-            }
+            this.setState( (state) => {
+              state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
+              return state;
+            });
           });
         })
       },

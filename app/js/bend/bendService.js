@@ -838,6 +838,17 @@ module.exports = {
 
     //-------- end of search view --------------
 
+    //-------- recent activities ---------------------
+    searchRecentActivity(param, cb){
+        Bend.execute("search-activity-recent", param).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
+    //-------- end of recent activities --------------
+
     //-------detail view ------
     checkActivityDid(id, type, cb) {
         Bend.execute("checkActivityDid", {

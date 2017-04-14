@@ -141,13 +141,10 @@ class ServiceView extends Component {
           this.offset += this.limit;
 
           result.data.service.map( (service, index) => {
-            if (service.categories && service.categories.length > 0) {
-              var category = UtilService.getCategoryById(service.categories[0])
-              this.setState( (state) => {
-                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
-                return state;
-              });
-            }
+            this.setState( (state) => {
+              state.categoryIcons[imageOffset + index] =  UtilService.getCategoryIconFromSlug(service);
+              return state;
+            });
           });
         })
       },

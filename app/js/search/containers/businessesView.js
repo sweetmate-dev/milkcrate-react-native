@@ -154,23 +154,10 @@ class BusinessesView extends Component {
           this.offset += this.limit;
 
           result.data.business.map( (business, index) => {
-            if (business.categories && business.categories.length > 0) {
-              var category = UtilService.getCategoryById(business.categories[0])
-
-              console.log( "category : ", category);
-
-              if (category === undefined) {
-                this.setState( (state) => {
-                  state.categoryIcons[imageOffset + index] = null;
-                  return state;
-                })
-              } else {
-                this.setState( (state) => {
-                  state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
-                  return state;
-                })
-              }
-            }
+            this.setState( (state) => {
+              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(business);
+              return state;
+            })
           });
         })
       },

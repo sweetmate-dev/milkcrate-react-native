@@ -205,12 +205,6 @@ class EventDetail extends Component {
       event,
     } = this.props;
 
-    let icon = null;
-
-    if (this.category !== undefined) {
-      icon = UtilService.getCategoryIcon(this.category.slug);
-    }
-    
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -246,7 +240,7 @@ class EventDetail extends Component {
           { !event._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ icon } />
+              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(event) } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{ event.name }</Text>
                 { this.state.currentLocation && <Text style={ styles.textValue }>

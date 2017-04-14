@@ -136,13 +136,12 @@ class ActionView extends Component {
           this.offset += this.limit;
 
           result.data.action.map( (action, index) => {
-            if (action.categories && action.categories.length > 0) {
-              var category = UtilService.getCategoryById(action.categories[0])
-              this.setState( (state) => {
-                state.categoryIcons[imageOffset + index] = UtilService.getCategoryIcon(category.slug);
-                return state;
-              });
-            }
+
+            this.setState( (state) => {
+              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(action);
+              return state;
+            });
+           
           });
         })
       },

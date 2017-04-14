@@ -67,18 +67,13 @@ class RecentView extends Component {
       },
     });
 
-    const title = this.props.title;
-    const  index = this.props.index;
-
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
 
-        bendService.searchActivity({
-
-          category: UtilService.convertToSlug(title),
+        bendService.searchRecentActivity({
           offset: 0,
-          limit: 20,
+          limit: 1000,
           lat: position.coords.latitude,
           long: position.coords.longitude
         }, (error, result) => {
@@ -89,14 +84,6 @@ class RecentView extends Component {
             console.log("search failed", error)
             return
           }
-          //console.log("search result", result)
-
-          // var activities = []
-          // activities = activities.concat(result.data.action);
-          // activities = activities.concat(result.data.business);
-          // activities = activities.concat(result.data.service);
-          // activities = activities.concat(result.data.event);
-          // activities = activities.concat(result.data.volunteer_opportunity);
 
           var activities = result.data;
           this.setState({
@@ -145,12 +132,15 @@ class RecentView extends Component {
     })
   }
 
-
   renderActionsListRow(rowData, sectionID, rowID) {
+    
+    rowData = rowData.activity;
+    const icon = UtilService.getCategoryIconFromSlug(rowData);
+    
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -158,10 +148,14 @@ class RecentView extends Component {
   }
 
   renderBusinessesListRow(rowData, sectionID, rowID) {
+
+    rowData = rowData.activity;
+    const icon = UtilService.getCategoryIconFromSlug(rowData);
+
     return (
       <BusinessesListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ icon }
         description={ rowData.description }
         distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : 1.0 }
@@ -173,10 +167,14 @@ class RecentView extends Component {
   }
 
   renderEventsListRow(rowData, sectionID, rowID) {
+
+    rowData = rowData.activity;
+    const icon = UtilService.getCategoryIconFromSlug(rowData);
+
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
       />
@@ -184,10 +182,14 @@ class RecentView extends Component {
   }
 
   renderVolunteerListRow(rowData, sectionID, rowID) {
+
+    rowData = rowData.activity;
+    const icon = UtilService.getCategoryIconFromSlug(rowData);
+
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -195,10 +197,14 @@ class RecentView extends Component {
   }
 
   renderServicesListRow(rowData, sectionID, rowID) {
+
+    rowData = rowData.activity;
+    const icon = UtilService.getCategoryIconFromSlug(rowData);
+
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ icon }
         points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedE(rowData) }
       />
@@ -309,7 +315,7 @@ class RecentView extends Component {
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title={ this.props.title }
+          title={ 'Recent' }
         />
         <ScrollView
           refreshControl={

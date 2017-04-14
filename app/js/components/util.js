@@ -431,6 +431,22 @@ class UtilService {
   static getActivityIcon(type) {
     return activityImages[type]
   }
+
+  static getCategoryIconFromSlug(activity) {
+
+    let icon = null;
+    
+    if (activity.categories && activity.categories.length > 0) {
+
+      var category = UtilService.getCategoryById(activity.categories[0]);
+      
+      if (category != null)
+        icon = UtilService.getCategoryIcon(category.slug);
+    }
+
+    return icon;
+  }
+
 }
 
 export default UtilService
