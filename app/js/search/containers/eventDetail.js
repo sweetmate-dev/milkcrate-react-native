@@ -121,10 +121,6 @@ class EventDetail extends Component {
       event
     } = this.props; 
 
-    console.log('event : ', event);
-
-    const address = event.address1 + " " + event.address2 + ", " + UtilService.getCityStateString(event.city, event.state, event.postalCode);
-
     bendService.captureActivity(this.props.event._id, 'event', (error, result) => {
       if (error){
         console.log(error);
@@ -143,6 +139,12 @@ class EventDetail extends Component {
 
   onAddToCalendar() {
 
+    const {
+      event
+    } = this.props; 
+
+    const address = event.address1 + " " + event.address2 + ", " + UtilService.getCityStateString(event.city, event.state, event.postalCode);
+
     RNCalendarEvents.authorizeEventStore()
         .then(status => {
           if (status === 'authorized') {
@@ -156,19 +158,19 @@ class EventDetail extends Component {
                 })
                 .then( id => {
                   this.calendarEventIds[index] = id;
+                  localStorage.save(this.activityId, this.calendarEventIds)
+                    .then(() => {
+                      console.log('Local Storage successfully');
+                    })
                 })
                 .catch( error => {
                   console.log('error : ', error);
                 });
             });
-
-            if (this.calendarEventIds.length > 0) {
-              localStorage.save(this.activityId, this.calendarEventIds);
-            }
           }
         })
         .catch( error => {
-          console.log('error : ', error);
+          console.log('authorizeEventStore error : ', error);
     });
   }
 
@@ -321,11 +323,11 @@ class EventDetail extends Component {
                 <Text style={ styles.textOrange }>I Can't Go</Text>
               </View>
             </TouchableOpacity>
-            {/*<TouchableOpacity onPress={ () => this.onAddToCalendar() }>
+            <TouchableOpacity onPress={ () => this.onAddToCalendar() }>
               <View style={ styles.buttonGreen }>
                 <Text style={ styles.textButton }>Add to Calendar</Text>
               </View>
-            </TouchableOpacity>*/}
+            </TouchableOpacity>
           </View>
         }
       </View>
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#EFEFEF',
     height: 40,
-    width: commonStyles.screenWidth,
+    width: commonStyles.screenWidth / 2,
   },
   buttonGreen: {
     justifyContent: 'center',

@@ -18,8 +18,9 @@ import {
 import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
 
+import { Actions } from 'react-native-router-flux';
+import ResponsiveImage from 'react-native-responsive-image';
 import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
@@ -136,18 +137,32 @@ class SetupProfile extends Component {
   }
 
   onPickProfilePhoto() {
-    var options = {
-      quality: 1.0,
-      storageOptions: {
-        skipBackup: true,
-      },
-      customButtons:[{
-        name:"remove",
-        title:"Remove Photo"
-      }]
-    };
+
+    let options;
+
+    if (this.state.profilePhotoFile == null) {
+      options = {
+        quality: 1.0,
+        storageOptions: {
+          skipBackup: true,
+        }
+      };
+    } else {
+      options = {
+        quality: 1.0,
+        storageOptions: {
+          skipBackup: true,
+        },
+        customButtons:[{
+          name:"remove",
+          title:"Remove Photo"
+        }]
+      };
+    }
+    
     ImagePicker.showImagePicker(options, (response) => {
-      if(response.customButton == 'remove') {
+
+      if (response.customButton == 'remove') {
         this.setState({
           profilePhoto: null,
           profilePhotoFile: null,
@@ -172,16 +187,17 @@ class SetupProfile extends Component {
     });
   }
 
-  showPhoto () {
-    if (this.state.profilePhoto) {
+  get showPhoto() {
+
+    if (this.state.profilePhoto ) {
       return (
-        <Image source={ this.state.profilePhoto } style={ styles.imagePhoto }/>
+        <ResponsiveImage source={ this.state.profilePhoto } style={ styles.imagePhoto } />
+      );      
+    } else {
+      return (
+        <ResponsiveImage source={ camera } initWidth='22' initHeight='20' />
       );
     }
-
-    return (
-        <Image source={ camera } style={ styles.imageCamera }/>
-    );
   }
 
   render() {
@@ -194,7 +210,7 @@ class SetupProfile extends Component {
           <View style={ styles.photoContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPickProfilePhoto() }>
               <View style={ styles.photoWrapper }>
-                { this.showPhoto() }
+                { this.showPhoto }
               </View>
             </TouchableOpacity>  
             <Text style={ styles.textDescription }>Snap or upload profile photo</Text>

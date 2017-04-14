@@ -29,6 +29,7 @@
     "react-native-modal-dropdown": "^0.4.1",
     "react-native-permissions": "^0.2.7",
     "react-native-radio-buttons": "^0.14.0",
+    "react-native-responsive-image": "^2.0.2",
     "react-native-router-flux": "^3.37.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
     "react-native-snap-carousel": "^2.0.1",
