@@ -9,8 +9,10 @@ import {
   Image,
   Dimensions,
   TextInput,
+  Platform,
   TouchableOpacity,
   Alert,
+    ActivityIndicator
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -21,6 +23,8 @@ import { Actions } from 'react-native-router-flux';
 import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
+
+import Permissions from 'react-native-permissions';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -45,7 +49,17 @@ class SetupProfile extends Component {
       name: user.name ? user.name : '',
       birthday: user.birthdate ? moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY') : '',
       gender: user.gender ? user.gender : '',
+      isUploadingFile:false
     };
+  }
+
+  componentDidMount() {
+    /*if (Platform.OS === 'ios') {
+      Permissions.requestPermission('notification')
+          .then(response => {
+            console.log(response)
+          });
+    }*/
   }
 
   onSelectGender(gender) {
@@ -61,9 +75,15 @@ class SetupProfile extends Component {
       return;
     }
 
+    this.setState({
+      isUploadingFile:true
+    })
     if (this.state.profilePhotoFile) {
       //upload image first
       bendService.uploadFile(this.state.profilePhotoFile, (error, file)=>{
+        this.setState({
+          isUploadingFile:false
+        })
         if (error) {
           alert("Failed to upload file. Please try again later");
           return;
@@ -74,8 +94,8 @@ class SetupProfile extends Component {
       {
         _workflow: 'avatar'
       });
-    }
-    this.updateUserInfo();
+    } else
+      this.updateUserInfo();
   }
 
   updateUserInfo(f) {
@@ -95,16 +115,23 @@ class SetupProfile extends Component {
       userData.gender = this.state.gender;
     }
 
-    console.log(userData);
+    //console.log(userData);
 
     bendService.updateUser(userData, (error, result)=>{
-      console.log(error, result)
+      //console.log(error, result)
+
       if (error) {
         alert("Failed to update user profile")
+        this.setState({
+          isUploadingFile:false
+        })
         return;
       }
 
       Actions.Main();
+      this.setState({
+        isUploadingFile:false
+      })
     })
   }
 
@@ -113,12 +140,21 @@ class SetupProfile extends Component {
       quality: 1.0,
       storageOptions: {
         skipBackup: true,
-      }
+      },
+      customButtons:[{
+        name:"remove",
+        title:"Remove Photo"
+      }]
     };
-
-    ImagePicker.showImagePicker(options, (response) => {      
-      console.log('Response = ', response);
-
+    ImagePicker.showImagePicker(options, (response) => {
+      if(response.customButton == 'remove') {
+        this.setState({
+          profilePhoto: null,
+          profilePhotoFile: null,
+        });
+        return;
+      }
+      //console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } 
@@ -142,9 +178,9 @@ class SetupProfile extends Component {
         <Image source={ this.state.profilePhoto } style={ styles.imagePhoto }/>
       );
     }
-      
+
     return (
-      <Image source={ camera } style={ styles.imageCamera }/>
+        <Image source={ camera } style={ styles.imageCamera }/>
     );
   }
 
@@ -213,11 +249,19 @@ class SetupProfile extends Component {
               </View>
             </View>
             <View style={ styles.buttonCompleteProfileWrapper }>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCompleteProfile() }>
+              {!this.state.isUploadingFile&&<TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCompleteProfile() }>
                 <View style={ styles.buttonCompleteProfile }>
                   <Text style={ styles.textButton }>Complete Profile</Text>
                 </View>  
-              </TouchableOpacity>            
+              </TouchableOpacity>}
+              {this.state.isUploadingFile&&
+                <View style={ styles.buttonCompleteProfile }>
+                  <ActivityIndicator
+                      hidesWhenStopped={ true }
+                      animating={ true }
+                  />
+                </View>
+                }
             </View>
           </View>
           <View style={ styles.bottomContainer }>            
