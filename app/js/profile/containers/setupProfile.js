@@ -12,7 +12,7 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
-    ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';

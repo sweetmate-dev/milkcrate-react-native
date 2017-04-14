@@ -11,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Keyboard,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -18,6 +19,8 @@ import * as signupActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+import timer from 'react-native-timer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -41,10 +44,14 @@ class Signup extends Component {
       confirmPassword: '',
       communityCode: '',
       bShowConfirmPassword: true,
+      signingUp: false,
     };
   }
 
   onSignUp() {
+
+    Keyboard.dismiss();
+
     if (this.state.email == '') {
       Alert.alert('E-mail Required', 'Please enter your email address.');
       return;
@@ -60,6 +67,8 @@ class Signup extends Component {
       return;
     }
 
+    this.setState({ signingUp: true });
+
     bendService.signup({
       username:this.state.email,
       password:this.state.password,
@@ -68,26 +77,30 @@ class Signup extends Component {
       defaultAvatar:UtilService.getRandomDefaultAvatar()
     }, (error, user)=>{
       
+      this.setState({ signingUp: false });
+
       if (error) {
-        if (error.name.code == 'milkcrate-app.error.common.missingInput') {
-          alert("Please fill in all the required fields");
-        } else if (error.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
-          alert("Please enter a valid email address")
-        } else if (error.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
-          alert("Your password and confirmation did not match. Please check them and try again.")
-        } else if (error.name.code == 'milkcrate-app.error.signup.invalidCode') {
-          alert("Please enter a valid community code")
-        } else if (error.name.code == 'milkcrate-app.error.signup.invalidUsername') {
-          alert("This email address is already taken. Please sign in instead.")
-        } else if (error.name.code == 'milkcrate-app.error.common.unknown') {
-          alert("Something's Awry. Please try again later.")
-        }
+        timer.setTimeout( this, 'SignupFailed', () => {
+          timer.clearInterval(this, 'SignupFailed');
+          if (error.name.code == 'milkcrate-app.error.common.missingInput') {
+            alert("Please fill in all the required fields");
+          } else if (error.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
+            alert("Please enter a valid email address")
+          } else if (error.name.code == 'milkcrate-app.error.signup.passwordDismatch') {
+            alert("Your password and confirmation did not match. Please check them and try again.")
+          } else if (error.name.code == 'milkcrate-app.error.signup.invalidCode') {
+            alert("Please enter a valid community code")
+          } else if (error.name.code == 'milkcrate-app.error.signup.invalidUsername') {
+            alert("This email address is already taken. Please sign in instead.")
+          } else if (error.name.code == 'milkcrate-app.error.common.unknown') {
+            alert("Something's Awry. Please try again later.")
+          }
+        }, 200);
+
         return;
       }
 
-      if (!error) {
-        Actions.SetupProfile();
-      }
+      Actions.SetupProfile();
     })
   }
 
@@ -114,104 +127,105 @@ class Signup extends Component {
   render() {
     return (
       <View style={ styles.container }>
+        <Spinner visible={ this.state.signingUp }/>
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}>
-        <Image source={ background } style={ styles.background } resizeMode="cover">
-          <View style={ styles.descriptionContainer }>
-            <Text style={ styles.textTitle }>Getting Started</Text>
-            <Text style={ styles.textDescription }>Your administrator should have sent you an </Text>
-            <Text style={ styles.textDescription }>access code.</Text>
-            <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
-          </View>
-          <View style={ styles.inputContainer }>
-            <TextInput
-              ref="email"
-              autoCapitalize="none"
-              autoCorrect={ false }
-              placeholder="Email"
-              placeholderTextColor={ commonColors.placeholderText }
-              textAlign="center"
-              style={ styles.input }
-              underlineColorAndroid="transparent"
-              returnKeyType={ 'next' }
-              keyboardType="email-address"
-              value={ this.state.email }
-              onChangeText={ (text) => this.setState({ email: text }) }
-              onSubmitEditing={ () => this.refs.password.focus() }
-            />
-            <View style={ styles.inputWrapper }>
+          <Image source={ background } style={ styles.background } resizeMode="cover">
+            <View style={ styles.descriptionContainer }>
+              <Text style={ styles.textTitle }>Getting Started</Text>
+              <Text style={ styles.textDescription }>Your administrator should have sent you an </Text>
+              <Text style={ styles.textDescription }>access code.</Text>
+              <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
+            </View>
+            <View style={ styles.inputContainer }>
               <TextInput
-                ref="password"
+                ref="email"
                 autoCapitalize="none"
                 autoCorrect={ false }
-                placeholder="Password"
-                secureTextEntry={ this.state.bShowConfirmPassword }
+                placeholder="Email"
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="center"
                 style={ styles.input }
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'next' }
-                value={ this.state.password }
-                onChangeText={ (text) => this.setState({ password: text }) }
-                onSubmitEditing={ () => this.refs.confirmPassword.focus() }
+                keyboardType="email-address"
+                value={ this.state.email }
+                onChangeText={ (text) => this.setState({ email: text }) }
+                onSubmitEditing={ () => this.refs.password.focus() }
               />
-            </View>
-            <View style={ styles.inputWrapper }>
-              <TextInput
-                ref="confirmPassword"
-                autoCapitalize="none"
-                autoCorrect={ false }
-                placeholder="Confirm Password"
-                secureTextEntry={ this.state.bShowConfirmPassword }
-                placeholderTextColor={ commonColors.placeholderText }
-                textAlign="center"
-                style={ styles.input }
-                underlineColorAndroid="transparent"
-                returnKeyType={ 'next' }
-                value={ this.state.confirmPassword }
-                onSubmitEditing={ () => this.refs.communityCode.focus() }
-                onChangeText={ (text) => this.setState({ confirmPassword: text }) }
-              />
-              <TouchableOpacity
-                activeOpacity={ .5 }
-                style={ styles.eyeButtonWrapper }
-                onPress={ () => this.onToggleConfirmPassword() }
-              >
-                <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
-              </TouchableOpacity>
-            </View>
-            <TextInput
-              ref="communityCode"
-              autoCapitalize="none"
-              autoCorrect={ false }
-              placeholder="Community Code"
-              placeholderTextColor={ commonColors.placeholderText }
-              textAlign="center"
-              style={ styles.input }
-              underlineColorAndroid="transparent"
-              returnKeyType={ 'done' }
-              value={ this.state.communityCode }
-              onChangeText={ (text) => this.setState({ communityCode: text }) }
-              onSubmitEditing={ () => this.onSignUp() }
-            />
-          </View>
-          <View style={ styles.bottomContainer }>
-            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
-              <View style={ styles.buttonSubmit }>
-                <Text style={ styles.textButton }>Submit</Text>
+              <View style={ styles.inputWrapper }>
+                <TextInput
+                  ref="password"
+                  autoCapitalize="none"
+                  autoCorrect={ false }
+                  placeholder="Password"
+                  secureTextEntry={ this.state.bShowConfirmPassword }
+                  placeholderTextColor={ commonColors.placeholderText }
+                  textAlign="center"
+                  style={ styles.input }
+                  underlineColorAndroid="transparent"
+                  returnKeyType={ 'next' }
+                  value={ this.state.password }
+                  onChangeText={ (text) => this.setState({ password: text }) }
+                  onSubmitEditing={ () => this.refs.confirmPassword.focus() }
+                />
               </View>
-            </TouchableOpacity>
-            <View style={ styles.bottomContentWrap }>
-              <Text style={ styles.textInvite }>Don’t know your access code?</Text>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
-                <Text style={ styles.textUnderButton }>Contact Us.</Text>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
-                {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
-              </TouchableOpacity>
-
+              <View style={ styles.inputWrapper }>
+                <TextInput
+                  ref="confirmPassword"
+                  autoCapitalize="none"
+                  autoCorrect={ false }
+                  placeholder="Confirm Password"
+                  secureTextEntry={ this.state.bShowConfirmPassword }
+                  placeholderTextColor={ commonColors.placeholderText }
+                  textAlign="center"
+                  style={ styles.input }
+                  underlineColorAndroid="transparent"
+                  returnKeyType={ 'next' }
+                  value={ this.state.confirmPassword }
+                  onSubmitEditing={ () => this.refs.communityCode.focus() }
+                  onChangeText={ (text) => this.setState({ confirmPassword: text }) }
+                />
+                <TouchableOpacity
+                  activeOpacity={ .5 }
+                  style={ styles.eyeButtonWrapper }
+                  onPress={ () => this.onToggleConfirmPassword() }
+                >
+                  <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
+                </TouchableOpacity>
+              </View>
+              <TextInput
+                ref="communityCode"
+                autoCapitalize="none"
+                autoCorrect={ false }
+                placeholder="Community Code"
+                placeholderTextColor={ commonColors.placeholderText }
+                textAlign="center"
+                style={ styles.input }
+                underlineColorAndroid="transparent"
+                returnKeyType={ 'go' }
+                value={ this.state.communityCode }
+                onChangeText={ (text) => this.setState({ communityCode: text }) }
+                onSubmitEditing={ () => this.onSignUp() }
+              />
             </View>
-          </View>
-        </Image>
+            <View style={ styles.bottomContainer }>
+              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
+                <View style={ styles.buttonSubmit }>
+                  <Text style={ styles.textButton }>Submit</Text>
+                </View>
+              </TouchableOpacity>
+              <View style={ styles.bottomContentWrap }>
+                <Text style={ styles.textInvite }>Don’t know your access code?</Text>
+                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
+                  <Text style={ styles.textUnderButton }>Contact Us.</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
+                  {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
+                </TouchableOpacity>
+
+              </View>
+            </View>
+          </Image>
         </KeyboardAwareScrollView>
       </View>
     );

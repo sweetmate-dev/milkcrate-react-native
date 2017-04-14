@@ -11,14 +11,17 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-    findNodeHandle
+  Keyboard,
+  findNodeHandle,  
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import * as loginActions from '../actions';
 import { connect } from 'react-redux';
-
 import { Actions } from 'react-native-router-flux';
+
+import Spinner from 'react-native-loading-spinner-overlay';
+import timer from 'react-native-timer';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 import bendService from '../../bend/bendService'
@@ -35,10 +38,14 @@ class Login extends Component {
       email: '',
       password: '',
       bShowConfirmPassword: true,
+      loggingIn: false,
     };
   }
 
   onLogin() {
+
+    Keyboard.dismiss();
+
     if (this.state.email == '') {
       Alert.alert('Please enter your email address.');
       return;
@@ -49,14 +56,23 @@ class Login extends Component {
       return;
     }
 
+    this.setState({ loggingIn: true });
+
     bendService.login(this.state.email, this.state.password, (error, user)=>{
       
+      this.setState({ loggingIn: false });
+
       if (error || !user.enabled) {
-        alert("Invalid credentials. Please check your email and password and try again.")
 
         this.setState({
           password: '',
         });
+
+        timer.setTimeout( this, 'LoginFailed', () => {
+          timer.clearInterval(this, 'LoginFailed');
+          Alert.alert("Invalid credentials. Please check your email and password and try again.")
+        }, 200);
+
         return
       }
 
@@ -86,6 +102,7 @@ class Login extends Component {
   render() {
     return (
       <View style={ styles.container } >
+        <Spinner visible={ this.state.loggingIn }/>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <View style={ styles.descriptionContainer }>
             <Text style={ styles.textTitle }>Log In</Text>
@@ -120,7 +137,7 @@ class Login extends Component {
                 textAlign="center"
                 style={ styles.input }
                 underlineColorAndroid="transparent"
-                returnKeyType={ 'done' }
+                returnKeyType={ 'go' }
                 value={ this.state.password }
                 onChangeText={ (text) => this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }

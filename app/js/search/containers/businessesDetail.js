@@ -335,7 +335,9 @@ class BusinessesDetail extends Component {
           onBack={ this.onBack }
           title={ business.name }
         />
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          extraHeight={ 120 }
+        >
           { business._geoloc &&<MapView
             style={ styles.map }
             initialRegion={{
@@ -503,7 +505,7 @@ class BusinessesDetail extends Component {
               <TextInput
                 autoCapitalize="none"
                 autoCorrect={ false }
-                multiline={ true }
+                multiline={ false }
                 placeholder="Add a comment"
                 placeholderTextColor={ commonColors.placeholderText }
                 textAlign="left"
@@ -512,6 +514,7 @@ class BusinessesDetail extends Component {
                 returnKeyType={ 'done' }
                 value={this.state.businessComment}
                 onChangeText={ (text) => this.setState({ businessComment: text }) }
+                onSubmitEditing={ () => this.onRateBusiness() }
               />              
             </View>
           </View>

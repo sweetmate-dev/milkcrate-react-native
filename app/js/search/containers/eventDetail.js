@@ -133,36 +133,38 @@ class EventDetail extends Component {
 
       this.setState({
         didStatus: true,
-      })
-
-      // register event to Calendar
-      // RNCalendarEvents.authorizeEventStore()
-      //     .then(status => {
-      //       if (status === 'authorized') {
-      //         event.times.map( (time, entry)=> {
-
-      //           RNCalendarEvents.saveEvent(event.name, {
-      //               location: address,
-      //               notes: event.description,
-      //               startDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.from), "YYYY-MM-DDTHH:mm:ss.sssZ"),
-      //               endDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.until), "YYYY-MM-DDTHH:mm:ss.sssZ"),
-      //             })
-      //             .then( id => {
-      //               console.log('success : ', id);
-
-      //             })
-      //             .catch( error => {
-      //               console.log('error : ', error);
-      //             });
-      //         });
-      //       }
-      //     })
-      //     .catch( error => {
-      //       console.log('error : ', error);
-      // });
+      })      
     })
 
     this.onGoWeb();
+  }
+
+  onAddToCalendar() {
+
+    RNCalendarEvents.authorizeEventStore()
+        .then(status => {
+          if (status === 'authorized') {
+            event.times.map( (time, entry)=> {
+
+              RNCalendarEvents.saveEvent(event.name, {
+                  location: address,
+                  notes: event.description,
+                  startDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.from), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                  endDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.until), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                })
+                .then( id => {
+                  console.log('success : ', id);
+
+                })
+                .catch( error => {
+                  console.log('error : ', error);
+                });
+            });
+          }
+        })
+        .catch( error => {
+          console.log('error : ', error);
+    });
   }
 
   onUncheckIn() {
@@ -203,6 +205,12 @@ class EventDetail extends Component {
       event,
     } = this.props;
 
+    let icon = null;
+
+    if (this.category !== undefined) {
+      icon = UtilService.getCategoryIcon(this.category.slug);
+    }
+    
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -238,7 +246,7 @@ class EventDetail extends Component {
           { !event._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
-              <Image style={ styles.imageIcon } source={ UtilService.getCategoryIcon(this.category.slug) } />
+              <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.infoSubContainer }>
                 <Text style={ styles.textTitle }>{ event.name }</Text>
                 { this.state.currentLocation && <Text style={ styles.textValue }>
@@ -300,16 +308,27 @@ class EventDetail extends Component {
             </View>
           </View> }
         </ScrollView>
-        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
-          <View style={ styles.buttonCheckin }>
-            <Text style={ styles.textButton }>Register</Text>
+        { 
+          !this.state.didStatus ?
+          <TouchableOpacity onPress={ () => this.onCheckIn() }>
+            <View style={ styles.buttonCheckin }>
+              <Text style={ styles.textButton }>Register</Text>
+            </View>
+          </TouchableOpacity> 
+          :
+          <View style={ styles.bottomContainer }>
+            <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+              <View style={ styles.buttonGrey }>
+                <Text style={ styles.textOrange }>I Can't Go</Text>
+              </View>
+            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={ () => this.onAddToCalendar() }>
+              <View style={ styles.buttonGreen }>
+                <Text style={ styles.textButton }>Add to Calendar</Text>
+              </View>
+            </TouchableOpacity>*/}
           </View>
-        </TouchableOpacity> }
-        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
-          <View style={ styles.buttonGrey }>
-            <Text style={ styles.textOrange }>I Can't Go</Text>
-          </View>
-        </TouchableOpacity> }
+        }
       </View>
     );
   }
@@ -383,7 +402,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
-  },
+  },    
   buttonCheckin: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -395,6 +414,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#EFEFEF',
     height: 40,
+    width: commonStyles.screenWidth,
+  },
+  buttonGreen: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: commonColors.theme,
+    height: 40,
+    width: commonStyles.screenWidth / 2,
   },
   individualInfoContainer: {
     flexDirection: 'row',
@@ -497,5 +524,10 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
     paddingVertical: 10,
+  },
+  bottomContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

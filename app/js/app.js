@@ -178,7 +178,7 @@ class App extends Component {
         <Scene key="Introduce" component={ Introduce } />
         <Scene key="Signup" component={ Signup } />
         <Scene key="Login" component={ Login } />
-        <Scene key="SetupProfile" component={ SetupProfile }/>
+        <Scene key="SetupProfile" component={ SetupProfile } />
         <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />
