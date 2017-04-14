@@ -24,11 +24,8 @@ import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
 import UtilService from '../../components/util'
 
 const ASPECT_RATIO = screenWidth / screenHiehgt;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.005;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const SPACE = 0.01;
 
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const map_selected_pin = require('../../../assets/imgs/map_marker_selected.png');
@@ -134,7 +131,7 @@ class BusinessesMapView extends Component {
             ))            
           }          
         </MapView.Animated>
-        <View style={ styles.calloutContainer } >
+        <View style={ styles.calloutContainer }>
           <BusinessesListCell
             title={ businesses[this.state.tappedPin].name }
             icon={ categoryIcons[this.state.tappedPin] }
