@@ -70,8 +70,8 @@ class Settings extends Component {
 
   onSuggestBusinessOrEvent() {
     Mailer.mail({
-      subject: 'Suggestion for directory',
-      recipients: ['info@mymilkcrate.com'],
+      subject: 'Suggest a Business, Event, Volunteer Opportunity or Service',
+      recipients: ['support@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
       if(error) {
@@ -170,15 +170,15 @@ class Settings extends Component {
 
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Allow others to see my activity</Text>
-            <Switch 
-              onValueChange={ (value) => { this.updateShareActivity(value) }} 
+            <Switch
+              onValueChange={ (value) => { this.updateShareActivity(value) }}
               value={ this.state.user.shareActivity }
             />
           </View>
           <View style={ styles.cellContainer }>
             <Text style={ styles.textCellTitle }>Push notifications</Text>
-            <Switch 
-              onValueChange={ (value) => { this.updateAllowNotification(value) }} 
+            <Switch
+              onValueChange={ (value) => { this.updateAllowNotification(value) }}
               value={ this.state.allowNotifications }
             />
           </View>

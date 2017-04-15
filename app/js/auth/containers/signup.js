@@ -76,7 +76,7 @@ class Signup extends Component {
       code:this.state.communityCode,
       defaultAvatar:UtilService.getRandomDefaultAvatar()
     }, (error, user)=>{
-      
+
       this.setState({ signingUp: false });
 
       if (error) {
@@ -106,7 +106,7 @@ class Signup extends Component {
 
   onContactUs() {
     Mailer.mail({
-      subject: 'Feedback on MilkCrate for Communities',
+      subject: 'I need help logging in',
       recipients: ['info@mymilkcrate.com'],
       body: '',
     }, (error, event) => {
