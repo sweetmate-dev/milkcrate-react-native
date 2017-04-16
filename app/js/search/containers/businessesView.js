@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Keyboard,
   Alert,
 } from 'react-native';
 
@@ -50,6 +51,9 @@ class BusinessesView extends Component {
       currentLocation: null,
       businesses: [],
       categoryIcons: [],
+      
+      searchMode: true,
+      searchAutoFocus: false,
 
       businessesQuery:{
         more: true,
@@ -183,21 +187,12 @@ class BusinessesView extends Component {
     this.loadBusinesses();
   }
 
-  // onSearchFocus() {
-
-  //   this.offset = 0;
-  //   this.more = false;
-  //   this.businesses = [];
-
-  //   this.setState( (state) => {
-  //     state.businessesQuery.more = false;
-  //     state.businesses = [];
-  //     state.categoryIcons = [];
-  //     return state;
-  //   })
-  // }
-
   onSearchCancel() {
+
+    if (this.state.selectedIndex ===  'Map') {
+      this.setState({ selectedIndex: 'List' });
+    }
+
     this.offset = 0;
     this.searchText = '';
     this.more = true;
@@ -207,6 +202,7 @@ class BusinessesView extends Component {
       state.businessesQuery.more = true;
       state.businesses = [];
       state.categoryIcons = [];
+
       return state;
     })
 
@@ -218,6 +214,41 @@ class BusinessesView extends Component {
     this.loadAllData();    
   }
 
+  onSelectSegment(option) {
+
+    Keyboard.dismiss();
+
+    this.setState({ 
+      selectedIndex: option,
+    });
+
+    let searchMode = false;
+
+    if (option === 'List') {
+      searchMode = true;
+    }
+
+    this.setState({
+      searchMode: searchMode,
+      searchAutoFocus: false,
+    });
+  }
+
+  onGoSearchScreen() {
+
+    this.onSelectSegment('List');
+
+    this.setState({
+      searchAutoFocus: true,
+    });
+  }
+
+  onSearchFocus() {
+    this.setState({ 
+      searchAutoFocus: false,
+    });
+  }
+
   render() {
     return (
       <View style={ styles.container }>
@@ -227,6 +258,10 @@ class BusinessesView extends Component {
           placeholder={ 'Search for businesses' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
+          onFocus={ () => this.onSearchFocus() }
+          searchMode={ this.state.searchMode }
+          onGoSearchScreen={ () => this.onGoSearchScreen() }
+          searchAutoFocus={ this.state.searchAutoFocus }
         />
         <View style={ styles.segmentedWrap }>
           <View style={ styles.segmentedLeft }/>
@@ -237,7 +272,7 @@ class BusinessesView extends Component {
               backTint= { commonColors.theme }
               options={ ['List', 'Map'] }
               allowFontScaling={ false } // default: true
-              onSelection={ option => this.setState({ selectedIndex: option }) }
+              onSelection={ (option) => this.onSelectSegment(option) }
               selectedOption={ this.state.selectedIndex }
             />
           </View>

@@ -105,20 +105,20 @@ export default class TrendingCarousel extends Component {
             <Text style={ styles.textCategory }> { type } </Text>
             <View style={ styles.titleContainer }>
               <Image style={ styles.imageTitle } source={ UtilService.getActivityIcon(activityType) } resizeMode="contain"/>
-              <Text numberOfLines={ 1 } style={ styles.textTitle }>{ title }</Text>
+              <Text numberOfLines={ 2 } style={ styles.textTitle }>{ title }</Text>
             </View>
           </View>
           <View style={ styles.centerContainer }>
             <Image style={ styles.imageCategoryIcon } source={ icon }/>
           </View>
           <View style={ styles.bottomContainer }>
-            { (users.length > 0) && <View style={ styles.avatarsMainContainer }>
-              <View style={ styles.names_timeContainer }>
+            <View style={ styles.avatarsMainContainer }>
+              { (users.length > 0) && <View style={ styles.names_timeContainer }>
                 <Text style={ styles.textName }>{ users[0].name }</Text>
                 { (userCount > 1) && <Text style={ styles.textName }> and { userCount - 1 } others</Text> }
                 <Text numberOfLines={ 1 } style={ styles.textSmall }>Latest { UtilService.getPastDateTime(time) }</Text>
-              </View>
-              <View style={ styles.avatarsContainer }>
+              </View> }
+              { (users.length > 0) && <View style={ styles.avatarsContainer }>
                 { 
                   this.getUsers(users) 
                 }
@@ -127,8 +127,8 @@ export default class TrendingCarousel extends Component {
                     <Text style={ styles.textMoreUser }>+{ activity.trendActivityCount - 6 }</Text>
                   </View>
                 }
-              </View>
-            </View> }
+              </View> }
+            </View>
             <View style={ styles.like_coinContainer }>
               <View style={ styles.heartContainer }>
                 { false && <Image style={ styles.imageLike } source={ heart }/> }
@@ -177,8 +177,8 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
   },
   imageCategoryIcon: {
-    width: 40,
-    height: 40,
+    width: carouselHeight * 0.167,
+    height: carouselHeight * 0.167,
   },
   topContainer: {
     flex: 4,
@@ -209,20 +209,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   titleContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   imageTitle: {
-    width: 20,
+    width: 16,
     height: 16,
   },
   textTitle: {
     color: '#fff',
     fontFamily: 'Open Sans',
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: 'left',
     backgroundColor: 'transparent',
+    lineHeight: 16,
     paddingLeft: 5,
   },
   avatarsMainContainer: {

@@ -101,7 +101,7 @@ export default class SearchBar extends Component {
   }
 
   _onFocus() {
-    this._textInput.setNativeProps({ text: '' });
+    // this._textInput.setNativeProps({ text: '' });
     this.setState({ isOnFocus: true });
     if (this.props.onFocus) {
       this.props.onFocus();

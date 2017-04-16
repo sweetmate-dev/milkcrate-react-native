@@ -376,9 +376,9 @@ class Home extends Component {
       return false;
     }
 
-    return entries.map((entry, index) => {
-      var cat = bendService.getActivityCategory(this.state.categories, entry)
-      if(cat == null) return null;
+    return entries.map( (entry, index) => {
+      let category = bendService.getActivityCategory(this.state.categories, entry)
+      if(category == null) return null;
       return (
         <TrendingCarousel
           key={ index }
@@ -386,7 +386,7 @@ class Home extends Component {
           activityType={ entry.type }
           activity={ entry }
           title={ entry.name }
-          icon={ cat ? UtilService.getCategorySticker(cat) : require('../../../assets/imgs/category-stickers/transit.png') }
+          icon={ category ? UtilService.getCategorySticker(category) : require('../../../assets/imgs/category-stickers/transit.png') }
           users={ entry.users }
           userCount={ entry.userCount }
           time={ entry.lastTime }
@@ -444,8 +444,8 @@ class Home extends Component {
           <Text style={ styles.textTitle }>Intro Video</Text>
         </View>
         <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
-          <View style={styles.imageVideoView}>
-            <Image style={styles.imageVideo} resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
+          <View style={ styles.videoWrapper }>
+            <Image style={ styles.imageVideo } source={ require('../../../assets/imgs/vid.png') } />
           </View>
         </TouchableOpacity>
       </View>
@@ -453,6 +453,7 @@ class Home extends Component {
   }
 
   get showTrending() {
+
     return (
     this.state.trendings.length > 0 && <View style={ styles.trendingContainer }>
         <View style={ styles.trendingTitleContainer }>
@@ -817,20 +818,12 @@ const styles = StyleSheet.create({
   dailyPollStateModeWrapper: {
 
   },
-  imageVideoWrapper: {
-    position:'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor:'red',
-  },
   imageVideo: {
-    flexShrink:1,
-    height:200
+    width: commonStyles.screenWidth,
+    height: commonStyles.screenWidth * 0.453,
   },
-  imageVideoView: {
+  videoWrapper: {
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
   },
 });
