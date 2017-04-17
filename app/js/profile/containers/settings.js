@@ -80,7 +80,7 @@ class Settings extends Component {
     });
   }
 
-  opneURL(url) {
+  openURL(url) {
     Linking.canOpenURL(url).then( supported => {
       if (supported) {
         Linking.openURL(url);
@@ -91,19 +91,19 @@ class Settings extends Component {
   }
 
   onAboutMilkCrate() {
-    this.opneURL('http://www.mymilkcrate.com');
+    this.openURL('http://www.mymilkcrate.com');
   }
 
   onPrivacyPolicy() {
-    this.opneURL('http://mymilkcrate.com/privacy-policy/');
+    this.openURL('http://mymilkcrate.com/privacy-policy/');
   }
 
   onTermsOfUse() {
-    this.opneURL('http://mymilkcrate.com/terms-of-use/');
+    this.openURL('http://mymilkcrate.com/terms-of-use/');
   }
 
   onSoftwareLicenses() {
-    this.opneURL('http://mymilkcrate.com/software-licenses/');
+    this.openURL('http://mymilkcrate.com/software-licenses/');
   }
 
   onLogOut() {
@@ -140,6 +140,10 @@ class Settings extends Component {
       }
       console.log("User updated");
     })
+  }
+
+  onGoIntroVideo() {
+    this.openURL('http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4')
   }
 
   render() {
@@ -229,6 +233,12 @@ class Settings extends Component {
           <TouchableHighlight onPress={ () => this.onSoftwareLicenses() }>
             <View style={ styles.cellContainer }>
               <Text style={ styles.textCellTitle }>Software Licenses</Text>
+              <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={ () => this.onGoIntroVideo() }>
+            <View style={ styles.cellContainer }>
+              <Text style={ styles.textCellTitle }>Watch Intro Video</Text>
               <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
             </View>
           </TouchableHighlight>

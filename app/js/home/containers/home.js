@@ -434,7 +434,7 @@ class Home extends Component {
   get showVideo() {
     var delta = (Date.now() - bendService.getActiveUser()._bmd_createdAt/1000000)/1000;
     
-    if (delta > 14 * 3600 * 24) {
+    if (delta > 5 * 3600 * 24) {
       return null;
     }
 

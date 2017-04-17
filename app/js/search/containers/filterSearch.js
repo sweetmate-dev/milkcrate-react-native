@@ -50,7 +50,8 @@ class FilterSearch extends Component {
         action: [],
         volunteer_opportunity: [],
         business: [],
-      }
+      },
+      totalCount:0
     };
     this.searchText = ""
   }
@@ -191,6 +192,10 @@ class FilterSearch extends Component {
 
       var activities = result.data;
       this.setState({ activities: activities });
+      this.setState({
+        activities: activities,
+        totalCount:result.count
+      });
       this.getActivityIcons(activities);
     })
   }
@@ -381,15 +386,23 @@ class FilterSearch extends Component {
   render() {
     const { status } = this.props;
 
-    return (
-      <ScrollView>
-        { this.showActions }
-        { this.showBusinesses }
-        { this.showEvents }
-        { this.showVolunteer }
-        { this.showServices }
-      </ScrollView>
-    );
+    if(this.state.totalCount>0){
+      return (
+          <ScrollView>
+            { this.showActions }
+            { this.showBusinesses }
+            { this.showEvents }
+            { this.showVolunteer }
+            { this.showServices }
+          </ScrollView>
+      )
+    } else {
+      return (
+          <View style={styles.emptyPage}>
+            <Text style={styles.noResultText}>No matches found</Text>
+          </View>
+      )
+    }
   }
 }
 
@@ -418,4 +431,16 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 8,
   },
+  emptyPage : {
+    flex:1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  noResultText : {
+    fontSize:16,
+    fontFamily: 'OpenSans-Semibold',
+    color: commonColors.grayMoreText,
+    textAlign:'center',
+    lineHeight:30
+  }
 });
