@@ -91,29 +91,32 @@ class BusinessesMapView extends Component {
     let region = null;
 
     if (this.state.currentLocation != null) {
-      region = new MapView.AnimatedRegion({
+      region = {
         latitude: this.state.currentLocation.coords.latitude,
         longitude: this.state.currentLocation.coords.longitude,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      });
+      };
     } else {
-      region = new MapView.AnimatedRegion({
+      region = {
         latitude: businesses[this.state.tappedPin]._geoloc[1],
         longitude: businesses[this.state.tappedPin]._geoloc[0],
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      });
+      };
     }
 
     return (
       <View style={ styles.container }>
-        <MapView.Animated
+        <MapView
           style={ styles.map }
           region={ region }
+          showsMyLocationButton={ false }
+          showsPointsOfInterest={ false }
+          loadingEnabled={ true }
         >
           {
-            this.props.currentLocation && <MapView.Marker.Animated
+            this.props.currentLocation && <MapView.Marker
               image={ currentLocationMarker }
               coordinate={ this.props.currentLocation.coords }
               flat={ true }                
@@ -121,7 +124,7 @@ class BusinessesMapView extends Component {
           }
           {
             this.state.markers.map( (marker, index) => (
-              <MapView.Marker.Animated
+              <MapView.Marker
                 key={ index }
                 image={ marker.pin }
                 coordinate={ marker.coordinate }
@@ -130,7 +133,7 @@ class BusinessesMapView extends Component {
               />
             ))            
           }          
-        </MapView.Animated>
+        </MapView>
         <View style={ styles.calloutContainer }>
           <BusinessesListCell
             title={ businesses[this.state.tappedPin].name }

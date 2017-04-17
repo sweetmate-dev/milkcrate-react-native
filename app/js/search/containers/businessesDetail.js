@@ -320,7 +320,7 @@ class BusinessesDetail extends Component {
       icon = UtilService.getCategoryIcon(this.category.slug);
     }
 
-    var distance = null;
+    var distance = 0;
     var distanceMeter = null;
     if(this.state.currentLocation && business._geoloc) {
       distance = UtilService.getDistanceFromLatLonInMile(business._geoloc[1],business._geoloc[0],
@@ -366,8 +366,8 @@ class BusinessesDetail extends Component {
               <Image style={ styles.imageIcon } source={ icon } />
               <View style={ styles.businessInfoSubContainer }>
                 <Text style={ styles.textTitle }>{ business.name }</Text>
-                { distance && <Text style={ styles.textValue }>
-                  { business._geoloc?distance + ' Miles   ':''}
+                { distance > 0 && <Text style={ styles.textValue }>
+                  { business._geoloc ? distance + ' Miles   ':'' }
                   { UtilService.getPricesString(business.price) }</Text> 
                 }
               </View>
