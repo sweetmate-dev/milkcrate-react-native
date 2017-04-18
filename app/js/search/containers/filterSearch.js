@@ -73,6 +73,7 @@ class FilterSearch extends Component {
     setTimeout((searchText)=>{
       if(searchText == this.searchText) {
         this.getActivities(searchText);
+        this.searchText = ""
       }
     }, 300, newProps.searchText)
   }
@@ -148,7 +149,7 @@ class FilterSearch extends Component {
             console.log(error);
             return;
           }
-          
+
           this.setState( (state) => {
             state.icons.volunteer_opportunity[index] = UtilService.getCategoryIcon(result.slug);
             return state;
