@@ -167,19 +167,30 @@ class ServiceView extends Component {
   }
 
   onSearchChange(text) {
-    this.offset = 0;
-    this.searchText = text;      
-    this.more = true;
+    this.tempSearchText = text
+    setTimeout((oldSearchText)=>{
+      if(oldSearchText == this.tempSearchText) {
+        this.state.services = [];
+        this.offset = 0;
+        this.searchText = text;
+        this.limit = 20;
+        this.more = true;
 
-    this.setState( (state) => {
-      state.serviceQuery.more = true;
-      state.categoryIcons = [];
-      return state;
-    })
+        this.setState({
+          currentLocation: null,
+          services: this.state.services,
+          categoryIcons: [],
 
-    this.loadServices();
+          serviceQuery:{
+            more: true,
+            loading: false,
+          },
+        });
+
+        this.loadServices();
+      }
+    }, 300, text)
   }
-
   // onSearchFocus() {
 
   //   this.offset = 0;

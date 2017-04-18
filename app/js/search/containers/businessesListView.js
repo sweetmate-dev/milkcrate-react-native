@@ -42,7 +42,7 @@ class BusinessesListView extends Component {
   }
 
   renderRow(rowData, sectionID, rowID) {
-    const caetgoriIcon = this.props.categoryIcons[rowID];
+    const caetgoriIcon = UtilService.getCategoryIconFromSlug(rowData);
 
     return (
       <BusinessesListCell
