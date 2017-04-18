@@ -7,7 +7,9 @@ import {
 } from 'react-native';
 
 export const SkipButton = ({
-  styles, onSkipBtnClick, isSkipBtnShow,
+  styles, 
+  onSkipBtnClick, 
+  isSkipBtnShow,
   leftTextColor,
   skipBtnLabel,
   skipFadeOpacity

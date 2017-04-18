@@ -128,105 +128,107 @@ class Signup extends Component {
     return (
       <View style={ styles.container }>
         <Spinner visible={ this.state.signingUp }/>
-        <KeyboardAwareScrollView keyboardShouldPersistTaps={'always'}>
-          <Image source={ background } style={ styles.background } resizeMode="cover">
-            <View style={ styles.descriptionContainer }>
-              <Text style={ styles.textTitle }>Getting Started</Text>
-              <Text style={ styles.textDescription }>Your administrator should have sent you an </Text>
-              <Text style={ styles.textDescription }>access code.</Text>
-              <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
-            </View>
-            <View style={ styles.inputContainer }>
-              <TextInput
-                ref="email"
-                autoCapitalize="none"
-                autoCorrect={ false }
-                placeholder="Email"
-                placeholderTextColor={ commonColors.placeholderText }
-                textAlign="center"
-                style={ styles.input }
-                underlineColorAndroid="transparent"
-                returnKeyType={ 'next' }
-                keyboardType="email-address"
-                value={ this.state.email }
-                onChangeText={ (text) => this.setState({ email: text }) }
-                onSubmitEditing={ () => this.refs.password.focus() }
-              />
-              <View style={ styles.inputWrapper }>
+        <Image source={ background } style={ styles.background } resizeMode="cover">
+          <KeyboardAwareScrollView>
+            <View style={ styles.keyboardContainer }>
+              <View style={ styles.descriptionContainer }>
+                <Text style={ styles.textTitle }>Getting Started</Text>
+                <Text style={ styles.textDescription }>Your administrator should have sent you an </Text>
+                <Text style={ styles.textDescription }>access code.</Text>
+                <Text style={ styles.textDescription }>Use this code to gain access to your community.</Text>
+              </View>
+              <View style={ styles.inputContainer }>
                 <TextInput
-                  ref="password"
+                  ref="email"
                   autoCapitalize="none"
                   autoCorrect={ false }
-                  placeholder="Password"
-                  secureTextEntry={ this.state.bShowConfirmPassword }
+                  placeholder="Email"
                   placeholderTextColor={ commonColors.placeholderText }
                   textAlign="center"
                   style={ styles.input }
                   underlineColorAndroid="transparent"
                   returnKeyType={ 'next' }
-                  value={ this.state.password }
-                  onChangeText={ (text) => this.setState({ password: text }) }
-                  onSubmitEditing={ () => this.refs.confirmPassword.focus() }
+                  keyboardType="email-address"
+                  value={ this.state.email }
+                  onChangeText={ (text) => this.setState({ email: text }) }
+                  onSubmitEditing={ () => this.refs.password.focus() }
                 />
-              </View>
-              <View style={ styles.inputWrapper }>
-                <TextInput
-                  ref="confirmPassword"
-                  autoCapitalize="none"
-                  autoCorrect={ false }
-                  placeholder="Confirm Password"
-                  secureTextEntry={ this.state.bShowConfirmPassword }
-                  placeholderTextColor={ commonColors.placeholderText }
-                  textAlign="center"
-                  style={ styles.input }
-                  underlineColorAndroid="transparent"
-                  returnKeyType={ 'next' }
-                  value={ this.state.confirmPassword }
-                  onSubmitEditing={ () => this.refs.communityCode.focus() }
-                  onChangeText={ (text) => this.setState({ confirmPassword: text }) }
-                />
-                <TouchableOpacity
-                  activeOpacity={ .5 }
-                  style={ styles.eyeButtonWrapper }
-                  onPress={ () => this.onToggleConfirmPassword() }
-                >
-                  <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
-                </TouchableOpacity>
-              </View>
-              <TextInput
-                ref="communityCode"
-                autoCapitalize="none"
-                autoCorrect={ false }
-                placeholder="Community Code"
-                placeholderTextColor={ commonColors.placeholderText }
-                textAlign="center"
-                style={ styles.input }
-                underlineColorAndroid="transparent"
-                returnKeyType={ 'go' }
-                value={ this.state.communityCode }
-                onChangeText={ (text) => this.setState({ communityCode: text }) }
-                onSubmitEditing={ () => this.onSignUp() }
-              />
-            </View>
-            <View style={ styles.bottomContainer }>
-              <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
-                <View style={ styles.buttonSubmit }>
-                  <Text style={ styles.textButton }>Submit</Text>
+                <View style={ styles.inputWrapper }>
+                  <TextInput
+                    ref="password"
+                    autoCapitalize="none"
+                    autoCorrect={ false }
+                    placeholder="Password"
+                    secureTextEntry={ this.state.bShowConfirmPassword }
+                    placeholderTextColor={ commonColors.placeholderText }
+                    textAlign="center"
+                    style={ styles.input }
+                    underlineColorAndroid="transparent"
+                    returnKeyType={ 'next' }
+                    value={ this.state.password }
+                    onChangeText={ (text) => this.setState({ password: text }) }
+                    onSubmitEditing={ () => this.refs.confirmPassword.focus() }
+                  />
                 </View>
-              </TouchableOpacity>
-              <View style={ styles.bottomContentWrap }>
-                <Text style={ styles.textInvite }>Don’t know your access code?</Text>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
-                  <Text style={ styles.textUnderButton }>Contact Us.</Text>
+                <View style={ styles.inputWrapper }>
+                  <TextInput
+                    ref="confirmPassword"
+                    autoCapitalize="none"
+                    autoCorrect={ false }
+                    placeholder="Confirm Password"
+                    secureTextEntry={ this.state.bShowConfirmPassword }
+                    placeholderTextColor={ commonColors.placeholderText }
+                    textAlign="center"
+                    style={ styles.input }
+                    underlineColorAndroid="transparent"
+                    returnKeyType={ 'next' }
+                    value={ this.state.confirmPassword }
+                    onSubmitEditing={ () => this.refs.communityCode.focus() }
+                    onChangeText={ (text) => this.setState({ confirmPassword: text }) }
+                  />
+                  <TouchableOpacity
+                    activeOpacity={ .5 }
+                    style={ styles.eyeButtonWrapper }
+                    onPress={ () => this.onToggleConfirmPassword() }
+                  >
+                    <Image source={ this.state.bShowConfirmPassword ? eye : eye_slash } style={ styles.imageEye }/>
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  ref="communityCode"
+                  autoCapitalize="none"
+                  autoCorrect={ false }
+                  placeholder="Community Code"
+                  placeholderTextColor={ commonColors.placeholderText }
+                  textAlign="center"
+                  style={ styles.input }
+                  underlineColorAndroid="transparent"
+                  returnKeyType={ 'go' }
+                  value={ this.state.communityCode }
+                  onChangeText={ (text) => this.setState({ communityCode: text }) }
+                  onSubmitEditing={ () => this.onSignUp() }
+                />
+              </View>
+              <View style={ styles.bottomContainer }>
+                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSignUp() }>
+                  <View style={ styles.buttonSubmit }>
+                    <Text style={ styles.textButton }>Submit</Text>
+                  </View>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
-                  {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
-                </TouchableOpacity>
+                <View style={ styles.bottomContentWrap }>
+                  <Text style={ styles.textInvite }>Don’t know your access code?</Text>
+                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
+                    <Text style={ styles.textUnderButton }>Contact Us.</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
+                    {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
+                  </TouchableOpacity>
 
+                </View>
               </View>
             </View>
-          </Image>
-        </KeyboardAwareScrollView>
+          </KeyboardAwareScrollView>
+        </Image>
       </View>
     );
   }
@@ -243,6 +245,10 @@ export default connect(state => ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  keyboardContainer: {
+    width: screenWidth,
+    height: screenHiehgt,
   },
   background: {
     width: screenWidth,

@@ -21,9 +21,13 @@ import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+import timer from 'react-native-timer';
 import TextField from 'react-native-md-textinput';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
+import ResponsiveImage from 'react-native-responsive-image';
+import ImagePicker from 'react-native-image-picker';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -34,6 +38,8 @@ import * as _ from 'underscore'
 import UtilService from '../../components/util'
 
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
+const camera = require('../../../assets/imgs/camera_full.png');
+
 const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
 class EditProfile extends Component {
@@ -41,24 +47,93 @@ class EditProfile extends Component {
   constructor(props) {
     super(props);
 
+    this.user = bendService.getActiveUser();
     this.state = {
-      user:bendService.getActiveUser(),
+      user: this.user,
+      profilePhoto: camera,
+      profilePhotoFile: null,
+      activityStatus: false,
     };
+  }
+
+  componentDidMount() {
+
+    if (this.user.avatar != null) {
+      bendService.getUser( (error, result) => {
+
+        if (error) {
+          console.log(error);
+          return;
+        }
+  
+        console.log( 'user avatar : ', result);
+
+        const source = { uri: UtilService.getMiddleImage(result.avatar) };
+        this.setState({ profilePhoto: source });
+      })
+    }
   }
 
   onBack() {
     Actions.pop();
   }
 
-  onSaveProfile() {
-    bendService.updateUser(this.state.user, (error, result)=>{
+  updateUserInfo(file) {
+  
+    let userData = this.state.user;
+
+    if (file) {
+
+      userData.avatar = bendService.makeBendFile(file._id)
+    }
+
+    bendService.updateUser(userData, (error, result) => {
+
+      this.setState({ activityStatus: false });
+
       if (error) {
-        console.log(error);
+        console.log(error);        
         return;
       }
 
-      Alert.alert("Profile Updated", "Your changes have been saved.")
+      timer.setTimeout( this, 'UpdateUser', () => {
+        timer.clearInterval(this, 'UpdateUser');
+        Alert.alert("Profile Updated", "Your changes have been saved.");
+      }, 200);
     })
+  }
+
+  onSaveProfile() {
+
+    this.setState({ activityStatus: true });
+
+    if (this.state.profilePhotoFile) {
+      //upload image first
+      bendService.uploadFile(this.state.profilePhotoFile, (error, file)=>{
+        this.setState({
+          isUploadingFile:false
+        })
+        if (error) {
+
+          this.setState({ activityStatus: false });
+
+          timer.setTimeout( this, 'UpdateUser', () => {
+            timer.clearInterval(this, 'UpdateUser');
+            alert("Failed to upload file. Please try again later");
+          }, 200);
+
+          return;
+        }
+        console.log( 'uploaded file : ', file);
+
+        this.updateUserInfo(file);
+      }, 
+      {
+        _workflow: 'avatar'
+      });
+    } else {
+      this.updateUserInfo();
+    }
   }
 
   onSelectGender(data) {
@@ -71,16 +146,77 @@ class EditProfile extends Component {
     this.setState({ user: this.state.user });
   }
 
+  onPickProfilePhoto() {
+
+    let options;
+
+    if (this.state.profilePhotoFile == null) {
+      options = {
+        quality: 1.0,
+        storageOptions: {
+          skipBackup: true,
+        }
+      };
+    } else {
+      options = {
+        quality: 1.0,
+        storageOptions: {
+          skipBackup: true,
+        },
+        customButtons:[{
+          name:"remove",
+          title:"Remove Photo"
+        }]
+      };
+    }
+    
+    ImagePicker.showImagePicker(options, (response) => {
+
+      if (response.customButton == 'remove') {
+        this.setState({
+          profilePhoto: camera,
+          profilePhotoFile: null,
+        });
+        return;
+      }
+      //console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } 
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error); 
+      }
+      else {
+        let source = { uri: response.uri };
+
+        this.setState({
+          profilePhoto: source,
+          profilePhotoFile: response,
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <View style={ styles.container }>
+        <Spinner visible={ this.state.activityStatus }/>
+
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
           title ='Edit Profile'
         />
         <ScrollView style={ styles.scrollView }>
-          <Text style={ styles.textSettingsSection }>User Profile</Text>
+          <View style={ styles.photoContainer }>
+            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPickProfilePhoto() }>
+              <View style={ styles.photoWrapper }>
+                <ResponsiveImage source={ this.state.profilePhoto } style={ styles.imagePhoto } />
+              </View>
+            </TouchableOpacity>  
+          </View>
+
+          {/*<Text style={ styles.textSettingsSection }>User Profile</Text>*/}
           <TextField
             label='First & Last Name'
             autoCorrect={ false }
@@ -196,6 +332,24 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: 'transparent',
+  },
+  photoContainer: {
+    marginVertical: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoWrapper: {
+    width: commonStyles.screenWidth * 0.22,
+    height:  commonStyles.screenWidth * 0.22,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imagePhoto: {
+    width: commonStyles.screenWidth * 0.22,
+    height:  commonStyles.screenWidth * 0.22,
+    borderRadius: 5,
   },
   textSettingsSection: {
     color: commonColors.grayMoreText,

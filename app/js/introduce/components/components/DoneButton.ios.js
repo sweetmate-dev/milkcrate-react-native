@@ -7,12 +7,21 @@ import {
 } from 'react-native';
 
 export const DoneButton = ({
-  styles, onDoneBtnClick, onNextBtnClick,
-  rightTextColor, isDoneBtnShow,
-  doneBtnLabel, nextBtnLabel, 
-  doneFadeOpacity, skipFadeOpacity, nextOpacity,
-  skipBtnLabel, index, total,
+  styles, 
+  onDoneBtnClick, 
+  onNextBtnClick,
+  rightTextColor, 
+  isDoneBtnShow,
+  doneBtnLabel, 
+  nextBtnLabel, 
+  doneFadeOpacity, 
+  skipFadeOpacity, 
+  nextOpacity,
+  skipBtnLabel, 
+  index, 
+  total,
 }) => {
+
   return (
     <View style={ styles.btnContainer }>
       <Animated.View style={ [styles.full, { height: 0 }, {
@@ -33,10 +42,10 @@ export const DoneButton = ({
           </Text>
         </View>
       </Animated.View>
-      <Animated.View style={ [styles.full, { height: 0 }, { opacity: nextOpacity }] }>
+      <Animated.View style={ [styles.full, { height: 0 }, ] }>
         <TouchableOpacity style={ styles.full }
-          onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick }>
-          <Text style={ [styles.nextButtonText, { color: rightTextColor }] }>
+          onPress={ index >= (total - 2) ? onDoneBtnClick : onNextBtnClick }>
+          <Text style={ [doneButtonStyles.nextButtonText, { color: rightTextColor },] }>
             {
               index >= (total - 2) ? 
                 skipBtnLabel 
@@ -51,4 +60,11 @@ export const DoneButton = ({
 }
 
 export default DoneButton
-        
+
+const doneButtonStyles = {
+  nextButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'Open Sans',
+  },
+}

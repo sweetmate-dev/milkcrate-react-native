@@ -187,6 +187,8 @@ class VolunteerDetail extends Component {
       volunteer,
     } = this.props;
 
+    console.log('volunteer detail : ', volunteer);
+
     return (
       <View style={ styles.container }>
         <NavTitleBar

@@ -91,11 +91,6 @@ const defaulStyles = {
     alignItems: 'center',
     height: 50,
   },
-  nextButtonText: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    fontFamily: 'Arial',
-  },
   full: {
     height: 80,
     width: 100,
@@ -145,8 +140,11 @@ export default class AppIntro extends Component {
 
   onSkipBtnClick = (context) => {
 
-    if (this.props.goLastPage == false)
+    if (this.props.goLastPage == false) {
+      this.props.onSkipBtnClick(0);
       return;
+    }
+
     if (context.state.isScrolling || context.state.total < 2) return;
     const state = context.state;
     const diff = context.state.total - 1;
@@ -267,7 +265,8 @@ export default class AppIntro extends Component {
               isDoneBtnShow={ isDoneBtnShow }
               styles={ this.styles }
               onNextBtnClick={ this.onNextBtnClick.bind(this, context) }
-              onDoneBtnClick={ this.props.onDoneBtnClick }/> 
+              onDoneBtnClick={ this.props.onDoneBtnClick }
+            /> 
             :
             <View style={ this.styles.btnContainer }/>
           }

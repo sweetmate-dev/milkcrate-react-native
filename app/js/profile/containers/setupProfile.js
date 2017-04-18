@@ -25,7 +25,7 @@ import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
 
-import Permissions from 'react-native-permissions';
+// import Permissions from 'react-native-permissions';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -34,7 +34,7 @@ import moment from 'moment';
 import bendService from '../../bend/bendService'
 
 const background = require('../../../assets/imgs/background_profile.png');
-const camera = require('../../../assets/imgs/camera.png');
+const camera = require('../../../assets/imgs/camera_full.png');
 const triangle_down = require('../../../assets/imgs/triangle_down.png');
 const arrayGender = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
@@ -43,14 +43,14 @@ class SetupProfile extends Component {
     super(props);
 
     var user = bendService.getActiveUser();
-    
+
     this.state = {
-      profilePhoto: null,
+      profilePhoto: camera,
       profilePhotoFile: null,
       name: user.name ? user.name : '',
       birthday: user.birthdate ? moment(user.birthdate, 'YYYY-MM-DD').format('MMM DD, YYYY') : '',
       gender: user.gender ? user.gender : '',
-      isUploadingFile:false
+      isUploadingFile: false
     };
   }
 
@@ -95,8 +95,9 @@ class SetupProfile extends Component {
       {
         _workflow: 'avatar'
       });
-    } else
+    } else {
       this.updateUserInfo();
+    }
   }
 
   updateUserInfo(f) {
@@ -164,7 +165,7 @@ class SetupProfile extends Component {
 
       if (response.customButton == 'remove') {
         this.setState({
-          profilePhoto: null,
+          profilePhoto: camera,
           profilePhotoFile: null,
         });
         return;
@@ -187,19 +188,6 @@ class SetupProfile extends Component {
     });
   }
 
-  get showPhoto() {
-
-    if (this.state.profilePhoto ) {
-      return (
-        <ResponsiveImage source={ this.state.profilePhoto } style={ styles.imagePhoto } />
-      );      
-    } else {
-      return (
-        <ResponsiveImage source={ camera } initWidth='22' initHeight='20' />
-      );
-    }
-  }
-
   render() {
     return (
       <View style={ styles.container }>
@@ -210,7 +198,7 @@ class SetupProfile extends Component {
           <View style={ styles.photoContainer }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPickProfilePhoto() }>
               <View style={ styles.photoWrapper }>
-                { this.showPhoto }
+                <ResponsiveImage source={ this.state.profilePhoto } style={ styles.imagePhoto } />
               </View>
             </TouchableOpacity>  
             <Text style={ styles.textDescription }>Snap or upload profile photo</Text>
@@ -273,8 +261,8 @@ class SetupProfile extends Component {
               {this.state.isUploadingFile&&
                 <View style={ styles.buttonCompleteProfile }>
                   <ActivityIndicator
-                      hidesWhenStopped={ true }
-                      animating={ true }
+                    hidesWhenStopped={ true }
+                    animating={ true }
                   />
                 </View>
                 }

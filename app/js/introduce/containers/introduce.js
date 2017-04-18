@@ -12,8 +12,11 @@ import {
   Alert,
 } from 'react-native';
 
+import { Actions } from 'react-native-router-flux';
+
 import AppIntro from '../components/AppIntro';
 import Login from '../../auth/containers/login';
+import Signup from '../../auth/containers/signup';
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -32,6 +35,11 @@ export default class Introduce extends Component {
     StatusBar.setHidden(true);
   }
 
+  onGoLogin() {
+
+    Actions.Login();
+  }
+
   render() {
     return (
       <View style={ styles.container }>
@@ -44,7 +52,8 @@ export default class Introduce extends Component {
           dotColor= { commonColors.line }
           activeDotColor={ commonColors.title }
           customStyles={ customStyles }
-          goLastPage={ true }
+          onSkipBtnClick={ (position) => this.onGoLogin() }
+          onDoneBtnClick={ () => this.onGoLogin() }
         >
           <View style={ styles.slide }>
             <Image source={ background1 } style={ styles.background } resizeMode="cover">
@@ -116,7 +125,7 @@ export default class Introduce extends Component {
               <View style={ styles.paddingBottom }></View>
             </Image>
           </View>
-          <Login/>
+          <Signup/>
         </AppIntro>
       </View>
     );

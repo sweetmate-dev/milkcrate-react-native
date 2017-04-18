@@ -6,10 +6,16 @@ import {
 } from 'react-native';
 
 export const DoneButton = ({
-  styles, onDoneBtnClick, onNextBtnClick,
-  rightTextColor, isDoneBtnShow,
-  doneBtnLabel, nextBtnLabel,
-  skipBtnLabel, index, total,
+  styles, 
+  onDoneBtnClick, 
+  onNextBtnClick,
+  rightTextColor, 
+  isDoneBtnShow,
+  doneBtnLabel, 
+  nextBtnLabel,
+  skipBtnLabel, 
+  index, 
+  total,
 }) => {
   return (
     <View style={ [styles.btnContainer, { height: 0, paddingBottom: 5 }] }>

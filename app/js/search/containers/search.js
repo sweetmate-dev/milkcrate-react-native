@@ -25,7 +25,7 @@ class Search extends Component {
     this.state = {
       mainSearchPage: true,
       searchText: '',
-      searchAutoFocus: false,
+      searchAutoFocus: true,
     };
   }
 
