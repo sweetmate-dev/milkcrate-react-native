@@ -161,19 +161,31 @@ class VolunteerView extends Component {
   }
 
   onSearchChange(text) {
-    this.offset = 0;
-    this.searchText = text;      
-    this.more = true;
+    this.tempSearchText = text
+    setTimeout((oldSearchText)=>{
+      if(oldSearchText == this.tempSearchText) {
+        this.state.volunteeres = [];
+        this.offset = 0;
+        this.searchText = text;
+        this.limit = 20;
+        this.more = true;
 
-    this.setState( (state) => {
-      state.volunteeresQuery.more = true;
-      state.categoryIcons = [];
-      return state;
-    })
+        this.setState({
+          currentLocation: null,
+          volunteeres: this.state.volunteeres,
+          categoryIcons: [],
 
-    this.loadVolunteer();
+          volunteeresQuery:{
+            more: true,
+            loading: false,
+          },
+        });
+
+        this.loadVolunteer()
+      }
+    }, 300, text)
   }
-
+  
   onSearchCancel() {
     this.offset = 0;
     this.searchText = '';
