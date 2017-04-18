@@ -30,8 +30,16 @@ class Search extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.searchAutoFocus == true){
-       this.setState({ searchAutoFocus: true });
+    if(newProps.selectedTab == 'search') {
+      if(this.state.searchText == "") {
+        this.setState({
+          mainSearchPage: true
+        });
+      }
+    } else {
+      if (newProps.searchAutoFocus == true){
+        this.setState({ searchAutoFocus: true });
+      }
     }
   }
 

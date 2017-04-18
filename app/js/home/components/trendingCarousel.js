@@ -114,7 +114,7 @@ export default class TrendingCarousel extends Component {
           <View style={ styles.bottomContainer }>
             <View style={ styles.avatarsMainContainer }>
               { (users.length > 0) && <View style={ styles.names_timeContainer }>
-                <Text style={ styles.textName }>{ users[0].name }</Text>
+                <Text style={ styles.textName }>{ users[0].name||users[0].username }</Text>
                 { (userCount > 1) && <Text style={ styles.textName }> and { userCount - 1 } others</Text> }
                 <Text numberOfLines={ 1 } style={ styles.textSmall }>Latest { UtilService.getPastDateTime(time) }</Text>
               </View> }

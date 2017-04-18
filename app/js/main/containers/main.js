@@ -190,7 +190,8 @@ export default class Main extends Component {
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.onSelectTab('search') }>
-            <Search 
+            <Search
+                selectedTab={this.state.selectedTab}
               subOne={ subOne }
               searchAutoFocus={ this.state.searchAutoFocus }
             />

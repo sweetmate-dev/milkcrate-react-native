@@ -173,18 +173,30 @@ class BusinessesView extends Component {
   }
 
   onSearchChange(text) {
-    this.offset = 0;
-    this.searchText = text;      
-    this.more = true;
-    this.businesses = [];
+    this.tempSearchText = text
+    setTimeout((oldSearchText)=>{
+      if(oldSearchText == this.tempSearchText) {
+        this.businesses = [];
+        this.state.businesses = [];
+        this.offset = 0;
+        this.searchText = text;
+        this.limit = 20;
+        this.more = true;
 
-    this.setState( (state) => {
-      state.businessesQuery.more = true;
-      state.categoryIcons = [];
-      return state;
-    })
+        this.setState({
+          currentLocation: null,
+          businesses: this.state.businesses,
+          categoryIcons: [],
 
-    this.loadBusinesses();
+          businessesQuery:{
+            more: true,
+            loading: false,
+          },
+        });
+
+        this.loadBusinesses();
+      }
+    }, 300, text)
   }
 
   onSearchCancel() {
@@ -197,6 +209,7 @@ class BusinessesView extends Component {
     this.searchText = '';
     this.more = true;
     this.businesses = [];
+    this.state.businesses = [];
 
     this.setState( (state) => {
       state.businessesQuery.more = true;
@@ -291,7 +304,6 @@ class BusinessesView extends Component {
           this.state.selectedIndex == 'List' ?
             <BusinessesListView 
               businesses={ this.state.businesses }
-              categoryIcons={ this.state.categoryIcons }
               currentLocation={ this.state.currentLocation }
               moreBusinesses={ this.state.businessesQuery.more }
               loading={ this.state.businessesQuery.loading }
@@ -301,7 +313,6 @@ class BusinessesView extends Component {
             />
             :
             <BusinessesMapView 
-              categoryIcons={ this.state.categoryIcons }
               businesses={ this.state.businesses }
               currentLocation={ this.state.currentLocation }
             />

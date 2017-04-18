@@ -164,17 +164,29 @@ class ActionView extends Component {
   }
 
   onSearchChange(text) {
-    this.offset = 0;
-    this.searchText = text;      
-    this.more = true;
+    this.tempSearchText = text
+    setTimeout((oldSearchText)=>{
+      if(oldSearchText == this.tempSearchText) {
+        this.state.actions = [];
+        this.offset = 0;
+        this.searchText = text;
+        this.limit = 20;
+        this.more = true;
 
-    this.setState( (state) => {
-      state.actionsQuery.more = true;
-      state.categoryIcons = [];
-      return state;
-    })
+        this.setState({
+          currentLocation: null,
+          actions: this.state.actions,
+          categoryIcons: [],
 
-    this.loadActions();
+          actionsQuery:{
+            more: true,
+            loading: false,
+          },
+        });
+
+        this.loadActions();
+      }
+    }, 300, text)
   }
 
   onSearchCancel() {

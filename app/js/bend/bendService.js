@@ -387,6 +387,7 @@ module.exports = {
                 callback(err)
             })
         }, (err, ret)=>{
+
             if(trends.length > 0) {
                 //get users
                 async.map(trends,
@@ -409,7 +410,8 @@ module.exports = {
                                 }).then((rets)=>{
                                     var users = []
                                     _.map(rets, (o)=>{
-                                        users.push(o.user);
+                                        if(o.user && o.user.defaultAvatar)
+                                            users.push(o.user);
                                     })
                                     t.users = users
                                     if(rets.length > 0)
@@ -445,6 +447,10 @@ module.exports = {
                         trends = _.sortBy(trends, (o)=>{
                             return o.seq
                         })
+                        trends = _.filter(trends, (o)=>{
+                            return (o.users && o.users.length > 0)
+                        })
+                        //console.log("trends", trends)
                         cb(null, trends)
                     })
             } else {
