@@ -100,14 +100,15 @@ class VolunteerView extends Component {
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
+          var param = {
+            type: 'volunteer_opportunity',
+            offset: this.offset,
+            limit: this.limit,
+            query: this.searchText
+          }
+        bendService.searchActivity(param, (error, result) => {
+          if(param.query != this.searchText) return;
 
-        bendService.searchActivity({
-          type: 'volunteer_opportunity',
-          offset: this.offset,
-          limit: this.limit,
-          query: this.searchText
-        }, (error, result) => {
-          
           this.setState( (state) => {  
             state.volunteeresQuery.loading = false;
             return state;
@@ -161,12 +162,11 @@ class VolunteerView extends Component {
   }
 
   onSearchChange(text) {
-    this.tempSearchText = text
+    this.searchText = text
     setTimeout((oldSearchText)=>{
-      if(oldSearchText == this.tempSearchText) {
+      if(oldSearchText == this.searchText) {
         this.state.volunteeres = [];
         this.offset = 0;
-        this.searchText = text;
         this.limit = 20;
         this.more = true;
 
@@ -185,7 +185,7 @@ class VolunteerView extends Component {
       }
     }, 300, text)
   }
-  
+
   onSearchCancel() {
     this.offset = 0;
     this.searchText = '';

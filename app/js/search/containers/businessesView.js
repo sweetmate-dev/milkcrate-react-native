@@ -121,15 +121,21 @@ class BusinessesView extends Component {
 
         this.setState({ currentLocation: position })
 
-        bendService.searchActivity({
-          type: 'business',
-          offset: this.offset,
-          limit: this.limit,
-          query: this.searchText,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result) => {
-          this.setState( (state) => {  
+          var param = {
+            type: 'business',
+            offset: this.offset,
+            limit: this.limit,
+            query: this.searchText,
+          }
+
+          if(this.state.currentLocation) {
+            param.lat = this.state.currentLocation.coords.latitude;
+            param.long = this.state.currentLocation.coords.longitude;
+          }
+
+        bendService.searchActivity(param, (error, result) => {
+          if(param.query != this.searchText) return;
+          this.setState( (state) => {
             state.businessesQuery.loading = false;
             return state;
           });
@@ -143,14 +149,14 @@ class BusinessesView extends Component {
 
           if (result.data.business.length < this.limit) {
             this.more = false;
-            this.setState( (state) => {  
+            this.setState( (state) => {
               state.businessesQuery.more = false;
               return state;
             });
           }
 
           this.businesses = this.businesses.concat(result.data.business);
-          this.setState({ 
+          this.setState({
             businesses: this.businesses,
           });
 
@@ -173,13 +179,12 @@ class BusinessesView extends Component {
   }
 
   onSearchChange(text) {
-    this.tempSearchText = text
+    this.searchText = text
     setTimeout((oldSearchText)=>{
-      if(oldSearchText == this.tempSearchText) {
+      if(oldSearchText == this.searchText) {
         this.businesses = [];
         this.state.businesses = [];
         this.offset = 0;
-        this.searchText = text;
         this.limit = 20;
         this.more = true;
 

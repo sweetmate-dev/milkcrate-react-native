@@ -98,58 +98,62 @@ class ActionView extends Component {
       return state;
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
+    /*navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
-
-        bendService.searchActivity({
-          type: 'action',
-          offset: this.offset,
-          limit: this.limit,
-          query: this.searchText
-        }, (error, result) => {
-          
-          this.setState( (state) => {  
-            state.actionsQuery.loading = false;
-            return state;
-          });
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          } 
-
-          if (result.data.action.length < this.limit) {
-            this.more = false;
-            this.setState( (state) => {  
-              state.actionsQuery.more = false;
-              return state;
-            });
-          }
-
-          this.state.actions = this.state.actions.concat(result.data.action);
-          this.setState({ actions: this.state.actions });
-
-          const imageOffset = this.offset;
-          this.offset += this.limit;
-
-          result.data.action.map( (action, index) => {
-
-            this.setState( (state) => {
-              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(action);
-              return state;
-            });
-           
-          });
-        })
       },
       (error) => {
         console.log(JSON.stringify(error));
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
+    );*/
+
+    var searchText = this.searchText
+    bendService.searchActivity({
+      type: 'action',
+      offset: this.offset,
+      limit: this.limit,
+      query: this.searchText
+    }, (error, result) => {
+      if(searchText != this.searchText) {
+        return;
+      }
+
+      this.setState( (state) => {
+        state.actionsQuery.loading = false;
+        return state;
+      });
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      if (result.data.action.length < this.limit) {
+        this.more = false;
+        this.setState( (state) => {
+          state.actionsQuery.more = false;
+          return state;
+        });
+      }
+
+      this.state.actions = this.state.actions.concat(result.data.action);
+      this.setState({ actions: this.state.actions });
+
+      const imageOffset = this.offset;
+      this.offset += this.limit;
+
+      result.data.action.map( (action, index) => {
+
+        this.setState( (state) => {
+          state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(action);
+          return state;
+        });
+
+      });
+    })
   }
 
   renderActionsListRow(rowData, sectionID, rowID) {
@@ -164,12 +168,11 @@ class ActionView extends Component {
   }
 
   onSearchChange(text) {
-    this.tempSearchText = text
+    this.searchText = text
     setTimeout((oldSearchText)=>{
-      if(oldSearchText == this.tempSearchText) {
+      if(oldSearchText == this.searchText) {
         this.state.actions = [];
         this.offset = 0;
-        this.searchText = text;
         this.limit = 20;
         this.more = true;
 

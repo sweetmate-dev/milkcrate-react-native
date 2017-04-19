@@ -104,17 +104,20 @@ class ServiceView extends Component {
     navigator.geolocation.getCurrentPosition( (position) => {
 
         this.setState({ currentLocation: position })
+          var param = {
+            type: 'service',
+            offset: this.offset,
+            limit: this.limit,
+            query: this.searchText
+          }
 
-        bendService.searchActivity({
-          type: 'service',
-          offset: this.offset,
-          limit: this.limit,
-          query: this.searchText,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result) => {
-          
-          this.setState( (state) => {  
+          if(this.state.currentLocation) {
+            param.lat = this.state.currentLocation.coords.latitude;
+            param.long = this.state.currentLocation.coords.longitude;
+          }
+        bendService.searchActivity(param, (error, result) => {
+          if(param.query != this.searchText) return;
+          this.setState( (state) => {
             state.serviceQuery.loading = false;
             return state;
           });
@@ -124,11 +127,11 @@ class ServiceView extends Component {
           if (error) {
             console.log("search failed", error)
             return
-          } 
+          }
 
           if (result.data.service.length < this.limit) {
             this.more = false;
-            this.setState( (state) => {  
+            this.setState( (state) => {
               state.serviceQuery.more = false;
               return state;
             });
@@ -167,12 +170,11 @@ class ServiceView extends Component {
   }
 
   onSearchChange(text) {
-    this.tempSearchText = text
+    this.searchText = text
     setTimeout((oldSearchText)=>{
-      if(oldSearchText == this.tempSearchText) {
+      if(oldSearchText == this.searchText) {
         this.state.services = [];
         this.offset = 0;
-        this.searchText = text;
         this.limit = 20;
         this.more = true;
 
