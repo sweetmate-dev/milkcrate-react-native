@@ -22,11 +22,11 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
 import RNCalendarEvents from 'react-native-calendar-events';
-import localStorage from 'react-native-local-storage';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import Point from '../../components/Point';
+import { LocalStorage } from '../../styles/localStorage';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -40,6 +40,8 @@ const web = require('../../../assets/imgs/web.png');
 const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const CALENDAR_EVENTS = 'CalendarEvents';
 
 class EventDetail extends Component {
   constructor(props) {
@@ -122,7 +124,7 @@ class EventDetail extends Component {
     } = this.props; 
 
     bendService.captureActivity(this.props.event._id, 'event', (error, result) => {
-      if (error){
+      if (error) {
         console.log(error);
         return;
       }
@@ -131,7 +133,7 @@ class EventDetail extends Component {
 
       this.setState({
         didStatus: true,
-      })      
+      });
     })
 
     this.onGoWeb();
@@ -139,29 +141,75 @@ class EventDetail extends Component {
 
   onAddToCalendar() {
 
+    LocalStorage.load({
+      key: CALENDAR_EVENTS,
+      id: this.activityId
+    }).then( (data) => {
+
+      console.log( 'Calendar event : ', data);
+      alert('The event had already been added to Calendar');
+    })
+    .catch( (error) => {
+      console.log('local storage error : ', error.message);
+      switch (error.name) {
+        case 'NotFoundError':
+          this.addEventToCalendar();
+          break;
+      }
+    });
+  }
+
+  addEventToCalendar() {
+
     const {
       event
     } = this.props; 
 
     const address = event.address1 + " " + event.address2 + ", " + UtilService.getCityStateString(event.city, event.state, event.postalCode);
-
+    
     RNCalendarEvents.authorizeEventStore()
         .then(status => {
           if (status === 'authorized') {
             event.times.map( (time, index)=> {
 
+              let startDate = '';
+              let endDate = '';
+              let eventDate = '';
+
+              if ((time.date === null) || (time.date === '')) {
+                eventDate = UtilService.formatDateWithFormat2(new Date(), 'YYYY-MM-DD');
+              } else {
+                eventDate = time.date;
+              }
+              
+              startDate = eventDate;
+              endDate = eventDate;
+
+              if ((time.from === null) || (time.from === ''))
+                startDate += "T" + "00:00";
+              else 
+                startDate += "T" + time.from;
+              
+              if ((time.until === null) || (time.until === ''))
+                endDate += "T" + "23:59";
+              else 
+                endDate += "T" + time.until;
+              
               RNCalendarEvents.saveEvent(event.name, {
                   location: address,
                   notes: event.description,
-                  startDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.from), "YYYY-MM-DDTHH:mm:ss.sssZ"),
-                  endDate: UtilService.formatDateWithFormat2(new Date(time.date + "T" + time.until), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                  startDate: UtilService.formatDateWithFormat2(new Date(startDate), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                  endDate: UtilService.formatDateWithFormat2(new Date(endDate), "YYYY-MM-DDTHH:mm:ss.sssZ"),
                 })
                 .then( id => {
                   this.calendarEventIds[index] = id;
-                  localStorage.save(this.activityId, this.calendarEventIds)
-                    .then(() => {
-                      console.log('Local Storage successfully');
-                    })
+                  LocalStorage.save({
+                    key: CALENDAR_EVENTS,
+                    id: this.activityId,
+                    rawData: this.calendarEventIds,
+                  });
+
+                  alert('The event has been added to Calendar successfully!');
                 })
                 .catch( error => {
                   console.log('error : ', error);
@@ -171,6 +219,40 @@ class EventDetail extends Component {
         })
         .catch( error => {
           console.log('authorizeEventStore error : ', error);
+        });
+  }
+
+  removeEventFromCalendar() {
+
+    const activityId = this.activityId;
+    this.activityId = null;
+      
+    LocalStorage.load({
+      key: CALENDAR_EVENTS,
+      id: activityId
+    }).then( (data) => {
+
+      console.log( 'Calendar event : ', data);
+      
+      data.map( (id, index ) => {
+        RNCalendarEvents.removeEvent(id)
+          .then( success => {
+            if (index === (data.length - 1)) {
+              alert('The event has been removed from Calendar');
+              LocalStorage.remove({
+                key: CALENDAR_EVENTS,
+                id: activityId,
+              });
+            }
+          })
+          .catch( error => {
+            console.log('remove envet error : ', error);
+          });
+      });
+     
+    })
+    .catch( (error) => {
+      console.log('local storage error : ', error.message);
     });
   }
 
@@ -181,11 +263,11 @@ class EventDetail extends Component {
         return;
       }
 
-      this.activityId = null;
+      this.removeEventFromCalendar();
 
       this.setState({
         didStatus: false,
-      })
+      });
     })
   }
 
@@ -203,7 +285,7 @@ class EventDetail extends Component {
       return null;
 
     return (
-      <Image style={ [styles.map, { backgroundColor:backgroundColor }] } source={{ uri:coverImage }}/>
+      <Image style={ [styles.map, { backgroundColor: backgroundColor }] } source={{ uri: coverImage }}/>
     )
   }
 
@@ -217,7 +299,7 @@ class EventDetail extends Component {
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title = {event.name}
+          title={ event.name }
         />
         <ScrollView>
           {
