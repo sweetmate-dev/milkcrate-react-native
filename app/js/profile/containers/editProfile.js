@@ -83,8 +83,9 @@ class EditProfile extends Component {
     let userData = this.state.user;
 
     if (file) {
-
-      userData.avatar = bendService.makeBendFile(file._id)
+      userData.avatar = bendService.makeBendFile(file._id);
+    } else {
+      userData.avatar = null;
     }
 
     bendService.updateUser(userData, (error, result) => {
@@ -150,7 +151,7 @@ class EditProfile extends Component {
 
     let options;
 
-    if (this.state.profilePhotoFile == null) {
+    if (this.state.profilePhoto === camera) {
       options = {
         quality: 1.0,
         storageOptions: {

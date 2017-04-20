@@ -65,15 +65,15 @@ class VolunteerDetail extends Component {
 
   componentDidMount() {
     this.mounted = true
-    const {volunteer} = this.props;
-    bendService.checkActivityDid(volunteer._id, 'volunteer_opportunity', (error, result)=>{
+    const { volunteer } = this.props;
+    bendService.checkActivityDid(volunteer._id, 'volunteer_opportunity', (error, result) => {
       
       if (error) {
         console.log(error);
         return;
       }
 
-      if (result){
+      if (result) {
         this.mounted && (this.state.activityId = result);
       }
 
@@ -92,7 +92,7 @@ class VolunteerDetail extends Component {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
 
-    bendService.getUser( (error, result)=> {
+    bendService.getUser( (error, result) => {
       if( error) {
         console.log(error);
         return;
@@ -130,7 +130,7 @@ class VolunteerDetail extends Component {
   }
 
   onCheckInDo() {
-    bendService.captureActivityForVolunteer(this.props.volunteer._id, 'volunteer_opportunity', Number(this.state.hoursNumber ||0 ), (error, result) => {
+    bendService.captureActivityForVolunteer(this.props.volunteer._id, 'volunteer_opportunity', Number(this.state.hoursNumber || 0 ), (error, result) => {
       if (error) {
         console.log(error);
         return;
@@ -146,7 +146,7 @@ class VolunteerDetail extends Component {
   }
 
   onUncheckIn() {
-    bendService.removeActivity(this.state.activityId, (error, result)=>{
+    bendService.removeActivity(this.state.activityId, (error, result) => {
       if (error){
         console.log(error);
         return;
@@ -161,12 +161,12 @@ class VolunteerDetail extends Component {
   }
 
   renderCoverImage() {
-    var {
+    let {
       volunteer
     } = this.props;
 
-    var coverImage, backgroundColor;
-    var imageObj = volunteer.coverImage ? volunteer.coverImage : this.category.coverImage;
+    let coverImage, backgroundColor;
+    let imageObj = volunteer.coverImage ? volunteer.coverImage : this.category.coverImage;
     coverImage = UtilService.getMiddleImage(imageObj);
     backgroundColor = UtilService.getBackColor(imageObj);
 
@@ -174,12 +174,12 @@ class VolunteerDetail extends Component {
       return null;
 
     return (
-      <Image style={ [styles.map, { backgroundColor: backgroundColor }] } source={{ uri:coverImage }}/>
+      <Image style={ [styles.map, { backgroundColor: backgroundColor }] } source={{ uri: coverImage }}/>
     );
   }
 
   setModalVisible(visible) {
-    this.mounted&&this.setState({ modalVisible: visible });
+    this.mounted && this.setState({ modalVisible: visible });
   }
 
   render() {
@@ -211,11 +211,11 @@ class VolunteerDetail extends Component {
             {
               <MapView.Marker
                 image={ map_pin }
-                style={styles.map_pin}
+                style={ styles.map_pin }
                 coordinate={{
                   latitude: Number(volunteer._geoloc[1]),
                   longitude: Number(volunteer._geoloc[0]),
-                  }}
+                }}
               />
             }
           </MapView>}
@@ -224,11 +224,12 @@ class VolunteerDetail extends Component {
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(volunteer) } />
               <View style={ styles.infoSubContainer }>
-                <Text style={ styles.textTitle }>{volunteer.name}</Text>
+                <Text style={ styles.textTitle }>{ volunteer.name }</Text>
                 { this.state.currentLocation && <Text style={ styles.textValue }>
-                  { volunteer._geoloc?UtilService.getDistanceFromLatLonInMile(volunteer._geoloc[1],volunteer._geoloc[0],
+                  { volunteer._geoloc ? UtilService.getDistanceFromLatLonInMile(volunteer._geoloc[1],volunteer._geoloc[0],
                       this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) + ' Miles' : '' }
-                  </Text> }
+                  </Text> 
+                }
               </View>
               <Point point={ Math.max(volunteer.points || 1, 1) }/>
             </View>
@@ -241,7 +242,7 @@ class VolunteerDetail extends Component {
                 </TouchableOpacity> }
               </View>
               <View style={ styles.visitContainer }>
-                { this.state.didStatus && UtilService.isValidURL(volunteer.url) && <TouchableOpacity onPress={ () => this.onGoWeb() }>
+                { UtilService.isValidURL(volunteer.url) && <TouchableOpacity onPress={ () => this.onGoWeb() }>
                   <View style={ styles.visitCellContainer }>
                     <Image style={ styles.imageVisit } source={ web } />
                     <Text style={ styles.textInfoTitle }>Web</Text>
