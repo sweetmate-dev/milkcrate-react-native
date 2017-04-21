@@ -10,12 +10,12 @@ import {
   Alert,
 } from 'react-native';
 
-import * as commonStyles from '../../styles/commonStyles';
-import * as commonColors from '../../styles/commonColors';
-import Point from '../../components/Point';
+import * as commonStyles from '../styles/commonStyles';
+import * as commonColors from '../styles/commonColors';
+import Point from '../components/Point';
 
-const imageHeart = require('../../../assets/imgs/heart.png');
-const imageRedHeart = require('../../../assets/imgs/heart_red.png');
+const imageHeart = require('../../assets/imgs/heart.png');
+const imageRedHeart = require('../../assets/imgs/heart_red.png');
 
 export default class RecentActivityListCell extends Component {
 

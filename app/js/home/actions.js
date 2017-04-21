@@ -5,4 +5,3 @@ export function home() {
     type: [types.HOME_REQUEST, types.HOME_SUCCESS, types.HOME_ERRORE]
   };
 }
-

@@ -10,7 +10,7 @@ import {
   Dimensions,
   ScrollView,
   ListView,
-    Linking,
+  Linking,
   TouchableOpacity,
   TouchableHighlight,
   RefreshControl,
@@ -22,6 +22,7 @@ import { bindActionCreators } from 'redux';
 import * as homeActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import * as commonActions from '../../common/actions';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
@@ -30,7 +31,7 @@ import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
 import TrendingCarousel from '../components/trendingCarousel';
-import RecentActivityListCell from '../components/recentActivityListCell';
+import RecentActivityListCell from '../../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
@@ -96,10 +97,36 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
+    const oldRecentActivityLike = this.props.recentActivityLike;
     
-    if(newProps.selectedTab == 'home') {
+    if (newProps.selectedTab == 'home') {
       //get recent activity again
       this.loadLastActivities();
+    }
+
+    if (commonStatus === 'recent_activity_like_success') {
+
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == recentActivityId;
+      })
+
+      if (likeResult && exist) {
+        
+        if (oldRecentActivityLike != recentActivityLike) {
+          exist.likedByMe = recentActivityLike;
+
+          if (recentActivityLike) {
+            exist.likeCount = Number(exist.likeCount || 0) + 1;
+          } else {
+            exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
+          }
+
+          this.setState({
+            recentActivities: this.state.recentActivities
+          });
+        }
+      }
     }
   }
 
@@ -114,8 +141,8 @@ class Home extends Component {
       if (error) {
         console.log(error);return
       }
-      console.log("getLastActivities", result.length)
-      if(result.length > 0) {
+
+      if (result.length > 0) {
         this.state.recentActivities = result.concat(this.state.recentActivities);
         this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
@@ -299,36 +326,14 @@ class Home extends Component {
         likeByMe={ rowData.likedByMe || false }
         points={ Number(rowData.points || 1) }
         onClick={ () => this.onRecentActivityCellPressed(rowData) }
-        onLike={ () => this.onLike(rowData, !(rowData.likedByMe|| false)) }
+        onLike={ () => this.onLike(rowData, !(rowData.likedByMe || false)) }
       />
     );
   }
 
   onLike(activity, like) {
-    bendService.likeActivity(activity, like, (error, result) => {
-      
-      if (error) {
-        console.log(error);
-        return
-      }
 
-      var exist = _.find(this.state.recentActivities, (obj)=>{
-        return obj._id == activity._id
-      })
-
-      if (result && exist) {
-        exist.likedByMe = like;
-        
-        if (like)
-          exist.likeCount = Number(exist.likeCount || 0) + 1;
-        else
-          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
-
-        this.setState({
-          recentActivities:this.state.recentActivities
-        });
-      }
-    })
+    this.props.recentActivityLikeActions.likeRecentActivity(activity, like);
   }
 
   onRecentActivityCellPressed (activity) {
@@ -686,12 +691,17 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-  status: state.search.status
+    status: state.home.status, 
+    commonStatus: state.common.status,
+    likeResult: state.common.likeResult,
+    recentActivityId: state.common.recentActivityId,
+    recentActivityLike: state.common.recentActivityLike,
   }),
   (dispatch) => ({
-    actions: bindActionCreators(homeActions, dispatch)
+    actions: bindActionCreators(homeActions, dispatch),
+    recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
   })
-)(Home);
+) (Home);
 
 const styles = StyleSheet.create({
   container: {

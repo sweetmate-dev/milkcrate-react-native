@@ -20,11 +20,12 @@ import { bindActionCreators } from 'redux';
 import * as communityPointsActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import * as commonActions from '../../common/actions';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
-import RecentActivityListCellForCommunity from '../components/recentActivityListCellForCommunity';
+import RecentActivityListCell from '../../components/recentActivityListCell';
 import SimpleLeaderboardListCell from '../components/simpleLeaderboardListCell';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -71,6 +72,35 @@ class CommunityPoints extends Component {
     this.loadAllData();
   }
 
+  componentWillReceiveProps(newProps) {
+    const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
+    const oldRecentActivityLike = this.props.recentActivityLike;
+
+    if (commonStatus === 'recent_activity_like_success') {
+
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == recentActivityId;
+      })
+
+      if (likeResult && exist) {
+
+        if (oldRecentActivityLike != recentActivityLike) {
+
+          exist.likedByMe = recentActivityLike;
+
+          if (recentActivityLike)
+            exist.likeCount = Number(exist.likeCount || 0) + 1;
+          else
+            exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
+
+          this.setState({
+            recentActivities:this.state.recentActivities
+          });
+        }
+      }
+    }
+  }
+
   loadAllData() {
 
     bendService.getUser( (error, result) => {
@@ -105,7 +135,6 @@ class CommunityPoints extends Component {
 
     this.totalUsers = 0;
 
-    console.log("here-getLeaderBoardSimpleList");
     bendService.getLeaderBoardSimpleList( (error, userList, allUsers) => {
       console.log("getLeaderBoardSimpleList", userList)
       if (error) {
@@ -187,7 +216,7 @@ class CommunityPoints extends Component {
 
   renderRecentActivityRow(rowData, sectionID, rowID) {
     return (
-      <RecentActivityListCellForCommunity
+      <RecentActivityListCell
         name={ rowData.user.name || '' }
         description={ rowData.summary || '' }
         avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
@@ -218,28 +247,8 @@ class CommunityPoints extends Component {
   }
 
   onLike(activity, like) {
-    bendService.likeActivity(activity, like, (error, result) => { 
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      var exist = _.find(this.state.recentActivities, (obj) => {
-        return obj._id == activity._id;
-      })
-
-      if (result && exist) {
-        exist.likedByMe = like
-        if (like)
-          exist.likeCount = Number(exist.likeCount || 0) + 1;
-        else
-          exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
-
-        this.setState({
-          recentActivities: this.state.recentActivities,
-        })
-      }
-    })
+    
+    this.props.recentActivityLikeActions.likeRecentActivity(activity, like);
   }
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
@@ -345,12 +354,17 @@ class CommunityPoints extends Component {
 }
 
 export default connect(state => ({
-  status: state.profile.status
+    status: state.profile.status,
+    commonStatus: state.common.status,
+    likeResult: state.common.likeResult,
+    recentActivityId: state.common.recentActivityId,
+    recentActivityLike: state.common.recentActivityLike,
   }),
   (dispatch) => ({
-    actions: bindActionCreators(communityPointsActions, dispatch)
+    actions: bindActionCreators(communityPointsActions, dispatch),
+    recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
   })
-)(CommunityPoints);
+) (CommunityPoints);
 
 const styles = StyleSheet.create({
   container: {
