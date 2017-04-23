@@ -20,6 +20,7 @@ import { bindActionCreators } from 'redux';
 import * as actionDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import * as commonActions from '../../common/actions';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -73,6 +74,7 @@ class ActionDetail extends Component {
       }
 
       this.state.activityId = result.activity._id;
+      this.props.commonActions.captureActivity(result.activity._id);
 
       this.setState({
         didStatus: true
@@ -87,6 +89,7 @@ class ActionDetail extends Component {
         return;
       }
 
+      this.props.commonActions.removeActivity(this.state.activityId);
       this.state.activityId = null;
 
       this.setState({
@@ -179,7 +182,8 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(actionDetailActions, dispatch)
+    actions: bindActionCreators(actionDetailActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(ActionDetail);
 

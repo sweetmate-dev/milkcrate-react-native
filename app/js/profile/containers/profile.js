@@ -18,6 +18,7 @@ import { bindActionCreators } from 'redux';
 import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import * as commonActions from '../../common/actions';
 
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
@@ -67,7 +68,55 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.selectedTab == 'profile') {
+    const { commonStatus, activityId } = newProps;
+    if(commonStatus === 'capture_activity_success') {
+      //console.log("commonStatus", commonStatus, activityId)
+
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == activityId;
+      })
+
+      if(exist) return;
+
+      //add new recent activity
+      bendService.getRecentActivity(activityId, (err, activity)=>{
+        if(err) {
+          console.log(err);return;
+        }
+
+        this.state.recentActivities.unshift(activity);
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      })
+
+      bendService.getUser( (error, result) => {
+        this.hasMounted&&this.setState({
+          currentUser: result,
+        })
+      })
+    } else if(commonStatus === 'remove_activity_success') {
+      //console.log("commonStatus", commonStatus, activityId)
+
+      //remove recent activity from list
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == activityId;
+      })
+
+      if(exist) {
+        var idx = this.state.recentActivities.indexOf(exist)
+        this.state.recentActivities.splice(idx, 1);
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      }
+
+      bendService.getUser( (error, result) => {
+        this.hasMounted&&this.setState({
+          currentUser: result,
+        })
+      })
+    } else if (newProps.selectedTab == 'profile') {
       if (!Cache.cacheMap['user']) {
         this.loadAllData();
       }
@@ -318,10 +367,13 @@ class Profile extends Component {
 }
 
 export default connect(state => ({
-  status: state.profile.status
+  status: state.profile.status,
+  commonStatus: state.common.status,
+  activityId: state.common.activityId,
   }),
   (dispatch) => ({
-    actions: bindActionCreators(profileActions, dispatch)
+    actions: bindActionCreators(profileActions, dispatch),
+    recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
   })
 )(Profile);
 

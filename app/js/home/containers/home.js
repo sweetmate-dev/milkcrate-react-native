@@ -97,14 +97,10 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
+    //console.log("home componentWillReceiveProps", newProps)
+    const { commonStatus, likeResult, recentActivityId, recentActivityLike, activityId } = newProps;
     const oldRecentActivityLike = this.props.recentActivityLike;
     
-    if (newProps.selectedTab == 'home') {
-      //get recent activity again
-      this.loadLastActivities();
-    }
-
     if (commonStatus === 'recent_activity_like_success') {
 
       var exist = _.find(this.state.recentActivities, (obj) => {
@@ -127,6 +123,42 @@ class Home extends Component {
           });
         }
       }
+    } else if(commonStatus === 'capture_activity_success') {
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == activityId;
+      })
+
+      if(exist) return;
+
+      //add new recent activity
+      bendService.getRecentActivity(activityId, (err, activity)=>{
+        if(err) {
+          console.log(err);return;
+        }
+
+        this.state.recentActivities.unshift(activity);
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      })
+    } else if(commonStatus === 'remove_activity_success') {
+      //console.log("commonStatus", commonStatus, activityId)
+
+      //remove recent activity from list
+      var exist = _.find(this.state.recentActivities, (obj) => {
+        return obj._id == activityId;
+      })
+
+      if(exist) {
+        var idx = this.state.recentActivities.indexOf(exist)
+        this.state.recentActivities.splice(idx, 1);
+        this.setState({
+          recentActivities:this.state.recentActivities
+        })
+      }
+    } else if (newProps.selectedTab == 'home') {
+      //get recent activity again
+      this.loadLastActivities();
     }
   }
 
@@ -696,6 +728,7 @@ export default connect(state => ({
     likeResult: state.common.likeResult,
     recentActivityId: state.common.recentActivityId,
     recentActivityLike: state.common.recentActivityLike,
+    activityId: state.common.activityId,
   }),
   (dispatch) => ({
     actions: bindActionCreators(homeActions, dispatch),

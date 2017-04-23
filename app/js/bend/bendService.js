@@ -635,6 +635,35 @@ module.exports = {
         })
     },
 
+    getRecentActivity(activityId, cb) {
+        Bend.DataStore.get("activity", activityId, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community",
+                user:"user",
+                "user.avatar":"BendFile",
+                "activity.certification":'certification'
+            }
+        }).then((activity)=>{
+
+            query = new Bend.Query();
+            query.equalTo("user._id", this.getActiveUser()._id)
+            query.notEqualTo("deleted", true)
+            query.equalTo("activity._id", activity._id)
+            Bend.DataStore.find("activityLike", query).then(function(likes){
+                if(likes.length>0) {
+                    activity.likedByMe = true
+                }
+
+                cb(null, activity)
+            }, function(err){
+                cb(err)
+            })
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
     getMyRecentActivities(createdAt, limit, cb) {
         var query = new Bend.Query();
         query.equalTo("user._id", this.getActiveUser()._id)
@@ -652,8 +681,9 @@ module.exports = {
                 "activity.certification":'certification'
             }
         }).then((rets)=>{
+            cb(null, rets)
             //consider likes
-            var activityIds = []
+            /*var activityIds = []
             _.map(rets, (o)=>{
                 activityIds.push(o._id)
             })
@@ -679,7 +709,21 @@ module.exports = {
                 cb(null, rets)
             }, function(err){
                 cb(err)
-            })
+            })*/
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getMyRecentActivity(activityId, cb) {
+        Bend.DataStore.get("activity", activityId, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community",
+                "activity.certification":'certification'
+            }
+        }).then((activity)=>{
+            cb(null, activity)
         }, (err)=>{
             cb(err)
         })

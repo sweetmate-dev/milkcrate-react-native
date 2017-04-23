@@ -16,3 +16,17 @@ export function likeRecentActivity(activity, like) {
   }  
 }
 
+export function captureActivity(activityId) {
+  //console.log("captureActivity", activityId, flag)
+  return dispatch => {
+    dispatch({ type: types.ACTIVITY_CAPTURE_SUCCESS, activityId: activityId});
+  }
+}
+export function removeActivity(activityId) {
+  //console.log("captureActivity", activityId, flag)
+  return dispatch => {
+    dispatch({ type: types.ACTIVITY_REMOVE_SUCCESS, activityId: activityId});
+  }
+}
+
+
