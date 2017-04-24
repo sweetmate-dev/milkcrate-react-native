@@ -1016,6 +1016,7 @@ module.exports = {
     },
 
     saveInstallInformation(param, cb) {
+        delete param._bmd;
         Bend.executeAnonymous("save-installation", param).then((ret)=>{
             console.log(ret);
             cb(null, ret);
