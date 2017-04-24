@@ -118,8 +118,16 @@ class VolunteerDetail extends Component {
   }
 
   onGoWeb() {
-    if(this.props.volunteer.url)
-      Linking.openURL(this.props.volunteer.url);
+    var url = UtilService.fixUrl(this.props.volunteer.url);
+    if(url) {
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      }).catch((error)=>{
+        //console.log("URL open error");
+      });
+    }
   }
 
   onCheckIn() {

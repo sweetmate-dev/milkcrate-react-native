@@ -169,7 +169,16 @@ class BusinessesDetail extends Component {
   }
 
   onGoWeb() {
-    Linking.openURL(this.props.business.url);
+    var url = UtilService.fixUrl(this.props.business.url);
+    if(url) {
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      }).catch((error)=>{
+        //console.log("URL open error");
+      });
+    }
   }
 
   onGetDirection() {

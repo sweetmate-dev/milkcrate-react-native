@@ -99,13 +99,16 @@ class ActionDetail extends Component {
   }
 
   visitWebSite(url) {
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      }
-    }).catch((error)=>{
-      //console.log("URL open error");
-    });
+    url = UtilService.fixUrl(url);
+    if(url) {
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      }).catch((error)=>{
+        //console.log("URL open error");
+      });
+    }
   }
 
   render() {

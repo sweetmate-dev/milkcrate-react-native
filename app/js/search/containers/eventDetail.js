@@ -113,8 +113,16 @@ class EventDetail extends Component {
   }
 
   onGoWeb() {
-    if(this.props.event.url)
-      Linking.openURL(this.props.event.url);
+    var url = UtilService.fixUrl(this.props.event.url);
+    if(url) {
+      Linking.canOpenURL(url).then(supported => {
+        if (supported) {
+          Linking.openURL(url);
+        }
+      }).catch((error)=>{
+        //console.log("URL open error");
+      });
+    }
   }
 
   onCheckIn() {

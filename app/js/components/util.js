@@ -399,6 +399,18 @@ class UtilService {
     return true
   }
 
+  static fixUrl(url) {
+    if(this.isValidURL(url)) {
+      url = url.toLowerCase()
+      if(url.indexOf("http://") == -1) {
+        url = "http://" + url
+      }
+      
+      return url;
+    } else
+      return null;
+  }
+
   static getCategoryById(id) {
     return _.find(Cache.categories, (o)=>{
       return o._id == id
