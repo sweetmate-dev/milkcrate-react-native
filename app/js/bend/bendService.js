@@ -746,18 +746,22 @@ module.exports = {
 
     //poll
     pollResponse(question, answer, cb) {
+        var communityId = this.getActiveUser().community._id
         //add new response into poll question response
         Bend.DataStore.save("pollQuestionResponse", {
             answer:this.makeBendRef("pollQuestionAnswer", answer._id),
             question:this.makeBendRef("pollQuestion", question._id),
-            user:this.makeBendRef("user", this.getActiveUser()._id)
+            user:this.makeBendRef("user", this.getActiveUser()._id),
+            community:this.makeBendRef("community", communityId),
         }).then((ret)=>{
             //increase response count and percentage
             async.waterfall([
                 (callback)=>{
                     //pollQuestion update
                     Bend.DataStore.get("pollQuestion", question._id).then((ret)=>{
-                        ret.responseCount++;
+                        ret.responseCounts = ret.responseCounts||{}
+                        ret.responseCounts[communityId] = ret.responseCounts[communityId]||0
+                        ret.responseCounts[communityId]++;
                         Bend.DataStore.update("pollQuestion", ret).then((ret)=>{
                             callback(null, ret)
 
@@ -775,9 +779,11 @@ module.exports = {
                 (questionRet, callback)=>{
                     //pollQuestionAnswer update
                     Bend.DataStore.get("pollQuestionAnswer", answer._id).then((ret)=>{
-                        ret.count = Number(ret.count||0)
-                        ret.count++;
-                        ret.percentage = Math.round(ret.count * 100 / questionRet.responseCount)
+                        ret.counts = ret.counts||{}
+                        ret.counts[communityId] = ret.counts[communityId]||0
+                        ret.counts[communityId]++;
+                        ret.percentages = ret.percentages||{}
+                        ret.percentages[communityId] = Math.round(ret.counts[communityId] * 100 / questionRet.responseCounts[communityId])
                         Bend.DataStore.update("pollQuestionAnswer", ret).then((ret)=>{
                             callback(null, ret)
                         }, (err)=>{
@@ -795,7 +801,9 @@ module.exports = {
 
                     Bend.DataStore.find("pollQuestionAnswer", q).then((rets)=>{
                         _.map(rets, (a)=>{
-                            a.percentage = Math.round(Number(a.count||0) * 100 / questionRet.responseCount)
+                            a.percentages = a.percentages||{}
+                            a.counts = a.counts||{}
+                            a.percentages[communityId] = Math.round(Number(a.counts[communityId]||0) * 100 / questionRet.responseCounts[communityId])
                             Bend.DataStore.update("pollQuestionAnswer", a).then((ret)=>{
                                 //console.log(ret);
                             }, (err)=>{
@@ -818,6 +826,7 @@ module.exports = {
         //check if user answered already today
         var query = new Bend.Query();
         query.equalTo("user._id", this.getActiveUser()._id)
+        query.equalTo("community._id", this.getActiveUser().community._id)
         query.greaterThanOrEqualTo("_bmd.createdAt", (new Date().setHours(0,0,0,0)) * 1000000)
         Bend.DataStore.find("pollQuestionResponse", query, {
             relations:{

@@ -118,7 +118,7 @@ class Home extends Component {
             exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
           }
 
-          this.setState({
+          this.hasMounted&&this.setState({
             recentActivities: this.state.recentActivities
           });
         }
@@ -137,7 +137,7 @@ class Home extends Component {
         }
 
         this.state.recentActivities.unshift(activity);
-        this.setState({
+        this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
         })
       })
@@ -152,7 +152,7 @@ class Home extends Component {
       if(exist) {
         var idx = this.state.recentActivities.indexOf(exist)
         this.state.recentActivities.splice(idx, 1);
-        this.setState({
+        this.hasMounted && this.setState({
           recentActivities:this.state.recentActivities
         })
       }
@@ -552,12 +552,21 @@ class Home extends Component {
                   }
 
                   //update values locally
-                  this.state.pollQuestion.question.responseCount ++;
-                  this.state.pollQuestion.answers[index].count ++
-                  this.state.pollQuestion.answers[index].percentage = Math.round(this.state.pollQuestion.answers[index].count * 100 / this.state.pollQuestion.question.responseCount);
+                  var communityId = bendService.getActiveUser().community._id
+                  this.state.pollQuestion.question.responseCounts = this.state.pollQuestion.question.responseCounts||{}
+                  this.state.pollQuestion.question.responseCounts[communityId] = this.state.pollQuestion.question.responseCounts[communityId]||0
+                  this.state.pollQuestion.question.responseCounts[communityId]++;
+                  this.state.pollQuestion.answers[index].counts = this.state.pollQuestion.answers[index].counts||{}
+                  this.state.pollQuestion.answers[index].counts[communityId] = this.state.pollQuestion.answers[index].counts[communityId]||0
+                  this.state.pollQuestion.answers[index].counts[communityId] ++
+
+                  this.state.pollQuestion.answers[index].percentages = this.state.pollQuestion.answers[index].percentages||{}
+                  this.state.pollQuestion.answers[index].percentages[communityId] = Math.round(this.state.pollQuestion.answers[index].counts[communityId] * 100 / this.state.pollQuestion.question.responseCounts[communityId]);
                   
                   _.map(this.state.pollQuestion.answers, (obj)=>{
-                    obj.percentage = Math.round(obj.count * 100 / this.state.pollQuestion.question.responseCount);
+                    obj.percentages = obj.percentages||{}
+                    obj.counts = obj.counts||{}
+                    obj.percentages[communityId] = Math.round((obj.counts[communityId]||0) * 100 / this.state.pollQuestion.question.responseCounts[communityId]);
                   })
 
                   this.hasMounted&&this.setState({
@@ -620,10 +629,12 @@ class Home extends Component {
         <View style={ styles.dailyPollSelectContentContainer }>
           {
             this.state.pollQuestion.answers.map( (obj, index) => {
+              var communityId = bendService.getActiveUser().community._id;
+              var percent = obj.percentages?Number(obj.percentages[communityId]||0):0
               return (
                 <DailyPollStateCell
                   key={ index }
-                  percent={ Number(obj.percentage) }
+                  percent={ percent }
                   description={ obj.title }
                   selected={ this.state.selectedDailyPollIndex === index ? true : false }
                   bottomLine={ (this.state.pollQuestion.answers.length - 1) === index ? false : true }
