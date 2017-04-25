@@ -55,12 +55,12 @@ class SetupProfile extends Component {
   }
 
   componentDidMount() {
-    /*if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios') {
       Permissions.requestPermission('notification')
           .then(response => {
             console.log(response)
           });
-    }*/
+    }
   }
 
   onSelectGender(gender) {

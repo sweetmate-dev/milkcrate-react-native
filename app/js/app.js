@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Linking,
+    AsyncStorage,
   Alert,
 } from 'react-native';
 
@@ -13,7 +14,11 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
+import DeviceInfo from 'react-native-device-info';
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+
 import bendService from './bend/bendService'
+import * as _ from 'underscore'
 
 import * as reducers from './reducers';
 
@@ -98,32 +103,111 @@ const deepLink_Search_Categories = [
 ];
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state ={
-      initialize: false,
-      loggedIn: false,
-    };
+        this.state ={
+            initialize: false,
+            loggedIn: false,
+        };
 
-    bendService.init((err, activeUser)=>{
+        this.last = null;
 
-      console.log("bend init", err, activeUser)
+        bendService.init((err, activeUser)=>{
 
-      if(activeUser && activeUser._id) {
-        this.setState({ loggedIn: true });
+            console.log("bend init", err, activeUser)
 
-      } else {
-        this.setState({ loggedIn: false });
-      }
+            if(activeUser && activeUser._id) {
+                this.setState({ loggedIn: true });
+            } else {
+                this.setState({ loggedIn: false });
+            }
 
-      this.setState({ initialize: true });
+            this.setState({ initialize: true });
 
-      if(activeUser && !activeUser.name) {
-        Actions.SetupProfile();
-      }
-    });
-  }
+            /*
+             - appVersion
+             - bundleId (this is the package name for  android)
+             - user – if a user is logged in
+             - deviceName  – "Kostas' iPhone"
+             - deviceModel – "iPhone"
+             - deviceVersion – "iPhone7,2"
+             - systemName – the OS ("iOS")
+             - systemVersion – the OS version
+             - deviceId – the vendorID on iOS, unique device id on android
+             - buildType – "release" or "development" or "staging"
+             - apnsToken – iOS only, the push token
+             - gcmRegistrationId – Android only, the android push token
+             */
+
+            AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
+                var installInfo = ret
+                console.log("installationInfo", installInfo)
+                if(installInfo) {
+                    installInfo = JSON.parse(installInfo)
+                } else {
+                    installInfo = {}
+                }
+                _.extend(installInfo, {
+                    appVersion:DeviceInfo.getVersion(),
+                    bundleId:DeviceInfo.getBundleId(),
+                    user:activeUser?{
+                        "_type": "BendRef",
+                        "_id": activeUser._id,
+                        "_collection": "user"
+                    }:null,
+                    deviceName:DeviceInfo.getDeviceName(),
+                    deviceModel:DeviceInfo.getModel(),
+                    deviceVersion:DeviceInfo.getDeviceId(),
+                    systemName:DeviceInfo.getSystemName(),
+                    systemVersion:DeviceInfo.getSystemVersion(),
+                    deviceId:DeviceInfo.getUniqueID(),
+                    buildType:"development",
+                })
+
+                bendService.saveInstallInformation(installInfo, (err, ret)=>{
+                    if(!err) {
+                        AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
+                    }
+                })
+
+                BackgroundGeolocation.configure({
+                    desiredAccuracy: 10,
+                    stationaryRadius: 50,
+                    distanceFilter: 50,
+                    debug: false,
+                    stopOnTerminate: false,
+                    interval: 10000
+                }, function () {});
+
+                BackgroundGeolocation.on('location', (location) => {
+                    if(this.last) {
+                        if(this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
+                            return;
+                        }
+                    }
+
+                    this.last = location
+                    console.log('[DEBUG] BackgroundGeolocation location', location);
+
+                    //save to bend
+                    bendService.saveGeoLocation({
+                        latitude:location.latitude,
+                        longitude:location.longitude,
+                        speed:location.speed,
+                        altitude:location.altitude,
+                        accuracy:location.accuracy
+                    }, (err, ret)=>{
+                        console.log(err, ret);
+                    })
+                });
+
+                BackgroundGeolocation.start(() => {
+                    console.log('[DEBUG] BackgroundGeolocation started successfully');
+                });
+            });
+        });
+    }
 
   deepLinks () {
 
@@ -178,7 +262,7 @@ class App extends Component {
         <Scene key="Introduce" component={ Introduce } />
         <Scene key="Signup" component={ Signup } />
         <Scene key="Login" component={ Login } />
-        <Scene key="SetupProfile" component={ SetupProfile } />
+        <Scene key="SetupProfile" component={ SetupProfile }/>
         <Scene key="Main" component={ Main } type={ ActionConst.RESET } initial={ this.state.loggedIn }/>
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />

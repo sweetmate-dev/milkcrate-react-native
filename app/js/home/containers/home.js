@@ -10,7 +10,7 @@ import {
   Dimensions,
   ScrollView,
   ListView,
-  Linking,
+    Linking,
   TouchableOpacity,
   TouchableHighlight,
   RefreshControl,
@@ -26,6 +26,8 @@ import * as commonActions from '../../common/actions';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
+import VideoPlayer from 'react-native-video-player';
+
 
 import NavSearchBar from '../../components/navSearchBar';
 
@@ -480,17 +482,20 @@ class Home extends Component {
         <View style={ styles.trendingTitleContainer }>
           <Text style={ styles.textTitle }>Intro Video</Text>
         </View>
-        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
-          <View style={ styles.videoWrapper }>
-            <Image style={ styles.imageVideo } source={ require('../../../assets/imgs/vid.png') } />
+        {/*<TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
+          <View style={styles.imageVideoView}>
+            <Image style={styles.imageVideo} resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
+        <VideoPlayer
+            thumbnail={require('../../../assets/imgs/vid.png')}
+            video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
+        />
       </View>
     )
   }
 
   get showTrending() {
-
     return (
     this.state.trendings.length > 0 && <View style={ styles.trendingContainer }>
         <View style={ styles.trendingTitleContainer }>
@@ -872,12 +877,20 @@ const styles = StyleSheet.create({
   dailyPollStateModeWrapper: {
 
   },
-  imageVideo: {
-    width: commonStyles.screenWidth,
-    height: commonStyles.screenWidth * 0.453,
+  imageVideoWrapper: {
+    position:'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor:'red',
   },
-  videoWrapper: {
+  imageVideo: {
+    flexShrink:1,
+    height:200
+  },
+  imageVideoView: {
     flexDirection:'row',
-    alignItems:'center',
+    alignItems:'center'
   },
 });

@@ -66,13 +66,13 @@ export default class Main extends Component {
 
   componentDidMount() {
     this.hasMounted = true
-    /*if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios') {
       Permissions.requestPermission('notification')
           .then(response => {
             console.log(response)
           });
 
-    } */
+    } 
     if (Platform.OS === 'ios') {
       navigator.geolocation.getCurrentPosition( (position) => {
           console.log(JSON.stringify(position));
