@@ -250,6 +250,11 @@ class Settings extends Component {
               <Text style={ styles.textLogOut }>Log Out</Text>
             </View>
           </TouchableOpacity>
+
+          <View style={ styles.versionContainer }>
+            <Text style={ styles.textVersion }>MilkCrate for Communities v4.1 (45, v23)</Text>
+          </View>
+
         </ScrollView>
       </View>
     );
@@ -317,11 +322,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: commonColors.line,
     marginTop: 24,
-    marginBottom: 50,
   },
   textLogOut: {
     color: commonColors.bottomButton,
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
   },
+  versionContainer: {
+    // backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
+  textVersion: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+  },
+
 });

@@ -206,8 +206,8 @@ class EventDetail extends Component {
               RNCalendarEvents.saveEvent(event.name, {
                   location: address,
                   notes: event.description,
-                  startDate: UtilService.formatDateWithFormat2(new Date(startDate), "YYYY-MM-DDTHH:mm:ss.sssZ"),
-                  endDate: UtilService.formatDateWithFormat2(new Date(endDate), "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                  startDate: UtilService.formatDateWithFormat2(startDate, "YYYY-MM-DDTHH:mm:ss.sssZ"),
+                  endDate: UtilService.formatDateWithFormat2(endDate, "YYYY-MM-DDTHH:mm:ss.sssZ"),
                 })
                 .then( id => {
                   this.calendarEventIds[index] = id;
