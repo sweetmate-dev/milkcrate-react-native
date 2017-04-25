@@ -114,8 +114,9 @@ class Settings extends Component {
 
   updateShareActivity(val) {
     this.state.user.shareActivity = val;
+
     this.setState({
-      shareActivity:val
+      shareActivity: val
     })
 
     bendService.updateUser(this.state.user, (error, result) => {
@@ -129,6 +130,7 @@ class Settings extends Component {
 
   updateAllowNotification(val) {
     this.state.user.allowNotifications = val;
+
     this.setState({
       allowNotifications: val,
     })
@@ -183,7 +185,7 @@ class Settings extends Component {
             <Text style={ styles.textCellTitle }>Push notifications</Text>
             <Switch
               onValueChange={ (value) => { this.updateAllowNotification(value) }}
-              value={ this.state.allowNotifications }
+              value={ this.state.user.allowNotifications }
             />
           </View>
           <View style={ styles.line }/>
