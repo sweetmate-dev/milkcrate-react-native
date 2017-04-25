@@ -155,7 +155,7 @@ class EventDetail extends Component {
     }).then( (data) => {
 
       console.log( 'Calendar event : ', data);
-      alert('The event had already been added to Calendar');
+      Alert.alert('Event Added', 'This event had been already added to your calendar');
     })
     .catch( (error) => {
       console.log('local storage error : ', error.message);
@@ -217,7 +217,7 @@ class EventDetail extends Component {
                     rawData: this.calendarEventIds,
                   });
 
-                  alert('The event has been added to Calendar successfully!');
+                  Alert.alert('Event Added', 'This event has been successfully added to your calendar');
                 })
                 .catch( error => {
                   console.log('error : ', error);
