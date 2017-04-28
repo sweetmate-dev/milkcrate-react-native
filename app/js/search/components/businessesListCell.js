@@ -19,7 +19,6 @@ export default class BusinessesListCell extends Component {
     title: PropTypes.string.isRequired,
     icon: PropTypes.number,
     description: PropTypes.string,
-    distance: PropTypes.number,
     price: PropTypes.number,
     rating: PropTypes.number,
     onClick: PropTypes.func,
@@ -80,7 +79,7 @@ export default class BusinessesListCell extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View> }
               </View>
-              <Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>
+              {distance&&<Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>}
             </View>
           </View>
           {/*<View style={ styles.cellBottomContainer }>

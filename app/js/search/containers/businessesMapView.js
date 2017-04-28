@@ -139,7 +139,7 @@ class BusinessesMapView extends Component {
             icon={ UtilService.getCategoryIconFromSlug(businesses[this.state.tappedPin]) }
             description={ businesses[this.state.tappedPin].description }
             distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
-            this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
+            this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : null }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Number(businesses[this.state.tappedPin].rating || 0) }
             onClick={ () => this.onPressedCell(businesses[this.state.tappedPin]) }

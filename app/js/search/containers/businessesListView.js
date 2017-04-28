@@ -50,7 +50,7 @@ class BusinessesListView extends Component {
         icon={ caetgoriIcon }
         description={ rowData.description }
         distance={ rowData._geoloc && this.props.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
-        this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : 1.0 }
+        this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : null }
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedCell(rowData) }
