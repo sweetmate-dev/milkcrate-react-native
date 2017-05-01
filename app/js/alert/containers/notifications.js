@@ -69,11 +69,25 @@ class Notifications extends Component {
   }
 
   renderAlertRow(rowData, sectionID, rowID) {
+
+    if (rowData.actor.name === undefined) { 
+      return null;
+    }
+
+    let iconUrl = '';
+    if (rowData.actor.avatar) {      
+      iconUrl = UtilService.getSmallImage(rowData.actor.avatar);
+
+      if (iconUrl === undefined) {
+        iconUrl = '';
+      }
+    }
+
     return (
       <AlertListCell
         name={ rowData.actor.name }
         description={ rowData.message }
-        avatar={ rowData.actor.avatar ? UtilService.getSmallImage(rowData.actor.avatar) : "" }
+        avatar={ iconUrl }
         avatarBackColor={ UtilService.getBackColor(rowData.actor.avatar) }
         time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
         onClick={ () => this.onAlertCellPressed(rowData.activity) }
