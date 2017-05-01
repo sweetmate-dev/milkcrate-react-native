@@ -66,31 +66,22 @@ export default class Main extends Component {
 
   componentDidMount() {
     this.hasMounted = true
+
     if (Platform.OS === 'ios') {
       Permissions.requestPermission('notification')
           .then(response => {
             console.log(response)
           });
-
     } 
-    if (Platform.OS === 'ios') {
-      navigator.geolocation.getCurrentPosition( (position) => {
-          console.log(JSON.stringify(position));
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-      );
-    } else {
-      Permissions.requestPermission('location', 'always')
-        .then(response => {
-          this.hasMounted&&this.setState({ photoPermission: response })
-        });
-    }
+
+    Permissions.requestPermission('location', 'always')
+      .then(response => {
+        console.log(JSON.stringify(response));
+      });
 
     this.loadAlerts()
   }
+  
   componentWillUnmount() {
     this.hasMounted = false
   }

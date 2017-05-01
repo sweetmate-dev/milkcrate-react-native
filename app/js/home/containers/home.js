@@ -101,7 +101,6 @@ class Home extends Component {
   componentWillReceiveProps(newProps) {
     //console.log("home componentWillReceiveProps", newProps)
     const { commonStatus, likeResult, recentActivityId, recentActivityLike, activityId } = newProps;
-    const oldRecentActivityLike = this.props.recentActivityLike;
     
     if (commonStatus === 'recent_activity_like_success') {
 
@@ -111,7 +110,8 @@ class Home extends Component {
 
       if (likeResult && exist) {
         
-        if (oldRecentActivityLike != recentActivityLike) {
+        if (exist.likedByMe != recentActivityLike) {
+
           exist.likedByMe = recentActivityLike;
 
           if (recentActivityLike) {
@@ -341,8 +341,6 @@ class Home extends Component {
       this.hasMounted&&this.setState({
         activityQuery: this.state.activityQuery
       })
-
-      console.log("activity count", this.state.recentActivities.length);
     })
   }
 

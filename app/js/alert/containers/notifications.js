@@ -134,7 +134,6 @@ class Notifications extends Component {
           </View>
       )
     }
-
   }
 
   render() {

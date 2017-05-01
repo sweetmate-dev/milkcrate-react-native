@@ -74,7 +74,6 @@ class CommunityPoints extends Component {
 
   componentWillReceiveProps(newProps) {
     const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
-    const oldRecentActivityLike = this.props.recentActivityLike;
 
     if (commonStatus === 'recent_activity_like_success') {
 
@@ -84,7 +83,7 @@ class CommunityPoints extends Component {
 
       if (likeResult && exist) {
 
-        if (oldRecentActivityLike != recentActivityLike) {
+        if (exist.likedByMe != recentActivityLike) {
 
           exist.likedByMe = recentActivityLike;
 
