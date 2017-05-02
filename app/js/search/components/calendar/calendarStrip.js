@@ -249,9 +249,12 @@ export default class CalendarStrip extends Component {
     return `${monthFormatting.length > 1 ? firstDay.format(monthFormatting) : ''} ${monthFormatting.length > 1 ? '/' : ''} ${lastDay.format(this.props.calendarHeaderFormat)}`;
   }
 
-  compareSameDates( firstDate, secondDate) {
-    var timeDiff = firstDate - secondDate;
-    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  compareDates( firstDate, secondDate) {
+
+    let date1 = moment(moment(firstDate).format("YYYY-MM-DD"));
+    let date2 = moment(moment(secondDate).format("YYYY-MM-DD"));
+
+    let diffDays = date1.diff(date2, 'days');
     return diffDays == 0 ? true : false;
   }
 
@@ -274,12 +277,8 @@ export default class CalendarStrip extends Component {
 
       let bEventDay = false;
 
-      this.props.eventDays.map((eventDate) => {
-
-        var date1 = new Date(eventDate);
-        var date2 = new Date(date);
-
-        if (this.compareSameDates(date1, date2) == true) {
+      this.props.eventDays.map( (eventDate) => {
+        if (this.compareDates(eventDate, date) == true) {
           bEventDay = true;
           return;
         }

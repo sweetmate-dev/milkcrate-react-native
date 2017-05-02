@@ -111,27 +111,28 @@ class Notifications extends Component {
   renderAlert() {
     if(this.props.alerts.length > 0) {
       return (
-          <ScrollView
-              style={ styles.listViewWrap }
-              refreshControl={
-             <RefreshControl
-             refreshing={ this.state.isRefreshing }
-             onRefresh={ () => this.onRefresh() }
-             tintColor={ commonColors.theme }
-             />
-             }
-          >
-            <ListView
-                enableEmptySections={ true }
-                dataSource={ this.dataSourceAlert.cloneWithRows(this.props.alerts) }
-                renderRow={ this.renderAlertRow.bind(this) }/>
-          </ScrollView>
+        <ScrollView
+          style={ styles.listViewWrap }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ () => this.onRefresh() }
+              tintColor={ commonColors.theme }
+            />
+          }
+        >
+          <ListView
+            enableEmptySections={ true }
+            dataSource={ this.dataSourceAlert.cloneWithRows(this.props.alerts) }
+            renderRow={ this.renderAlertRow.bind(this) }
+          />
+        </ScrollView>
       )
     } else {
       return (
-          <View style={styles.emptyPage}>
-            <Text style={styles.noResultText}>Alerts will appear here when someone likes your activity, new challenges are pushed to your phone and more!</Text>
-          </View>
+        <View style={styles.emptyPage}>
+          <Text style={styles.noResultText}>Alerts will appear here when someone likes your activity, new challenges are pushed to your phone and more!</Text>
+        </View>
       )
     }
   }

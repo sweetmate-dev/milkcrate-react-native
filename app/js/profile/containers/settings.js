@@ -23,6 +23,7 @@ import { Actions } from 'react-native-router-flux';
 
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import NavTitleBar from '../../components/navTitleBar';
+import VideoPlayer from '../../components/videoPlayer';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 var Mailer = require('NativeModules').RNMail;
@@ -37,6 +38,7 @@ class Settings extends Component {
       allowOthersToSeeMyActivity: true,
       pushNotifications: true,
       user: bendService.getActiveUser(),
+      watchIntroVideo: false,
    };
   }
 
@@ -145,7 +147,26 @@ class Settings extends Component {
   }
 
   onGoIntroVideo() {
-    this.openURL('http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4')
+    this.setState({ watchIntroVideo: true });
+  }
+
+  onFullscreenPlayerWillDismiss() {
+    this.setState({ watchIntroVideo: false });
+  }
+
+  get watchIntroVideo() {
+    if (this.state.watchIntroVideo) {
+      return(
+        <VideoPlayer
+          videoHeight={ 0 }
+          autoplay={ true }
+          video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
+          onFullscreenPlayerWillDismiss={ (event) => this.onFullscreenPlayerWillDismiss(event) }
+        />
+      );
+    }
+
+    return null;
   }
 
   render() {
@@ -244,6 +265,7 @@ class Settings extends Component {
               <EntypoIcon name="chevron-thin-right" size={ 15 } color={ commonColors.title }/>
             </View>
           </TouchableHighlight>
+          { this.watchIntroVideo }
           <View style={ styles.line }/>
 
           {/* Logout */}

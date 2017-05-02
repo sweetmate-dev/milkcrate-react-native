@@ -301,7 +301,7 @@ class EventDetail extends Component {
     const { 
       event,
     } = this.props;
-
+    
     return (
       <View style={ styles.container }>
         <NavTitleBar

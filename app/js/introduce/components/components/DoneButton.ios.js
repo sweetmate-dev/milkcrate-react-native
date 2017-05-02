@@ -44,10 +44,10 @@ export const DoneButton = ({
       </Animated.View>
       <Animated.View style={ [styles.full, { height: 0 }, ] }>
         <TouchableOpacity style={ styles.full }
-          onPress={ index >= (total - 2) ? onDoneBtnClick : onNextBtnClick }>
+          onPress={ index >= (total - 1) ? onDoneBtnClick : onNextBtnClick }>
           <Text style={ [doneButtonStyles.nextButtonText, { color: rightTextColor },] }>
             {
-              index >= (total - 2) ? 
+              index >= (total - 1) ? 
                 skipBtnLabel 
                 : 
                 nextBtnLabel

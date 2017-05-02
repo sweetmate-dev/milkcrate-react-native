@@ -19,6 +19,7 @@ import Home from '../../home/containers/home';
 import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
 import Profile from '../../profile/containers/profile';
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 
 
 import * as commonColors from '../../styles/commonColors';
@@ -55,6 +56,8 @@ export default class Main extends Component {
       hasNewAlert:false
     };
 
+    this.last = null;
+
     StatusBar.setHidden(false);
 
     if (Platform.OS === 'ios') {
@@ -78,7 +81,43 @@ export default class Main extends Component {
       .then(response => {
         console.log(JSON.stringify(response));
       });
+    
+    BackgroundGeolocation.configure({
+      desiredAccuracy: 10,
+      stationaryRadius: 50,
+      distanceFilter: 50,
+      debug: false,
+      stopOnTerminate: false,
+      interval: 10000
+    }, function () {});
 
+    BackgroundGeolocation.on('location', (location) => {
+      if (this.last) {
+        if (this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
+          return;
+        }
+      }
+
+      this.last = location
+      console.log('[DEBUG] BackgroundGeolocation location', location);
+
+      //save to bend
+      bendService.saveGeoLocation({
+        latitude:location.latitude,
+        longitude:location.longitude,
+        speed:location.speed,
+        altitude:location.altitude,
+        accuracy:location.accuracy
+      }, (error, result)=>{
+        console.log(error, result);
+      })
+    });
+
+    BackgroundGeolocation.start(() => {
+      console.log('[DEBUG] BackgroundGeolocation started successfully');
+    });
+
+    
     this.loadAlerts()
   }
   
@@ -166,7 +205,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ homeSelectedIcon } style={ styles.iconTabbar1 }/> }
             onPress={ () => this.onSelectTab('home') }>
             <Home
-              selectedTab={this.state.selectedTab}
+              selectedTab={ this.state.selectedTab }
               subOne={ subOne } 
               onSearch={ () => this.onSelectSearch() }
             />
@@ -182,7 +221,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.onSelectTab('search') }>
             <Search
-              selectedTab={this.state.selectedTab}
+              selectedTab={ this.state.selectedTab}
               subOne={ subOne }
               searchAutoFocus={ this.state.searchAutoFocus }
             />

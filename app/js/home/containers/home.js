@@ -10,7 +10,7 @@ import {
   Dimensions,
   ScrollView,
   ListView,
-    Linking,
+  Linking,
   TouchableOpacity,
   TouchableHighlight,
   RefreshControl,
@@ -26,8 +26,6 @@ import * as commonActions from '../../common/actions';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
-import VideoPlayer from 'react-native-video-player';
-
 
 import NavSearchBar from '../../components/navSearchBar';
 
@@ -40,6 +38,8 @@ import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
+import VideoPlayer from '../../components/videoPlayer';
+
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -458,14 +458,14 @@ class Home extends Component {
   }
 
   onGoIntroVideo() {
-    var url = 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) {
-        Linking.openURL(url);
-      }
-    }).catch((error)=>{
-      //console.log("URL open error");
-    });
+    // var url = 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'
+    // Linking.canOpenURL(url).then(supported => {
+    //   if (supported) {
+    //     Linking.openURL(url);
+    //   }
+    // }).catch((error)=>{
+    //   //console.log("URL open error");
+    // });
   }
 
   get showVideo() {
@@ -486,8 +486,8 @@ class Home extends Component {
           </View>
         </TouchableOpacity>*/}
         <VideoPlayer
-            thumbnail={require('../../../assets/imgs/vid.png')}
-            video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
+          thumbnail={ require('../../../assets/imgs/vid.png') }
+          video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
         />
       </View>
     )
