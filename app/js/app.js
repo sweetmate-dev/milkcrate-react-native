@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import {
+    AlertIOS,
   Linking,
     AsyncStorage,
   Alert,
+    Platform,
+    PushNotificationIOS
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -125,86 +128,130 @@ class App extends Component {
 
             this.setState({ initialize: true });
 
-            /*
-             - appVersion
-             - bundleId (this is the package name for  android)
-             - user – if a user is logged in
-             - deviceName  – "Kostas' iPhone"
-             - deviceModel – "iPhone"
-             - deviceVersion – "iPhone7,2"
-             - systemName – the OS ("iOS")
-             - systemVersion – the OS version
-             - deviceId – the vendorID on iOS, unique device id on android
-             - buildType – "release" or "development" or "staging"
-             - apnsToken – iOS only, the push token
-             - gcmRegistrationId – Android only, the android push token
-             */
+            if (Platform.OS === 'ios') {
+                PushNotificationIOS.addEventListener('register', (token)=>{
+                    this.saveInstallationInfo(activeUser, token)
 
-            AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
-                var installInfo = ret
-                console.log("installationInfo", installInfo)
-                if(installInfo) {
-                    installInfo = JSON.parse(installInfo)
-                } else {
-                    installInfo = {}
+                });
+                PushNotificationIOS.addEventListener('registrationError', ()=>{
+                    this.saveInstallationInfo(activeUser, null)
+                });
+                PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
+                PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
+
+                PushNotificationIOS.requestPermissions();
+            } else if (Platform.OS === 'android') {
+
+            }
+        });
+    }
+
+    _onRemoteNotification(notification) {
+        /*AlertIOS.alert(
+            'Push Notification Received',
+            'Alert message: ' + notification.getMessage(),
+            [{
+                text: 'Dismiss',
+                onPress: null,
+            }]
+        );*/
+    }
+
+    _onLocalNotification(notification){
+        /*AlertIOS.alert(
+            'Local Notification Received',
+            'Alert message: ' + notification.getMessage(),
+            [{
+                text: 'Dismiss',
+                onPress: null,
+            }]
+        );*/
+    }
+
+    saveInstallationInfo(activeUser, token) {
+        /*
+         - appVersion
+         - bundleId (this is the package name for  android)
+         - user – if a user is logged in
+         - deviceName  – "Kostas' iPhone"
+         - deviceModel – "iPhone"
+         - deviceVersion – "iPhone7,2"
+         - systemName – the OS ("iOS")
+         - systemVersion – the OS version
+         - deviceId – the vendorID on iOS, unique device id on android
+         - buildType – "release" or "development" or "staging"
+         - apnsToken – iOS only, the push token
+         - gcmRegistrationId – Android only, the android push token
+         */
+
+        AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
+            var installInfo = ret
+            //console.log("installationInfo", installInfo)
+            if(installInfo) {
+                installInfo = JSON.parse(installInfo)
+            } else {
+                installInfo = {}
+            }
+            _.extend(installInfo, {
+                appVersion:DeviceInfo.getVersion(),
+                bundleId:DeviceInfo.getBundleId(),
+                user:activeUser?{
+                    "_type": "BendRef",
+                    "_id": activeUser._id,
+                    "_collection": "user"
+                }:null,
+                deviceName:DeviceInfo.getDeviceName(),
+                deviceModel:DeviceInfo.getModel(),
+                deviceVersion:DeviceInfo.getDeviceId(),
+                systemName:DeviceInfo.getSystemName(),
+                systemVersion:DeviceInfo.getSystemVersion(),
+                deviceId:DeviceInfo.getUniqueID(),
+                buildType:(__DEV__?"development":"product"),
+            })
+
+            if(Platform.OS == 'ios' && token) {
+                installInfo.apnsToken = token
+            }
+
+            bendService.saveInstallInformation(installInfo, (err, ret)=>{
+                if(!err) {
+                    AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
                 }
-                _.extend(installInfo, {
-                    appVersion:DeviceInfo.getVersion(),
-                    bundleId:DeviceInfo.getBundleId(),
-                    user:activeUser?{
-                        "_type": "BendRef",
-                        "_id": activeUser._id,
-                        "_collection": "user"
-                    }:null,
-                    deviceName:DeviceInfo.getDeviceName(),
-                    deviceModel:DeviceInfo.getModel(),
-                    deviceVersion:DeviceInfo.getDeviceId(),
-                    systemName:DeviceInfo.getSystemName(),
-                    systemVersion:DeviceInfo.getSystemVersion(),
-                    deviceId:DeviceInfo.getUniqueID(),
-                    buildType:"development",
-                })
+            })
 
-                bendService.saveInstallInformation(installInfo, (err, ret)=>{
-                    if(!err) {
-                        AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
+            BackgroundGeolocation.configure({
+                desiredAccuracy: 10,
+                stationaryRadius: 50,
+                distanceFilter: 50,
+                debug: false,
+                stopOnTerminate: false,
+                interval: 10000
+            }, function () {});
+
+            BackgroundGeolocation.on('location', (location) => {
+                if(this.last) {
+                    if(this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
+                        return;
                     }
+                }
+
+                this.last = location
+                console.log('[DEBUG] BackgroundGeolocation location', location);
+
+                //save to bend
+                bendService.saveGeoLocation({
+                    latitude:location.latitude,
+                    longitude:location.longitude,
+                    speed:location.speed,
+                    altitude:location.altitude,
+                    accuracy:location.accuracy
+                }, (err, ret)=>{
+                    console.log(err, ret);
                 })
+            });
 
-                BackgroundGeolocation.configure({
-                    desiredAccuracy: 10,
-                    stationaryRadius: 50,
-                    distanceFilter: 50,
-                    debug: false,
-                    stopOnTerminate: false,
-                    interval: 10000
-                }, function () {});
-
-                BackgroundGeolocation.on('location', (location) => {
-                    if(this.last) {
-                        if(this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
-                            return;
-                        }
-                    }
-
-                    this.last = location
-                    console.log('[DEBUG] BackgroundGeolocation location', location);
-
-                    //save to bend
-                    bendService.saveGeoLocation({
-                        latitude:location.latitude,
-                        longitude:location.longitude,
-                        speed:location.speed,
-                        altitude:location.altitude,
-                        accuracy:location.accuracy
-                    }, (err, ret)=>{
-                        console.log(err, ret);
-                    })
-                });
-
-                BackgroundGeolocation.start(() => {
-                    console.log('[DEBUG] BackgroundGeolocation started successfully');
-                });
+            BackgroundGeolocation.start(() => {
+                console.log('[DEBUG] BackgroundGeolocation started successfully');
             });
         });
     }
