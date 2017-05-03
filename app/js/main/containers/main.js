@@ -11,6 +11,9 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
+  PushNotificationIOS,
+  AsyncStorage,
+  AlertIOS,
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -20,6 +23,7 @@ import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
 import Profile from '../../profile/containers/profile';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+import DeviceInfo from 'react-native-device-info';
 
 
 import * as commonColors from '../../styles/commonColors';
@@ -71,58 +75,144 @@ export default class Main extends Component {
     this.hasMounted = true
 
     if (Platform.OS === 'ios') {
-      Permissions.requestPermission('notification')
-          .then(response => {
-            console.log(response)
-          });
-    } 
+
+      let activeUser = bendService.getActiveUser();
+
+      PushNotificationIOS.addEventListener('register', (token)=>{
+          this.saveInstallationInfo(activeUser, token)
+
+      });
+      PushNotificationIOS.addEventListener('registrationError', ()=>{
+          this.saveInstallationInfo(activeUser, null)
+      });
+      PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
+      PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
+
+      PushNotificationIOS.requestPermissions();
+    } else if (Platform.OS === 'android') {
+
+    }
 
     Permissions.requestPermission('location', 'always')
       .then(response => {
         console.log(JSON.stringify(response));
       });
     
-    BackgroundGeolocation.configure({
-      desiredAccuracy: 10,
-      stationaryRadius: 50,
-      distanceFilter: 50,
-      debug: false,
-      stopOnTerminate: false,
-      interval: 10000
-    }, function () {});
-
-    BackgroundGeolocation.on('location', (location) => {
-      if (this.last) {
-        if (this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
-          return;
-        }
-      }
-
-      this.last = location
-      console.log('[DEBUG] BackgroundGeolocation location', location);
-
-      //save to bend
-      bendService.saveGeoLocation({
-        latitude:location.latitude,
-        longitude:location.longitude,
-        speed:location.speed,
-        altitude:location.altitude,
-        accuracy:location.accuracy
-      }, (error, result)=>{
-        console.log(error, result);
-      })
-    });
-
-    BackgroundGeolocation.start(() => {
-      console.log('[DEBUG] BackgroundGeolocation started successfully');
-    });
-
-    
     this.loadAlerts()
   }
   
   componentWillUnmount() {
     this.hasMounted = false
+  }
+
+  _onRemoteNotification(notification) {
+      /*AlertIOS.alert(
+          'Push Notification Received',
+          'Alert message: ' + notification.getMessage(),
+          [{
+              text: 'Dismiss',
+              onPress: null,
+          }]
+      );*/
+  }
+
+  _onLocalNotification(notification){
+      /*AlertIOS.alert(
+          'Local Notification Received',
+          'Alert message: ' + notification.getMessage(),
+          [{
+              text: 'Dismiss',
+              onPress: null,
+          }]
+      );*/
+  }
+
+  saveInstallationInfo(activeUser, token) {
+    /*
+      - appVersion
+      - bundleId (this is the package name for  android)
+      - user – if a user is logged in
+      - deviceName  – "Kostas' iPhone"
+      - deviceModel – "iPhone"
+      - deviceVersion – "iPhone7,2"
+      - systemName – the OS ("iOS")
+      - systemVersion – the OS version
+      - deviceId – the vendorID on iOS, unique device id on android
+      - buildType – "release" or "development" or "staging"
+      - apnsToken – iOS only, the push token
+      - gcmRegistrationId – Android only, the android push token
+     */
+
+    AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
+      var installInfo = ret
+      //console.log("installationInfo", installInfo)
+      if (installInfo) {
+        installInfo = JSON.parse(installInfo)
+      } else {
+        installInfo = {}
+      }
+      _.extend(installInfo, {
+        appVersion: DeviceInfo.getVersion(),
+        bundleId: DeviceInfo.getBundleId(),
+        user: activeUser ? {
+          "_type": "BendRef",
+          "_id": activeUser._id,
+          "_collection": "user"
+        } : null,
+        deviceName: DeviceInfo.getDeviceName(),
+        deviceModel: DeviceInfo.getModel(),
+        deviceVersion: DeviceInfo.getDeviceId(),
+        systemName: DeviceInfo.getSystemName(),
+        systemVersion: DeviceInfo.getSystemVersion(),
+        deviceId: DeviceInfo.getUniqueID(),
+        buildType: (__DEV__?"development" : "product"),
+      })
+
+      if (Platform.OS == 'ios' && token) {
+        installInfo.apnsToken = token
+      }
+
+      bendService.saveInstallInformation(installInfo, (err, ret)=>{
+        if (!err) {
+          AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
+        }
+      })
+
+      BackgroundGeolocation.configure({
+        desiredAccuracy: 10,
+        stationaryRadius: 50,
+        distanceFilter: 50,
+        debug: false,
+        stopOnTerminate: false,
+        interval: 10000
+      }, function () {});
+
+      BackgroundGeolocation.on('location', (location) => {
+        if (this.last) {
+          if (this.last.latitude == location.latitude && this.last.longitude == location.longitude) {
+            return;
+          }
+        }
+
+        this.last = location
+        console.log('[DEBUG] BackgroundGeolocation location', location);
+
+        //save to bend
+        bendService.saveGeoLocation({
+          latitude: location.latitude,
+          longitude: location.longitude,
+          speed: location.speed,
+          altitude: location.altitude,
+          accuracy: location.accuracy,
+        }, (err, ret)=>{
+          console.log(err, ret);
+        })
+      });
+
+      BackgroundGeolocation.start(() => {
+        console.log('[DEBUG] BackgroundGeolocation started successfully');
+      });
+    });
   }
 
   loadAlerts() {

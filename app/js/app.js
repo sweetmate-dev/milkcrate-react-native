@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
-    AlertIOS,
   Linking,
-    AsyncStorage,
   Alert,
-    Platform,
-    PushNotificationIOS
+  Platform,
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -16,8 +13,6 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
-
-import DeviceInfo from 'react-native-device-info';
 
 import bendService from './bend/bendService'
 import * as _ from 'underscore'
@@ -105,120 +100,25 @@ const deepLink_Search_Categories = [
 ];
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state ={
-            initialize: false,
-            loggedIn: false,
-        };
+    this.state ={
+      initialize: false,
+      loggedIn: false,
+    };
 
-        this.last = null;
+    bendService.init((err, activeUser)=>{
+      console.log("bend init", err, activeUser)
 
-        bendService.init((err, activeUser)=>{
-
-            console.log("bend init", err, activeUser)
-
-            if(activeUser && activeUser._id) {
-                this.setState({ loggedIn: true });
-            } else {
-                this.setState({ loggedIn: false });
-            }
-
-            this.setState({ initialize: true });
-
-            if (Platform.OS === 'ios') {
-                PushNotificationIOS.addEventListener('register', (token)=>{
-                    this.saveInstallationInfo(activeUser, token)
-
-                });
-                PushNotificationIOS.addEventListener('registrationError', ()=>{
-                    this.saveInstallationInfo(activeUser, null)
-                });
-                PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
-                PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
-
-                PushNotificationIOS.requestPermissions();
-            } else if (Platform.OS === 'android') {
-
-            }
-        });
-    }
-
-    _onRemoteNotification(notification) {
-        /*AlertIOS.alert(
-            'Push Notification Received',
-            'Alert message: ' + notification.getMessage(),
-            [{
-                text: 'Dismiss',
-                onPress: null,
-            }]
-        );*/
-    }
-
-    _onLocalNotification(notification){
-        /*AlertIOS.alert(
-            'Local Notification Received',
-            'Alert message: ' + notification.getMessage(),
-            [{
-                text: 'Dismiss',
-                onPress: null,
-            }]
-        );*/
-    }
-
-    saveInstallationInfo(activeUser, token) {
-        /*
-         - appVersion
-         - bundleId (this is the package name for  android)
-         - user – if a user is logged in
-         - deviceName  – "Kostas' iPhone"
-         - deviceModel – "iPhone"
-         - deviceVersion – "iPhone7,2"
-         - systemName – the OS ("iOS")
-         - systemVersion – the OS version
-         - deviceId – the vendorID on iOS, unique device id on android
-         - buildType – "release" or "development" or "staging"
-         - apnsToken – iOS only, the push token
-         - gcmRegistrationId – Android only, the android push token
-         */
-
-        AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
-            var installInfo = ret
-            //console.log("installationInfo", installInfo)
-            if(installInfo) {
-                installInfo = JSON.parse(installInfo)
-            } else {
-                installInfo = {}
-            }
-            _.extend(installInfo, {
-                appVersion:DeviceInfo.getVersion(),
-                bundleId:DeviceInfo.getBundleId(),
-                user:activeUser?{
-                    "_type": "BendRef",
-                    "_id": activeUser._id,
-                    "_collection": "user"
-                }:null,
-                deviceName:DeviceInfo.getDeviceName(),
-                deviceModel:DeviceInfo.getModel(),
-                deviceVersion:DeviceInfo.getDeviceId(),
-                systemName:DeviceInfo.getSystemName(),
-                systemVersion:DeviceInfo.getSystemVersion(),
-                deviceId:DeviceInfo.getUniqueID(),
-                buildType:(__DEV__?"development":"product"),
-            })
-
-            if(Platform.OS == 'ios' && token) {
-                installInfo.apnsToken = token
-            }
-
-            bendService.saveInstallInformation(installInfo, (err, ret)=>{
-                if(!err) {
-                    AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
-                }
-            })
-        });
-    }
+      if (activeUser && activeUser._id) {
+        this.setState({ loggedIn: true });
+      } else {
+        this.setState({ loggedIn: false });
+      }
+      this.setState({ initialize: true });
+    });
+  }
 
   deepLinks () {
 
