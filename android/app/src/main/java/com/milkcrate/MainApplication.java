@@ -8,7 +8,6 @@ import com.facebook.react.ReactApplication;
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.horcrux.svg.SvgPackage;
-import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.brentvatne.react.ReactVideoPackage;
 import com.joshblour.reactnativepermissions.ReactNativePermissionsPackage;
@@ -50,7 +49,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new BackgroundGeolocationPackage(),
             new ReactNativePushNotificationPackage(),
-            new SvgPackage(),
             new SvgPackage(),
             new RNDeviceInfo(),
             new ReactVideoPackage(),
