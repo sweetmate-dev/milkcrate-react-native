@@ -98,7 +98,7 @@ import RNFetchBlob from 'react-native-fetch-blob'
          * @deprecated Bend.API_ENDPOINT
          */
         Bend.APIHostName = undefined;
-        Bend.API_ENDPOINT = 'https://api.roarforgood.com';
+        Bend.API_ENDPOINT = 'https://api.bend.io';
 
         /**
          * The Bend API version used when communicating with `Bend.APIHostName`.
