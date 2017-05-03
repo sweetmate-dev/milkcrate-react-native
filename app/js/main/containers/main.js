@@ -25,6 +25,7 @@ import Profile from '../../profile/containers/profile';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import DeviceInfo from 'react-native-device-info';
 
+import { Actions } from 'react-native-router-flux';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -42,6 +43,7 @@ const youSelectedIcon = require('../../../assets/imgs/tabbar_you_selected.png');
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import PushNotification from 'react-native-push-notification';
 
 export default class Main extends Component {
   constructor(props) {
@@ -74,9 +76,11 @@ export default class Main extends Component {
   componentDidMount() {
     this.hasMounted = true
 
-    if (Platform.OS === 'ios') {
-
-      let activeUser = bendService.getActiveUser();
+    let activeUser = bendService.getActiveUser();
+    if(!activeUser.name) {
+      Actions.SetupProfile()
+    }
+    /*if (Platform.OS === 'ios') {
 
       PushNotificationIOS.addEventListener('register', (token)=>{
           this.saveInstallationInfo(activeUser, token)
@@ -96,7 +100,42 @@ export default class Main extends Component {
     Permissions.requestPermission('location', 'always')
       .then(response => {
         console.log(JSON.stringify(response));
-      });
+      });*/
+
+    PushNotification.configure({
+
+      // (optional) Called when Token is generated (iOS and Android)
+      onRegister: function(token) {
+        console.log("Token:", token)
+        this.saveInstallationInfo(activeUser, token?token.token:null)
+      },
+
+      // (required) Called when a remote or local notification is opened or received
+      onNotification: function(notification) {
+        this._onRemoteNotification(notification)
+      },
+
+      // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+      senderID: "1491633624875",
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true
+      },
+
+      // Should the initial notification be popped automatically
+      // default: true
+      popInitialNotification: true,
+
+      /**
+       * (optional) default: true
+       * - Specified if permissions (ios) and token (android and ios) will requested or not,
+       * - if not, you must call PushNotificationsHandler.requestPermissions() later
+       */
+      requestPermissions: true,
+    });
     
     this.loadAlerts()
   }

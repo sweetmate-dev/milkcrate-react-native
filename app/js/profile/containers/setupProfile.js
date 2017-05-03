@@ -25,7 +25,7 @@ import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
 
-// import Permissions from 'react-native-permissions';
+import Permissions from 'react-native-permissions';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
