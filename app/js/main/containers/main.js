@@ -96,11 +96,11 @@ export default class Main extends Component {
     } else if (Platform.OS === 'android') {
 
     }
-
+    */
     Permissions.requestPermission('location', 'always')
       .then(response => {
         console.log(JSON.stringify(response));
-      });*/
+      });
 
     PushNotification.configure({
 

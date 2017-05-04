@@ -213,7 +213,7 @@ export default class VideoPlayer extends Component {
   }
 
   onClose() {
-
+    this.hideControls();
     this.setState({ 
       isStarted: false,
       isPlaying: false,
