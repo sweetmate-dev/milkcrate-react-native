@@ -66,7 +66,6 @@
 		E58A69753D9E46D4A7C235E4 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 683526AAF95F4773B0E70187 /* Foundation.ttf */; };
 		E9C068B6BD8D43C3AA977950 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E99C5D02209741CC95FF0DFE /* libRCTVideo.a */; };
 		F471DA292D5941B7A632032D /* Blanch.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C1E7048C1B8641C9B5CAB86B /* Blanch.ttf */; };
-		F4BA6E69B5E74737BF888A9F /* libRNAppInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73C37E1C3DF04B2D8A7AE7E9 /* libRNAppInfo.a */; };
 		F78E1001D92D454882D41503 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E3EB1A0652AE46A28EFBB9E2 /* Entypo.ttf */; };
 		FD4013342B03406F85503F2E /* OpenSans_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6830886BF4754F4AAD0DC63A /* OpenSans_bold.ttf */; };
 /* End PBXBuildFile section */
@@ -428,7 +427,6 @@
 		6A5C6E2514FA420CA363F22A /* libRNCalendarEvents.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCalendarEvents.a; sourceTree = "<group>"; };
 		6A99B898C39B49CE9A8991C2 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		6E0ABED755074414A1F30BFA /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		73C37E1C3DF04B2D8A7AE7E9 /* libRNAppInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNAppInfo.a; sourceTree = "<group>"; };
 		740317E9BC704508BDE2005D /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		7656FB7875094C8DA80EE9AA /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
@@ -500,7 +498,6 @@
 				E12F8D36D58143F9B064E643 /* libRNSVG.a in Frameworks */,
 				E9C068B6BD8D43C3AA977950 /* libRCTVideo.a in Frameworks */,
 				BE6099799AA743A1B70BC7B6 /* libRCTBackgroundGeolocation.a in Frameworks */,
-				F4BA6E69B5E74737BF888A9F /* libRNAppInfo.a in Frameworks */,
 				838DF28EE8C642629DE47898 /* libRCTOrientation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1683,7 +1680,6 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
-					"$(SRCROOT)/../node_modules/react-native-app-info/RNAppInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				INFOPLIST_FILE = Milkcrate/Info.plist;
@@ -1731,7 +1727,6 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
-					"$(SRCROOT)/../node_modules/react-native-app-info/RNAppInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				INFOPLIST_FILE = Milkcrate/Info.plist;
@@ -1816,7 +1811,6 @@
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
-					"$(SRCROOT)/../node_modules/react-native-app-info/RNAppInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				INFOPLIST_FILE = Milkcrate/Info.plist;
