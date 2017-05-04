@@ -38,8 +38,6 @@ import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
-import VideoPlayer from '../../components/videoPlayer';
-
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -457,15 +455,8 @@ class Home extends Component {
     );
   }
 
-  onGoIntroVideo() {
-    // var url = 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4'
-    // Linking.canOpenURL(url).then(supported => {
-    //   if (supported) {
-    //     Linking.openURL(url);
-    //   }
-    // }).catch((error)=>{
-    //   //console.log("URL open error");
-    // });
+  onPlayIntroVideo() {
+    Actions.VideoPlayModal();
   }
 
   get showVideo() {
@@ -480,15 +471,11 @@ class Home extends Component {
         <View style={ styles.trendingTitleContainer }>
           <Text style={ styles.textTitle }>Intro Video</Text>
         </View>
-        {/*<TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onGoIntroVideo() }>
-          <View style={styles.imageVideoView}>
-            <Image style={styles.imageVideo} resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
+        <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPlayIntroVideo() }>
+          <View style={ styles.imageVideoView }>
+            <Image style={ styles.imageVideo } resizeMode='contain' source={require('../../../assets/imgs/vid.png')} />
           </View>
-        </TouchableOpacity>*/}
-        <VideoPlayer
-          thumbnail={ require('../../../assets/imgs/vid.png') }
-          video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
-        />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -884,8 +871,9 @@ const styles = StyleSheet.create({
     backgroundColor:'red',
   },
   imageVideo: {
-    flexShrink:1,
-    height:200
+    flexShrink: 1,
+    height: 200,
+    backgroundColor:'black',
   },
   imageVideoView: {
     flexDirection:'row',

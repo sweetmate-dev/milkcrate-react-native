@@ -1,10 +1,12 @@
 package com.milkcrate;
 
+import android.app.Activity;
 import android.app.Application;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.github.yamill.orientation.OrientationPackage;
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.horcrux.svg.SvgPackage;
@@ -31,6 +33,16 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+  private Activity mainActivity = null;
+
+  public Activity getMainAcitivity() {
+    return this.getMainAcitivity();
+  }
+
+  public void setMainActivity(Activity mainActivity) {
+    this.mainActivity = mainActivity;
+  }
+
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
     @Override
@@ -47,6 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+//            new OrientationPackage(((MainApplication)getApplicationContext()).getMainAcitivity()),
             new BackgroundGeolocationPackage(),
             new ReactNativePushNotificationPackage(),
             new SvgPackage(),

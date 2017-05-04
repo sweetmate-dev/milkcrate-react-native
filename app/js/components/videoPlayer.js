@@ -1,6 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
+import { 
+  View, 
+  StyleSheet, 
+  Image, 
+  TouchableOpacity, 
+  Platform,
+} from 'react-native';
+
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+
 import Video from 'react-native-video'; // eslint-disable-line
 import timer from 'react-native-timer';
 
@@ -117,6 +126,8 @@ export default class VideoPlayer extends Component {
     this.onSeekRelease = this.onSeekRelease.bind(this);
     this.onSeek = this.onSeek.bind(this);
     this.onFullscreenPlayerWillDismiss = this.onFullscreenPlayerWillDismiss.bind(this);
+    this.onClose = this.onClose.bind(this);
+
 
     this.player = null;
   }
@@ -124,7 +135,7 @@ export default class VideoPlayer extends Component {
   componentDidMount() {
     if (this.props.autoplay) {
       this.hideControls();
-      this.setFullScreen();
+      // this.setFullScreen();
     }
   }
 
@@ -142,7 +153,7 @@ export default class VideoPlayer extends Component {
     });
     this.hideControls();
 
-    this.setFullScreen();
+    // this.setFullScreen();
   }
 
   onProgress(event) {
@@ -199,6 +210,18 @@ export default class VideoPlayer extends Component {
 
   onToggleFullScreen() {
     this.player.presentFullscreenPlayer();
+  }
+
+  onClose() {
+
+    this.setState({ 
+      isStarted: false,
+      isPlaying: false,
+    });
+
+    if (this.props.onClose) {
+      this.props.onClose();
+    }
   }
 
   setFullScreen() {
@@ -401,6 +424,17 @@ export default class VideoPlayer extends Component {
 
     return (
       <View style={ [styles.controls, customStyles.controls] }>
+       <TouchableOpacity 
+          onPress={ this.onClose } 
+          style={ customStyles.controlButton }
+        >
+          <SimpleLineIcons
+            style={ [styles.extraControl, customStyles.controlIcon] }
+            name="close"
+            size={ 32 }
+          />
+        </TouchableOpacity>
+      
         <TouchableOpacity
           onPress={ this.onPlayPress }
           style={ [customStyles.controlButton, customStyles.playControl] }
@@ -421,18 +455,6 @@ export default class VideoPlayer extends Component {
               style={ [styles.extraControl, customStyles.controlIcon] }
               name={ this.state.isMuted ? 'volume-off' : 'volume-up' }
               size={ 24 }
-            />
-          </TouchableOpacity>
-        )}
-        { (Platform.OS === 'android') ? null : (
-          <TouchableOpacity 
-            onPress={ this.onToggleFullScreen } 
-            style={ customStyles.controlButton }
-          >
-            <Icon
-              style={ [styles.extraControl, customStyles.controlIcon] }
-              name="fullscreen"
-              size={ 32 }
             />
           </TouchableOpacity>
         )}
@@ -481,8 +503,8 @@ export default class VideoPlayer extends Component {
             onPress={ this.showControls } 
           />
         </View>
-        {/*{((!this.state.isPlaying) || this.state.isControlsVisible)
-          ? this.renderControls() : this.renderSeekBar(true)}*/}
+        { ((!this.state.isPlaying) || this.state.isControlsVisible)
+          ? this.renderControls() : this.renderSeekBar(true)}
       </View>
     );
   }
@@ -559,6 +581,7 @@ VideoPlayer.propTypes = {
   onProgress: PropTypes.func,
   onLoad: PropTypes.func,
   onFullscreenPlayerWillDismiss: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 VideoPlayer.defaultProps = {
