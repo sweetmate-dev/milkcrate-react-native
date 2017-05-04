@@ -2,16 +2,16 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-  Keyboard,
-  Alert,
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Dimensions,
+    ScrollView,
+    TouchableOpacity,
+    Keyboard,
+    Alert,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -33,6 +33,7 @@ const currentLocation = require('../../../assets/imgs/current_location_button.pn
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 
 class BusinessesView extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class BusinessesView extends Component {
       currentLocation: null,
       businesses: [],
       categoryIcons: [],
-      
+
       searchMode: true,
       searchAutoFocus: false,
 
@@ -99,83 +100,93 @@ class BusinessesView extends Component {
 
   onCurrentLocation() {
     navigator.geolocation.getCurrentPosition( (position) => {
-        this.setState({ currentLocation: position });
-      },
-      (error) => {
-        console.log(JSON.stringify(error));
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+          this.setState({ currentLocation: position });
+        },
+        (error) => {
+          console.log(JSON.stringify(error));
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }
 
   loadBusinesses() {
     if (this.more === false)
       return;
-    
-    this.setState( (state) => {  
+
+    this.setState( (state) => {
       state.businessesQuery.loading = true;
       return state;
     });
 
     navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentLocation: position })
-
-          var param = {
-            type: 'business',
-            offset: this.offset,
-            limit: this.limit,
-            query: this.searchText,
-          }
-
-          if(this.state.currentLocation) {
-            param.lat = this.state.currentLocation.coords.latitude;
-            param.long = this.state.currentLocation.coords.longitude;
-          }
-
-        bendService.searchActivity(param, (error, result) => {
-          if(param.query != this.searchText) return;
-          this.setState( (state) => {
-            state.businessesQuery.loading = false;
-            return state;
-          });
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-
-          if (result.data.business.length < this.limit) {
-            this.more = false;
-            this.setState( (state) => {
-              state.businessesQuery.more = false;
-              return state;
-            });
-          }
-
-          this.businesses = this.businesses.concat(result.data.business);
-          this.setState({
-            businesses: this.businesses,
-          });
-
-          const imageOffset = this.offset;
-          this.offset += this.limit;
-
-          result.data.business.map( (business, index) => {
-            this.setState( (state) => {
-              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(business);
-              return state;
-            })
-          });
-        })
+      console.log("navigator.geolocation.getCurrentPosition", position)
+        this.search(position);
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null);
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+  }
+
+  search(position) {
+    if(position)
+      this.setState({ currentLocation: position })
+
+    var param = {
+      type: 'business',
+      offset: this.offset,
+      limit: this.limit,
+      query: this.searchText,
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+    bendService.searchActivity(param, (error, result) => {
+      if(param.query != this.searchText) return;
+      this.setState( (state) => {
+        state.businessesQuery.loading = false;
+        return state;
+      });
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      if (result.data.business.length < this.limit) {
+        this.more = false;
+        this.setState( (state) => {
+          state.businessesQuery.more = false;
+          return state;
+        });
+      }
+
+      this.businesses = this.businesses.concat(result.data.business);
+      this.setState({
+        businesses: this.businesses,
+      });
+
+      const imageOffset = this.offset;
+      this.offset += this.limit;
+
+      result.data.business.map( (business, index) => {
+        this.setState( (state) => {
+          state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(business);
+          return state;
+        })
+      });
+    })
   }
 
   onSearchChange(text) {
@@ -229,14 +240,14 @@ class BusinessesView extends Component {
 
   onRefresh() {
     this.setState({ isRefreshing: true });
-    this.loadAllData();    
+    this.loadAllData();
   }
 
   onSelectSegment(option) {
 
     Keyboard.dismiss();
 
-    this.setState({ 
+    this.setState({
       selectedIndex: option,
     });
 
@@ -262,77 +273,77 @@ class BusinessesView extends Component {
   }
 
   onSearchFocus() {
-    this.setState({ 
+    this.setState({
       searchAutoFocus: false,
     });
   }
 
   render() {
     return (
-      <View style={ styles.container }>
-        <NavSearchBar
-          buttons={ commonStyles.NavBackButton }
-          onBack={ this.onBack }
-          placeholder={ 'Search for businesses' }
-          onSearchChange={ (text) => this.onSearchChange(text) }
-          onCancel={ () => this.onSearchCancel() }
-          onFocus={ () => this.onSearchFocus() }
-          searchMode={ this.state.searchMode }
-          onGoSearchScreen={ () => this.onGoSearchScreen() }
-          searchAutoFocus={ this.state.searchAutoFocus }
-        />
-        <View style={ styles.segmentedWrap }>
-          <View style={ styles.segmentedLeft }/>
-          <View style={ styles.segmented }>
-            <SegmentedControls
-              tint={ '#fff' }
-              selectedTint= { commonColors.theme }
-              backTint= { commonColors.theme }
-              options={ ['List', 'Map'] }
-              allowFontScaling={ false } // default: true
-              onSelection={ (option) => this.onSelectSegment(option) }
-              selectedOption={ this.state.selectedIndex }
-            />
+        <View style={ styles.container }>
+          <NavSearchBar
+              buttons={ commonStyles.NavBackButton }
+              onBack={ this.onBack }
+              placeholder={ 'Search for businesses' }
+              onSearchChange={ (text) => this.onSearchChange(text) }
+              onCancel={ () => this.onSearchCancel() }
+              onFocus={ () => this.onSearchFocus() }
+              searchMode={ this.state.searchMode }
+              onGoSearchScreen={ () => this.onGoSearchScreen() }
+              searchAutoFocus={ this.state.searchAutoFocus }
+          />
+          <View style={ styles.segmentedWrap }>
+            <View style={ styles.segmentedLeft }/>
+            <View style={ styles.segmented }>
+              <SegmentedControls
+                  tint={ '#fff' }
+                  selectedTint= { commonColors.theme }
+                  backTint= { commonColors.theme }
+                  options={ ['List', 'Map'] }
+                  allowFontScaling={ false } // default: true
+                  onSelection={ (option) => this.onSelectSegment(option) }
+                  selectedOption={ this.state.selectedIndex }
+              />
+            </View>
+            <View style={ styles.segmentedRight }>
+              {
+                this.state.selectedIndex == 'Map' ?
+                    <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCurrentLocation() }>
+                      <Image style={ styles.imageCurrentLocation } source={ currentLocation }/>
+                    </TouchableOpacity>
+                    :
+                    null
+              }
+            </View>
           </View>
-          <View style={ styles.segmentedRight }>
-            {
-              this.state.selectedIndex == 'Map' ?
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onCurrentLocation() }>
-                  <Image style={ styles.imageCurrentLocation } source={ currentLocation }/>
-                </TouchableOpacity>
-              :
-                null
-            }
-          </View>
+          {
+            this.state.selectedIndex == 'List' ?
+                <BusinessesListView
+                    businesses={ this.state.businesses }
+                    currentLocation={ this.state.currentLocation }
+                    moreBusinesses={ this.state.businessesQuery.more }
+                    loading={ this.state.businessesQuery.loading }
+                    onLoadBusinesses={ () => this.loadBusinesses() }
+                    isRefreshing={ this.state.isRefreshing }
+                    onRefresh={ () => this.onRefresh() }
+                />
+                :
+                <BusinessesMapView
+                    businesses={ this.state.businesses }
+                    currentLocation={ this.state.currentLocation }
+                />
+          }
         </View>
-        {
-          this.state.selectedIndex == 'List' ?
-            <BusinessesListView 
-              businesses={ this.state.businesses }
-              currentLocation={ this.state.currentLocation }
-              moreBusinesses={ this.state.businessesQuery.more }
-              loading={ this.state.businessesQuery.loading }
-              onLoadBusinesses={ () => this.loadBusinesses() }
-              isRefreshing={ this.state.isRefreshing }
-              onRefresh={ () => this.onRefresh() }
-            />
-            :
-            <BusinessesMapView 
-              businesses={ this.state.businesses }
-              currentLocation={ this.state.currentLocation }
-            />
-        }
-      </View>
     );
   }
 }
 
 export default connect(state => ({
-  status: state.search.status
-  }),
-  (dispatch) => ({
-    actions: bindActionCreators(searchActions, dispatch)
-  })
+      status: state.search.status
+    }),
+    (dispatch) => ({
+      actions: bindActionCreators(searchActions, dispatch)
+    })
 )(BusinessesView);
 
 const styles = StyleSheet.create({

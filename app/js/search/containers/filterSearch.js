@@ -20,6 +20,7 @@ import * as searchActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 
+import Cache from '../../components/Cache'
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
 
@@ -184,7 +185,13 @@ class FilterSearch extends Component {
     if(this.state.currentLocation) {
       param.lat = this.state.currentLocation.coords.latitude;
       param.long = this.state.currentLocation.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
     }
+
     bendService.searchActivity(param, (error, result) => {
       if (error) {
         console.log("search failed", error);

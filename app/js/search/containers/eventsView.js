@@ -26,6 +26,7 @@ import * as commonStyles from '../../styles/commonStyles';
 import EventsListCell from '../components/eventsListCell';
 
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 
@@ -138,87 +139,102 @@ class EventsView extends Component {
     });
 
     navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentLocation: position })
-
-        bendService.searchActivity({
-          type: 'event',
-          offset: this.offset,
-          limit: this.limit,
-          query: this.searchText,
-          lat: position.coords.latitude,
-          long: position.coords.longitude,
-          from: UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
-        }, (error, result) => {
-          
-          this.setState( (state) => {  
-            state.eventsQuery.loading = false;
-            return state;
-          });
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-
-          if (result.data.event.length < this.limit) {
-            this.more = false;
-            this.setState( (state) => {  
-              state.eventsQuery.more = false;
-              return state;
-            });
-          }
-
-          //group by with date
-          var events = result.data.event;
-          _.map(events, (event) => {
-            event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
-          })
-          events = _.sortBy(events, (event) => {
-            return event.date
-          })
-
-          _.each(events, (event) => {
-            var exist = _.find(this.events, (entry) => {
-              return entry.date == event.date;
-            })
-
-            if (exist) {
-              exist.events.push(event);
-            } else {
-              this.events.push({
-                date: event.date,
-                events: [event],
-              })
-            }
-          })
-
-          this.setState({ events: this.events });
-
-          this.events.map( (entry) => {
-            this.eventDays.push( entry.date );
-          });
-          
-          this.setState({ eventDays: this.eventDays });
-
-          const imageOffset = this.offset;
-          this.offset += this.limit;
-
-          result.data.event.map((event, index) => {
-            this.setState( (state) => {
-              state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
-              return state;
-            });
-          });
-        })
+        this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null)
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+  }
+
+  search(position) {
+    if(position)
+      this.setState({ currentLocation: position })
+
+    var param = {
+      type: 'event',
+      offset: this.offset,
+      limit: this.limit,
+      query: this.searchText,
+      from: UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+
+    bendService.searchActivity(param, (error, result) => {
+
+      this.setState( (state) => {
+        state.eventsQuery.loading = false;
+        return state;
+      });
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      if (result.data.event.length < this.limit) {
+        this.more = false;
+        this.setState( (state) => {
+          state.eventsQuery.more = false;
+          return state;
+        });
+      }
+
+      //group by with date
+      var events = result.data.event;
+      _.map(events, (event) => {
+        event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
+      })
+      events = _.sortBy(events, (event) => {
+        return event.date
+      })
+
+      _.each(events, (event) => {
+        var exist = _.find(this.events, (entry) => {
+          return entry.date == event.date;
+        })
+
+        if (exist) {
+          exist.events.push(event);
+        } else {
+          this.events.push({
+            date: event.date,
+            events: [event],
+          })
+        }
+      })
+
+      this.setState({ events: this.events });
+
+      this.events.map( (entry) => {
+        this.eventDays.push( entry.date );
+      });
+
+      this.setState({ eventDays: this.eventDays });
+
+      const imageOffset = this.offset;
+      this.offset += this.limit;
+
+      result.data.event.map((event, index) => {
+        this.setState( (state) => {
+          state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
+          return state;
+        });
+      });
+    })
   }
 
   renderListRow(rowData, sectionID, rowID) {

@@ -23,6 +23,7 @@ import { Actions } from 'react-native-router-flux';
 
 import NavSearchBar from '../../components/navSearchBar';
 
+import Cache from '../../components/Cache'
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
 
@@ -102,60 +103,72 @@ class ServiceView extends Component {
     });
 
     navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentLocation: position })
-          var param = {
-            type: 'service',
-            offset: this.offset,
-            limit: this.limit,
-            query: this.searchText
-          }
-
-          if(this.state.currentLocation) {
-            param.lat = this.state.currentLocation.coords.latitude;
-            param.long = this.state.currentLocation.coords.longitude;
-          }
-        bendService.searchActivity(param, (error, result) => {
-          if(param.query != this.searchText) return;
-          this.setState( (state) => {
-            state.serviceQuery.loading = false;
-            return state;
-          });
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-
-          if (result.data.service.length < this.limit) {
-            this.more = false;
-            this.setState( (state) => {
-              state.serviceQuery.more = false;
-              return state;
-            });
-          }
-
-          this.state.services = this.state.services.concat(result.data.service);
-          this.setState({ services: this.state.services });
-
-          const imageOffset = this.offset;
-          this.offset += this.limit;
-
-          result.data.service.map( (service, index) => {
-            this.setState( (state) => {
-              state.categoryIcons[imageOffset + index] =  UtilService.getCategoryIconFromSlug(service);
-              return state;
-            });
-          });
-        })
+      this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null)
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+  }
+
+  search(position) {
+    if(position)
+      this.setState({ currentLocation: position })
+
+    var param = {
+      type: 'service',
+      offset: this.offset,
+      limit: this.limit,
+      query: this.searchText
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+
+    bendService.searchActivity(param, (error, result) => {
+      if(param.query != this.searchText) return;
+      this.setState( (state) => {
+        state.serviceQuery.loading = false;
+        return state;
+      });
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      if (result.data.service.length < this.limit) {
+        this.more = false;
+        this.setState( (state) => {
+          state.serviceQuery.more = false;
+          return state;
+        });
+      }
+
+      this.state.services = this.state.services.concat(result.data.service);
+      this.setState({ services: this.state.services });
+
+      const imageOffset = this.offset;
+      this.offset += this.limit;
+
+      result.data.service.map( (service, index) => {
+        this.setState( (state) => {
+          state.categoryIcons[imageOffset + index] =  UtilService.getCategoryIconFromSlug(service);
+          return state;
+        });
+      });
+    })
   }
 
   renderListRow(rowData, sectionID, rowID) {

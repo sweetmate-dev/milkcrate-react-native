@@ -29,6 +29,7 @@ import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
 
 import UtilService from '../../components/util'
+import Cache from '../../components/Cache'
 import bendService from '../../bend/bendService'
 
 class CategoryView extends Component {
@@ -68,48 +69,61 @@ class CategoryView extends Component {
       },
     });
 
-    const title = this.props.title;
-    const  index = this.props.index;
-
     navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentLocation: position })
-
-        bendService.searchActivity({
-
-          category: UtilService.convertToSlug(title),
-          offset: 0,
-          limit: 20,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result) => {
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-          //console.log("search result", result)
-
-          // var activities = []
-          // activities = activities.concat(result.data.action);
-          // activities = activities.concat(result.data.business);
-          // activities = activities.concat(result.data.service);
-          // activities = activities.concat(result.data.event);
-          // activities = activities.concat(result.data.volunteer_opportunity);
-
-          var activities = result.data;
-          this.setState({
-            activities: activities,
-          })
-        })
+      this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null)
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
+  }
+
+  search(position) {
+    if(position)
+      this.setState({ currentLocation: position })
+    const title = this.props.title;
+    const  index = this.props.index;
+
+    var param = {
+      category: UtilService.convertToSlug(title),
+      offset: 0,
+      limit: 20,
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+
+    bendService.searchActivity(param, (error, result) => {
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+      //console.log("search result", result)
+
+      // var activities = []
+      // activities = activities.concat(result.data.action);
+      // activities = activities.concat(result.data.business);
+      // activities = activities.concat(result.data.service);
+      // activities = activities.concat(result.data.event);
+      // activities = activities.concat(result.data.volunteer_opportunity);
+
+      var activities = result.data;
+      this.setState({
+        activities: activities,
+      })
+    })
   }
 
   onBack() {

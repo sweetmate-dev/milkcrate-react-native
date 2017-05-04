@@ -27,6 +27,7 @@ import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
+import Cache from '../../components/Cache'
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
 
@@ -98,53 +99,11 @@ class VolunteerView extends Component {
     });
 
     navigator.geolocation.getCurrentPosition( (position) => {
-
-        this.setState({ currentLocation: position })
-          var param = {
-            type: 'volunteer_opportunity',
-            offset: this.offset,
-            limit: this.limit,
-            query: this.searchText
-          }
-        bendService.searchActivity(param, (error, result) => {
-          if(param.query != this.searchText) return;
-
-          this.setState( (state) => {  
-            state.volunteeresQuery.loading = false;
-            return state;
-          });
-
-          this.setState({ isRefreshing: false });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          } 
-
-          if (result.data.volunteer_opportunity.length < this.limit) {
-            this.more = false;
-            this.setState( (state) => {  
-              state.volunteeresQuery.more = false;
-              return state;
-            });
-          }
-
-          this.state.volunteeres = this.state.volunteeres.concat(result.data.volunteer_opportunity);
-          this.setState({ volunteeres: this.state.volunteeres });
-
-          const imageOffset = this.offset;
-          this.offset += this.limit;
-
-          result.data.volunteer_opportunity.map((item, index) => {
-            this.setState( (state) => {
-              state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(item);
-              return state;
-            });
-          });
-        })
+      this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null)
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
@@ -159,6 +118,65 @@ class VolunteerView extends Component {
         onClick={ () => this.onPressedCell(rowData) }
       />
     );
+  }
+
+  search(position) {
+    if(position)
+      this.setState({ currentLocation: position })
+
+    var param = {
+      type: 'volunteer_opportunity',
+      offset: this.offset,
+      limit: this.limit,
+      query: this.searchText
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+
+    bendService.searchActivity(param, (error, result) => {
+      if(param.query != this.searchText) return;
+
+      this.setState( (state) => {
+        state.volunteeresQuery.loading = false;
+        return state;
+      });
+
+      this.setState({ isRefreshing: false });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      if (result.data.volunteer_opportunity.length < this.limit) {
+        this.more = false;
+        this.setState( (state) => {
+          state.volunteeresQuery.more = false;
+          return state;
+        });
+      }
+
+      this.state.volunteeres = this.state.volunteeres.concat(result.data.volunteer_opportunity);
+      this.setState({ volunteeres: this.state.volunteeres });
+
+      const imageOffset = this.offset;
+      this.offset += this.limit;
+
+      result.data.volunteer_opportunity.map((item, index) => {
+        this.setState( (state) => {
+          state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(item);
+          return state;
+        });
+      });
+    })
   }
 
   onSearchChange(text) {
