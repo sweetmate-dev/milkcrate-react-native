@@ -96,22 +96,22 @@ export default class Main extends Component {
     } else if (Platform.OS === 'android') {
 
     }
-    */
+
     Permissions.requestPermission('location', 'always')
       .then(response => {
         console.log(JSON.stringify(response));
-      });
+      });*/
 
     PushNotification.configure({
 
       // (optional) Called when Token is generated (iOS and Android)
-      onRegister: function(token) {
+      onRegister: (token)=> {
         console.log("Token:", token)
-        this.saveInstallationInfo(activeUser, token?token.token:null)
+        this.saveInstallationInfo(activeUser, (token?token.token:null))
       },
 
       // (required) Called when a remote or local notification is opened or received
-      onNotification: function(notification) {
+      onNotification: (notification)=> {
         this._onRemoteNotification(notification)
       },
 
