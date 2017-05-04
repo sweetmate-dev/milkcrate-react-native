@@ -52,6 +52,7 @@ class EventDetail extends Component {
 
       user: {},
       currentLocation: null,
+      showAddToCalendar: true,
     };
     
     this.activityId = null;
@@ -73,8 +74,22 @@ class EventDetail extends Component {
         return;
       }
 
-      if (result)
+      if (result) {
         this.activityId = result;
+
+        LocalStorage.load({
+          key: CALENDAR_EVENTS,
+          id: this.activityId
+        }).then( (data) => {
+
+          console.log( 'Calendar event : ', data);
+          this.setState({ showAddToCalendar: false });
+        })
+        .catch( (error) => {
+          console.log('local storage error : ', error.message);
+          this.setState({ showAddToCalendar: true });
+        });
+      }
 
       this.setState({
         didStatus: result == false ? false : true,
@@ -155,7 +170,7 @@ class EventDetail extends Component {
     }).then( (data) => {
 
       console.log( 'Calendar event : ', data);
-      Alert.alert('Event Added', 'This event had been already added to your calendar');
+      Alert.alert('Event Added', 'This event had been already added to your calendar.');
     })
     .catch( (error) => {
       console.log('local storage error : ', error.message);
@@ -217,7 +232,8 @@ class EventDetail extends Component {
                     rawData: this.calendarEventIds,
                   });
 
-                  Alert.alert('Event Added', 'This event has been successfully added to your calendar');
+                  Alert.alert('Event Added', 'This event has been added to your calendar.');
+                  this.setState({ showAddToCalendar: false });
                 })
                 .catch( error => {
                   console.log('error : ', error);
@@ -302,6 +318,11 @@ class EventDetail extends Component {
       event,
     } = this.props;
     
+    let grayButtonWidth = commonStyles.screenWidth;
+    if (this.state.showAddToCalendar) {
+      grayButtonWidth /= 2;
+    }
+
     return (
       <View style={ styles.container }>
         <NavTitleBar
@@ -409,15 +430,20 @@ class EventDetail extends Component {
           :
           <View style={ styles.bottomContainer }>
             <TouchableOpacity onPress={ () => this.onUncheckIn() }>
-              <View style={ styles.buttonGrey }>
+              <View style={ [styles.buttonGrey, { width: grayButtonWidth }] }>
                 <Text style={ styles.textOrange }>I Can't Go</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={ () => this.onAddToCalendar() }>
-              <View style={ styles.buttonGreen }>
-                <Text style={ styles.textButton }>Add to Calendar</Text>
-              </View>
-            </TouchableOpacity>
+            {
+              this.state.showAddToCalendar ?
+                <TouchableOpacity onPress={ () => this.onAddToCalendar() }>
+                  <View style={ styles.buttonGreen }>
+                    <Text style={ styles.textButton }>Add to Calendar</Text>
+                  </View>
+                </TouchableOpacity>
+              :
+                null
+            }
           </View>
         }
       </View>
@@ -505,7 +531,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#EFEFEF',
     height: 40,
-    width: commonStyles.screenWidth / 2,
+    // width: commonStyles.screenWidth / 2,
   },
   buttonGreen: {
     justifyContent: 'center',
