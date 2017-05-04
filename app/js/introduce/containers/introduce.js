@@ -17,6 +17,7 @@ import { Actions } from 'react-native-router-flux';
 import AppIntro from '../components/AppIntro';
 import Login from '../../auth/containers/login';
 import Signup from '../../auth/containers/signup';
+import Orientation from 'react-native-orientation';
 
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
@@ -35,8 +36,11 @@ export default class Introduce extends Component {
     StatusBar.setHidden(true);
   }
 
-  onGoLogin() {
+  componentDidMount() {
+    Orientation.lockToPortrait();
+  }
 
+  onGoLogin() {
     Actions.Login();
   }
 

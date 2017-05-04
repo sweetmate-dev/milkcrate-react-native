@@ -33,16 +33,6 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private Activity mainActivity = null;
-
-  public Activity getMainAcitivity() {
-    return this.getMainAcitivity();
-  }
-
-  public void setMainActivity(Activity mainActivity) {
-    this.mainActivity = mainActivity;
-  }
-
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 
     @Override
@@ -59,7 +49,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-//            new OrientationPackage(((MainApplication)getApplicationContext()).getMainAcitivity()),
+            new OrientationPackage(),
             new BackgroundGeolocationPackage(),
             new ReactNativePushNotificationPackage(),
             new SvgPackage(),

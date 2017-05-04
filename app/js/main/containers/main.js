@@ -24,6 +24,7 @@ import Notifications from '../../alert/containers/notifications';
 import Profile from '../../profile/containers/profile';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import DeviceInfo from 'react-native-device-info';
+import Orientation from 'react-native-orientation';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -75,6 +76,8 @@ export default class Main extends Component {
 
   componentDidMount() {
     this.hasMounted = true
+
+    Orientation.unlockAllOrientations();
 
     let activeUser = bendService.getActiveUser();
     if(!activeUser.name) {

@@ -33,10 +33,10 @@ export const DoneButton = ({
 }
 
 function showButton(isDoneBtnShow, doneBtnLabel, nextBtnLabel, skipBtnLabel, index, total) {
-  if (isDoneBtnShow)
-    return doneBtnLabel;
+  // if (isDoneBtnShow)
+  //   return doneBtnLabel;
 
-  if (index >= (total - 2))
+  if (index >= (total - 1))
     return skipBtnLabel;
   
   return nextBtnLabel;

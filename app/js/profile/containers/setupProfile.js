@@ -26,6 +26,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
 
 import Permissions from 'react-native-permissions';
+import Orientation from 'react-native-orientation';
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
@@ -55,6 +56,8 @@ class SetupProfile extends Component {
   }
 
   componentDidMount() {
+    Orientation.unlockAllOrientations();
+
     if (Platform.OS === 'ios') {
       Permissions.requestPermission('notification')
           .then(response => {

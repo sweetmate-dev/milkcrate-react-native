@@ -3,10 +3,10 @@ package com.milkcrate;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
+import android.content.Intent;
+import android.content.res.Configuration;
 
 public class MainActivity extends ReactActivity {
-
-    private MainApplication mainApp;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -18,16 +18,11 @@ public class MainActivity extends ReactActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mainApp = (MainApplication)this.getApplicationContext();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mainApp.setMainActivity(this);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
     }
 }
 
