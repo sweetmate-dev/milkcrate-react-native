@@ -130,13 +130,19 @@ export default class VideoPlayer extends Component {
 
 
     this.player = null;
+    this._isMounted = false;
   }
 
   componentDidMount() {
+    this._isMounted = true;
     if (this.props.autoplay) {
       this.hideControls();
       // this.setFullScreen();
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onLayout(event) {
@@ -213,7 +219,6 @@ export default class VideoPlayer extends Component {
   }
 
   onClose() {
-    this.hideControls();
     this.setState({ 
       isStarted: false,
       isPlaying: false,
@@ -324,8 +329,11 @@ export default class VideoPlayer extends Component {
       clearTimeout(this.controlsTimeout);
       this.controlsTimeout = null;
     }
+
     this.controlsTimeout = setTimeout(() => {
-      this.setState({ isControlsVisible: false });
+      if (this._isMounted === true) {
+        this.setState({ isControlsVisible: false });
+      }
     }, this.props.controlsTimeout);
   }
 

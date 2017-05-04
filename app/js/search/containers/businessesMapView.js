@@ -41,6 +41,9 @@ class BusinessesMapView extends Component {
       tappedPin: 0,
     };
 
+    this.latitudeDelta = LATITUDE_DELTA;
+    this.longitudeDelta = LONGITUDE_DELTA;
+    this.currentRegion = null;
     this.watchID = null;
   }  
 
@@ -82,6 +85,12 @@ class BusinessesMapView extends Component {
     Actions.BusinessesDetail({ business: rowData });
   }
 
+  onRegionChange( region ) {
+    this.currentRegion = region;
+    this.latitudeDelta = this.currentRegion.latitudeDelta;
+    this.longitudeDelta = this.currentRegion.longitudeDelta;
+  }
+
   render() {
     const { 
       businesses,
@@ -93,15 +102,16 @@ class BusinessesMapView extends Component {
       region = {
         latitude: this.state.currentLocation.coords.latitude,
         longitude: this.state.currentLocation.coords.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
+        latitudeDelta: this.latitudeDelta,
+        longitudeDelta: this.longitudeDelta,
       };
-    } else {
+    } 
+    else if ( this.currentRegion === null) {
       region = {
         latitude: businesses[this.state.tappedPin]._geoloc[1],
         longitude: businesses[this.state.tappedPin]._geoloc[0],
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
+        latitudeDelta: this.latitudeDelta,
+        longitudeDelta: this.longitudeDelta,
       };
     }
 
@@ -113,6 +123,7 @@ class BusinessesMapView extends Component {
           showsMyLocationButton={ false }
           showsPointsOfInterest={ false }
           loadingEnabled={ true }
+          onRegionChange={ (region) => this.onRegionChange(region) }
         >
           {
             this.props.currentLocation && <MapView.Marker

@@ -370,7 +370,7 @@ class EventDetail extends Component {
             </View>
             <View style={ styles.individualInfoContainer }>
               <View style={ styles.addressContainer }>
-                <Text style={ styles.textAddress }>{ event.address1 } { event.address2 }</Text>
+                <Text numberOfLines={ 2 } style={ styles.textAddress }>{ event.address1 } { event.address2 }</Text>
                 <Text style={ styles.textAddress }>{ UtilService.getCityStateString(event.city, event.state, event.postalCode) }</Text>
                 <TouchableOpacity onPress={ () => this.onGetDirection() }>
                   <Text style={ styles.textTitle }>Get Directions</Text>
@@ -547,6 +547,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   addressContainer: {
+    flex: 4.5,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
@@ -556,6 +557,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   visitContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -570,7 +572,6 @@ const styles = StyleSheet.create({
   visitCellContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 5,
   },
   imageVisit: {
     height: 48,
