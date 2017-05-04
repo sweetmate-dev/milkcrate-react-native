@@ -27,7 +27,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 var Mailer = require('NativeModules').RNMail; 
 import DeviceInfo from 'react-native-device-info';
-
+import codePush from "react-native-code-push";
 
 import bendService from '../../bend/bendService'
 
@@ -39,7 +39,18 @@ class Settings extends Component {
       allowOthersToSeeMyActivity: true,
       pushNotifications: true,
       user: bendService.getActiveUser(),
+      label: null,
    };
+  }
+
+  componentDidMount() {
+    codePush.getUpdateMetadata().then( (metadata) => {
+      if (metadata === undefined) {
+        return;
+      }
+      
+      this.setState({ label: metadata.label });
+    });
   }
 
   onBack() {
@@ -256,8 +267,7 @@ class Settings extends Component {
           </TouchableOpacity>
 
           <View style={ styles.versionContainer }>
-            <Text style={ styles.textVersion }>MilkCrate for Communities v{ DeviceInfo.getVersion() } ({ DeviceInfo.getBuildNumber() })</Text>
-            {/*<Text style={ styles.textVersion }>MilkCrate for Communities v4.1 (04)</Text>*/}
+            <Text style={ styles.textVersion }>MilkCrate for Communities v{ DeviceInfo.getVersion() } ({ this.state.label ? (DeviceInfo.getBuildNumber(), this.state.label) : DeviceInfo.getBuildNumber() })</Text>
           </View>
 
         </ScrollView>

@@ -302,7 +302,7 @@ class EventDetail extends Component {
 
     var coverImage, backgroundColor;
     var imageObj = event.coverImage ? event.coverImage : this.category.coverImage;
-    coverImage = UtilService.getMiddleImage(imageObj);
+    coverImage = UtilService.getLargeImage(imageObj);
     backgroundColor = UtilService.getBackColor(imageObj);
 
     if (coverImage == null) 
