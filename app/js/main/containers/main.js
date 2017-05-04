@@ -136,10 +136,10 @@ export default class Main extends Component {
        */
       requestPermissions: true,
     });
-    
+
     this.loadAlerts()
   }
-  
+
   componentWillUnmount() {
     this.hasMounted = false
   }
@@ -204,7 +204,7 @@ export default class Main extends Component {
         systemName: DeviceInfo.getSystemName(),
         systemVersion: DeviceInfo.getSystemVersion(),
         deviceId: DeviceInfo.getUniqueID(),
-        buildType: (__DEV__?"development" : "product"),
+        buildType: (__DEV__ ? "development" : "production"),
       })
 
       if (Platform.OS == 'ios' && token) {
@@ -315,7 +315,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { 
+    const {
       subOne,
     } = this.props;
 
@@ -335,7 +335,7 @@ export default class Main extends Component {
             onPress={ () => this.onSelectTab('home') }>
             <Home
               selectedTab={ this.state.selectedTab }
-              subOne={ subOne } 
+              subOne={ subOne }
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
@@ -366,13 +366,13 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.onSelectTab('alerts') }>
-            <Notifications 
+            <Notifications
               subOne={ subOne }
               alerts={ this.state.alerts }
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
-          
+
           {/* You */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'profile' }
