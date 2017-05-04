@@ -194,7 +194,7 @@ class App extends Component {
         <Scene key="ServiceView" component={ ServiceView } />
         <Scene key="VolunteerView" component={ VolunteerView } />
         <Scene key="VolunteerDetail" component={ VolunteerDetail } />
-        <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical'/>        
+        <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical'/>
       </Scene>
     );
 
