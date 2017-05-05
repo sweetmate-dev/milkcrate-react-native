@@ -125,7 +125,7 @@ class Signup extends Component {
   }
 
   onLogIn() {
-    Actions.Login();
+    Actions.pop();
   }
 
   render() {
