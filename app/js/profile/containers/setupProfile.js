@@ -133,10 +133,11 @@ class SetupProfile extends Component {
         return;
       }
 
-      Actions.Main();
       this.setState({
-        isUploadingFile:false
+        isUploadingFile: false
       })
+
+      Actions.Main();
     })
   }
 

@@ -92,7 +92,7 @@ class Login extends Component {
   }
 
   onCreateAccount() {
-    Actions.Signup();
+    Actions.Signup({ showLogIn: true });
   }
 
   onToggleConfirmPassword() {

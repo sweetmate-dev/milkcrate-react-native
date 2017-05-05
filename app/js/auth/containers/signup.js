@@ -124,6 +124,10 @@ class Signup extends Component {
     this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
   }
 
+  onLogIn() {
+    Actions.Login();
+  }
+
   render() {
     return (
       <View style={ styles.container }>
@@ -223,8 +227,16 @@ class Signup extends Component {
                   <TouchableOpacity activeOpacity={ .5 } style={{ marginTop: 16 }} onPress={ () => this.onLearnMore() }>
                     {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
                   </TouchableOpacity>
-
                 </View>
+                {
+                  this.props.showLogIn ?
+                    <TouchableOpacity style={ styles.buttonLogIn } onPress={ () => this.onLogIn() }>
+                      <Text style={ styles.textLogInButton}>Log In</Text>
+                    </TouchableOpacity>
+                  :
+                    null
+                }
+
               </View>
             </View>
           </KeyboardAwareScrollView>
@@ -351,4 +363,20 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     backgroundColor: 'transparent',
   },
+  buttonLogIn: {
+    height: 80,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15,
+    alignSelf: 'flex-end',
+  },
+  textLogInButton: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: commonColors.title,
+    fontFamily: 'Open Sans',
+    backgroundColor: 'transparent',
+  },
+
 });

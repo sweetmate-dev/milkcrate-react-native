@@ -135,7 +135,7 @@ class CommunityPoints extends Component {
     this.totalUsers = 0;
 
     bendService.getLeaderBoardSimpleList( (error, userList, allUsers) => {
-      console.log("getLeaderBoardSimpleList", userList)
+      // console.log("getLeaderBoardSimpleList : ", userList)
       if (error) {
         console.log(error);
         return;
@@ -252,12 +252,16 @@ class CommunityPoints extends Component {
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
     var previousRank = rowData.previousRank, currentRank = rowData.rank
+    let name = rowData.name;
+    if (name === undefined) {
+      name = rowData.username;
+    }
 
     return (
       <SimpleLeaderboardListCell
         status={ previousRank == -1 ? 0 : (previousRank < currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
         index={ rowData.rank }
-        name={ rowData.name }
+        name={ name }
         points={ rowData.points }
         avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
         avatarBackColor={ UtilService.getBackColor(rowData.avatar) }
