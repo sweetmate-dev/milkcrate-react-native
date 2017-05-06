@@ -210,8 +210,12 @@ export default class Main extends Component {
         buildType: (__DEV__ ? "development" : "production"),
       })
 
-      if (Platform.OS == 'ios' && token) {
-        installInfo.apnsToken = token
+      if(token) {
+        if (Platform.OS == 'ios') {
+          installInfo.apnsToken = token
+        } else {
+          installInfo.gcmRegistrationId = token
+        }
       }
 
       bendService.saveInstallInformation(installInfo, (err, ret)=>{
