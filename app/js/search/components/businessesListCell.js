@@ -56,6 +56,8 @@ export default class BusinessesListCell extends Component {
       mode,
     } = this.props;
 
+    console.log('business : ', this.props);
+  
     let dollars = '';
 
     for (i = 1 ; i <= price ; i++)
@@ -79,7 +81,7 @@ export default class BusinessesListCell extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View> }
               </View>
-              {distance&&<Text style={ styles.text }>{ distance.toFixed(1) } Miles  { dollars }</Text>}
+              <Text style={ styles.text }>{ (distance > 0) ? distance.toFixed(1) : 0 } Miles  { dollars }</Text>
             </View>
           </View>
           {/*<View style={ styles.cellBottomContainer }>

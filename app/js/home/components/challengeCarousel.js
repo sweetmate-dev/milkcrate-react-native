@@ -28,7 +28,6 @@ export default class ChallengeCarousel extends Component {
 
   goChallengeActivityDetail() {
     var challenge = this.props.rawData;
-
     if (challenge.type == 'business') {
       Actions.BusinessesDetail({ business: challenge.activity });
     } else if(challenge.type == 'action') {

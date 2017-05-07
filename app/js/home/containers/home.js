@@ -389,15 +389,18 @@ class Home extends Component {
   }
 
   getChallengeCarousel (entries) {
+    
     return entries.map( (entry, index) => {
-      var cat = bendService.getActivityCategory(this.state.categories, entry.activity)
-      if(cat == null) return null;
+      const category = bendService.getActivityCategory(this.state.categories, entry.activity)
+      if (category == null) {
+        return null;
+      }
       return (
         <ChallengeCarousel
           key={ index }
           title={ entry.title }
           subtitle={entry.activity.name}
-          icon={ UtilService.getCategoryIcon(cat) }
+          icon={ UtilService.getCategoryIcon(category) }
           points={ entry.activity.points ? Math.max(Number(entry.activity.points), 1) : 1 }
           link={ entry.activity.url }
           rawData={ entry }
@@ -672,6 +675,7 @@ class Home extends Component {
         <View style={ styles.recentActivityListViewWrapper }>
           <ListView
             enableEmptySections={ true }
+            scrollEnabled={ false }
             dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
             renderRow={ this.renderRecentActivityRow.bind(this) }
           />
