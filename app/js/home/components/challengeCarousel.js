@@ -28,14 +28,17 @@ export default class ChallengeCarousel extends Component {
 
   goChallengeActivityDetail() {
     var challenge = this.props.rawData;
+
+    console.log('goChallengeActivityDetail : ', challenge);
+
     if (challenge.type == 'business') {
       Actions.BusinessesDetail({ business: challenge.activity });
     } else if(challenge.type == 'action') {
       Actions.ActionDetail({ action: challenge.activity });
     } else if(challenge.type == 'event') {
       Actions.EventDetail({ event: challenge.activity });
-    } else if(challenge.type == 'serivce') {
-      Actions.ServiceDetail({ serivce: challenge.activity });
+    } else if(challenge.type == 'service') {
+      Actions.ServiceDetail({ service: challenge.activity });
     } else if(challenge.type == 'volunteer') {
       Actions.VolunteerDetail({ volunteer: challenge.activity });
     }
