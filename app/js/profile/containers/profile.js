@@ -61,6 +61,10 @@ class Profile extends Component {
   componentDidMount() {
     this.hasMounted = true
     this.loadAllData();
+
+    if (this.props.subOne === 'community') {
+      this.onSeeCommunityPoints();
+    }
   }
 
   componentWillUnmount() {
@@ -303,7 +307,6 @@ class Profile extends Component {
 
   render() {
     const currentUser = this.state.currentUser;
-
     return (
       <View style={ styles.container }>
         <NavSearchBar

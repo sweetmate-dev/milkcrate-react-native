@@ -51,9 +51,10 @@ export default class Main extends Component {
     super(props);
 
     let tab = this.props.tab;
+    console.log('main - tab : ', tab)
     if (tab == null)
       tab = 'home';
-
+    
     this.state = {
       selectedTab: tab,
       badge: 0,
@@ -75,6 +76,8 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
+    console.log('main - componentDidMount tab : ', this.props.tab);
+    
     this.hasMounted = true
 
     Orientation.unlockAllOrientations();
@@ -83,7 +86,8 @@ export default class Main extends Component {
     if(!activeUser.name) {
       Actions.SetupProfile()
     }
-    /*if (Platform.OS === 'ios') {
+    /*
+    if (Platform.OS === 'ios') {
 
       PushNotificationIOS.addEventListener('register', (token)=>{
           this.saveInstallationInfo(activeUser, token)
@@ -110,7 +114,7 @@ export default class Main extends Component {
       // (optional) Called when Token is generated (iOS and Android)
       onRegister: (token)=> {
         console.log("Token:", token)
-        this.saveInstallationInfo(activeUser, (token?token.token:null))
+        this.saveInstallationInfo(activeUser, (token ? token.token : null))
       },
 
       // (required) Called when a remote or local notification is opened or received
@@ -146,27 +150,36 @@ export default class Main extends Component {
   componentWillUnmount() {
     this.hasMounted = false
   }
+  
+  componentWillReceiveProps(nextProps){    
+    
+    // console.log( 'main - componentWillReceiveProps');
+
+    // if (nextProps.tab != this.state.selectedTab) {
+    //   this.setState({ selectedTab: tab });
+    // }
+  }
 
   _onRemoteNotification(notification) {
-      /*AlertIOS.alert(
-          'Push Notification Received',
-          'Alert message: ' + notification.getMessage(),
-          [{
-              text: 'Dismiss',
-              onPress: null,
-          }]
-      );*/
+    /*AlertIOS.alert(
+        'Push Notification Received',
+        'Alert message: ' + notification.getMessage(),
+        [{
+            text: 'Dismiss',
+            onPress: null,
+        }]
+    );*/
   }
 
   _onLocalNotification(notification){
-      /*AlertIOS.alert(
-          'Local Notification Received',
-          'Alert message: ' + notification.getMessage(),
-          [{
-              text: 'Dismiss',
-              onPress: null,
-          }]
-      );*/
+    /*AlertIOS.alert(
+      'Local Notification Received',
+      'Alert message: ' + notification.getMessage(),
+      [{
+          text: 'Dismiss',
+          onPress: null,
+      }]
+    );*/
   }
 
   saveInstallationInfo(activeUser, token) {
@@ -183,7 +196,7 @@ export default class Main extends Component {
       - buildType – "release" or "development" or "staging"
       - apnsToken – iOS only, the push token
       - gcmRegistrationId – Android only, the android push token
-     */
+    */
 
     AsyncStorage.getItem('milkcrate-installation-info', (err, ret)=>{
       var installInfo = ret
@@ -210,7 +223,7 @@ export default class Main extends Component {
         buildType: (__DEV__ ? "development" : "production"),
       })
 
-      if(token) {
+      if (token) {
         if (Platform.OS == 'ios') {
           installInfo.apnsToken = token
         } else {
@@ -218,8 +231,8 @@ export default class Main extends Component {
         }
       }
 
-      bendService.saveInstallInformation(installInfo, (err, ret)=>{
-        if (!err) {
+      bendService.saveInstallInformation(installInfo, (error, ret)=>{
+        if (!error) {
           AsyncStorage.setItem('milkcrate-installation-info', JSON.stringify(ret.result));
         }
       })
@@ -240,7 +253,7 @@ export default class Main extends Component {
           }
         }
 
-        this.last = location
+        this.last = location;
         console.log('[DEBUG] BackgroundGeolocation location', location);
 
         //save to bend
@@ -250,8 +263,8 @@ export default class Main extends Component {
           speed: location.speed,
           altitude: location.altitude,
           accuracy: location.accuracy,
-        }, (err, ret)=>{
-          console.log(err, ret);
+        }, (error, result)=>{
+          console.log(error, result);
         })
       });
 
@@ -270,7 +283,7 @@ export default class Main extends Component {
       }
 
       if (result.length > 0) {
-        this.hasMounted&&this.setState({
+        this.hasMounted && this.setState({
           alerts: result,
           lastAlertTime:result[0]._bmd.createdAt
         })
@@ -303,19 +316,19 @@ export default class Main extends Component {
   }
 
   onSelectSearch() {
-    this.hasMounted&&this.setState({
+    this.hasMounted && this.setState({
       selectedTab: 'search',
       searchAutoFocus: true,
     });
   }
 
   onSelectTab( tab ) {
-    this.hasMounted&&this.setState({
+    this.hasMounted && this.setState({
       selectedTab: tab,
     });
 
     if(tab == 'alerts') {
-      this.hasMounted&&this.setState({
+      this.hasMounted && this.setState({
         hasNewAlert:false
       });
     }
@@ -325,6 +338,8 @@ export default class Main extends Component {
     const {
       subOne,
     } = this.props;
+
+    console.log( 'main - subOne', subOne);
 
     return (
       <View style={ styles.container }>
@@ -357,19 +372,19 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.onSelectTab('search') }>
             <Search
-              selectedTab={ this.state.selectedTab}
+              selectedTab={ this.state.selectedTab }
               subOne={ subOne }
               searchAutoFocus={ this.state.searchAutoFocus }
             />
           </TabNavigator.Item>
 
-          {/* Alerta */}
+          {/* Alert */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'alerts' }
             title="Alerts"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
-            renderIcon={ () => <Image source={ this.state.hasNewAlert?alertIconRed:alertIcon } style={ this.state.hasNewAlert?styles.iconTabbar3_2:styles.iconTabbar3 } resizeMode="contain"/> }
+            renderIcon={ () => <Image source={ this.state.hasNewAlert ? alertIconRed : alertIcon } style={ this.state.hasNewAlert ? styles.iconTabbar3_2 : styles.iconTabbar3 } resizeMode="contain"/> }
             renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
             onPress={ () => this.onSelectTab('alerts') }>

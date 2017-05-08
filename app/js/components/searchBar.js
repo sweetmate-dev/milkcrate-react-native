@@ -57,7 +57,7 @@ export default class SearchBar extends Component {
 
     this.state = {
       isOnFocus: false,
-      textSearch: '',
+      textSearch: this.props.query,
     };
     
     this._onFocus = this._onFocus.bind(this);
@@ -193,6 +193,7 @@ export default class SearchBar extends Component {
             onChangeText={ (text) => this._onSearchChange(text) }
             onEndEditing={ this.props.onEndEditing }
             onSubmitEditing={ this.props.onSubmitEditing }
+            text={ this.state.textSearch }
             placeholder={ placeholder }
             placeholderTextColor={ placeholderColor }
             underlineColorAndroid="transparent"

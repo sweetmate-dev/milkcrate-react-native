@@ -29,6 +29,7 @@ import * as commonColors from '../../styles/commonColors';
 
 const exploreWays = [
   {
+    key: 'recent',
     title: 'Recent',
     description: 'See your most recent activities',
     icon: require('../../../assets/imgs/recent.png'),
@@ -36,6 +37,7 @@ const exploreWays = [
     iconHeight: 21,
   },
   {
+    key: 'actions',
     title: 'Take Action',
     description: 'Explore easy, self-reported lifestyle behaviors',
     icon: require('../../../assets/imgs/actions.png'),
@@ -43,6 +45,7 @@ const exploreWays = [
     iconHeight: 22,
   },
   {
+    key: 'businesses',
     title: 'Businesses',
     description: 'Check in to local, sustainable businesses nearby',
     icon: require('../../../assets/imgs/businesses.png'),
@@ -50,27 +53,29 @@ const exploreWays = [
     iconHeight: 21,
   },
   {
-     title: 'Events',
-     description: 'Register for green events and add to your calendar',
-     icon: require('../../../assets/imgs/events.png'),
-     iconWidth: 23,
-     iconHeight: 25,
-   },
-  {
-     title: 'Services',
-     description: 'Sign up for eco-friendly lifestyle services',
-     icon: require('../../../assets/imgs/services.png'),
-     iconWidth: 23,
-     iconHeight: 20,
+    key: 'events',
+    title: 'Events',
+    description: 'Register for green events and add to your calendar',
+    icon: require('../../../assets/imgs/events.png'),
+    iconWidth: 23,
+    iconHeight: 25,
   },
   {
+    key: 'services',
+    title: 'Services',
+    description: 'Sign up for eco-friendly lifestyle services',
+    icon: require('../../../assets/imgs/services.png'),
+    iconWidth: 23,
+    iconHeight: 20,
+  },
+  {
+    key: 'volunteer_opportunities',
     title: 'Volunteer Opportunities',
     description: 'Find one that’s right for you',
     icon: require('../../../assets/imgs/volunteer.png'),
     iconWidth: 26,
     iconHeight: 25,
   },
-
 ];
 
 const categoryTitles = [
@@ -185,8 +190,8 @@ class MainSearch extends Component {
       let subOne = this.props.subOne;
 
       for (let i = 0 ; i < exploreWays.length ; i++) {
-        if (exploreWays[i].title.toLowerCase() == subOne.toLocaleString()) {
-          this.onSelectExploreWays ( i );
+        if (exploreWays[i].key.toLowerCase() == subOne.toLocaleString()) {
+          this.onSelectExploreWays ( i, this.props.query );
           return;
         }
       }
@@ -200,7 +205,7 @@ class MainSearch extends Component {
     }
   }
 
-  onSelectExploreWays (index) {
+  onSelectExploreWays (index, query) {
 
     switch (Number(index)) {
       case 0://Recent
@@ -208,22 +213,22 @@ class MainSearch extends Component {
         break;
 
       case 1://Take Action
-        Actions.ActionView();
+        Actions.ActionView({ query: query });
         break;
 
       case 2://Businesses
-        Actions.BusinessesView();
+        Actions.BusinessesView({ query: query });
         break;
 
       case 3://Events
-        Actions.EventsView();
+        Actions.EventsView({ query: query });
         break;
       case 4://Services
-        Actions.ServiceView();
+        Actions.ServiceView({ query: query });
         break;
 
       case 5://Volunteer
-        Actions.VolunteerView();
+        Actions.VolunteerView({ query : query });
         break;
 
       default:
@@ -244,7 +249,7 @@ class MainSearch extends Component {
         icon={ rowData.icon }
         iconWidth={ rowData.iconWidth }
         iconHeight={ rowData.iconHeight }
-        onClick={ () => this.onSelectExploreWays(rowID) }
+        onClick={ () => this.onSelectExploreWays(rowID, null) }
       />
     );
   }

@@ -79,7 +79,9 @@ class Search extends Component {
         />
         {
           this.state.mainSearchPage ?
-          <MainSearch/>
+          <MainSearch
+            subOne={ this.props.subOne }
+          />
           :
           <FilterSearch 
             searchText={ this.state.searchText }

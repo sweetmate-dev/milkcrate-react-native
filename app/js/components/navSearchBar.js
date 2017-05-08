@@ -34,6 +34,7 @@ export default class NavSearchBar extends Component {
     buttons: PropTypes.number,
     searchAutoFocus: PropTypes.bool,
     searchMode: PropTypes.bool,
+    query: PropTypes.string,
   }
 
   static defaultProps = {
@@ -49,6 +50,7 @@ export default class NavSearchBar extends Component {
     buttons: commonStyles.NavNoneButton,
     searchAutoFocus: false,
     searchMode: true,
+    query: '',
   }
 
   constructor(props) {
@@ -123,6 +125,7 @@ export default class NavSearchBar extends Component {
       buttons,
       searchAutoFocus,
       searchMode,
+      query,
     } = this.props;
 
     return (
@@ -154,6 +157,7 @@ export default class NavSearchBar extends Component {
               searchAutoFocus={ searchAutoFocus }
               searchMode={ searchMode }
               height={ 28 }
+              query={ query }
               iconColor={ "#ffffff99" }
               placeholder = { placeholder }
               placeholderColor="#ffffff99"
