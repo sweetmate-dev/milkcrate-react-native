@@ -58,6 +58,7 @@ class Leaderboard extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     bendService.getCommunity((error, result)=>{
       if (!error)
         this.setState({
@@ -68,18 +69,22 @@ class Leaderboard extends Component {
     this.loadUserPage();
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   loadUserPage() {
     if ( this.state.query.more === false )
       return;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.query.loading = true;
       return state;
     });
 
     bendService.getLeaderBoardPage(this.state.query.offset, this.state.query.limit + 1, (error, result) => {
       //console.log("getRecentActivities", error, result)
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.query.loading = false;
         return state;
       });
@@ -98,12 +103,12 @@ class Leaderboard extends Component {
       if (result.length > 0) {
         this.state.userList = this.state.userList.concat(result)
         this.state.query.offset += result.length
-        this.setState({
+        this.hasMounted && this.setState({
           userList: this.state.userList
         })
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         query: this.state.query
       })
     })

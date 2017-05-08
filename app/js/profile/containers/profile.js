@@ -85,7 +85,7 @@ class Profile extends Component {
         }
 
         this.state.recentActivities.unshift(activity);
-        this.setState({
+        this.hasMounted && this.setState({
           recentActivities:this.state.recentActivities
         })
       })
@@ -106,7 +106,7 @@ class Profile extends Component {
       if(exist) {
         var idx = this.state.recentActivities.indexOf(exist)
         this.state.recentActivities.splice(idx, 1);
-        this.setState({
+        this.hasMounted && this.setState({
           recentActivities:this.state.recentActivities
         })
       }

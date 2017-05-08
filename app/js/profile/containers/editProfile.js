@@ -57,7 +57,7 @@ class EditProfile extends Component {
   }
 
   componentDidMount() {
-
+    this.hasMounted = true
     if (this.user.avatar != null) {
       bendService.getUser( (error, result) => {
 
@@ -72,6 +72,10 @@ class EditProfile extends Component {
         this.setState({ profilePhoto: source });
       })
     }
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack() {
@@ -90,7 +94,7 @@ class EditProfile extends Component {
 
     bendService.updateUser(userData, (error, result) => {
 
-      this.setState({ activityStatus: false });
+      this.hasMounted && this.setState({ activityStatus: false });
 
       if (error) {
         console.log(error);        
@@ -106,17 +110,17 @@ class EditProfile extends Component {
 
   onSaveProfile() {
 
-    this.setState({ activityStatus: true });
+    this.hasMounted && this.setState({ activityStatus: true });
 
     if (this.state.profilePhotoFile) {
       //upload image first
       bendService.uploadFile(this.state.profilePhotoFile, (error, file)=>{
-        this.setState({
+            this.hasMounted && this.setState({
           isUploadingFile:false
         })
         if (error) {
 
-          this.setState({ activityStatus: false });
+          this.hasMounted && this.setState({ activityStatus: false });
 
           timer.setTimeout( this, 'UpdateUser', () => {
             timer.clearInterval(this, 'UpdateUser');
@@ -139,12 +143,12 @@ class EditProfile extends Component {
 
   onSelectGender(data) {
     this.state.user.gender = data.toLowerCase();
-    this.setState({ user: this.state.user });
+    this.hasMounted && this.setState({ user: this.state.user });
   }
 
   onChangeBirthday(date) {
     this.state.user.birthday = UtilService.formatDateWithFormat2(new Date(date), 'YYYY-MM-DD');
-    this.setState({ user: this.state.user });
+    this.hasMounted && this.setState({ user: this.state.user });
   }
 
   onPickProfilePhoto() {
@@ -174,7 +178,7 @@ class EditProfile extends Component {
     ImagePicker.showImagePicker(options, (response) => {
 
       if (response.customButton == 'remove') {
-        this.setState({
+        this.hasMounted && this.setState({
           profilePhoto: camera,
           profilePhotoFile: null,
         });
@@ -190,7 +194,7 @@ class EditProfile extends Component {
       else {
         let source = { uri: response.uri };
 
-        this.setState({
+        this.hasMounted && this.setState({
           profilePhoto: source,
           profilePhotoFile: response,
         });

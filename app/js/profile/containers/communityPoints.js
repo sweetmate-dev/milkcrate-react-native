@@ -69,7 +69,12 @@ class CommunityPoints extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(newProps) {
@@ -92,7 +97,7 @@ class CommunityPoints extends Component {
           else
             exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
 
-          this.setState({
+          this.hasMounted && this.setState({
             recentActivities:this.state.recentActivities
           });
         }
@@ -103,20 +108,20 @@ class CommunityPoints extends Component {
   loadAllData() {
 
     bendService.getUser( (error, result) => {
-      this.setState({
+      this.hasMounted && this.setState({
         currentUser: result,
       })
     })
 
     bendService.getCommunity( (error, result) => {
       if (!error) {
-        this.setState({
+        this.hasMounted && this.setState({
           community: result,
         })
       }
     })
 
-    this.setState({
+    this.hasMounted && this.setState({
       currentUserIndex: 0,
       userList: [],
       recentActivities: [],
@@ -147,7 +152,7 @@ class CommunityPoints extends Component {
 
       this.totalUsers = allUsers.length
 
-      this.setState({
+      this.hasMounted && this.setState({
         currentUserIndex: currentUserIndex,
         userList: userList,
       })
@@ -161,26 +166,27 @@ class CommunityPoints extends Component {
   }
 
   onLeaderboardCellPressed () {
-    Actions.Leaderboard({ total: this.totalUsers });
+    if(this.state.currentUserIndex)
+      Actions.Leaderboard({ total: this.totalUsers });
   }
 
   loadRecentActivities() {
     if ( this.state.activityQuery.more === false )
       return;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.activityQuery.loading = true;
       return state;
     });
 
     bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
       //console.log("getRecentActivities", error, result)
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log(error);
@@ -189,7 +195,7 @@ class CommunityPoints extends Component {
 
       this.state.activityQuery.more = (result.length == this.activityQuery.limit + 1)
 
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.activityQuery.more = this.activityQuery.more;
         return state;
       });
@@ -202,12 +208,12 @@ class CommunityPoints extends Component {
       if (result.length > 0) {
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
-        this.setState({
+        this.hasMounted && this.setState({
           recentActivities:this.state.recentActivities
         })
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         activityQuery: this.state.activityQuery
       })
     })
@@ -276,7 +282,7 @@ class CommunityPoints extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 
@@ -318,10 +324,11 @@ class CommunityPoints extends Component {
           </View>
 
           { (this.state.userList.length > 0) && <View style={ styles.leaderboardContainer }>
-            <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.rank) } place</Text>
-            <TouchableOpacity 
+            {this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.rank) } place</Text>}
+            {!this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard</Text>}
+            <TouchableOpacity
               onPress={ () => this.onLeaderboardCellPressed() }
-              activeOpacity={ 0.5 }
+              activeOpacity={ this.state.currentUserIndex?0.5:1 }
             >
               <View style={ styles.leaderboardListViewWrapper }>
                 <ListView
@@ -330,10 +337,10 @@ class CommunityPoints extends Component {
                   renderRow={ this.renderLeaderboardRow.bind(this) }
                   contentContainerStyle={ styles.leaderboardListView }
                 />
-                <View style={ styles.viewMoreContainer }>
+                {this.state.currentUserIndex && <View style={ styles.viewMoreContainer }>
                   <Text style={ styles.textViewMore }>View More</Text>
                   <EntypoIcon style={ styles.rightIcon } name="chevron-thin-right" size={ 15 } color={ commonColors.grayMoreText }/>
-                </View>
+                </View>}
               </View>
             </TouchableOpacity>
           </View> }

@@ -992,36 +992,38 @@ module.exports = {
                 var users = ret[0].data;
                 var currentUserId = this.getActiveUser()._id
                 var idx = users.indexOf(currentUserId);
+                var startIdx = 0;
+                var endIdx = 2;
                 if(idx != -1) {
-                    var startIdx = idx -1;
-                    var endIdx = idx + 1;
-
-                    if(startIdx < 0) {
-                        startIdx++;endIdx++;
-                    } else if(endIdx > users.length - 1) {
-                        startIdx--;endIdx--;
-                    }
-
-                    startIdx = Math.max(startIdx, 0);
-                    endIdx = Math.min(endIdx, users.length - 1);
-
-                    var userIdx = []
-                    for(var i = startIdx; i <= endIdx ; i++)
-                        userIdx.push(users[i]);
-
-                    var q = new Bend.Query()
-                    q.contains('_id', userIdx);
-                    q.ascending('rank')
-                    Bend.User.find(q, {
-                        relations:{
-                            avatar:"BendFile"
-                        }
-                    }).then((userList)=>{
-                        cb(null, userList, users)
-                    }, (err)=>{
-                        cb(err)
-                    })
+                    startIdx = idx -1;
+                    endIdx = idx + 1;
                 }
+
+                if(startIdx < 0) {
+                    startIdx++;endIdx++;
+                } else if(endIdx > users.length - 1) {
+                    startIdx--;endIdx--;
+                }
+
+                startIdx = Math.max(startIdx, 0);
+                endIdx = Math.min(endIdx, users.length - 1);
+
+                var userIdx = []
+                for(var i = startIdx; i <= endIdx ; i++)
+                    userIdx.push(users[i]);
+
+                var q = new Bend.Query()
+                q.contains('_id', userIdx);
+                q.ascending('rank')
+                Bend.User.find(q, {
+                    relations:{
+                        avatar:"BendFile"
+                    }
+                }).then((userList)=>{
+                    cb(null, userList, users)
+                }, (err)=>{
+                    cb(err)
+                })
             } else {
                 cb(null, null)
             }

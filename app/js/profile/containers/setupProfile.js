@@ -64,10 +64,16 @@ class SetupProfile extends Component {
             console.log(response)
           });
     }
+
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onSelectGender(gender) {
-    this.setState({
+    this.hasMounted && this.setState({
       gender: gender,
     });
   }
@@ -79,13 +85,13 @@ class SetupProfile extends Component {
       return;
     }
 
-    this.setState({
+    this.hasMounted && this.setState({
       isUploadingFile:true
     })
     if (this.state.profilePhotoFile) {
       //upload image first
       bendService.uploadFile(this.state.profilePhotoFile, (error, file)=>{
-        this.setState({
+            this.hasMounted && this.setState({
           isUploadingFile:false
         })
         if (error) {
@@ -127,13 +133,13 @@ class SetupProfile extends Component {
 
       if (error) {
         alert("Failed to update user profile")
-        this.setState({
+        this.hasMounted && this.setState({
           isUploadingFile:false
         })
         return;
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         isUploadingFile: false
       })
 
@@ -168,7 +174,7 @@ class SetupProfile extends Component {
     ImagePicker.showImagePicker(options, (response) => {
 
       if (response.customButton == 'remove') {
-        this.setState({
+        this.hasMounted && this.setState({
           profilePhoto: camera,
           profilePhotoFile: null,
         });
@@ -184,7 +190,7 @@ class SetupProfile extends Component {
       else {
         let source = { uri: response.uri };
 
-        this.setState({
+        this.hasMounted && this.setState({
           profilePhoto: source,
           profilePhotoFile: response,
         });

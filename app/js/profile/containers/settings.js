@@ -44,13 +44,18 @@ class Settings extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     codePush.getUpdateMetadata().then( (metadata) => {
       if (metadata === undefined) {
         return;
       }
-      
-      this.setState({ label: metadata.label });
+
+      this.hasMounted && this.setState({ label: metadata.label });
     });
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack() {
@@ -128,7 +133,7 @@ class Settings extends Component {
   updateShareActivity(val) {
     this.state.user.shareActivity = val;
 
-    this.setState({
+    this.hasMounted && this.setState({
       shareActivity: val
     })
 
@@ -144,7 +149,7 @@ class Settings extends Component {
   updateAllowNotification(val) {
     this.state.user.allowNotifications = val;
 
-    this.setState({
+    this.hasMounted && this.setState({
       allowNotifications: val,
     })
 
