@@ -221,6 +221,7 @@ class ActionView extends Component {
           placeholder={ 'Search for actions' }
           onSearchChange={ (text) => this.onSearchChange(text) }
           onCancel={ () => this.onSearchCancel() }
+          query={ this.searchText }
         />
         <ScrollView
           refreshControl={

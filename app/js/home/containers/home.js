@@ -384,10 +384,6 @@ class Home extends Component {
     Actions.LearnMoreModal({question:this.state.pollQuestion.question});
   }
 
-  goChallenge(activity, type) {
-
-  }
-
   getChallengeCarousel (entries) {
     
     return entries.map( (entry, index) => {
