@@ -139,6 +139,22 @@ module.exports = {
         })
     },
 
+    getOriginalActivity(type, id, cb) {
+        Bend.DataStore.get(type, id, {
+            relations:{
+                community:"community",
+                "certification":"certification",
+                "coverImage":"bendFile",
+                "image":"bendFile",
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+
     getEvent(id, cb) {
         Bend.DataStore.get("event", id, {
             relations:{
