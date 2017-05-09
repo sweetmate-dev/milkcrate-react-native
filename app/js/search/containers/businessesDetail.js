@@ -316,9 +316,8 @@ class BusinessesDetail extends Component {
   render() {
     const { 
       business,
+      modal,
     } = this.props;
-
-    console.log('business detail : ', business);
 
     var rating = (business.rating || 0.0).toFixed(1);
     var avatar = this.state.user.avatar ? UtilService.getSmallImage(this.state.user.avatar) : null;
@@ -344,7 +343,7 @@ class BusinessesDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ commonStyles.NavBackButton }
+          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title={ business.name }
         />

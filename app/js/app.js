@@ -53,7 +53,7 @@ import VideoPlayModal from './components/videoPlayModal';
 
 
 //Deep Links
-const deepLink_General = [
+const deepLinkGeneral = [
   // { url: '/introduce', action: Actions.Introduce },
   // { url: '/signup', action: Actions.Signup },
   { url: '/main', parameters: { tab: 'home', }},
@@ -64,7 +64,15 @@ const deepLink_General = [
   { url: '/community', parameters: { tab: 'profile', subOne: 'community',}},
 ];
 
-const deepLink_Search_Activities = [
+const deepLinkActivitiesDetail = [
+  { url: '/actions/:id', parameters: { tab: 'modal', subOne: 'action', }},
+  { url: '/businesses/:id', parameters: { tab: 'modal', subOne: 'business', }},
+  { url: '/events/:id', parameters: { tab: 'modal', subOne: 'event', }},
+  { url: '/services/:id', parameters: { tab: 'modal', subOne: 'service', }},
+  { url: '/volunteer_opportunities/:id', parameters: { tab: 'modal', subOne: 'volunteer_opportunity', }},  
+];
+
+const deepLinkSearchActivities = [
   { url: '/search/recent', parameters: { tab: 'search', subOne: 'recent', }},
   { url: '/search/actions', parameters: { tab: 'search', subOne: 'actions', }},
   { url: '/search/businesses', parameters: { tab: 'search', subOne: 'businesses', }},
@@ -73,7 +81,7 @@ const deepLink_Search_Activities = [
   { url: '/search/volunteer_opportunities', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},  
 ];
 
-const deepLink_Search_Activities_Query = [
+const deepLinkSearchActivitiesQuery = [
   // { url: '/search/recent/:query', parameters: { tab: 'search', subOne: 'recent', }},
   { url: '/search/actions/:query', parameters: { tab: 'search', subOne: 'actions', }},
   { url: '/search/businesses/:query', parameters: { tab: 'search', subOne: 'businesses', }},
@@ -82,7 +90,7 @@ const deepLink_Search_Activities_Query = [
   { url: '/search/volunteer_opportunities/:query', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},  
 ];
 
-const deepLink_Search_Categories = [
+const deepLinkSearchCategories = [
   { url: '/search/animals', parameters: { tab: 'search', subOne: 'animals', }},
   { url: '/search/baby', parameters: { tab: 'search', subOne: 'baby', }},
   { url: '/search/beauty', parameters: { tab: 'search', subOne: 'beauty', }},
@@ -154,7 +162,9 @@ class App extends Component {
       if (supported) {
         if (url.includes('?q=')) {
           url = url.replace(/\?q=/gi, '/');
-        }        
+        }
+
+        console.log('handleUrl : ', url);
         DeepLinking.evaluateUrl(url);
       }
     });
@@ -164,30 +174,34 @@ class App extends Component {
     DeepLinking.addScheme('milkcrate://');
     Linking.addEventListener('url', this.handleUrl);
 
-    deepLink_General.forEach((link) => {
+    deepLinkGeneral.forEach((link) => {
       DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        console.log('DeepLinking : ', scheme, path);
         Actions.Main(link.parameters );
       });
     });
 
-    deepLink_Search_Activities.forEach((link) => {
-      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        console.log('DeepLinking : ', scheme, path);
+    deepLinkActivitiesDetail.forEach((link) => {
+      DeepLinking.addRoute(link.url , ({ scheme, path, id }) => {
+        link.parameters['id'] = id;
         Actions.Main( link.parameters );
       });
     });
 
-    deepLink_Search_Activities_Query.forEach((link) => {
+    deepLinkSearchActivities.forEach((link) => {
+      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
+        Actions.Main( link.parameters );
+      });
+    });
+
+    deepLinkSearchActivitiesQuery.forEach((link) => {
       DeepLinking.addRoute(link.url , ({ scheme, path, query }) => {
         link.parameters['query'] = query;
         Actions.Main( link.parameters );
       });
     });
 
-    deepLink_Search_Categories.forEach((link) => {
+    deepLinkSearchCategories.forEach((link) => {
       DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        console.log('DeepLinking : ', scheme, path);
         Actions.Main( link.parameters );
       });
     });
@@ -216,10 +230,6 @@ class App extends Component {
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />
         <Scene key="RecentView" component={ RecentView } />
-        <Scene key="BusinessesDetail" component={ BusinessesDetail } />
-        <Scene key="ActionDetail" component={ ActionDetail } />
-        <Scene key="EventDetail" component={ EventDetail } />
-        <Scene key="ServiceDetail" component={ ServiceDetail } />
         <Scene key="EventsView" component={ EventsView } />
         <Scene key="Settings" component={ Settings } />
         <Scene key="CommunityPoints" component={ CommunityPoints } />
@@ -231,8 +241,17 @@ class App extends Component {
         <Scene key="ActionView" component={ ActionView } />
         <Scene key="ServiceView" component={ ServiceView } />
         <Scene key="VolunteerView" component={ VolunteerView } />
+        <Scene key="ActionDetail" component={ ActionDetail } />
+        <Scene key="BusinessesDetail" component={ BusinessesDetail } />
+        <Scene key="EventDetail" component={ EventDetail } />
+        <Scene key="ServiceDetail" component={ ServiceDetail } />
         <Scene key="VolunteerDetail" component={ VolunteerDetail } />
-        <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical'/>
+        <Scene key="ActionDetailModal" component={ ActionDetail } direction='vertical' />
+        <Scene key="BusinessesDetailModal" component={ BusinessesDetail } direction='vertical' />
+        <Scene key="EventDetailModal" component={ EventDetail } direction='vertical' />
+        <Scene key="ServiceDetailModal" component={ ServiceDetail } direction='vertical' />
+        <Scene key="VolunteerDetailModal" component={ VolunteerDetail } direction='vertical' />
+        <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical' />
       </Scene>
     );
 

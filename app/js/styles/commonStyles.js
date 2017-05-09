@@ -37,6 +37,8 @@ export const NavNoneButton = 0;
 export const NavBackButton = 1;
 export const NavFilterButton = 2;
 export const NavSettingButton = 4;
+export const NavCloseButton = 8;
+
 
 /*
 export const stickerImages = [

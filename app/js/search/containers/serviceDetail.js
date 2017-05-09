@@ -123,6 +123,7 @@ class ServiceDetail extends Component {
   render() {
     const { 
       service,
+      modal,
     } = this.props;
 
     var backgroundImage, backgroundColor;
@@ -135,7 +136,7 @@ class ServiceDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ commonStyles.NavBackButton }
+          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title ={ service.name }
         />

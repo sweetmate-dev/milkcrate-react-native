@@ -114,6 +114,7 @@ class ActionDetail extends Component {
   render() {
     const { 
       action,
+      modal,
     } = this.props;
 
     var category = _.find(Cache.categories, (obj) => {
@@ -128,7 +129,7 @@ class ActionDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ commonStyles.NavBackButton }
+          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title ={action.name}
         />

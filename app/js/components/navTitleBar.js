@@ -13,6 +13,7 @@ import {
 import { screenWidth } from '../styles/commonStyles';
 import * as commonColors from '../styles/commonColors';
 import * as commonStyles from '../styles/commonStyles';
+import EvilIcon from 'react-native-vector-icons/EvilIcons';
 
 const back_arrow = require('../../assets/imgs/back_arrow.png');
 const filter = require('../../assets/imgs/filter.png');
@@ -71,11 +72,16 @@ export default class NavTitleBar extends Component {
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
           {
-            buttons & commonStyles.NavBackButton ?
+            ((buttons & commonStyles.NavBackButton) || (buttons & commonStyles.NavCloseButton)) ?
               <View style={ styles.buttonWrap }>
                 <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
                   <View style={ styles.button }>
-                    <Image source={ back_arrow } style={ styles.image }/>
+                    {
+                      buttons & commonStyles.NavBackButton ?
+                        <Image source={ back_arrow } style={ styles.image }/>
+                      :
+                        <EvilIcon name="close" size={ 28 } color='#fff'/>
+                    }
                   </View>
                 </TouchableOpacity>
               </View>

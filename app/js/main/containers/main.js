@@ -11,9 +11,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
-  PushNotificationIOS,
   AsyncStorage,
-  AlertIOS,
+  Linking,
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -25,6 +24,7 @@ import Profile from '../../profile/containers/profile';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import DeviceInfo from 'react-native-device-info';
 import Orientation from 'react-native-orientation';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -52,16 +52,18 @@ export default class Main extends Component {
 
     let tab = this.props.tab;
     console.log('main - tab : ', tab)
-    if (tab == null)
+    if ((tab == null) || (tab == 'modal')) {
       tab = 'home';
+    }
     
     this.state = {
       selectedTab: tab,
       badge: 0,
       searchAutoFocus: false,
-      alerts:[],
-      lastAlertTime:0,
-      hasNewAlert:false
+      alerts: [],
+      lastAlertTime: 0,
+      hasNewAlert: false,
+      showingModal: false,
     };
 
     this.last = null;
@@ -76,7 +78,9 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-    console.log('main - componentDidMount tab : ', this.props.tab);
+    if (this.props.tab === 'modal') {
+      this.showActivityDetailModal();
+    }
     
     this.hasMounted = true
 
@@ -161,25 +165,17 @@ export default class Main extends Component {
   }
 
   _onRemoteNotification(notification) {
-    /*AlertIOS.alert(
-        'Push Notification Received',
-        'Alert message: ' + notification.getMessage(),
-        [{
-            text: 'Dismiss',
-            onPress: null,
-        }]
-    );*/
+    const url = notification.data.deeplink;
+
+    Linking.canOpenURL(url).then((supported) => {  
+      if (supported) {
+        Linking.openURL(url.toLowerCase());
+      }
+    });
   }
 
   _onLocalNotification(notification){
-    /*AlertIOS.alert(
-      'Local Notification Received',
-      'Alert message: ' + notification.getMessage(),
-      [{
-          text: 'Dismiss',
-          onPress: null,
-      }]
-    );*/
+
   }
 
   saveInstallationInfo(activeUser, token) {
@@ -315,6 +311,52 @@ export default class Main extends Component {
     }, 3000)
   }
 
+  showActivityDetailModal() {
+    const { 
+      subOne, 
+      id,
+    } = this.props;
+
+    this.setState({ showingModal: true });
+
+    bendService.getActivityWithId(subOne, id, (error, result) => {
+
+      this.setState({ showingModal: false });
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+      
+      switch( subOne ){
+        case 'action':
+          Actions.ActionDetailModal({ action: result, modal: true });
+          break;
+
+        case 'business':
+          Actions.BusinessesDetailModal({ business: result, modal: true });
+          break;
+
+        case 'event':
+          Actions.EventDetailModal({ event: result, modal: true});
+          break;
+        
+        case 'service':
+          Actions.ServiceDetailModal({ service: result, modal: true });
+          break;
+        
+        case 'volunteer_opportunity':
+          Actions.VolunteerDetailModal({ volunteer: result, modal: true });
+          break;
+        
+        default:
+          break;
+      }
+      
+
+    });
+  }
+
   onSelectSearch() {
     this.hasMounted && this.setState({
       selectedTab: 'search',
@@ -339,10 +381,9 @@ export default class Main extends Component {
       subOne,
     } = this.props;
 
-    console.log( 'main - subOne', subOne);
-
     return (
       <View style={ styles.container }>
+        <Spinner visible={ this.state.showingModal }/>
         <TabNavigator
           tabBarStyle = { styles.tab }
         >

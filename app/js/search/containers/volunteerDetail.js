@@ -193,14 +193,13 @@ class VolunteerDetail extends Component {
   render() {
     const { 
       volunteer,
+      modal,
     } = this.props;
-
-    console.log('volunteer detail : ', volunteer);
 
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ commonStyles.NavBackButton }
+          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title = {volunteer.name}
         />

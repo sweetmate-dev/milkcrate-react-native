@@ -128,7 +128,11 @@ class EventDetail extends Component {
   }
 
   onGoWeb() {
+
+    console.log('onGoWeb 1 : ', this.props.event.url);
     var url = UtilService.fixUrl(this.props.event.url);
+    console.log('onGoWeb 2: ', url);
+
     if(url) {
       Linking.canOpenURL(url).then(supported => {
         if (supported) {
@@ -316,8 +320,9 @@ class EventDetail extends Component {
   render() {
     const { 
       event,
+      modal,
     } = this.props;
-    
+
     let grayButtonWidth = commonStyles.screenWidth;
     if (this.state.showAddToCalendar) {
       grayButtonWidth /= 2;
@@ -326,7 +331,7 @@ class EventDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ commonStyles.NavBackButton }
+          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title={ event.name }
         />

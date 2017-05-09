@@ -130,7 +130,20 @@ module.exports = {
                 activity:["action", "business", "event", "volunteer_opportunity", "service"],
                 community:"community",
                 user:"user",
-                "user.avatar":"bendFile"
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getActivityWithId(activity,id, cb) {
+        Bend.DataStore.get(activity, id, {
+            relations:{
+                certification:"certification",
+                community:"community",
+                coverImage:"BendFile"
             }
         }).then((ret)=>{
             cb(null, ret)
