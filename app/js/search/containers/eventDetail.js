@@ -46,7 +46,7 @@ const CALENDAR_EVENTS = 'CalendarEvents';
 class EventDetail extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       didStatus: false,
 
@@ -54,7 +54,7 @@ class EventDetail extends Component {
       currentLocation: null,
       showAddToCalendar: true,
     };
-    
+
     this.activityId = null;
     this.calendarEventIds = [];
 
@@ -148,7 +148,7 @@ class EventDetail extends Component {
 
     const {
       event
-    } = this.props; 
+    } = this.props;
 
     bendService.captureActivity(this.props.event._id, 'event', (error, result) => {
       if (error) {
@@ -190,10 +190,10 @@ class EventDetail extends Component {
 
     const {
       event
-    } = this.props; 
+    } = this.props;
 
     const address = event.address1 + " " + event.address2 + ", " + UtilService.getCityStateString(event.city, event.state, event.postalCode);
-    
+
     RNCalendarEvents.authorizeEventStore()
         .then(status => {
           if (status === 'authorized') {
@@ -208,20 +208,20 @@ class EventDetail extends Component {
               } else {
                 eventDate = time.date;
               }
-              
+
               startDate = eventDate;
               endDate = eventDate;
 
               if ((time.from === null) || (time.from === ''))
                 startDate += "T" + "00:00";
-              else 
+              else
                 startDate += "T" + time.from;
-              
+
               if ((time.until === null) || (time.until === ''))
                 endDate += "T" + "23:59";
-              else 
+              else
                 endDate += "T" + time.until;
-              
+
               RNCalendarEvents.saveEvent(event.name, {
                   location: address,
                   notes: event.description,
@@ -254,19 +254,19 @@ class EventDetail extends Component {
 
     const activityId = this.activityId;
     this.activityId = null;
-      
+
     LocalStorage.load({
       key: CALENDAR_EVENTS,
       id: activityId
     }).then( (data) => {
 
       console.log( 'Calendar event : ', data);
-      
+
       data.map( (id, index ) => {
         RNCalendarEvents.removeEvent(id)
           .then( success => {
             if (index === (data.length - 1)) {
-              alert('The event has been removed from Calendar');
+              Alert.alert('Event Removed', 'This event has been removed from your calendar.');
               LocalStorage.remove({
                 key: CALENDAR_EVENTS,
                 id: activityId,
@@ -274,10 +274,10 @@ class EventDetail extends Component {
             }
           })
           .catch( error => {
-            console.log('remove envet error : ', error);
+            console.log('remove event error : ', error);
           });
       });
-     
+
     })
     .catch( (error) => {
       console.log('local storage error : ', error.message);
@@ -309,7 +309,7 @@ class EventDetail extends Component {
     coverImage = UtilService.getLargeImage(imageObj);
     backgroundColor = UtilService.getBackColor(imageObj);
 
-    if (coverImage == null) 
+    if (coverImage == null)
       return null;
 
     return (
@@ -318,7 +318,7 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { 
+    const {
       event,
       modal,
     } = this.props;
@@ -425,13 +425,13 @@ class EventDetail extends Component {
             </View>
           </View> }
         </ScrollView>
-        { 
+        {
           !this.state.didStatus ?
           <TouchableOpacity onPress={ () => this.onCheckIn() }>
             <View style={ styles.buttonCheckin }>
               <Text style={ styles.textButton }>Register</Text>
             </View>
-          </TouchableOpacity> 
+          </TouchableOpacity>
           :
           <View style={ styles.bottomContainer }>
             <TouchableOpacity onPress={ () => this.onUncheckIn() }>
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
-  },    
+  },
   buttonCheckin: {
     justifyContent: 'center',
     alignItems: 'center',
