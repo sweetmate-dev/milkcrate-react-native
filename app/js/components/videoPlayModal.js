@@ -35,7 +35,7 @@ export default class VideoPlayModal extends Component {
         <VideoPlayer
           autoplay={ true }
           videoWidth={ commonStyles.screenWidth }
-          videoHeight={ commonStyles.screenHiehgt - videoPaddingHeight }
+          videoHeight={ commonStyles.screenHeight - videoPaddingHeight }
           video={{ uri: 'http://311223117dc459c19100-ab7ee833adab3aef56dce40975a8acc5.r73.cf1.rackcdn.com/milkcrate-intro.mp4' }}
           onClose={ () => this.onClose() }
         />

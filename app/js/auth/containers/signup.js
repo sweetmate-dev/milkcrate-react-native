@@ -23,7 +23,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import timer from 'react-native-timer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import { screenWidth, screenHeight } from '../../styles/commonStyles';
 
 var Mailer = require('NativeModules').RNMail;
 
@@ -260,11 +260,11 @@ const styles = StyleSheet.create({
   },
   keyboardContainer: {
     width: screenWidth,
-    height: screenHiehgt,
+    height: screenHeight,
   },
   background: {
     width: screenWidth,
-    height: screenHiehgt,
+    height: screenHeight,
   },
   descriptionContainer: {
     flex: 1.2,

@@ -252,6 +252,11 @@ class BusinessesView extends Component {
 
     Keyboard.dismiss();
 
+    if (this.businesses.length === 0) {
+      this.setState({ selectedIndex: 'List' });
+      return;
+    }
+
     this.setState({
       selectedIndex: option,
     });
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: commonStyles.screenWidth,
-    height: commonStyles.screenHiehgt,
+    height: commonStyles.screenHeight,
   },
   segmentedWrap: {
     flexDirection: 'row',
@@ -379,6 +384,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 5,
   },
   imageCurrentLocation: {
     width: 20,

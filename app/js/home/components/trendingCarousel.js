@@ -19,7 +19,7 @@ import UtilService from '../../components/util'
 
 const heart = require('../../../assets/imgs/heart.png');
 
-export const carouselHeight = commonStyles.screenHiehgt * 0.36;
+export const carouselHeight = commonStyles.screenHeight * 0.36;
 const entryBorderRadius = 5;
 
 export default class TrendingCarousel extends Component {

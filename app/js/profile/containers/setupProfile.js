@@ -29,7 +29,7 @@ import Permissions from 'react-native-permissions';
 import Orientation from 'react-native-orientation';
 
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import { screenWidth, screenHeight } from '../../styles/commonStyles';
 
 import moment from 'moment';
 import bendService from '../../bend/bendService'
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: screenWidth,
-    height: screenHiehgt,
+    height: screenHeight,
   },
   descriptionContainer: {
     flex: 1,

@@ -19,11 +19,11 @@ import { Actions } from 'react-native-router-flux';
 
 import MapView from 'react-native-maps';
 import BusinessesListCell from '../components/businessesListCell';
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import { screenWidth, screenHeight } from '../../styles/commonStyles';
 
 import UtilService from '../../components/util'
 
-const ASPECT_RATIO = screenWidth / screenHiehgt;
+const ASPECT_RATIO = screenWidth / screenHeight;
 const LATITUDE_DELTA = 0.005;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -126,7 +126,7 @@ class BusinessesMapView extends Component {
           onRegionChange={ (region) => this.onRegionChange(region) }
         >
           {
-            this.props.currentLocation && <MapView.Marker
+            this.state.currentLocation && <MapView.Marker
               image={ currentLocationMarker }
               coordinate={ this.props.currentLocation.coords }
               flat={ true }                

@@ -29,7 +29,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Actions } from 'react-native-router-flux';
 
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import { screenWidth, screenHeight } from '../../styles/commonStyles';
 
 const homeIcon = require('../../../assets/imgs/tabbar_home.png');
 const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png');
@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: screenWidth,
-    height: screenHiehgt,
+    height: screenHeight,
   },
   iconTabbar1: {
     width: 19,

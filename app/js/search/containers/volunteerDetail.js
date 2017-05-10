@@ -37,7 +37,7 @@ const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
 const web = require('../../../assets/imgs/web.png');
 
-const ASPECT_RATIO = commonStyles.screenHiehgt / commonStyles.screenHiehgt;
+const ASPECT_RATIO = commonStyles.screenHeight / commonStyles.screenHeight;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 

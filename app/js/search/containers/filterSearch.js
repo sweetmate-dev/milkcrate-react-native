@@ -52,7 +52,7 @@ class FilterSearch extends Component {
         volunteer_opportunity: [],
         business: [],
       },
-      totalCount:0
+      totalCount: 1,
     };
     this.searchText = ""
   }
@@ -72,9 +72,10 @@ class FilterSearch extends Component {
   componentWillReceiveProps(newProps) {
     this.searchText = newProps.searchText
     setTimeout((searchText)=>{
-      if(searchText == this.searchText) {
+      if (searchText == this.searchText) {
         this.getActivities(searchText);
-        this.searchText = ""
+        this.searchText = "";
+        this.setState({ totalCount: 1 });
       }
     }, 300, newProps.searchText)
   }
@@ -182,11 +183,11 @@ class FilterSearch extends Component {
       query: searchText
     }
 
-    if(this.state.currentLocation) {
+    if (this.state.currentLocation) {
       param.lat = this.state.currentLocation.coords.latitude;
       param.long = this.state.currentLocation.coords.longitude;
     } else {
-      if(Cache.community && Cache.community._geoloc) {
+      if (Cache.community && Cache.community._geoloc) {
         param.lat = Cache.community._geoloc[1];
         param.long = Cache.community._geoloc[0];
       }
@@ -199,10 +200,9 @@ class FilterSearch extends Component {
       }
 
       var activities = result.data;
-      this.setState({ activities: activities });
       this.setState({
         activities: activities,
-        totalCount:result.count
+        totalCount: result.count
       });
       this.getActivityIcons(activities);
     })
@@ -394,21 +394,21 @@ class FilterSearch extends Component {
   render() {
     const { status } = this.props;
 
-    if(this.state.totalCount>0){
+    if (this.state.totalCount > 0) {
       return (
-          <ScrollView>
-            { this.showActions }
-            { this.showBusinesses }
-            { this.showEvents }
-            { this.showVolunteer }
-            { this.showServices }
-          </ScrollView>
+        <ScrollView>
+          { this.showActions }
+          { this.showBusinesses }
+          { this.showEvents }
+          { this.showVolunteer }
+          { this.showServices }
+        </ScrollView>
       )
     } else {
       return (
-          <View style={styles.emptyPage}>
-            <Text style={styles.noResultText}>No matches found</Text>
-          </View>
+        <View style={ styles.emptyPage }>
+          <Text style={ styles.noResultText }>No matches found</Text>
+        </View>
       )
     }
   }
@@ -439,16 +439,16 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 8,
   },
-  emptyPage : {
+  emptyPage: {
     flex:1,
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: 'center',
   },
-  noResultText : {
-    fontSize:16,
+  noResultText: {
+    fontSize: 16,
     fontFamily: 'OpenSans-Semibold',
     color: commonColors.grayMoreText,
-    textAlign:'center',
-    lineHeight:30
+    textAlign: 'center',
+    lineHeight: 30,
+    marginTop: 50,
   }
 });

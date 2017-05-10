@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: commonStyles.screenWidth,
-    height: commonStyles.screenHiehgt,
+    height: commonStyles.screenHeight,
   },
   slide: {
     flex: 1,

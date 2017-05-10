@@ -23,7 +23,7 @@ import { Actions } from 'react-native-router-flux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import timer from 'react-native-timer';
 import * as commonColors from '../../styles/commonColors';
-import { screenWidth, screenHiehgt } from '../../styles/commonStyles';
+import { screenWidth, screenHeight } from '../../styles/commonStyles';
 import bendService from '../../bend/bendService'
 
 const background = require('../../../assets/imgs/background_profile.png');
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   background: {
     width: screenWidth,
-    height: screenHiehgt,
+    height: screenHeight,
   },
   descriptionContainer: {
     flex: 1,

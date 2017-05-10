@@ -4,7 +4,7 @@ import {
   Platform,
 } from 'react-native';
 
-export const { width: screenWidth, height: screenHiehgt } = Dimensions.get('window');
+export const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 export function wp (percentage) {
   const value = (percentage * screenWidth) / 100;
@@ -12,7 +12,7 @@ export function wp (percentage) {
 }
 
 export function hp (percentage) {
-  const value = (percentage * screenHiehgt) / 100;
+  const value = (percentage * screenHeight) / 100;
   return Math.round(value);
 }
 
@@ -24,7 +24,7 @@ export function scaleScreen() {
   return 0.85;
 }
 
-export const carouselHeight = screenHiehgt * 0.3;
+export const carouselHeight = screenHeight * 0.3;
 export const carouselWidth = wp(88);
 export const carouselerWidth = screenWidth;
 export const carouselItemHorizontalPadding = wp(1);
