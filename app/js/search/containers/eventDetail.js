@@ -400,7 +400,7 @@ class EventDetail extends Component {
                         <Text style={ styles.textDay }>{ UtilService.getDay(time.date) }</Text>
                       </View>
                       <View style={ styles.dateSubContentContainer }>
-                        <Text style={ styles.textDate }>{ UtilService.formatDateWithFormat2(new Date(time.date), 'MMMM DD, YYYY') }</Text>
+                        <Text style={ styles.textDate }>{ UtilService.formatDateWithFormat2(time.date, 'MMMM DD, YYYY') }</Text>
                         <Text style={ styles.textValue }>{ UtilService.getEventTime(time.from, time.until) }</Text>
                       </View>
                     </View>
