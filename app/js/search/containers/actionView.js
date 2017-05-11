@@ -170,7 +170,7 @@ class ActionView extends Component {
   onSearchChange(text) {
     this.searchText = text
     setTimeout((oldSearchText)=>{
-      if(oldSearchText == this.searchText) {
+      if (oldSearchText == this.searchText) {
         this.state.actions = [];
         this.offset = 0;
         this.limit = 20;

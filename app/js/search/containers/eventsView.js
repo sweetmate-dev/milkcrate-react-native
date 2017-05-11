@@ -103,7 +103,7 @@ class EventsView extends Component {
   }
 
   onCellPressed(event) {
-    Actions.EventDetail({event:event});
+    Actions.EventDetail({ event: event });
   }
 
   onSelectDate(selectedDate) {
@@ -268,6 +268,31 @@ class EventsView extends Component {
     );
   }
 
+  onSearchChange(text) {
+    this.searchText = text
+    // setTimeout( (oldSearchText) => {
+    //   if (oldSearchText == this.searchText) {
+    //     this.state.actions = [];
+    //     this.offset = 0;
+    //     this.limit = 20;
+    //     this.more = true;
+
+    //     this.setState({
+    //       currentLocation: null,
+    //       actions: this.state.actions,
+    //       categoryIcons: [],
+
+    //       actionsQuery:{
+    //         more: true,
+    //         loading: false,
+    //       },
+    //     });
+
+    //     this.loadActions();
+    //   }
+    // }, 300, text)
+  }
+
   onRefresh() {
     this.setState({ isRefreshing: true });
     this.loadAllData();    
@@ -280,6 +305,7 @@ class EventsView extends Component {
         <NavSearchBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
+          onSearchChange={ (text) => this.onSearchChange(text) }
           placeholder ='Search for events'
         />
         <ScrollView

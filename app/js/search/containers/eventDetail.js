@@ -58,9 +58,12 @@ class EventDetail extends Component {
     this.activityId = null;
     this.calendarEventIds = [];
 
-    this.category = _.find(Cache.categories, (obj)=>{
-      return obj._id == this.props.event.categories[0]
-    })
+    this.category = null;
+    if ( this.props.event.categories ) {
+      this.category = _.find(Cache.categories, (obj)=>{
+        return obj._id == this.props.event.categories[0]
+      });
+    }
   }
 
   componentDidMount() {
@@ -300,21 +303,24 @@ class EventDetail extends Component {
   }
 
   renderCoverImage() {
-    var {
+    let {
       event,
     } = this.props;
 
-    var coverImage, backgroundColor;
-    var imageObj = event.coverImage ? event.coverImage : this.category.coverImage;
-    coverImage = UtilService.getLargeImage(imageObj);
+    let coverImage = null, backgroundColor;
+    let imageObj = event.coverImage ? event.coverImage : ( this.category ? this.category.coverImage : null );
+    if (imageObj) {
+      coverImage = UtilService.getLargeImage(imageObj);
+    }
     backgroundColor = UtilService.getBackColor(imageObj);
 
-    if (coverImage == null)
-      return null;
+    if (coverImage == null) {
+      return (<View style={ [styles.map, { backgroundColor: backgroundColor }] }/>);
+    }
 
     return (
       <Image style={ [styles.map, { backgroundColor: backgroundColor }] } source={{ uri: coverImage }}/>
-    )
+    );
   }
 
   render() {
