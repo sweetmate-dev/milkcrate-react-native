@@ -24,7 +24,7 @@ import ResponsiveImage from 'react-native-responsive-image';
 import ImagePicker from 'react-native-image-picker';
 import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
-
+import timer from 'react-native-timer';
 import Permissions from 'react-native-permissions';
 import Orientation from 'react-native-orientation';
 
@@ -76,6 +76,21 @@ class SetupProfile extends Component {
     this.hasMounted && this.setState({
       gender: gender,
     });
+  }
+
+  onChangeBirthday(date) {
+    let birthday = moment(date, 'MMM DD, YYYY');
+    let today = moment();
+
+    const age = today.diff(birthday, 'years');
+    if (Number(age) < 13) {
+      timer.setTimeout( this, 'AgeRequirementTimer', () => {
+        timer.clearInterval(this, 'AgeRequirementTimer');
+        Alert.alert('Age Requirement Not Met', 'You must be at least 13 years of age to use this app.');
+      }, 500);
+      return;
+    }
+    this.setState({ birthday: date });    
   }
 
   onCompleteProfile() {
@@ -248,7 +263,7 @@ class SetupProfile extends Component {
                     color: '#000',
                   },
                 }}
-                onDateChange={ (date) => { this.setState({ birthday: date }) }}
+                onDateChange={ (date) => this.onChangeBirthday(date) }
               />
               <View style={ styles.dropDownWrapper }>
                 <ModalDropdown

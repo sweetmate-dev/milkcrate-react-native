@@ -28,6 +28,7 @@ import ModalDropdown from 'react-native-modal-dropdown';
 import DatePicker from 'react-native-datepicker'
 import ResponsiveImage from 'react-native-responsive-image';
 import ImagePicker from 'react-native-image-picker';
+import moment from 'moment';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -147,7 +148,19 @@ class EditProfile extends Component {
   }
 
   onChangeBirthday(date) {
-    this.state.user.birthday = UtilService.formatDateWithFormat2(new Date(date), 'YYYY-MM-DD');
+    let birthday = moment(date, 'MMM DD, YYYY');
+    let today = moment();
+
+    const age = today.diff(birthday, 'years');
+    if (Number(age) < 13) {
+      timer.setTimeout( this, 'AgeRequirementTimer', () => {
+        timer.clearInterval(this, 'AgeRequirementTimer');
+        Alert.alert('Age Requirement Not Met', 'You must be at least 13 years of age to use this app.');
+      }, 500);
+      return;
+    }
+
+    this.state.user.birthday = UtilService.formatDateWithFormat2(date, 'YYYY-MM-DD');
     this.hasMounted && this.setState({ user: this.state.user });
   }
 

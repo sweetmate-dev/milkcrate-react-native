@@ -43,6 +43,7 @@ class EventsView extends Component {
 
     this.state = {
       isRefreshing: false,
+      selectedDate: undefined,
 
       arrayValidDate: [],
       eventDays: [],
@@ -59,6 +60,7 @@ class EventsView extends Component {
 
     this.eventDays = [];
     this.events = [];
+    this.initialEvents = [];
     this.offset = 0;
     this.limit = 1000; //need to fetch all events
     this.searchText = '';
@@ -86,6 +88,7 @@ class EventsView extends Component {
 
     this.eventDays = [];
     this.events = [];
+    this.initialEvents = [];
     this.offset = 0;
     this.limit = 1000; 
     this.searchText = '';
@@ -108,6 +111,7 @@ class EventsView extends Component {
 
   onSelectDate(selectedDate) {
     let newEvents = [];
+    this.setState({ selectedDate });
 
     _.each(this.events, (event) => {
 
@@ -193,48 +197,55 @@ class EventsView extends Component {
         });
       }
 
-      //group by with date
-      var events = result.data.event;
-      _.map(events, (event) => {
-        event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
-      })
-      events = _.sortBy(events, (event) => {
-        return event.date
-      })
-
-      _.each(events, (event) => {
-        var exist = _.find(this.events, (entry) => {
-          return entry.date == event.date;
-        })
-
-        if (exist) {
-          exist.events.push(event);
-        } else {
-          this.events.push({
-            date: event.date,
-            events: [event],
-          })
-        }
-      })
-
-      this.setState({ events: this.events });
-
-      this.events.map( (entry) => {
-        this.eventDays.push( entry.date );
-      });
-
-      this.setState({ eventDays: this.eventDays });
-
-      const imageOffset = this.offset;
       this.offset += this.limit;
 
-      result.data.event.map((event, index) => {
-        this.setState( (state) => {
-          state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
-          return state;
-        });
-      });
+      this.initialEvents = result.data.event;
+      this.groupEventsByDate(this.initialEvents)
     })
+  }
+
+  groupEventsByDate(initialEvents) {
+    //group by with date
+    this.events = [];
+    this.eventDays= [];
+    this.setState({ selectedDate: undefined });
+    
+    _.map(initialEvents, (event) => {
+      event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
+    })
+    let events = _.sortBy(initialEvents, (event) => {
+      return event.date
+    })
+
+    _.each(events, (event) => {
+      var exist = _.find(this.events, (entry) => {
+        return entry.date == event.date;
+      })
+
+      if (exist) {
+        exist.events.push(event);
+      } else {
+        this.events.push({
+          date: event.date,
+          events: [event],
+        })
+      }
+    })
+
+    this.setState({ events: this.events });
+
+    this.events.map( (entry) => {
+      this.eventDays.push( entry.date );
+    });
+
+    this.setState({ eventDays: this.eventDays });
+
+    initialEvents.map((event, index) => {
+      this.setState( (state) => {
+        state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
+        return state;
+      });
+    });
   }
 
   renderListRow(rowData, sectionID, rowID) {
@@ -268,29 +279,28 @@ class EventsView extends Component {
     );
   }
 
+  onSearchCancel() {
+    this.onSearchChange('');
+  }
+
   onSearchChange(text) {
-    this.searchText = text
-    // setTimeout( (oldSearchText) => {
-    //   if (oldSearchText == this.searchText) {
-    //     this.state.actions = [];
-    //     this.offset = 0;
-    //     this.limit = 20;
-    //     this.more = true;
+    this.searchText = text;
+    let newEvents;
+    if (this.searchText === '') {
+      newEvents = this.initialEvents;
+    } 
+    else {
+      newEvents = _.filter(this.initialEvents, (event) => {
+        console.log('event : ', event);
+        if (event.name.toLowerCase().indexOf(this.searchText.toLowerCase()) != -1) {
+          return true;
+        }
 
-    //     this.setState({
-    //       currentLocation: null,
-    //       actions: this.state.actions,
-    //       categoryIcons: [],
+        return false;
+      });
+    }
 
-    //       actionsQuery:{
-    //         more: true,
-    //         loading: false,
-    //       },
-    //     });
-
-    //     this.loadActions();
-    //   }
-    // }, 300, text)
+    this.groupEventsByDate(newEvents);  
   }
 
   onRefresh() {
@@ -306,7 +316,26 @@ class EventsView extends Component {
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
           onSearchChange={ (text) => this.onSearchChange(text) }
+          onCancel={ () => this.onSearchCancel() }
           placeholder ='Search for events'
+        />
+        <CalendarStrip
+          style={ styles.calendar }
+          selection={ 'background' }
+          calendarColor={ '#d4ebf640' }
+          dateNumberStyle={ styles.calendarDateNumber }
+          dateNameStyle={ styles.calendarDateName }
+          highlightColor={ '#d4ebf6' }
+          calendarHeaderStyle={ styles.calendarHeader }
+          iconStyle={ styles.calendarIcon }
+          iconContainer={{ flex: 0.1 }}
+          weekendDateNameStyle={ styles.calendarDateName }
+          weekendDateNumberStyle={ styles.calendarDateNumber }
+          highlightDateNameStyle={ styles.calendarDateName }
+          highlightDateNumberStyle={ styles.calendarDateNumber }
+          onDateSelected={ (date) => this.onSelectDate(date) }
+          eventDays={ this.state.eventDays }
+          selectedDate={ this.state.selectedDate }
         />
         <ScrollView
           refreshControl={
@@ -316,24 +345,7 @@ class EventsView extends Component {
               tintColor={ commonColors.theme }
             />
           }
-        >
-          <CalendarStrip
-            style={ styles.calendar }
-            selection={ 'background' }
-            calendarColor={ '#d4ebf640' }
-            dateNumberStyle={ styles.calendarDateNumber }
-            dateNameStyle={ styles.calendarDateName }
-            highlightColor={ '#d4ebf6' }
-            calendarHeaderStyle={ styles.calendarHeader }
-            iconStyle={ styles.calendarIcon }
-            iconContainer={{ flex: 0.1 }}
-            weekendDateNameStyle={ styles.calendarDateName }
-            weekendDateNumberStyle={ styles.calendarDateNumber }
-            highlightDateNameStyle={ styles.calendarDateName }
-            highlightDateNumberStyle={ styles.calendarDateNumber }
-            onDateSelected={ (date) => this.onSelectDate(date) }
-            eventDays={ this.state.eventDays }
-          />
+        >          
           <ListView
             enableEmptySections={ true }
             dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}

@@ -223,10 +223,10 @@ class App extends Component {
     const scenes = Actions.create(
       <Scene key="root">
         <Scene key="Introduce" component={ Introduce } />
+        <Scene key="Main" component={ Main } initial={ this.state.loggedIn }/>
         <Scene key="Signup" component={ Signup } />
         <Scene key="Login" component={ Login } />
-        <Scene key="SetupProfile" component={ SetupProfile }/>
-        <Scene key="Main" component={ Main } initial={ this.state.loggedIn }/>
+        <Scene key="SetupProfile" component={ SetupProfile } />
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />
         <Scene key="RecentView" component={ RecentView } />

@@ -82,6 +82,8 @@ export default class CalendarStrip extends Component {
       }
     }
 
+    console.log('selectedDate : ', this.props.selectedDate);
+
     const startingDate = this.setLocale(moment(this.props.startingDate));
     const selectedDate = this.setLocale(moment(this.props.selectedDate));
 
@@ -111,11 +113,20 @@ export default class CalendarStrip extends Component {
 
   //Receiving props and set selected date
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedDate !== this.props.selectedDate) {
-      const selectedDate = this.setLocale(moment(nextProps.selectedDate));
-      this.setState({
-          selectedDate
-      });
+    // if (nextProps.selectedDate !== this.props.selectedDate) {
+    //   const selectedDate = this.setLocale(moment(nextProps.selectedDate));
+    //   this.setState({
+    //     selectedDate
+    //   });
+    // }
+    if (nextProps.selectedDate === undefined) {
+      const startingDate = this.setLocale(moment(this.props.startingDate));
+      const selectedDate = this.setLocale(moment(this.props.selectedDate));
+
+      this.state = {
+        startingDate,
+        selectedDate
+      };
     }
   }
 
