@@ -155,7 +155,7 @@ class UtilService {
   };
 
   static formatDateWithFormat2(date, formatStr) {
-    if (!date) 
+    if (!date)
       return ""
     return moment(date).format(formatStr);
   };
@@ -173,23 +173,23 @@ class UtilService {
     if (mins < 0) {
       return "just now";
     } else if (mins < 60) {
-      
+
       if (mins == 1)
         return mins + " minute ago";
       else
         return mins + " minutes ago";
     } else if (mins < 24 * 60) {
-      
+
       var hours = Math.floor(mins/60)
-      
+
       if (hours == 1)
         return hours + " hour ago";
       else
         return hours + " hours ago";
     } else if (mins >= 24 * 60) {
-      
+
       var days = Math.floor(mins/(24 * 60))
-      
+
       if (days == 1)
         return days + " day ago";
       else
@@ -301,23 +301,23 @@ class UtilService {
   }
 
   static getBackColor(imageObj) {
-    if (!imageObj) 
+    if (!imageObj)
       return 'rgb(255,255,255)';
-    
+
     var backgroundColor = imageObj._env?'rgb(' + imageObj._env['input-md-average'].r + ','
     + imageObj._env['input-md-average'].g + ','
     + imageObj._env['input-md-average'].b + ')':'rgb(255,255,255)'
 
     return backgroundColor;
   }
-  
+
   static getPricesString(prices) {
     var p = prices||1;
     var ret = ""
     for(i = 1; i <= p ; i++) {
       ret+='$'
     }
-    
+
     return ret
   }
 
@@ -390,10 +390,10 @@ class UtilService {
   }
 
   static isValidURL(data) {
-    if (!this.isValid(data)) 
+    if (!this.isValid(data))
       return false
 
-    if (data == 'http://') 
+    if (data == 'http://')
       return false
 
     return true
@@ -402,9 +402,10 @@ class UtilService {
   static fixUrl(url) {
     if (this.isValidURL(url)) {
       url = url.toLowerCase()
-      if ((url.indexOf("http://") == -1) && (url.indexOf("https://") == -1)) {
+      //if ((url.indexOf("http://") == -1) && (url.indexOf("https://") == -1)) {
+      if (url.indexOf(":") == -1) {
         url = "http://" + url
-      }      
+      }
       return url;
     }
 
@@ -447,11 +448,11 @@ class UtilService {
   static getCategoryIconFromSlug(activity) {
 
     let icon = null;
-    
+
     if (activity.categories && activity.categories.length > 0) {
 
       var category = UtilService.getCategoryById(activity.categories[0]);
-      
+
       if (category != null)
         icon = UtilService.getCategoryIcon(category.slug);
     }
