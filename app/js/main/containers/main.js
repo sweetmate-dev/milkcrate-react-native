@@ -127,7 +127,7 @@ export default class Main extends Component {
       },
 
       // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-      senderID: "1491633624875",
+      senderID: "887728351696", //"1491633624875",
 
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
