@@ -1,7 +1,13 @@
+import {
+    Linking
+} from 'react-native';
 
 import moment from 'moment'
 import * as _ from 'underscore'
 import Cache from './Cache'
+
+import DeepLinking from 'react-native-deep-linking';
+import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
 const categoryButtons = {
   animals:require('../../assets/imgs/category-buttons/animals.png'),
@@ -144,6 +150,73 @@ const activityImages={
 
 const animals = ["cat", "corgi", "fish", "frog", "koala", "lion", "otter", "owl", "penguin", "pig",
   "raccoon", "rhino", "squirrel", "turtle", "whale"];
+
+//Deep Links
+const deepLinkGeneral = [
+  // { url: '/introduce', action: Actions.Introduce },
+  // { url: '/signup', action: Actions.Signup },
+  { url: '/main', parameters: { tab: 'home', }},
+  { url: '/home', parameters: { tab: 'home', }},
+  { url: '/search', parameters: { tab: 'search', }},
+  { url: '/alerts', parameters: { tab: 'alerts', }},
+  { url: '/profile', parameters: { tab: 'profile', }},
+  { url: '/community', parameters: { tab: 'profile', subOne: 'community',}},
+];
+
+const deepLinkActivitiesDetail = [
+  { url: '/actions/:id', parameters: { tab: 'modal', subOne: 'action', }},
+  { url: '/businesses/:id', parameters: { tab: 'modal', subOne: 'business', }},
+  { url: '/events/:id', parameters: { tab: 'modal', subOne: 'event', }},
+  { url: '/services/:id', parameters: { tab: 'modal', subOne: 'service', }},
+  { url: '/volunteer_opportunities/:id', parameters: { tab: 'modal', subOne: 'volunteer_opportunity', }},
+];
+
+const deepLinkSearchActivities = [
+  { url: '/search/recent', parameters: { tab: 'search', subOne: 'recent', }},
+  { url: '/search/actions', parameters: { tab: 'search', subOne: 'actions', }},
+  { url: '/search/businesses', parameters: { tab: 'search', subOne: 'businesses', }},
+  { url: '/search/events', parameters: { tab: 'search', subOne: 'events', }},
+  { url: '/search/services', parameters: { tab: 'search', subOne: 'services', }},
+  { url: '/search/volunteer_opportunities', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},
+];
+
+const deepLinkSearchActivitiesQuery = [
+  // { url: '/search/recent/:query', parameters: { tab: 'search', subOne: 'recent', }},
+  { url: '/search/actions/:query', parameters: { tab: 'search', subOne: 'actions', }},
+  { url: '/search/businesses/:query', parameters: { tab: 'search', subOne: 'businesses', }},
+  { url: '/search/events/:query', parameters: { tab: 'search', subOne: 'events', }},
+  { url: '/search/services/:query', parameters: { tab: 'search', subOne: 'services', }},
+  { url: '/search/volunteer_opportunities/:query', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},
+];
+
+const deepLinkSearchCategories = [
+  { url: '/search/animals', parameters: { tab: 'search', subOne: 'animals', }},
+  { url: '/search/baby', parameters: { tab: 'search', subOne: 'baby', }},
+  { url: '/search/beauty', parameters: { tab: 'search', subOne: 'beauty', }},
+  { url: '/search/bicycles', parameters: { tab: 'search', subOne: 'bicycles', }},
+  { url: '/search/civic', parameters: { tab: 'search', subOne: 'civic', }},
+  { url: '/search/coffee', parameters: { tab: 'search', subOne: 'coffee', }},
+  { url: '/search/community', parameters: { tab: 'search', subOne: 'community', }},
+  { url: '/search/construction', parameters: { tab: 'search', subOne: 'construction', }},
+  { url: '/search/dining', parameters: { tab: 'search', subOne: 'dining', }},
+  { url: '/search/drinks', parameters: { tab: 'search', subOne: 'drinks', }},
+  { url: '/search/education', parameters: { tab: 'search', subOne: 'education', }},
+  { url: '/search/energy', parameters: { tab: 'search', subOne: 'energy', }},
+  { url: '/search/fashion', parameters: { tab: 'search', subOne: 'fashion', }},
+  { url: '/search/finance', parameters: { tab: 'search', subOne: 'finance', }},
+  { url: '/search/food', parameters: { tab: 'search', subOne: 'food', }},
+  { url: '/search/garden', parameters: { tab: 'search', subOne: 'garden', }},
+  { url: '/search/green_space', parameters: { tab: 'search', subOne: 'green space', }},
+  { url: '/search/health_wellness', parameters: { tab: 'search', subOne: 'health & wellness', }},
+  { url: '/search/home_office', parameters: { tab: 'search', subOne: 'home & office', }},
+  { url: '/search/media_communications', parameters: { tab: 'search', subOne: 'media & communications', }},
+  { url: '/search/products', parameters: { tab: 'search', subOne: 'products', }},
+  { url: '/search/services', parameters: { tab: 'search', subOne: 'services', }},
+  { url: '/search/special_events', parameters: { tab: 'search', subOne: 'special events', }},
+  { url: '/search/tourism_hospitality', parameters: { tab: 'search', subOne: 'tourism & hospitality', }},
+  { url: '/search/transit', parameters: { tab: 'search', subOne: 'transit', }},
+  { url: '/search/waste', parameters: { tab: 'search', subOne: 'waste', }},
+];
 
 class UtilService {
 
@@ -458,6 +531,43 @@ class UtilService {
     }
 
     return icon;
+  }
+
+  static deepLinks () {
+    DeepLinking.resetRoutes()
+    DeepLinking.addScheme('milkcrate://');
+
+    deepLinkGeneral.forEach((link) => {
+      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
+        Actions.Main(link.parameters );
+      });
+    });
+
+    deepLinkActivitiesDetail.forEach((link) => {
+      DeepLinking.addRoute(link.url , ({ scheme, path, id }) => {
+        link.parameters['id'] = id;
+        Actions.Main( link.parameters );
+      });
+    });
+
+    deepLinkSearchActivities.forEach((link) => {
+      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
+        Actions.Main( link.parameters );
+      });
+    });
+
+    deepLinkSearchActivitiesQuery.forEach((link) => {
+      DeepLinking.addRoute(link.url , ({ scheme, path, query }) => {
+        link.parameters['query'] = query;
+        Actions.Main( link.parameters );
+      });
+    });
+
+    deepLinkSearchCategories.forEach((link) => {
+      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
+        Actions.Main( link.parameters );
+      });
+    });
   }
 
 }

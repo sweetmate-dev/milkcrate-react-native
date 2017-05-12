@@ -17,6 +17,7 @@ import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import timer from 'react-native-timer';
 
 import bendService from './bend/bendService'
+import UtilService from './components/util'
 import * as _ from 'underscore'
 
 import * as reducers from './reducers';
@@ -51,74 +52,6 @@ import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
 
-
-//Deep Links
-const deepLinkGeneral = [
-  // { url: '/introduce', action: Actions.Introduce },
-  // { url: '/signup', action: Actions.Signup },
-  { url: '/main', parameters: { tab: 'home', }},
-  { url: '/home', parameters: { tab: 'home', }},
-  { url: '/search', parameters: { tab: 'search', }},
-  { url: '/alerts', parameters: { tab: 'alerts', }},
-  { url: '/profile', parameters: { tab: 'profile', }},
-  { url: '/community', parameters: { tab: 'profile', subOne: 'community',}},
-];
-
-const deepLinkActivitiesDetail = [
-  { url: '/actions/:id', parameters: { tab: 'modal', subOne: 'action', }},
-  { url: '/businesses/:id', parameters: { tab: 'modal', subOne: 'business', }},
-  { url: '/events/:id', parameters: { tab: 'modal', subOne: 'event', }},
-  { url: '/services/:id', parameters: { tab: 'modal', subOne: 'service', }},
-  { url: '/volunteer_opportunities/:id', parameters: { tab: 'modal', subOne: 'volunteer_opportunity', }},  
-];
-
-const deepLinkSearchActivities = [
-  { url: '/search/recent', parameters: { tab: 'search', subOne: 'recent', }},
-  { url: '/search/actions', parameters: { tab: 'search', subOne: 'actions', }},
-  { url: '/search/businesses', parameters: { tab: 'search', subOne: 'businesses', }},
-  { url: '/search/events', parameters: { tab: 'search', subOne: 'events', }},
-  { url: '/search/services', parameters: { tab: 'search', subOne: 'services', }},
-  { url: '/search/volunteer_opportunities', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},  
-];
-
-const deepLinkSearchActivitiesQuery = [
-  // { url: '/search/recent/:query', parameters: { tab: 'search', subOne: 'recent', }},
-  { url: '/search/actions/:query', parameters: { tab: 'search', subOne: 'actions', }},
-  { url: '/search/businesses/:query', parameters: { tab: 'search', subOne: 'businesses', }},
-  { url: '/search/events/:query', parameters: { tab: 'search', subOne: 'events', }},
-  { url: '/search/services/:query', parameters: { tab: 'search', subOne: 'services', }},
-  { url: '/search/volunteer_opportunities/:query', parameters: { tab: 'search', subOne: 'volunteer_opportunities', }},  
-];
-
-const deepLinkSearchCategories = [
-  { url: '/search/animals', parameters: { tab: 'search', subOne: 'animals', }},
-  { url: '/search/baby', parameters: { tab: 'search', subOne: 'baby', }},
-  { url: '/search/beauty', parameters: { tab: 'search', subOne: 'beauty', }},
-  { url: '/search/bicycles', parameters: { tab: 'search', subOne: 'bicycles', }},
-  { url: '/search/civic', parameters: { tab: 'search', subOne: 'civic', }},
-  { url: '/search/coffee', parameters: { tab: 'search', subOne: 'coffee', }},
-  { url: '/search/community', parameters: { tab: 'search', subOne: 'community', }},
-  { url: '/search/construction', parameters: { tab: 'search', subOne: 'construction', }},
-  { url: '/search/dining', parameters: { tab: 'search', subOne: 'dining', }},
-  { url: '/search/drinks', parameters: { tab: 'search', subOne: 'drinks', }},
-  { url: '/search/education', parameters: { tab: 'search', subOne: 'education', }},
-  { url: '/search/energy', parameters: { tab: 'search', subOne: 'energy', }},
-  { url: '/search/fashion', parameters: { tab: 'search', subOne: 'fashion', }},
-  { url: '/search/finance', parameters: { tab: 'search', subOne: 'finance', }},
-  { url: '/search/food', parameters: { tab: 'search', subOne: 'food', }},
-  { url: '/search/garden', parameters: { tab: 'search', subOne: 'garden', }},
-  { url: '/search/green_space', parameters: { tab: 'search', subOne: 'green space', }},
-  { url: '/search/health_wellness', parameters: { tab: 'search', subOne: 'health & wellness', }},
-  { url: '/search/home_office', parameters: { tab: 'search', subOne: 'home & office', }},
-  { url: '/search/media_communications', parameters: { tab: 'search', subOne: 'media & communications', }},
-  { url: '/search/products', parameters: { tab: 'search', subOne: 'products', }},
-  { url: '/search/services', parameters: { tab: 'search', subOne: 'services', }},
-  { url: '/search/special_events', parameters: { tab: 'search', subOne: 'special events', }},
-  { url: '/search/tourism_hospitality', parameters: { tab: 'search', subOne: 'tourism & hospitality', }},
-  { url: '/search/transit', parameters: { tab: 'search', subOne: 'transit', }},
-  { url: '/search/waste', parameters: { tab: 'search', subOne: 'waste', }},
-];
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -144,65 +77,29 @@ class App extends Component {
       this.setState({ initialize: true });
 
       if (loggedInUser == true) {
-        this.deepLinks();
+        UtilService.deepLinks();
       }
     });
   }
 
   componentDidMount() {
+    Linking.addEventListener('url', ({ url }) => {
+      Linking.canOpenURL(url).then((supported) => {
+        if (supported) {
+          if (url.includes('?q=')) {
+            url = url.replace(/\?q=/gi, '/');
+          }
 
-  }
-
-  componentWillUnmount() {
-    Linking.removeEventListener('url', DeepLinking.handleUrl);
-  }
-
-  handleUrl = ({ url }) => {
-    Linking.canOpenURL(url).then((supported) => {
-      if (supported) {
-        if (url.includes('?q=')) {
-          url = url.replace(/\?q=/gi, '/');
+          console.log('handleUrl : ', url);
+          var defaultLink = 'milkcrate://search';
+          if(defaultLink == url) {
+            defaultLink = 'milkcrate://profile'
+          }
+          setTimeout(()=>{
+            DeepLinking.evaluateUrl(url);
+          }, 50)
+          DeepLinking.evaluateUrl(defaultLink);
         }
-
-        console.log('handleUrl : ', url);
-        DeepLinking.evaluateUrl(url);
-      }
-    });
-  }
-
-  deepLinks () {
-    DeepLinking.addScheme('milkcrate://');
-    Linking.addEventListener('url', this.handleUrl);
-
-    deepLinkGeneral.forEach((link) => {
-      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        Actions.Main(link.parameters );
-      });
-    });
-
-    deepLinkActivitiesDetail.forEach((link) => {
-      DeepLinking.addRoute(link.url , ({ scheme, path, id }) => {
-        link.parameters['id'] = id;
-        Actions.Main( link.parameters );
-      });
-    });
-
-    deepLinkSearchActivities.forEach((link) => {
-      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        Actions.Main( link.parameters );
-      });
-    });
-
-    deepLinkSearchActivitiesQuery.forEach((link) => {
-      DeepLinking.addRoute(link.url , ({ scheme, path, query }) => {
-        link.parameters['query'] = query;
-        Actions.Main( link.parameters );
-      });
-    });
-
-    deepLinkSearchCategories.forEach((link) => {
-      DeepLinking.addRoute(link.url, ({ scheme, path }) => {
-        Actions.Main( link.parameters );
       });
     });
 
@@ -213,6 +110,10 @@ class App extends Component {
     }).catch(error => {
       console.error('An error occurred', error)
     });
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', DeepLinking.handleUrl);
   }
 
   render() {

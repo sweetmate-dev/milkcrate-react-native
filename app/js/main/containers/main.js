@@ -167,6 +167,8 @@ export default class Main extends Component {
 
   _onRemoteNotification(notification) {
     console.log("notification", notification)
+    //reset deeplink
+    //UtilService.deepLinks()
 
     var url;
 
@@ -176,13 +178,14 @@ export default class Main extends Component {
       url = notification.deeplink;
     }
 
-    Linking.canOpenURL(url).then((supported) => {  
+    Linking.openURL(url.toLowerCase())
+
+    /*Linking.canOpenURL(url).then((supported) => {
       if (supported) {
-        console.log("before calling")
         //Linking.openURL(url.toLowerCase());
         DeepLinking.evaluateUrl(url.toLowerCase())
       }
-    });
+    });*/
   }
 
   _onLocalNotification(notification){
