@@ -45,6 +45,7 @@ import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import PushNotification from 'react-native-push-notification';
+import DeepLinking from 'react-native-deep-linking';
 
 export default class Main extends Component {
   constructor(props) {
@@ -165,11 +166,21 @@ export default class Main extends Component {
   }
 
   _onRemoteNotification(notification) {
-    const url = notification.data.deeplink;
+    console.log("notification", notification)
+
+    var url;
+
+    if(Platform.OS == 'ios') {
+      url = notification.data.deeplink;
+    } else {
+      url = notification.deeplink;
+    }
 
     Linking.canOpenURL(url).then((supported) => {  
       if (supported) {
-        Linking.openURL(url.toLowerCase());
+        console.log("before calling")
+        //Linking.openURL(url.toLowerCase());
+        DeepLinking.evaluateUrl(url.toLowerCase())
       }
     });
   }
