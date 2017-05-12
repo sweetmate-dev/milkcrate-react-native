@@ -99,8 +99,8 @@ android {
         applicationId "com.milkcrate"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4220000
-        versionName "4.2.2"
+        versionCode 4300000
+        versionName "4.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

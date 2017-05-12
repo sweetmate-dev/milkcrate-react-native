@@ -123,7 +123,7 @@ class App extends Component {
 
     const scenes = Actions.create(
       <Scene key="root">
-        <Scene key="Introduce" component={ Introduce } />
+        <Scene key="Introduce" component={ Introduce } type={ ActionConst.RESET } />
         <Scene key="Main" component={ Main } initial={ this.state.loggedIn }/>
         <Scene key="Signup" component={ Signup } />
         <Scene key="Login" component={ Login } />
