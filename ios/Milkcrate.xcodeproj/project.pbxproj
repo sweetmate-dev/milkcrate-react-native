@@ -471,6 +471,13 @@
 			remoteGlobalIDString = 418F75461D02DC3D0045FEA0;
 			remoteInfo = RCTBackgroundGeolocation;
 		};
+		81E7F0201EC9A9E100E12A1D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D4D218BF86594EAEBCDD1DE9 /* RNMixpanel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FDC64AF01BF1690D0044C1B4;
+			remoteInfo = RNMixpanel;
+		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -1243,6 +1250,14 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		81E7EFF61EC9A9E100E12A1D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81E7F0211EC9A9E100E12A1D /* libRNMixpanel.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -1548,6 +1563,10 @@
 				{
 					ProductGroup = 1F982D301E8073DA00203B8D /* Products */;
 					ProjectRef = 5C1549616D434EEE8785B06E /* RNMail.xcodeproj */;
+				},
+				{
+					ProductGroup = 81E7EFF61EC9A9E100E12A1D /* Products */;
+					ProjectRef = D4D218BF86594EAEBCDD1DE9 /* RNMixpanel.xcodeproj */;
 				},
 				{
 					ProductGroup = 811278821EAFB00600033CFD /* Products */;
@@ -1858,6 +1877,13 @@
 			fileType = archive.ar;
 			path = libRCTBackgroundGeolocation.a;
 			remoteRef = 811279CD1EB9BF3700033CFD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		81E7F0211EC9A9E100E12A1D /* libRNMixpanel.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNMixpanel.a;
+			remoteRef = 81E7F0201EC9A9E100E12A1D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
