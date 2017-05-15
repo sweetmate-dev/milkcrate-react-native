@@ -148,9 +148,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    alignSelf: 'stretch',
+    textAlignVertical: 'top',
     fontSize: 16,
     color: commonColors.title,
-    margin: 10,
+    margin: 10,    
     backgroundColor: '#fff',    
   },
 
