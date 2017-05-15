@@ -79,6 +79,8 @@ class ActionDetail extends Component {
       this.setState({
         didStatus: true
       })
+
+      UtilService.mixpanelEvent("Did an Action")
     })
   }
 

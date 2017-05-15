@@ -61,6 +61,8 @@ class BusinessesMapView extends Component {
       state.markers[this.state.tappedPin].pin = map_selected_pin;
       return state;
     });
+
+    UtilService.mixpanelEvent("Viewed Business Map View")
   }
 
   componentWillReceiveProps(nextProps) {

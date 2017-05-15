@@ -164,6 +164,9 @@ class EventDetail extends Component {
       this.setState({
         didStatus: true,
       });
+
+      UtilService.mixpanelEvent("Registered for an Event")
+
     })
 
     this.onGoWeb();

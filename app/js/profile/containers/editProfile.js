@@ -101,6 +101,7 @@ class EditProfile extends Component {
         console.log(error);        
         return;
       }
+      UtilService.mixpanelEvent("Edited Profile")
 
       timer.setTimeout( this, 'UpdateUser', () => {
         timer.clearInterval(this, 'UpdateUser');

@@ -62,6 +62,7 @@ class ServiceView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Services")
   }
 
   loadAllData() {

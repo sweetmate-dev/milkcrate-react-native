@@ -52,6 +52,7 @@ import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -77,9 +78,31 @@ class App extends Component {
       this.setState({ initialize: true });
 
       if (loggedInUser == true) {
-        UtilService.deepLinks();
+            UtilService.deepLinks();
+
+          UtilService.mixpanelEvent("Logged In", {"name":activeUser.name})
       }
     });
+
+      //initial mix setting, sets in first time
+      /*this.mixSetting = {
+          "Total Sessions": 0,
+          "Last Session Date": null,
+          "Total Looks Snapped": 0,
+          "Last Snap Date": null,
+          "Has Snapped": false,
+          "Total Looks Scanned": 0,
+          "Total Photos Uploaded":0,
+          "Last Scan Date": null,
+          "Has Scanned": false,
+          "Last Look Detail View": null,
+          "Total Products Viewed": 0,
+          "Has Viewed Product": false,
+          "Last Product Viewed": null,
+          "Camera Permission Granted": false,
+          "Photo Library Permission Granted": false,
+      };
+      Mixpanel.registerSuperPropertiesOnce(this.mixSetting);*/
   }
 
   componentDidMount() {
@@ -110,6 +133,8 @@ class App extends Component {
     }).catch(error => {
       console.error('An error occurred', error)
     });
+
+      UtilService.mixpanelEvent("Launched the app")
   }
 
   componentWillUnmount() {

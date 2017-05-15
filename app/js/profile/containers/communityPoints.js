@@ -71,6 +71,7 @@ class CommunityPoints extends Component {
   componentDidMount() {
     this.hasMounted = true
     this.loadAllData();
+    UtilService.mixpanelEvent("Viewed Community Points")
   }
 
   componentWillUnmount() {

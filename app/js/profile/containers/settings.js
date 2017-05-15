@@ -30,6 +30,7 @@ import DeviceInfo from 'react-native-device-info';
 import codePush from "react-native-code-push";
 
 import bendService from '../../bend/bendService'
+import UtilService from '../../components/util'
 
 class Settings extends Component {
   constructor(props) {
@@ -52,6 +53,8 @@ class Settings extends Component {
 
       this.hasMounted && this.setState({ label: metadata.label });
     });
+
+    UtilService.mixpanelEvent("Viewed Settings")
   }
 
   componentWillUnmount() {
@@ -83,6 +86,8 @@ class Settings extends Component {
       if(error) {
         Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
       }
+
+      UtilService.mixpanelEvent("Send Feedback")
     });
   }
 
@@ -95,6 +100,8 @@ class Settings extends Component {
       if(error) {
         Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
       }
+
+      UtilService.mixpanelEvent("Suggested an Activity")
     });
   }
 
@@ -110,18 +117,22 @@ class Settings extends Component {
 
   onAboutMilkCrate() {
     this.openURL('http://www.mymilkcrate.com');
+    UtilService.mixpanelEvent("Viewed About Milkcrate")
   }
 
   onPrivacyPolicy() {
     this.openURL('http://mymilkcrate.com/privacy-policy/');
+    UtilService.mixpanelEvent("Viewed Privacy Policy")
   }
 
   onTermsOfUse() {
     this.openURL('http://mymilkcrate.com/terms-of-use/');
+    UtilService.mixpanelEvent("Viewed Terms")
   }
 
   onSoftwareLicenses() {
     this.openURL('http://mymilkcrate.com/software-licenses/');
+    UtilService.mixpanelEvent("Viewed Software Licenses")
   }
 
   onLogOut() {
@@ -142,6 +153,8 @@ class Settings extends Component {
         console.log(error);
         return;
       }
+      UtilService.mixpanelEvent("Toggled Privacy", {"state":this.state.user.shareActivity?'on':'off'})
+
       console.log("User updated")
     })
   }
@@ -158,6 +171,7 @@ class Settings extends Component {
         console.log(error);
         return;
       }
+      UtilService.mixpanelEvent("Toggled Notification", {"state":this.state.user.allowNotifications?'on':'off'})
       console.log("User updated");
     })
   }

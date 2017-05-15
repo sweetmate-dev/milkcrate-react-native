@@ -17,6 +17,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import "RCTPushNotificationManager.h"
 #import "Orientation.h"
+#import "Mixpanel.h"
 
 @implementation AppDelegate
 
@@ -52,6 +53,9 @@
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
+  
+  [Mixpanel sharedInstanceWithToken:@"20e6d2c2b6c431dfecfdfaa100ec0a11"];
+  
   [self.window makeKeyAndVisible];
     return YES;
 }

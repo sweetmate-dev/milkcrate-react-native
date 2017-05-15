@@ -150,6 +150,8 @@ class VolunteerDetail extends Component {
         modalVisible: false,
         didStatus: true,
       })
+
+      UtilService.mixpanelEvent("Volunteered", {hours:Number(this.state.hoursNumber || 0 )})
     })
   }
 

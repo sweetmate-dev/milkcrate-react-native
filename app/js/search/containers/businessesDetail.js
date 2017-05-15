@@ -238,6 +238,8 @@ class BusinessesDetail extends Component {
         everDidStatus: true,
         didStatus: true,
       })
+
+      UtilService.mixpanelEvent("Checked in at a Business")
     })
   }
 

@@ -77,6 +77,7 @@ class Login extends Component {
       }
 
       if (!error) {
+        UtilService.mixpanelEvent("Logged In", {"name":user.name})
         //check community code
         if (!user.name) {
           Actions.SetupProfile();

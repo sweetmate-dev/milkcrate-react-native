@@ -65,6 +65,8 @@ class Profile extends Component {
     if (this.props.subOne === 'community') {
       this.onSeeCommunityPoints();
     }
+
+    UtilService.mixpanelEvent("Viewed Profile")
   }
 
   componentWillUnmount() {

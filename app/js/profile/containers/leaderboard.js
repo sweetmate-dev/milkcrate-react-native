@@ -67,6 +67,7 @@ class Leaderboard extends Component {
     })
 
     this.loadUserPage();
+    UtilService.mixpanelEvent("Viewed Leaderboard")
   }
 
   componentWillUnmount() {

@@ -53,6 +53,7 @@ class RecentView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Recent Activity")
   }
 
   loadAllData() {

@@ -5,6 +5,7 @@ import {
 import * as async from 'async'
 import * as _ from 'underscore'
 import Cache from '../components/Cache'
+import UtilService from '../components/util'
 
 var appKey = '589d36e94bad3014f50128ce';
 var appSecret = 'deduKe8DAuA1ry2cYYQXSQEFHgZy9qTvrL0D2lsc';
@@ -918,6 +919,7 @@ module.exports = {
 
     //-------- search view ---------------------
     searchActivity(param, cb){
+        UtilService.mixpanelEvent("Searched", {"type":param.type, "category":param.category, "query":param.query})
         Bend.execute("search-activity", param).then((ret)=>{
             cb(null, ret);
         }, (err)=>{

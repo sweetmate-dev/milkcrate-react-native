@@ -85,6 +85,9 @@ class ServiceDetail extends Component {
       this.setState({
         didStatus: true,
       })
+
+      UtilService.mixpanelEvent("Registered for a Service")
+
     })
 
     if (this.props.service.url)

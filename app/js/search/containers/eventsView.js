@@ -69,6 +69,7 @@ class EventsView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Events")
   }
 
   loadAllData() {

@@ -9,6 +9,16 @@ import Cache from './Cache'
 import DeepLinking from 'react-native-deep-linking';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 
+import Mixpanel from 'react-native-mixpanel'
+import DeviceInfo from 'react-native-device-info';
+
+const MIX_TOKEN = '20e6d2c2b6c431dfecfdfaa100ec0a11' // Production
+const UNIQUE_ID = DeviceInfo.getUniqueID()
+
+Mixpanel.sharedInstanceWithToken(MIX_TOKEN);
+Mixpanel.identify(UNIQUE_ID)
+
+
 const categoryButtons = {
   animals:require('../../assets/imgs/category-buttons/animals.png'),
   animals_active:require('../../assets/imgs/category-buttons/animals_active.png'),
@@ -570,6 +580,13 @@ class UtilService {
     });
   }
 
+  static mixpanelEvent(name, data) {
+    //console.log("captureActivity", activityId, flag)
+    if(data)
+      Mixpanel.trackWithProperties(name, data);
+    else
+      Mixpanel.track(name);
+  }
 }
 
 export default UtilService

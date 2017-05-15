@@ -17,6 +17,7 @@ import NavSearchBar from '../../components/navSearchBar';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
 import MainSearch from './mainSearch';
 import FilterSearch from './filterSearch';
+import UtilService from '../../components/util';
 
 class Search extends Component {
   constructor(props) {
@@ -47,6 +48,8 @@ class Search extends Component {
     if (this.props.searchAutoFocus == true){
       this.setState({ searchAutoFocus: true });
     }
+
+    UtilService.mixpanelEvent("Viewed Search Screen")
   }
 
   onSearchChange(text) {

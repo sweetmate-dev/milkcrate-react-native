@@ -58,6 +58,7 @@ class ActionView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Actions")
   }
 
   onBack() {

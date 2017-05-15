@@ -55,6 +55,7 @@ class CategoryView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Category", {"name":this.props.title})
   }
 
   loadAllData() {

@@ -65,6 +65,7 @@ class BusinessesView extends Component {
 
   componentDidMount() {
     this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Businesses")
   }
 
   loadAllData() {

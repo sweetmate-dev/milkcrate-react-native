@@ -27,6 +27,7 @@
     "react-native-maps": "^0.13.0",
     "react-native-mauron85-background-geolocation": "^0.2.0-alpha.7",
     "react-native-md-textinput": "^2.0.4",
+    "react-native-mixpanel": "0.0.15",
     "react-native-modal-dropdown": "^0.4.1",
     "react-native-orientation": "git+https://github.com/yamill/react-native-orientation.git",
     "react-native-permissions": "^0.2.7",

@@ -33,6 +33,7 @@ import { screenWidth, screenHeight } from '../../styles/commonStyles';
 
 import moment from 'moment';
 import bendService from '../../bend/bendService'
+import UtilService from '../../components/util'
 
 const background = require('../../../assets/imgs/background_profile.png');
 const camera = require('../../../assets/imgs/camera_full.png');

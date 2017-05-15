@@ -41,7 +41,7 @@ class Notifications extends Component {
   }
 
   componentDidMount(){
-
+    UtilService.mixpanelEvent("Viewed Alerts")
     //this.loadAllData();
   }
 
@@ -96,6 +96,7 @@ class Notifications extends Component {
   }
 
   onAlertCellPressed (activity) {
+    UtilService.mixpanelEvent("Tapped on an Alert")
     // alert("Tapped cell - " + rowID);
   }
 

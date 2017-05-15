@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export default function common(state = initialState, action = {}) {
-  console.log("common reducer", action)
+  //console.log("common reducer", action)
   switch (action.type) {
     case types.RECENT_ACTIVITY_LIKE_SUCCESS:
       return {

@@ -57,7 +57,8 @@ class VolunteerView extends Component {
   }
 
   componentDidMount() {
-    this.loadAllData();    
+    this.loadAllData();
+    UtilService.mixpanelEvent("Browsed Volunteer Opportunities")
   }
 
   loadAllData() {

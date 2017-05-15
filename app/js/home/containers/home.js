@@ -329,6 +329,11 @@ class Home extends Component {
       }      
       
       if (result.length > 0) {
+        if(this.state.recentActivities.length > 0)
+          UtilService.mixpanelEvent("Loaded More Community Activity")
+        else
+          UtilService.mixpanelEvent("View Recent Community Activity")
+
         this.state.recentActivities = this.state.recentActivities.concat(result)
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.hasMounted&&this.setState({
@@ -448,6 +453,9 @@ class Home extends Component {
         showsHorizontalScrollIndicator={ false }
         snapOnAndroid={ true }
         removeClippedSubviews={ false }
+        onSnapToItem={(idx)=>{
+          UtilService.mixpanelEvent("Swiped Challenges")
+        }}
       >
         { this.getChallengeCarousel( this.state.challenges ) }
       </Carousel>
@@ -455,6 +463,7 @@ class Home extends Component {
   }
 
   onPlayIntroVideo() {
+    UtilService.mixpanelEvent("Played Intro Video")
     Actions.VideoPlayModal();
   }
 
@@ -498,6 +507,9 @@ class Home extends Component {
             showsHorizontalScrollIndicator={ false }
             snapOnAndroid={ true }
             removeClippedSubviews={ false }
+            onSnapToItem={(idx)=>{
+              UtilService.mixpanelEvent("Swiped Trending")
+            }}
           >
           { this.getTrendingCarousel(this.state.trendings) }
         </Carousel>}
@@ -539,6 +551,8 @@ class Home extends Component {
                     console.log(error);
                     return
                   }
+
+                  UtilService.mixpanelEvent("Answered Daily Poll Question")
 
                   //update values locally
                   var communityId = bendService.getActiveUser().community._id

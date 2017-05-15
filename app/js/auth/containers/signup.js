@@ -100,6 +100,8 @@ class Signup extends Component {
         return;
       }
 
+      UtilService.mixpanelEvent("Created an Account", {"username":this.state.email, "code":this.state.communityCode})
+
       Actions.SetupProfile();
     })
   }

@@ -67,6 +67,8 @@ class ChangePassword extends Component {
         }        
       } else {
         alert("Password changed")
+        UtilService.mixpanelEvent("Changed Password")
+
       }
     })
   }
