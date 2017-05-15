@@ -51,7 +51,7 @@ import ServiceView from './search/containers/serviceView';
 import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
-
+import SendFeedbackModal from './profile/containers/sendFeedbackModal';
 
 class App extends Component {
   constructor(props) {
@@ -178,6 +178,7 @@ class App extends Component {
         <Scene key="ServiceDetailModal" component={ ServiceDetail } direction='vertical' />
         <Scene key="VolunteerDetailModal" component={ VolunteerDetail } direction='vertical' />
         <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical' />
+        <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />        
       </Scene>
     );
 

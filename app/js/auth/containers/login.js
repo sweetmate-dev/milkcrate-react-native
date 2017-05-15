@@ -24,7 +24,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import timer from 'react-native-timer';
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth, screenHeight } from '../../styles/commonStyles';
-import bendService from '../../bend/bendService'
+import bendService from '../../bend/bendService';
+import UtilService from '../../components/util';
 
 const background = require('../../../assets/imgs/background_profile.png');
 const eye = require('../../../assets/imgs/eye.png');

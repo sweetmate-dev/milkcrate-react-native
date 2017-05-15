@@ -117,6 +117,12 @@ class BusinessesMapView extends Component {
       };
     }
 
+    let distance = 0;
+    if ((businesses[this.state.tappedPin]._geoloc) && (this.props.currentLocation)) {
+      distance = UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
+            this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude);
+    }
+
     return (
       <View style={ styles.container }>
         <MapView
@@ -143,7 +149,7 @@ class BusinessesMapView extends Component {
                 flat={ true }
                 onPress={ () => this.onPressPin(index) }
               />
-            ))            
+            ))     
           }          
         </MapView>
         <View style={ styles.calloutContainer }>
@@ -151,8 +157,7 @@ class BusinessesMapView extends Component {
             title={ businesses[this.state.tappedPin].name }
             icon={ UtilService.getCategoryIconFromSlug(businesses[this.state.tappedPin]) }
             description={ businesses[this.state.tappedPin].description }
-            distance={ businesses[this.state.tappedPin]._geoloc ? UtilService.getDistanceFromLatLonInMile(businesses[this.state.tappedPin]._geoloc[1], businesses[this.state.tappedPin]._geoloc[0],
-            this.props.currentLocation.coords.latitude, this.props.currentLocation.coords.longitude) : null }
+            distance={ distance }
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Number(businesses[this.state.tappedPin].rating || 0) }
             onClick={ () => this.onPressedCell(businesses[this.state.tappedPin]) }

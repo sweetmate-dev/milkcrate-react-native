@@ -651,6 +651,10 @@ class Home extends Component {
   }
 
   get showDailyPoll() {
+    if ((this.state.pollQuestion.question.length === 0 ) || (this.state.pollQuestion.answers.length === 0 )) {
+      return null;
+    }
+    
     return (
       <View style={ styles.dailyPollContainer }>
         <Text style={ styles.textTitle }>Daily Poll</Text>

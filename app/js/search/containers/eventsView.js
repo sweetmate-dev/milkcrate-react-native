@@ -252,7 +252,7 @@ class EventsView extends Component {
   renderListRow(rowData, sectionID, rowID) {
     if( typeof rowData == 'string') 
       return null;
-
+    
     return (
       <View>
         {

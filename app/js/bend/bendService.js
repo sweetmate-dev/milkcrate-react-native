@@ -1001,6 +1001,16 @@ module.exports = {
         })
     },
 
+    sendFeedback(text, cb) {
+        Bend.execute("send-feedback", {
+            feedback: text,
+        }).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
+
     captureActivityForPoll(id, type, points, cb) {
         Bend.execute("capture-activity-poll", {
             type:type,

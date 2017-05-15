@@ -78,17 +78,18 @@ class Settings extends Component {
   }
 
   onSendUsYourFeedback() {
-    Mailer.mail({
-      subject: 'Feedback on MilkCrate for Communities',
-      recipients: ['info@mymilkcrate.com'],
-      body: '',
-    }, (error, event) => {
-      if(error) {
-        Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
-      }
+    // Mailer.mail({
+    //   subject: 'Feedback on MilkCrate for Communities',
+    //   recipients: ['info@mymilkcrate.com'],
+    //   body: '',
+    // }, (error, event) => {
+    //   if(error) {
+    //     Alert.alert('Cannot Send E-mail', 'Please email us directly at info@mymilkcrate.com');
+    //   }
 
-      UtilService.mixpanelEvent("Send Feedback")
-    });
+    //   UtilService.mixpanelEvent("Send Feedback")
+    // });
+    Actions.SendFeedbackModal();
   }
 
   onSuggestBusinessOrEvent() {
