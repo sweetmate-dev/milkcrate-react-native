@@ -25,6 +25,7 @@ export default class NavTitleBar extends Component {
     onBack: PropTypes.func,
     onFilter: PropTypes.func,
     onSetting: PropTypes.func,
+    onSend: PropTypes.func,
     title: PropTypes.string,
     buttons: PropTypes.number,    
   }
@@ -33,6 +34,7 @@ export default class NavTitleBar extends Component {
     onBack: () => {},
     onFilter: () => {},
     onSetting: () => {},
+    onSend: () => {},
     title: 'Title',
     buttons: commonStyles.NavNoneButton,
   }
@@ -42,6 +44,7 @@ export default class NavTitleBar extends Component {
     this.onBack = this.onBack.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSetting = this.onSetting.bind(this);
+    this.onSend = this.onSend.bind(this);
   }
 
   onBack() {
@@ -62,56 +65,117 @@ export default class NavTitleBar extends Component {
     }
   }
 
+  onSend() {
+    if (this.props.onSend) {
+      this.props.onSend();
+    }
+  }
+
+  get renderLeftButton() {
+    const {
+      buttons,
+    } = this.props;
+
+    if (buttons & commonStyles.NavBackButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
+            <View style={ styles.button }>
+               <Image source={ back_arrow } style={ styles.image }/>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    if (buttons & commonStyles.NavCloseButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
+            <View style={ styles.button }>
+              <EvilIcon name="close" size={ 28 } color='#fff'/>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    if (buttons & commonStyles.NavCloseTextButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
+            <View style={ styles.button }>
+              <Text style={ styles.textButton }>Cancel</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return (
+      <View style={ styles.titleBarPadding }/>          
+    );
+  }
+
+  get renderRightButton() {
+     const {
+      buttons,
+    } = this.props;
+
+    if (buttons & commonStyles.NavFilterButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
+            <View style={ styles.button }>
+              <Image source={ filter } style={ styles.image }/>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    
+    if (buttons & commonStyles.NavSettingButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSetting() }>
+            <View style={ styles.button }>
+              <Image source={ setting } style={ styles.image }/>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    
+   if (buttons & commonStyles.NavSendButton) {
+      return (
+        <View style={ styles.buttonWrap }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSend() }>
+            <View style={ styles.button }>
+              <Text style={ styles.textButton }>Send</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return(
+      <View style={ styles.titleBarPadding }/>
+    );
+  }
+
   render() {
     const {
       title,
-      buttons,
     } = this.props;
 
     return (
       <View style={ styles.container }>
         <View style={ styles.navigationBarWrap }>
-          {
-            ((buttons & commonStyles.NavBackButton) || (buttons & commonStyles.NavCloseButton)) ?
-              <View style={ styles.buttonWrap }>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onBack() }>
-                  <View style={ styles.button }>
-                    {
-                      buttons & commonStyles.NavBackButton ?
-                        <Image source={ back_arrow } style={ styles.image }/>
-                      :
-                        <EvilIcon name="close" size={ 28 } color='#fff'/>
-                    }
-                  </View>
-                </TouchableOpacity>
-              </View>
-            :
-              <View style={ styles.titleBarPadding }/>
-          }
+          { this.renderLeftButton }
           <View style={ styles.titleBarWrap }>
             <Text numberOfLines={ 1 } style={ styles.textTitle }>{ title }</Text>
           </View>
-          {
-            buttons & commonStyles.NavFilterButton ?
-              <View style={ styles.buttonWrap }>
-                <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
-                  <View style={ styles.button }>
-                    <Image source={ filter } style={ styles.image }/>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            :
-              buttons & commonStyles.NavSettingButton ?
-                <View style={ styles.buttonWrap }>
-                  <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onSetting() }>
-                    <View style={ styles.button }>
-                      <Image source={ setting } style={ styles.image }/>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              :
-                <View style={ styles.titleBarPadding }/>
-          }
+          { this.renderRightButton }
         </View>
       </View>
     );
@@ -132,7 +196,7 @@ const styles = StyleSheet.create({
     paddingTop: (Platform.OS === 'android') ? 0 : 20,
   },
   titleBarWrap: {
-    flex : 6,
+    flex : 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -160,5 +224,10 @@ const styles = StyleSheet.create({
   image: {
     width: 14,
     height: 14,
+  },
+  textButton: {
+    color: '#fff',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

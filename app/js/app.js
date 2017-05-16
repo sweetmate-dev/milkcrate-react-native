@@ -178,7 +178,7 @@ class App extends Component {
         <Scene key="ServiceDetailModal" component={ ServiceDetail } direction='vertical' />
         <Scene key="VolunteerDetailModal" component={ VolunteerDetail } direction='vertical' />
         <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical' />
-        <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />        
+        <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />
       </Scene>
     );
 

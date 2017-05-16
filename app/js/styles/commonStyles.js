@@ -38,6 +38,8 @@ export const NavBackButton = 1;
 export const NavFilterButton = 2;
 export const NavSettingButton = 4;
 export const NavCloseButton = 8;
+export const NavCloseTextButton = 16;
+export const NavSendButton = 32;
 
 
 /*

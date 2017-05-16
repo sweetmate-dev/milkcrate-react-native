@@ -2,24 +2,21 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
-  Image,
-  Dimensions,
-  ScrollView,
-  TouchableHighlight,
-  TouchableOpacity,
   TextInput,
+  Keyboard,
   Alert,
 } from 'react-native';
 
 import Spinner from 'react-native-loading-spinner-overlay';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Actions } from 'react-native-router-flux';
 import bendService from '../../bend/bendService'
 
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
@@ -35,15 +32,17 @@ export default class SendFeedbackModal extends Component {
   }
 
   onClose() {
+    Keyboard.dismiss();
     Actions.pop();
   }
 
   onSendUsYourFeedback() {
-
     if (this.state.textFeedback === '') {
       return;
     }
-
+    
+    Keyboard.dismiss();
+    
     this.setState({ sending: true });
     bendService.sendFeedback( this.state.textFeedback, (error, result) => {
 
@@ -62,18 +61,14 @@ export default class SendFeedbackModal extends Component {
     return (
       <View style={ styles.container }>
         <Spinner visible={ this.state.sending }/>
-        <View style={ styles.topContainer }/>
-        <View style={ styles.centerContainer }>
-          <View style={ styles.titleContainer}>
-            <TouchableOpacity onPress={ () => this.onClose() }>
-              <Text style={ styles.textDescription }>Close</Text>
-            </TouchableOpacity>
-            <Text style={ styles.textTitle }>Send Feedback</Text>
-            <TouchableOpacity onPress={ () => this.onSendUsYourFeedback() }>
-              <Text style={ styles.textDescription }>Send</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={ styles.contentContainer }>
+        <NavTitleBar
+          buttons={ commonStyles.NavCloseTextButton | commonStyles.NavSendButton }
+          onBack={ () => this.onClose() }
+          onSend={ () => this.onSendUsYourFeedback() }
+          title={ "Send Feedback" }
+        />
+        <KeyboardAwareScrollView>
+          <View style={ styles.keyboardContainer }>
             <TextInput
               autoCorrect={ false }
               multiline={ true }
@@ -85,10 +80,7 @@ export default class SendFeedbackModal extends Component {
               onChangeText={ (text) => this.setState({ textFeedback: text }) }              
             />
           </View>
-        </View>
-        <View style={ styles.bottomContainer }>
-          <View style={ styles.bottomPadding }/>
-        </View>        
+        </KeyboardAwareScrollView>
       </View>
     );
   }
@@ -97,54 +89,10 @@ export default class SendFeedbackModal extends Component {
 const styles = StyleSheet.create({  
   container: {
     flex: 1,
-    backgroundColor: '#000000c0',
-  },
-  scrollView: {
-    backgroundColor: 'transparent',
-  },
-  topContainer: {
-    flex: 1.5,
-    backgroundColor: 'transparent',
-  },
-  centerContainer: {
-    flex: 5,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 8,
-  },
-  bottomContainer: {
-    flex: 1.5,
-    backgroundColor: 'transparent',
-  },
-  bottomPadding: {
-    flex: 0.5,
-  },
-  titleContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: commonColors.theme,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
-  },
-  contentContainer: {
-    flex: 4,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
-  },
-  textTitle: {
-    color: '#fff',
-    fontFamily: 'Blanch',
-    fontSize: 40,
-  },
-  textDescription: {
-    color: '#fff',    
-    fontFamily: 'Open Sans',
-    fontSize: 18,
-    padding: 10,
+  },  
+  keyboardContainer: {
+    width: commonStyles.screenWidth,
+    height: commonStyles.screenHeight - 64,
   },
   input: {
     flex: 1,
@@ -152,8 +100,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     fontSize: 16,
     color: commonColors.title,
-    margin: 10,    
+    padding: 10,    
     backgroundColor: '#fff',    
   },
-
 });
