@@ -140,6 +140,15 @@ class Home extends Component {
         this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
         })
+
+        //update challenges
+        var exists = _.filter(this.state.challenges, (_o)=>{
+          return _o.activity._id == activity.activity._id
+        })
+        this.state.challenges = _.difference(this.state.challenges, exists)
+        this.setState({
+          challenges:this.state.challenges
+        })
       })
     } else if(commonStatus === 'remove_activity_success') {
       //console.log("commonStatus", commonStatus, activityId)

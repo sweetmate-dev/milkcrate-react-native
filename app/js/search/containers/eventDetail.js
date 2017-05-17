@@ -419,6 +419,14 @@ class EventDetail extends Component {
             </View> }
             <Text style={ styles.textDescription }>{ event.description }</Text>
           </View>
+          { UtilService.isValid(event.certification && event.certification.name) && <View style={ styles.certificationsContainer }>
+            <Text style={ styles.textHeading }>Certifications</Text>
+            <View style={ styles.certificationsButtonContainer }>
+              <View style={ styles.buttonCertificationsWrapper }>
+                <Text style={ styles.textCertificationsButton }>{ event.certification.name }</Text>
+              </View>
+            </View>
+          </View> }
           { event.tags && event.tags.length>0 && <View style={ styles.tagsContainer }>
             <Text style={ styles.textHeading }>Tags</Text>
             <View style={ styles.tagsButtonContainer }>
@@ -621,6 +629,34 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
     backgroundColor: 'transparent',
+  },
+  certificationsContainer: {
+    paddingLeft: 20,
+    paddingRight: 16,
+    paddingTop: 5,
+  },
+  certificationsButtonContainer: {
+    flex:1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap'
+  },
+  buttonCertificationsWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: commonColors.line,
+    borderWidth: 5,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  textCertificationsButton: {
+    textAlign: 'center',
+    backgroundColor: commonColors.line,
+    color: commonColors.detailTitle,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
   },
   tagsContainer: {
     paddingLeft: 20,

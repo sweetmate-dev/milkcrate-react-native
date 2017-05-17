@@ -375,7 +375,30 @@ module.exports = {
                 activity:"activity"
             }
         }).then((rets)=>{
-            cb(null, rets)
+            var activityIds = []
+            _.map(rets, (o)=>{
+                activityIds.push(o.activity._id)
+            })
+
+            if(activityIds.length > 0) {
+                var q = new Bend.Query()
+                q.contains("activity._id", activityIds)
+                q.notEqualTo("deleted", true)
+                q.equalTo("user._id", this.getActiveUser()._id)
+                Bend.DataStore.find("activity", q).then((activities)=>{
+                    _.map(activities,(o)=>{
+                        var exists = _.filter(rets, (_o)=>{
+                            return _o.activity._id == o.activity._id
+                        })
+                        rets = _.difference(rets, exists)
+                    })
+
+                    cb(null, rets)
+                }, (err)=>{
+                    cb(err)
+                })
+            } else
+                cb(null, rets)
         }, (err)=>{
             cb(err)
         })
