@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
   },
- topContainer: {
+  topContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

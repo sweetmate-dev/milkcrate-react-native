@@ -139,6 +139,14 @@ class Signup extends Component {
         <Spinner visible={ this.state.signingUp }/>
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <KeyboardAwareScrollView>
+            {
+              this.props.showLogIn ?
+                <TouchableOpacity style={ styles.buttonLogIn } onPress={ () => this.onLogIn() }>
+                  <Text style={ styles.textLogInButton}>Log In</Text>
+                </TouchableOpacity>
+              :
+                null
+            }
             <View style={ styles.keyboardContainer }>
               <View style={ styles.descriptionContainer }>
                 <Text style={ styles.textTitle }>Getting Started</Text>
@@ -226,6 +234,7 @@ class Signup extends Component {
                 </TouchableOpacity>
                 <View style={ styles.bottomContentWrap }>
                   <Text style={ styles.textInvite }>Don’t know your access code?</Text>
+                  <Text style={ styles.textInvite2 }>Or have other questions?</Text>
                   <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onContactUs() }>
                     <Text style={ styles.textUnderButton }>Contact Us.</Text>
                   </TouchableOpacity>
@@ -233,15 +242,6 @@ class Signup extends Component {
                     {/*<Text style={ styles.textUnderButton }>Learn More</Text>*/}
                   </TouchableOpacity>
                 </View>
-                {
-                  this.props.showLogIn ?
-                    <TouchableOpacity style={ styles.buttonLogIn } onPress={ () => this.onLogIn() }>
-                      <Text style={ styles.textLogInButton}>Log In</Text>
-                    </TouchableOpacity>
-                  :
-                    null
-                }
-
               </View>
             </View>
           </KeyboardAwareScrollView>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     flex: 1.2,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 0,
   },
   inputContainer: {
     flex: 1.2,
@@ -311,6 +311,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
     paddingVertical: 5,
+    backgroundColor: 'transparent',
+  },
+  textInvite2: {
+    color: commonColors.title,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+    paddingTop: 0,
+    paddingBottom: 5,
     backgroundColor: 'transparent',
   },
   imageEye: {
@@ -369,8 +377,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   buttonLogIn: {
-    height: 80,
-    width: 100,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 15,

@@ -137,8 +137,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   avatar: {
-    width: 32,
-    height: 32,
+    width: 48,
+    height: 48,
     borderRadius: 2,
   },
   textName: {
