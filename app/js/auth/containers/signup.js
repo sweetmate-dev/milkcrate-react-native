@@ -60,6 +60,9 @@ class Signup extends Component {
     if (this.state.password == '') {
       Alert.alert('Password Required', 'Please enter and confirm your password.');
       return;
+    } else if (this.state.password.length < 8) {
+      Alert.alert('Your password must be at least 8 characters.');
+      return;
     }
 
     if (this.state.communityCode == '') {

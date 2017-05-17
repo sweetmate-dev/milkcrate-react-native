@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Alert,
   Keyboard,
-  findNodeHandle,  
+  findNodeHandle,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -60,7 +60,7 @@ class Login extends Component {
     this.setState({ loggingIn: true });
 
     bendService.login(this.state.email, this.state.password, (error, user)=>{
-      
+
       this.setState({ loggingIn: false });
 
       if (error || !user.enabled) {
