@@ -13,6 +13,7 @@ import {
   Platform,
   AsyncStorage,
   Linking,
+  Alert,
 } from 'react-native';
 
 import TabNavigator from 'react-native-tab-navigator';
@@ -167,8 +168,6 @@ export default class Main extends Component {
 
   _onRemoteNotification(notification) {
     console.log("notification", notification)
-    //reset deeplink
-    //UtilService.deepLinks()
 
     var url;
 
@@ -178,14 +177,33 @@ export default class Main extends Component {
       url = notification.deeplink;
     }
 
-    Linking.openURL(url.toLowerCase())
-
-    /*Linking.canOpenURL(url).then((supported) => {
-      if (supported) {
-        //Linking.openURL(url.toLowerCase());
-        DeepLinking.evaluateUrl(url.toLowerCase())
+    if(notification.foreground) {
+      //in-use
+      if(url) {
+        Alert.alert(
+            notification.data.title,
+            notification.message,
+            [
+              {text: notification.data.cancelButton||'Dismiss', onPress: () => {
+                console.log("Canceled")
+              }},
+              {text: notification.data.actionButton||'View Now', onPress: () => {
+                Linking.openURL(url.toLowerCase())
+              }},
+            ]
+        )
+      } else {
+        Alert.alert(
+            notification.data.title,
+            notification.message
+        )
       }
-    });*/
+    } else {
+      //background notification
+
+      if(url)
+        Linking.openURL(url.toLowerCase())
+    }
   }
 
   _onLocalNotification(notification){
