@@ -271,6 +271,7 @@ export default class Main extends Component {
         distanceFilter: 50,
         debug: false,
         stopOnTerminate: false,
+        startForeground: false,
         interval: 10000
       }, function () {});
 

@@ -25,7 +25,9 @@ import * as commonActions from '../../common/actions';
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
+
 import Point from '../../components/Point';
+import EarnedPoint from '../../components/earnedPoint';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -39,7 +41,8 @@ class ActionDetail extends Component {
     this.state = {
       initialize: true,
       didStatus: false,
-      activityId: null
+      activityId: null,
+      showAnimiation: false,
     };
   }
 
@@ -72,6 +75,8 @@ class ActionDetail extends Component {
         console.log(error);
         return;
       }
+
+      this.setState({ showAnimiation: true });
 
       this.state.activityId = result.activity._id;
       this.props.commonActions.captureActivity(result.activity._id);
@@ -179,6 +184,7 @@ class ActionDetail extends Component {
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>
         </TouchableOpacity> }
+        <EarnedPoint show={ this.state.showAnimiation }/>
       </View>
     );
   }
