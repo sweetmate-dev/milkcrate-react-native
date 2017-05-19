@@ -75,6 +75,13 @@ module.exports = {
             cb(err);
         })
     },
+    resetPassword(email, cb) {
+        Bend.executeAnonymous("reset-password", {email:email}).then((ret)=>{
+            cb(null, ret);
+        }, (err)=>{
+            cb(err);
+        })
+    },
 
     updateUser(userData, cb) {
         if(userData.avatar) {

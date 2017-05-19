@@ -90,7 +90,7 @@ class Login extends Component {
   }
 
   onForgotPassword() {
-    alert("onForgotPassword");
+    Actions.ForgotPassword();
   }
 
   onCreateAccount() {
@@ -157,7 +157,7 @@ class Login extends Component {
                 activeOpacity={ .5 }
                 onPress={ () => this.onForgotPassword() }
               >
-                {/*<Text style={ styles.textTitleButton }>Forgot Password</Text>*/}
+                <Text style={ styles.textTitleButton }>Forgot Password</Text>
               </TouchableOpacity>
             </View>
 

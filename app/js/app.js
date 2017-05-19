@@ -29,6 +29,7 @@ const store = createStoreWithMiddleware(reducer);
 import Introduce from './introduce/containers/introduce';
 import Signup from './auth/containers/signup';
 import Login from './auth/containers/login';
+import ForgotPassword from './auth/containers/forgotPassword';
 import Main from './main/containers/main';
 import BusinessesView from './search/containers/businessesView';
 import CategoryView from './search/containers/categoryView';
@@ -151,6 +152,7 @@ class App extends Component {
         <Scene key="Introduce" component={ Introduce } type={ ActionConst.RESET } />
         <Scene key="Main" component={ Main } initial={ this.state.loggedIn }/>
         <Scene key="Signup" component={ Signup } />
+        <Scene key="ForgotPassword" component={ ForgotPassword } />
         <Scene key="Login" component={ Login } />
         <Scene key="SetupProfile" component={ SetupProfile } />
         <Scene key="BusinessesView" component={ BusinessesView } />
