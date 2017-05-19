@@ -104,7 +104,7 @@ class ForgotPassword extends Component {
           </View>}
           {this.state.resetPassword&&<View style={ styles.inputContainer }>
             <Text style={styles.textTitle}>Email Sent!</Text>
-            <Text style={ styles.textDescription }>We just sent an email to kostas@neusis.com. It has insructions for how to reset your password.</Text>
+            <Text style={ styles.textDescription }>We just sent an email to {this.state.email}. It has insructions for how to reset your password.</Text>
             <TouchableOpacity
                 activeOpacity={ .5 }
                 style={ styles.backButtonWrapper }
