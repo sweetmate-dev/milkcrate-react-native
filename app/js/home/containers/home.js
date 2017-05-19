@@ -147,7 +147,7 @@ class Home extends Component {
         })
         this.state.challenges = _.difference(this.state.challenges, exists)
         this.setState({
-          challenges:this.state.challenges
+          challenges
         })
       })
     } else if(commonStatus === 'remove_activity_success') {
