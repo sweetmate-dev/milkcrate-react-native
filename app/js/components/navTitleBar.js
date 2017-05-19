@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     paddingTop: (Platform.OS === 'android') ? 0 : 20,
   },
   titleBarWrap: {
-    flex : 5,
+    flex : 4,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   button: {
-    width: screenWidth * 0.12,
+    width: screenWidth * 0.1428,
     height: screenWidth * 0.12,
     justifyContent: 'center',
     alignItems: 'center',

@@ -8,10 +8,10 @@ import {
   TextInput,
   Keyboard,
   Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 
 import Spinner from 'react-native-loading-spinner-overlay';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Actions } from 'react-native-router-flux';
 import bendService from '../../bend/bendService'
@@ -67,20 +67,21 @@ export default class SendFeedbackModal extends Component {
           onSend={ () => this.onSendUsYourFeedback() }
           title={ "Send Feedback" }
         />
-        <KeyboardAwareScrollView>
-          <View style={ styles.keyboardContainer }>
-            <TextInput
-              autoCorrect={ false }
-              multiline={ true }
-              placeholder="Type your feedback"
-              placeholderTextColor={ commonColors.placeholderText }
-              textAlign="left"
-              style={ styles.input }
-              underlineColorAndroid="transparent"
-              onChangeText={ (text) => this.setState({ textFeedback: text }) }              
-            />
-          </View>
-        </KeyboardAwareScrollView>
+        <KeyboardAvoidingView
+          behavior='padding'
+          style={ styles.keyboardContainer }
+        >
+          <TextInput
+            autoCorrect={ false }
+            multiline={ true }
+            placeholder="Type your feedback"
+            placeholderTextColor={ commonColors.placeholderText }
+            textAlign="left"
+            style={ styles.input }
+            underlineColorAndroid="transparent"
+            onChangeText={ (text) => this.setState({ textFeedback: text }) }              
+          />
+        </KeyboardAvoidingView>
       </View>
     );
   }
@@ -91,8 +92,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },  
   keyboardContainer: {
-    width: commonStyles.screenWidth,
-    height: commonStyles.screenHeight - 64,
+    flex: 1,
+    justifyContent: 'center',
   },
   input: {
     flex: 1,
