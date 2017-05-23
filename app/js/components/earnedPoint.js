@@ -10,15 +10,19 @@ import { screenWidth, screenHeight } from '../styles/commonStyles';
 
 const diamond = require('../../assets/imgs/diamond_solo.gif');
 
+
 export default class EarnedPoint extends Component {
+
 
   static propTypes = {
     show: PropTypes.bool,
   }
 
+
   static defaultProps = {
     show: false,
   }
+
 
   constructor(props) {
     super(props);
@@ -29,25 +33,35 @@ export default class EarnedPoint extends Component {
     }
   }
 
+  
+  componentWillMount() {
+    this._isMounted = true;
+  }
+
+  
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
 
   componentWillReceiveProps(nextProps){
 
-    if (this.show !== nextProps.show ) {
+    if (this.props.show !== nextProps.show ) {
       this.setState({ show: nextProps.show });
     }
   }
 
 
   render() {
-    if (this.state.show === false) {
+    if ((this._isMounted === false) || (this.state.show === false)) {
       return null;
     }
 
     if (this.timer === 0) {
       this.timer = setInterval(() => {
-        this.setState({ show: false });
         clearInterval(this.timer);
         this.timer = 0;
+        this.setState({ show: false });
       }, 2500)
     }
 

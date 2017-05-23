@@ -182,7 +182,27 @@ class BusinessesDetail extends Component {
   }
 
   onGetDirection() {
-    var url = 'http://maps.apple.com/?ll=' + this.props.business._geoloc[1] + ',' + this.props.business._geoloc[0];
+    const { business } = this.props;
+
+    let address = '';
+    
+    if ((business.address1 !== undefined) && (business.address1 !== '')) {
+      address = business.address1;
+    }
+    
+    if ((business.address2 !== undefined) && (business.address2 !== '')) {
+      address += ',' + business.address2;
+    }
+
+    if ((business.city !== undefined) && (business.city !== '')) {
+      address += ',' + business.city;
+    }
+
+    if ((business.state !== undefined) && (business.state !== '')) {
+      address += ',' + business.state;
+    }
+
+    var url = 'http://maps.apple.com/?sll=' + this.props.business._geoloc[1] + ',' + this.props.business._geoloc[0] + '&q='+address;
     Linking.openURL(url);
   }
 
