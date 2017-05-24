@@ -246,6 +246,7 @@ class SetupProfile extends Component {
                 style={ styles.birthdayWrapper }
                 date={ this.state.birthday }
                 mode="date"
+                androidMode="spinner"
                 placeholder="Birthday"
                 format="MMM DD, YYYY"
                 minDate="Jan 01, 1900"

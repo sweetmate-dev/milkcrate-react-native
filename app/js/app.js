@@ -154,7 +154,7 @@ class App extends Component {
         <Scene key="Signup" component={ Signup } />
         <Scene key="ForgotPassword" component={ ForgotPassword } />
         <Scene key="Login" component={ Login } />
-        <Scene key="SetupProfile" component={ SetupProfile } />
+        <Scene key="SetupProfile" component={ SetupProfile } initial/>
         <Scene key="BusinessesView" component={ BusinessesView } />
         <Scene key="CategoryView" component={ CategoryView } />
         <Scene key="RecentView" component={ RecentView } />

@@ -281,6 +281,7 @@ class EditProfile extends Component {
               style={ styles.birthdayWrapper }
               date={ UtilService.formatDateWithFormat2(this.state.user.birthday, "MMMM DD, YYYY") }
               mode="date"
+              androidMode="spinner"
               placeholder="Birthday"
               format="MMMM DD, YYYY"
               minDate="Jan 01, 1900"
