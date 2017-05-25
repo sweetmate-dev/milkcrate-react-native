@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   Alert,
   Button,
-    Linking
+  Linking
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -27,7 +27,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
 import Point from '../../components/Point';
-import EarnedPoint from '../../components/earnedPoint';
+// import EarnedPoint from '../../components/earnedPoint';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -42,7 +42,7 @@ class ActionDetail extends Component {
       initialize: true,
       didStatus: false,
       activityId: null,
-      showAnimiation: false,
+      // showAnimiation: false,
     };
   }
 
@@ -56,17 +56,18 @@ class ActionDetail extends Component {
         return;
       }
 
-      if (result)
+      if (result) {
           this.state.activityId = result;
+      }
 
       this.setState({
         didStatus: result == false ? false : true,
-      })
+      });
     })
   }
 
   onBack () {
-    Actions.pop()
+    Actions.pop();
   }
 
   onCheckIn() {
@@ -75,17 +76,16 @@ class ActionDetail extends Component {
         console.log(error);
         return;
       }
-
-      this.setState({ showAnimiation: true });
+      // this.setState({ showAnimiation: true });
 
       this.state.activityId = result.activity._id;
       this.props.commonActions.captureActivity(result.activity._id);
 
       this.setState({
         didStatus: true
-      })
+      });
 
-      UtilService.mixpanelEvent("Did an Action")
+      UtilService.mixpanelEvent("Did an Action");
     })
   }
 
@@ -184,7 +184,7 @@ class ActionDetail extends Component {
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>
         </TouchableOpacity> }
-        <EarnedPoint show={ this.state.showAnimiation }/>
+        {/*<EarnedPoint show={ this.state.showAnimiation }/>*/}
       </View>
     );
   }

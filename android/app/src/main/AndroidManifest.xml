@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.milkcrate"
-    android:versionCode="4400000"
-    android:versionName="4.4">
+    android:versionCode="4410000"
+    android:versionName="4.4.1">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 

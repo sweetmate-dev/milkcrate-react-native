@@ -102,7 +102,7 @@ class Home extends Component {
     
     if (commonStatus === 'recent_activity_like_success') {
 
-      var exist = _.find(this.state.recentActivities, (obj) => {
+      let exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == recentActivityId;
       })
 
@@ -124,46 +124,49 @@ class Home extends Component {
         }
       }
     } else if(commonStatus === 'capture_activity_success') {
-      var exist = _.find(this.state.recentActivities, (obj) => {
+      let exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
       })
 
-      if(exist) return;
+      if (exist) {
+        return;
+      }
 
       //add new recent activity
-      bendService.getRecentActivity(activityId, (err, activity)=>{
-        if(err) {
-          console.log(err);return;
+      bendService.getRecentActivity(activityId, (error, activity) => {
+        if (error) {
+          console.log(error);
+          return;
         }
 
         this.state.recentActivities.unshift(activity);
-        this.hasMounted&&this.setState({
-          recentActivities:this.state.recentActivities
-        })
+        this.hasMounted && this.setState({
+          recentActivities: this.state.recentActivities,
+        });
 
         //update challenges
-        var exists = _.filter(this.state.challenges, (_o)=>{
-          return _o.activity._id == activity.activity._id
-        })
-        this.state.challenges = _.difference(this.state.challenges, exists)
+        let exists = _.filter(this.state.challenges, (object)=>{
+          return object.activity._id == activity.activity._id;
+        });
+        
         this.setState({
-          challenges
-        })
-      })
-    } else if(commonStatus === 'remove_activity_success') {
+          challenges: _.difference(this.state.challenges, exists),
+        });
+      });
+    } else if (commonStatus === 'remove_activity_success') {
       //console.log("commonStatus", commonStatus, activityId)
 
       //remove recent activity from list
-      var exist = _.find(this.state.recentActivities, (obj) => {
+      let exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
-      })
+      });
 
-      if(exist) {
-        var idx = this.state.recentActivities.indexOf(exist)
+      if (exist) {
+        let idx = this.state.recentActivities.indexOf(exist);
         this.state.recentActivities.splice(idx, 1);
         this.hasMounted && this.setState({
-          recentActivities:this.state.recentActivities
-        })
+          recentActivities: this.state.recentActivities,
+        });
       }
     } else if (newProps.selectedTab == 'home') {
       //get recent activity again

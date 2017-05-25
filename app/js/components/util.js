@@ -414,6 +414,10 @@ class UtilService {
   }
 
   static capitalizeFirstLetter(string) {
+    if (string === undefined ) {
+      return null;
+    }
+
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
