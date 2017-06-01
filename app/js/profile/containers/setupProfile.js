@@ -60,10 +60,12 @@ class SetupProfile extends Component {
     Orientation.unlockAllOrientations();
 
     if (Platform.OS === 'ios') {
-      Permissions.requestPermission('notification')
-          .then(response => {
-            console.log(response)
-          });
+      setTimeout(()=>{
+        Permissions.requestPermission('notification')
+            .then(response => {
+              console.log(response)
+            });
+      }, 1000)
     }
 
     this.hasMounted = true
