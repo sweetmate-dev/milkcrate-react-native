@@ -84,11 +84,14 @@ class BusinessesListView extends Component {
           renderRow={ this.renderRow.bind(this) }
           contentContainerStyle={ styles.categoryDetailListView }
         />
-        <LoadMoreSpinner
-          show={ moreBusinesses }
-          loading={ loading }
-          onClick={ ()=> onLoadBusinesses() }
-        />
+        {
+          !isRefreshing &&
+          <LoadMoreSpinner
+            show={ moreBusinesses }
+            loading={ loading }
+            onClick={ ()=> onLoadBusinesses() }
+          />
+        }
       </ScrollView>
     );
   }

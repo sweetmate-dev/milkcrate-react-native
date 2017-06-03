@@ -99,14 +99,15 @@ class VolunteerView extends Component {
       return state;
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-      this.search(position)
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
+        this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
         this.search(null)
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
@@ -250,11 +251,14 @@ class VolunteerView extends Component {
             renderRow={ this.renderListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }
           />
-          <LoadMoreSpinner
-            show={ this.state.volunteeresQuery.more }
-            loading={ this.state.volunteeresQuery.loading }
-            onClick={ ()=> this.loadVolunteer() }
-          />
+          {
+            !this.state.isRefreshing && 
+            <LoadMoreSpinner
+              show={ this.state.volunteeresQuery.more }
+              loading={ this.state.volunteeresQuery.loading }
+              onClick={ ()=> this.loadVolunteer() }
+            />
+          }
         </ScrollView>
       </View>
     );

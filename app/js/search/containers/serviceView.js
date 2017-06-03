@@ -103,14 +103,15 @@ class ServiceView extends Component {
       return state;
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-      this.search(position)
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
+        this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
         this.search(null)
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
@@ -266,11 +267,14 @@ class ServiceView extends Component {
             renderRow={ this.renderListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }
           />
-          <LoadMoreSpinner
-            show={ this.state.serviceQuery.more }
-            loading={ this.state.serviceQuery.loading }
-            onClick={ ()=> this.loadServices() }
-          />
+          { 
+            !this.state.isRefreshing && 
+            <LoadMoreSpinner
+              show={ this.state.serviceQuery.more }
+              loading={ this.state.serviceQuery.loading }
+              onClick={ ()=> this.loadServices() }
+            />
+          }
         </ScrollView>
       </View>
     );

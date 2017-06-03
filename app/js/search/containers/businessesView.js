@@ -100,13 +100,14 @@ class BusinessesView extends Component {
   }
 
   onCurrentLocation() {
-    navigator.geolocation.getCurrentPosition( (position) => {
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.setState({ currentLocation: position });
       },
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
@@ -119,15 +120,15 @@ class BusinessesView extends Component {
       return state;
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-      console.log("navigator.geolocation.getCurrentPosition", position)
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.search(position);
       },
       (error) => {
         console.log(JSON.stringify(error));
         this.search(null);
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 

@@ -92,6 +92,7 @@ export default class Main extends Component {
     if(!activeUser.name) {
       Actions.SetupProfile()
     }
+    
     /*
     if (Platform.OS === 'ios') {
 

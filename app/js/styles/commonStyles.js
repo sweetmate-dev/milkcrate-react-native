@@ -41,7 +41,11 @@ export const NavCloseButton = 8;
 export const NavCloseTextButton = 16;
 export const NavSendButton = 32;
 
-
+export const geoLocation = {
+  enableHighAccuracy: true,
+  timeout: 10000,
+  maximumAge: 1000,
+};
 /*
 export const stickerImages = [
   require('../../assets/imgs/category-stickers/animals.png'),

@@ -99,14 +99,14 @@ class ActionView extends Component {
       return state;
     });
 
-    /*navigator.geolocation.getCurrentPosition( (position) => {
-
+    /*navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.setState({ currentLocation: position })
       },
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );*/
 
     var searchText = this.searchText
@@ -239,11 +239,13 @@ class ActionView extends Component {
             renderRow={ this.renderActionsListRow.bind(this) }
             contentContainerStyle={ styles.listViewWrapper }
           />
-          <LoadMoreSpinner
-            show={ this.state.actionsQuery.more }
-            loading={ this.state.actionsQuery.loading }
-            onClick={ ()=> this.loadActions() }
-          />
+          {
+           !this.state.isRefreshing && <LoadMoreSpinner
+              show={ this.state.actionsQuery.more }
+              loading={ this.state.actionsQuery.loading }
+              onClick={ ()=> this.loadActions() }
+            />
+          }
         </ScrollView>
       </View>
     );

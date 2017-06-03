@@ -160,15 +160,15 @@ class Profile extends Component {
 
     this.loadRecentActivities()
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         //console.log("position", position)
           this.hasMounted&&this.setState({ currentLocation: position })
         },
         (error) => {
           console.log(JSON.stringify(error));
         },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 

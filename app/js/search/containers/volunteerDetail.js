@@ -82,14 +82,14 @@ class VolunteerDetail extends Component {
       })
     })
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.mounted && this.setState({ currentLocation: position })
       },
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
 
     bendService.getUser( (error, result) => {

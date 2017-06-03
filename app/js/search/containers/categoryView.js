@@ -2,17 +2,14 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   ListView,
   Text,
   View,
   Image,
-  Dimensions,
-  TouchableOpacity,
-  TouchableHighlight,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 
@@ -41,7 +38,7 @@ class CategoryView extends Component {
 
     this.state = {
       isRefreshing: false,
-
+      loading: true,
       currentLocation: null,
       activities: {
         event: [],
@@ -60,6 +57,7 @@ class CategoryView extends Component {
 
   loadAllData() {
     this.setState({
+      loading: true,
       currentLocation: null,
       activities: {
         event: [],
@@ -70,20 +68,25 @@ class CategoryView extends Component {
       },
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
-      this.search(position)
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
+        // alert(JSON.stringify(position));
+        this.search(position);
       },
       (error) => {
         console.log(JSON.stringify(error));
-        this.search(null)
+        // alert(JSON.stringify(error));
+        this.search(null);
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
   search(position) {
-    if(position)
+
+    if (position) {
       this.setState({ currentLocation: position })
+    }
     const title = this.props.title;
     const  index = this.props.index;
 
@@ -93,19 +96,20 @@ class CategoryView extends Component {
       limit: 20,
     }
 
-    if(position) {
+    if (position) {
       param.lat = position.coords.latitude;
       param.long = position.coords.longitude;
-    } else {
-      if(Cache.community && Cache.community._geoloc) {
-        param.lat = Cache.community._geoloc[1];
-        param.long = Cache.community._geoloc[0];
-      }
+    } else if (Cache.community && Cache.community._geoloc) {
+      param.lat = Cache.community._geoloc[1];
+      param.long = Cache.community._geoloc[0];
     }
 
     bendService.searchActivity(param, (error, result) => {
 
-      this.setState({ isRefreshing: false });
+      this.setState({ 
+        isRefreshing: false,
+        loading: false,
+      });
 
       if (error) {
         console.log("search failed", error)
@@ -232,7 +236,8 @@ class CategoryView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.action) }
             renderRow={ this.renderActionsListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -250,7 +255,8 @@ class CategoryView extends Component {
             enableEmptySections={ true }
             dataSource={ this.dataSource.cloneWithRows(this.state.activities.business) }
             renderRow={ this.renderBusinessesListRow.bind(this) }
-            contentContainerStyle={ styles.listViewWrapper }/>
+            contentContainerStyle={ styles.listViewWrapper }
+          />
         </View>
       :
         null
@@ -314,6 +320,16 @@ class CategoryView extends Component {
     );
   }
 
+  get showActivity() {
+    return (
+      <ActivityIndicator
+        hidesWhenStopped={ true }
+        animating={ !this.state.isRefreshing && this.state.loading }
+        style={ styles.activityIndicator }
+      />
+    );
+  }
+
   onRefresh() {
     this.setState({ isRefreshing: true });
     this.loadAllData();    
@@ -341,6 +357,7 @@ class CategoryView extends Component {
           { this.showEvents }
           { this.showVolunteer }
           { this.showServices }
+          { this.showActivity }
         </ScrollView>
       </View>
     );
@@ -364,7 +381,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: commonColors.line,
   },
-
   sectionHeaderContainer: {
     flexDirection: 'row',
   },
@@ -375,5 +391,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginLeft: 8,
     marginBottom: 8,
+  },
+  activityIndicator: {
+    marginTop: 10,
+    flex: 1,
   },
 });

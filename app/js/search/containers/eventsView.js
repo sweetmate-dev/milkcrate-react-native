@@ -7,10 +7,10 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
   ListView,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 
@@ -54,7 +54,7 @@ class EventsView extends Component {
       categoryIcons:[],
       eventsQuery: {
         more: true,
-        loading: false,
+        loading: true,
       },
     };
 
@@ -83,7 +83,7 @@ class EventsView extends Component {
       categoryIcons: [],
       eventsQuery: {
         more: true,
-        loading: false,
+        loading: true,
       },
     });
 
@@ -143,14 +143,15 @@ class EventsView extends Component {
       return state;
     });
 
-    navigator.geolocation.getCurrentPosition( (position) => {
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
         this.search(null)
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
@@ -304,6 +305,16 @@ class EventsView extends Component {
     this.groupEventsByDate(newEvents);  
   }
 
+  get showActivity() {
+    return (
+      <ActivityIndicator
+        hidesWhenStopped={ true }
+        animating={ !this.state.isRefreshing && this.state.loading }
+        style={ styles.activityIndicator }
+      />
+    );
+  }
+
   onRefresh() {
     this.setState({ isRefreshing: true });
     this.loadAllData();    
@@ -353,6 +364,7 @@ class EventsView extends Component {
             renderRow={ this.renderListRow.bind(this) }
             renderSectionHeader= { this.renderSectionHeader.bind(this) }
           />
+          { this.showActivity }
         </ScrollView>
       </View>
     );
@@ -409,5 +421,9 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'OpenSans-Semibold',
     fontSize: 14,
+  },
+  activityIndicator: {
+    marginTop: 10,
+    flex: 1,
   },
 });

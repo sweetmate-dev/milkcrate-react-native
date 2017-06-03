@@ -58,14 +58,14 @@ class FilterSearch extends Component {
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition( (position) => {
-
+    navigator.geolocation.getCurrentPosition( 
+      (position) => {
         this.setState({ currentLocation: position })
-        },
-        (error) => {
-          console.log(JSON.stringify(error));
-        },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      },
+      (error) => {
+        console.log(JSON.stringify(error));
+      },
+      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
   }
 
