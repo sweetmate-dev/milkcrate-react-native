@@ -80,9 +80,9 @@ class Home extends Component {
       }
     };
 
-    this.activityQuery = { 
+    this.activityQuery = {
       more: true,
-      createdAt: 0, 
+      createdAt: 0,
       limit: 20
     };
   }
@@ -99,7 +99,7 @@ class Home extends Component {
   componentWillReceiveProps(newProps) {
     //console.log("home componentWillReceiveProps", newProps)
     const { commonStatus, likeResult, recentActivityId, recentActivityLike, activityId } = newProps;
-    
+
     if (commonStatus === 'recent_activity_like_success') {
 
       let exist = _.find(this.state.recentActivities, (obj) => {
@@ -107,7 +107,7 @@ class Home extends Component {
       })
 
       if (likeResult && exist) {
-        
+
         if (exist.likedByMe != recentActivityLike) {
 
           exist.likedByMe = recentActivityLike;
@@ -148,7 +148,7 @@ class Home extends Component {
         let exists = _.filter(this.state.challenges, (object)=>{
           return object.activity._id == activity.activity._id;
         });
-        
+
         this.setState({
           challenges: _.difference(this.state.challenges, exists),
         });
@@ -215,13 +215,13 @@ class Home extends Component {
       activityQuery: {
         more: true,
         loading: false,
-      }      
+      }
     });
 
-    this.activityQuery = { 
+    this.activityQuery = {
       more: true,
-      createdAt: 0, 
-      limit: 20 
+      createdAt: 0,
+      limit: 20
     };
 
     bendService.getCategories( (error, result) => {
@@ -338,8 +338,8 @@ class Home extends Component {
       if (this.activityQuery.more) {
         //remove tail item
         result.pop()
-      }      
-      
+      }
+
       if (result.length > 0) {
         if(this.state.recentActivities.length > 0)
           UtilService.mixpanelEvent("Loaded More Community Activity")
@@ -402,7 +402,7 @@ class Home extends Component {
   }
 
   getChallengeCarousel (entries) {
-    
+
     return entries.map( (entry, index) => {
       const category = bendService.getActivityCategory(this.state.categories, entry.activity)
       if (category == null) {
@@ -481,7 +481,7 @@ class Home extends Component {
 
   get showVideo() {
     var delta = (Date.now() - (bendService.getActiveUser()._bmd.createdAt/1000000))/1000;
-    
+
     if (delta > 5 * 3600 * 24) {
       return null;
     }
@@ -577,7 +577,7 @@ class Home extends Component {
 
                   this.state.pollQuestion.answers[index].percentages = this.state.pollQuestion.answers[index].percentages||{}
                   this.state.pollQuestion.answers[index].percentages[communityId] = Math.round(this.state.pollQuestion.answers[index].counts[communityId] * 100 / this.state.pollQuestion.question.responseCounts[communityId]);
-                  
+
                   _.map(this.state.pollQuestion.answers, (obj)=>{
                     obj.percentages = obj.percentages||{}
                     obj.counts = obj.counts||{}
@@ -666,10 +666,10 @@ class Home extends Component {
     if ((this.state.pollQuestion.question.length === 0 ) || (this.state.pollQuestion.answers.length === 0 )) {
       return null;
     }
-    
+
     return (
       <View style={ styles.dailyPollContainer }>
-        <Text style={ styles.textTitle }>Daily Poll</Text>
+        <Text style={ styles.textTitle }>Poll</Text>
         <View style={ styles.dailyPollMainContentContainer }>
           <View style={ styles.dailyPollTopContentContainer }>
             <View style={ styles.dailyPollTopPointContainer }>
@@ -721,7 +721,7 @@ class Home extends Component {
 
   onRefresh() {
     this.hasMounted&&this.setState({ isRefreshing: true });
-    this.loadAllData();    
+    this.loadAllData();
   }
 
   render() {
@@ -754,7 +754,7 @@ class Home extends Component {
 }
 
 export default connect(state => ({
-    status: state.home.status, 
+    status: state.home.status,
     commonStatus: state.common.status,
     likeResult: state.common.likeResult,
     recentActivityId: state.common.recentActivityId,
