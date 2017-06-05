@@ -42,7 +42,7 @@ export const NavCloseTextButton = 16;
 export const NavSendButton = 32;
 
 export const geoLocation = {
-  enableHighAccuracy: true,
+  enableHighAccuracy: false,
   timeout: 10000,
   maximumAge: 1000,
 };
