@@ -171,41 +171,39 @@ export default class Main extends Component {
   }
 
   _onRemoteNotification(notification) {
-    console.log("notification", notification)
+    console.log("notification : ", notification)
+    let url;
 
-    var url;
-
-    if(Platform.OS == 'ios') {
+    if (Platform.OS == 'ios') {
       url = notification.data.deeplink;
     } else {
       url = notification.deeplink;
     }
 
-    if(notification.foreground) {
+    if (notification.foreground) {
       //in-use
-      if(url) {
+      if (url) {
         Alert.alert(
-            notification.data.title,
-            notification.message,
-            [
-              {text: notification.data.cancelButton||'Dismiss', onPress: () => {
-                console.log("Canceled")
-              }},
-              {text: notification.data.actionButton||'View Now', onPress: () => {
-                Linking.openURL(url.toLowerCase())
-              }},
-            ]
-        )
+          notification.title,
+          notification.message,
+          [
+            { text: notification.cancelButton || 'Dismiss', onPress: () => {
+              console.log("Canceled")
+            }},
+            { text: notification.actionButton || 'View Now', onPress: () => {
+              Linking.openURL(url.toLowerCase())
+            }},
+          ]
+        );
       } else {
         Alert.alert(
-            notification.data.title,
-            notification.message
+          notification.title,
+          notification.message
         )
       }
     } else {
       //background notification
-
-      if(url)
+      if (url)
         Linking.openURL(url.toLowerCase())
     }
   }

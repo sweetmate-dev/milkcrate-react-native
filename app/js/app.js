@@ -115,14 +115,16 @@ class App extends Component {
           }
 
           console.log('handleUrl : ', url);
-          var defaultLink = 'milkcrate://search';
-          if(defaultLink == url) {
-            defaultLink = 'milkcrate://profile'
-          }
-          setTimeout(()=>{
-            DeepLinking.evaluateUrl(url);
-          }, 50)
-          DeepLinking.evaluateUrl(defaultLink);
+          // var defaultLink = 'milkcrate://search';
+          // if(defaultLink == url) {
+          //   defaultLink = 'milkcrate://profile'
+          // }
+          // setTimeout(()=>{
+          //   DeepLinking.evaluateUrl(url);
+          // }, 50)
+          // DeepLinking.evaluateUrl(defaultLink);
+          DeepLinking.evaluateUrl(url);
+
         }
       });
     });
