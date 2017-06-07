@@ -134,7 +134,7 @@ class BusinessesMapView extends Component {
           onRegionChange={ (region) => this.onRegionChange(region) }
         >
           {
-            this.state.currentLocation && <MapView.Marker
+            this.props.currentLocation && <MapView.Marker
               image={ currentLocationMarker }
               coordinate={ this.props.currentLocation.coords }
               flat={ true }                
