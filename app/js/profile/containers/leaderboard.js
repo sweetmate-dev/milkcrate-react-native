@@ -157,6 +157,7 @@ class Leaderboard extends Component {
         <View style={ styles.orderContainer }>
           { community.logo && <Image source={{ uri : community.logo._downloadURL }} style={ styles.imageComcast } resizeMode="contain"/> }
           <Text style={ styles.textOrder }>{ UtilService.getPositionString(currentUser.rank) } out of { total } people</Text>
+          <Text style={ styles.textUpdate }>Updated every 15 mins</Text>
         </View>
 
         <ScrollView>
@@ -204,6 +205,13 @@ const styles = StyleSheet.create({
     color: commonColors.grayText,
     fontFamily: 'Open Sans',
     fontSize: 12,
+  },
+  textUpdate: {
+    marginTop: 10,
+    color: commonColors.grayText,
+    fontFamily: 'Open Sans',
+    // fontWeight: 'bold',
+    fontSize: 10,
   },
   leaderboardListViewWrapper: {
     flex: 1,
