@@ -376,6 +376,7 @@ module.exports = {
         query.containsAll("communities", [communityId])
         query.greaterThan("endsAt", Date.now() * 1000000)
         query.lessThan("startsAt", Date.now() * 1000000)
+        query.notEqualTo("deleted", true)
 
         Bend.DataStore.find("challenge", query, {
             relations:{
