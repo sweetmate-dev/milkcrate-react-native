@@ -21,6 +21,7 @@ import Permissions from 'react-native-permissions';
 import Home from '../../home/containers/home';
 import Search from '../../search/containers/search';
 import Notifications from '../../alert/containers/notifications';
+import Activity from '../../activity/containers/activity';
 import Profile from '../../profile/containers/profile';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import DeviceInfo from 'react-native-device-info';
@@ -36,9 +37,9 @@ const homeIcon = require('../../../assets/imgs/tabbar_home.png');
 const homeSelectedIcon = require('../../../assets/imgs/tabbar_home_selected.png');
 const searchIcon = require('../../../assets/imgs/tabbar_search.png');
 const searchSelectedIcon = require('../../../assets/imgs/tabbar_search_selected.png');
-const alertIcon = require('../../../assets/imgs/tabbar_alert.png');
+const activityIcon = require('../../../assets/imgs/tabbar_activity.png');
 const alertIconRed = require('../../../assets/imgs/icon-alert-red.png');
-const alertSelectedIcon = require('../../../assets/imgs/tabbar_alert_selected.png');
+const activitySelectedIcon = require('../../../assets/imgs/tabbar_activity_selected.png');
 const youIcon = require('../../../assets/imgs/tabbar_you.png');
 const youSelectedIcon = require('../../../assets/imgs/tabbar_you_selected.png');
 
@@ -62,9 +63,6 @@ export default class Main extends Component {
       selectedTab: tab,
       badge: 0,
       searchAutoFocus: false,
-      alerts: [],
-      lastAlertTime: 0,
-      hasNewAlert: false,
       showingModal: false,
     };
 
@@ -153,8 +151,6 @@ export default class Main extends Component {
         requestPermissions: true,
       });
     }, 1000)
-
-    this.loadAlerts()
   }
 
   componentWillUnmount() {
@@ -305,47 +301,6 @@ export default class Main extends Component {
     });
   }
 
-  loadAlerts() {
-    //first load alerts
-    bendService.getUserAlerts( (error, result)=>{
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      if (result.length > 0) {
-        this.hasMounted && this.setState({
-          alerts: result,
-          lastAlertTime:result[0]._bmd.createdAt
-        })
-      }
-    })
-
-    var intervalHandler = setInterval(()=>{
-      if(!this.hasMounted) {
-        clearInterval(intervalHandler);
-        return;
-      }
-      if (bendService.getActiveUser()) {
-        bendService.getLastAlerts(this.state.lastAlertTime, (error, result) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
-
-          if (result.length > 0) {
-            this.state.alerts = result.concat(this.state.alerts)
-            this.hasMounted && this.setState({
-              alerts: this.state.alerts,
-              lastAlertTime: result[0]._bmd.createdAt,
-              hasNewAlert:true
-            })
-          }
-        })
-      }
-    }, 3000)
-  }
-
   showActivityDetailModal() {
     const { 
       subOne, 
@@ -403,12 +358,6 @@ export default class Main extends Component {
     this.hasMounted && this.setState({
       selectedTab: tab,
     });
-
-    if(tab == 'alerts') {
-      this.hasMounted && this.setState({
-        hasNewAlert:false
-      });
-    }
   }
 
   render() {
@@ -441,7 +390,7 @@ export default class Main extends Component {
           {/* Search */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'search' }
-            title="Search"
+            title="Explore"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
             renderIcon={ () => <Image source={ searchIcon } style={ styles.iconTabbar2 }/> }
@@ -454,19 +403,18 @@ export default class Main extends Component {
             />
           </TabNavigator.Item>
 
-          {/* Alert */}
+          {/* Activity */}
           <TabNavigator.Item
-            selected={ this.state.selectedTab === 'alerts' }
-            title="Alerts"
+            selected={ this.state.selectedTab === 'activity' }
+            title="Activity"
             selectedTitleStyle={ styles.selectedText }
             titleStyle={ styles.text }
-            renderIcon={ () => <Image source={ this.state.hasNewAlert ? alertIconRed : alertIcon } style={ this.state.hasNewAlert ? styles.iconTabbar3_2 : styles.iconTabbar3 } resizeMode="contain"/> }
-            renderSelectedIcon={ () => <Image source={ alertSelectedIcon } style={ styles.iconTabbar3 }/> }
+            renderIcon={ () => <Image source={ activityIcon } style={ styles.iconTabbar3 } resizeMode="contain"/> }
+            renderSelectedIcon={ () => <Image source={ activitySelectedIcon } style={ styles.iconTabbar3 }/> }
             badgeText={ this.state.badge }
-            onPress={ () => this.onSelectTab('alerts') }>
-            <Notifications
+            onPress={ () => this.onSelectTab('activity') }>
+            <Activity
               subOne={ subOne }
-              alerts={ this.state.alerts }
               onSearch={ () => this.onSelectSearch() }
             />
           </TabNavigator.Item>
@@ -509,12 +457,8 @@ const styles = StyleSheet.create({
     height: 19,
   },
   iconTabbar3: {
-    width: 20,
+    width: 22,
     height: 21,
-  },
-  iconTabbar3_2: {
-    width: 20,
-    height: 24,
   },
   iconTabbar4: {
     width: 15,

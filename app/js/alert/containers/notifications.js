@@ -21,8 +21,9 @@ import { connect } from 'react-redux';
 
 import { Actions } from 'react-native-router-flux';
 import AlertListCell from '../components/alertListCell';
-import NavSearchBar from '../../components/navSearchBar';
+import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
+import * as commonStyles from '../../styles/commonStyles';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -42,7 +43,7 @@ class Notifications extends Component {
 
   componentDidMount(){
     UtilService.mixpanelEvent("Viewed Alerts")
-    //this.loadAllData();
+    // this.loadAllData();
   }
 
   loadAllData() {
@@ -109,6 +110,10 @@ class Notifications extends Component {
     this.loadAllData();    
   }
 
+  onBack() {
+    Actions.pop();
+  }
+
   renderAlert() {
     if(this.props.alerts.length > 0) {
       return (
@@ -141,9 +146,10 @@ class Notifications extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <NavSearchBar
-          onGoSearchScreen={ () => this.onGoSearchScreen() }
-          searchMode={ false }
+        <NavTitleBar
+          buttons={ commonStyles.NavBackButton }
+          onBack={ this.onBack }
+          title ='My Alerts'
         />
         {
             this.renderAlert()

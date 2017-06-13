@@ -40,6 +40,7 @@ export const NavSettingButton = 4;
 export const NavCloseButton = 8;
 export const NavCloseTextButton = 16;
 export const NavSendButton = 32;
+export const NavNotificationButton = 64;
 
 export const geoLocation = {
   enableHighAccuracy: false,

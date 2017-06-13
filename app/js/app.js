@@ -31,6 +31,7 @@ import Signup from './auth/containers/signup';
 import Login from './auth/containers/login';
 import ForgotPassword from './auth/containers/forgotPassword';
 import Main from './main/containers/main';
+import Notifications from './alert/containers/notifications';
 import BusinessesView from './search/containers/businessesView';
 import CategoryView from './search/containers/categoryView';
 import RecentView from './search/containers/recentView';
@@ -53,6 +54,7 @@ import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
 import SendFeedbackModal from './profile/containers/sendFeedbackModal';
+
 
 class App extends Component {
   constructor(props) {
@@ -162,6 +164,7 @@ class App extends Component {
         <Scene key="RecentView" component={ RecentView } />
         <Scene key="EventsView" component={ EventsView } />
         <Scene key="Settings" component={ Settings } />
+        <Scene key="Notifications" component={ Notifications } />
         <Scene key="CommunityPoints" component={ CommunityPoints } />
         <Scene key="WeeklyRecap" component={ WeeklyRecap } direction='vertical' />
         <Scene key="Leaderboard" component={ Leaderboard } />
