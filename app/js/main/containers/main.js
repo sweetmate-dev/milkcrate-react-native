@@ -54,7 +54,7 @@ export default class Main extends Component {
     super(props);
 
     let tab = this.props.tab;
-    console.log('main - tab : ', tab)
+
     if ((tab == null) || (tab == 'modal')) {
       tab = 'home';
     }

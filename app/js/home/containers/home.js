@@ -22,7 +22,6 @@ import { bindActionCreators } from 'redux';
 import * as homeActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
-import * as commonActions from '../../common/actions';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
@@ -30,14 +29,11 @@ import timer from 'react-native-timer';
 import NavSearchBar from '../../components/navSearchBar';
 
 import ChallengeCarousel from '../components/challengeCarousel';
-import TrendingCarousel from '../components/trendingCarousel';
-import RecentActivityListCell from '../../components/recentActivityListCell';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
-import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -47,9 +43,8 @@ import Cache from '../../components/Cache'
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 
-const trending = require('../../../assets/imgs/trending.png');
-
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
+
 
 class Home extends Component {
   constructor(props) {
@@ -59,24 +54,19 @@ class Home extends Component {
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
+      isRefreshing: true,
+
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
       selectedDailyPollStateMode: false,
-      isRefreshing: false,
 
       challenges: [],
       community: {},
       categories: [],
-      trendings: [],
       pollQuestion:{
         question: {},
         answers: [],
         myAnswer: null,
-      },
-      recentActivities:[],
-      activityQuery:{
-        more: true,
-        loading: false,
       },
 
       hasNewAlert: false,
@@ -84,11 +74,6 @@ class Home extends Component {
       lastAlertTime: 0,
     };
 
-    this.activityQuery = {
-      more: true,
-      createdAt: 0,
-      limit: 20
-    };
   }
 
   componentDidMount() {
@@ -101,105 +86,7 @@ class Home extends Component {
     this.hasMounted = false
   }
 
-  componentWillReceiveProps(newProps) {
-    //console.log("home componentWillReceiveProps", newProps)
-    const { commonStatus, likeResult, recentActivityId, recentActivityLike, activityId } = newProps;
-
-    if (commonStatus === 'recent_activity_like_success') {
-
-      let exist = _.find(this.state.recentActivities, (obj) => {
-        return obj._id == recentActivityId;
-      })
-
-      if (likeResult && exist) {
-
-        if (exist.likedByMe != recentActivityLike) {
-
-          exist.likedByMe = recentActivityLike;
-
-          if (recentActivityLike) {
-            exist.likeCount = Number(exist.likeCount || 0) + 1;
-          } else {
-            exist.likeCount = Math.max(Number(exist.likeCount || 0) - 1, 0);
-          }
-
-          this.hasMounted&&this.setState({
-            recentActivities: this.state.recentActivities
-          });
-        }
-      }
-    } else if(commonStatus === 'capture_activity_success') {
-      let exist = _.find(this.state.recentActivities, (obj) => {
-        return obj._id == activityId;
-      })
-
-      if (exist) {
-        return;
-      }
-
-      //add new recent activity
-      bendService.getRecentActivity(activityId, (error, activity) => {
-        if (error) {
-          console.log(error);
-          return;
-        }
-
-        this.state.recentActivities.unshift(activity);
-        this.hasMounted && this.setState({
-          recentActivities: this.state.recentActivities,
-        });
-
-        //update challenges
-        let exists = _.filter(this.state.challenges, (object)=>{
-          return object.activity._id == activity.activity._id;
-        });
-
-        this.setState({
-          challenges: _.difference(this.state.challenges, exists),
-        });
-      });
-    } else if (commonStatus === 'remove_activity_success') {
-      //console.log("commonStatus", commonStatus, activityId)
-
-      //remove recent activity from list
-      let exist = _.find(this.state.recentActivities, (obj) => {
-        return obj._id == activityId;
-      });
-
-      if (exist) {
-        let idx = this.state.recentActivities.indexOf(exist);
-        this.state.recentActivities.splice(idx, 1);
-        this.hasMounted && this.setState({
-          recentActivities: this.state.recentActivities,
-        });
-      }
-    } else if (newProps.selectedTab == 'home') {
-      //get recent activity again
-      this.loadLastActivities();
-    }
-  }
-
-  loadLastActivities() {
-    var lastTime = 0;
-    if (this.state.recentActivities.length > 0) {
-      lastTime = this.state.recentActivities[0]._bmd.createdAt;
-    } else
-        return;
-
-    bendService.getLastActivities(lastTime, (error, result)=>{
-      if (error) {
-        console.log(error);return
-      }
-
-      if (result.length > 0) {
-        this.state.recentActivities = result.concat(this.state.recentActivities);
-        this.hasMounted&&this.setState({
-          recentActivities:this.state.recentActivities
-        })
-      }
-    })
-  }
-
+  
   loadAllData() {
 
     this.hasMounted&&this.setState({
@@ -210,24 +97,12 @@ class Home extends Component {
       challenges: [],
       community: {},
       categories: [],
-      trendings: [],
       pollQuestion:{
         question: {},
         answers: [],
         myAnswer: null,
       },
-      recentActivities:[],
-      activityQuery: {
-        more: true,
-        loading: false,
-      }
     });
-
-    this.activityQuery = {
-      more: true,
-      createdAt: 0,
-      limit: 20
-    };
 
     bendService.getCategories( (error, result) => {
 
@@ -249,18 +124,6 @@ class Home extends Component {
       this.hasMounted&&this.setState({ challenges: result });
     })
 
-    bendService.getTrending( (error, result) => {
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      this.hasMounted&&this.setState({
-        trendings: result
-      })
-    })
-
     bendService.getCommunity( (error, result) => {
 
       if (error) {
@@ -272,8 +135,6 @@ class Home extends Component {
         community: result
       })
     })
-
-    this.loadRecentActivities()
 
     this.loadPollQuestion()
 
@@ -334,115 +195,27 @@ class Home extends Component {
   loadPollQuestion() {
     bendService.getPollQuestion( (error, question, answers, myAnswer) => {
 
+      if (this.hasMounted) {
+        this.setState({ isRefreshing: false });
+      }
+
       if (error) {
         console.log('poll questions erroror', error);
         return;
       }
 
-      this.hasMounted&&this.setState({
-        pollQuestion: {
-          question: question,
-          answers: answers,
-          myAnswer: myAnswer
-        }
-      })
-    })
-  }
-
-  loadRecentActivities() {
-
-    if ( this.activityQuery.more === false )
-      return;
-
-    this.hasMounted&&this.setState( (state) => {
-      state.activityQuery.loading = true;
-      return state;
+      if (this.hasMounted) {
+        this.setState({
+          pollQuestion: {
+            question: question,
+            answers: answers,
+            myAnswer: myAnswer
+          }
+        });
+      }
     });
-
-    bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
-
-      this.hasMounted&&this.setState( (state) => {
-        state.activityQuery.loading = false;
-        return state;
-      });
-
-      this.hasMounted&&this.setState({
-        isRefreshing: false,
-      });
-
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      this.activityQuery.more = (result.length == this.activityQuery.limit + 1)
-
-      this.hasMounted&&this.setState((state) => {
-        state.activityQuery.more = this.activityQuery.more;
-        return state;
-      });
-
-      if (this.activityQuery.more) {
-        //remove tail item
-        result.pop()
-      }
-
-      if (result.length > 0) {
-        if(this.state.recentActivities.length > 0)
-          UtilService.mixpanelEvent("Loaded More Community Activity")
-        else
-          UtilService.mixpanelEvent("View Recent Community Activity")
-
-        this.state.recentActivities = this.state.recentActivities.concat(result)
-        this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
-        this.hasMounted&&this.setState({
-          recentActivities: this.state.recentActivities,
-        })
-      }
-
-      this.hasMounted&&this.setState({
-        activityQuery: this.state.activityQuery
-      })
-    })
   }
 
-  renderRecentActivityRow(rowData, sectionID, rowID) {
-
-    return (
-      <RecentActivityListCell
-        name={ rowData.user.name || '' }
-        description={ rowData.summary || '' }
-        avatar={ rowData.user.avatar ? UtilService.getSmallImage(rowData.user.avatar) : '' }
-        avatarBackColor={ UtilService.getBackColor(rowData.user.avatar) }
-        defaultAvatar={ UtilService.getDefaultAvatar(rowData.user.defaultAvatar) }
-        time={ UtilService.getPastDateTime(rowData._bmd.createdAt) }
-        hearts={ Number(rowData.likeCount || 0) }
-        likeByMe={ rowData.likedByMe || false }
-        points={ Number(rowData.points || 1) }
-        onClick={ () => this.onRecentActivityCellPressed(rowData) }
-        onLike={ () => this.onLike(rowData, !(rowData.likedByMe || false)) }
-      />
-    );
-  }
-
-  onLike(activity, like) {
-
-    this.props.recentActivityLikeActions.likeRecentActivity(activity, like);
-  }
-
-  onRecentActivityCellPressed (activity) {
-    if(activity.type == 'business') {
-      Actions.BusinessesDetail({ business: activity.activity });
-    } else if(activity.type == 'action') {
-      Actions.ActionDetail({ action: activity.activity });
-    } else if(activity.type == 'event') {
-      Actions.EventDetail({ event: activity.activity });
-    } else if(activity.type == 'service') {
-      Actions.ServiceDetail({ service: activity.activity });
-    } else if(activity.type == 'volunteer_opportunity') {
-      Actions.VolunteerDetail({ volunteer: activity.activity });
-    }
-  }
 
   onLearnMore() {
     Actions.LearnMoreModal({question:this.state.pollQuestion.question});
@@ -463,33 +236,6 @@ class Home extends Component {
           icon={ UtilService.getCategoryIcon(category) }
           points={ entry.activity.points ? Math.max(Number(entry.activity.points), 1) : 1 }
           link={ entry.activity.url }
-          rawData={ entry }
-        />
-      );
-    });
-  }
-
-  getTrendingCarousel (entries) {
-    if (!entries || entries.length == 0) {
-      return false;
-    }
-
-    return entries.map( (entry, index) => {
-      let category = bendService.getActivityCategory(this.state.categories, entry)
-      if(category == null) return null;
-      return (
-        <TrendingCarousel
-          key={ index }
-          type={ UtilService.getTrendTitle(entry.type) }
-          activityType={ entry.type }
-          activity={ entry }
-          title={ entry.name }
-          icon={ category ? UtilService.getCategorySticker(category) : require('../../../assets/imgs/category-stickers/transit.png') }
-          users={ entry.users }
-          userCount={ entry.userCount }
-          time={ entry.lastTime }
-          hearts={ Number(entry.likeCount || 0) }
-          points={ Number(entry.points || 1) }
           rawData={ entry }
         />
       );
@@ -534,8 +280,8 @@ class Home extends Component {
     }
 
     return (
-      <View style={ styles.trendingContainer }>
-        <View style={ styles.trendingTitleContainer }>
+      <View style={ styles.videoContainer }>
+        <View style={ styles.videoTitleContainer }>
           <Text style={ styles.textTitle }>Intro Video</Text>
         </View>
         <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPlayIntroVideo() }>
@@ -545,35 +291,6 @@ class Home extends Component {
         </TouchableOpacity>
       </View>
     )
-  }
-
-  get showTrending() {
-    return (
-    this.state.trendings.length > 0 && <View style={ styles.trendingContainer }>
-        <View style={ styles.trendingTitleContainer }>
-          <Text style={ styles.textTitle }>Currently Trending</Text>
-          <Image style={ styles.imageTrending } source={ trending }/>
-        </View>
-        {
-          this.state.trendings.length > 0 && <Carousel
-            sliderWidth={ commonStyles.carouselerWidth }
-            itemWidth={ commonStyles.carouselItemWidth }
-            inactiveSlideScale={ 1 }
-            inactiveSlideOpacity={ 1 }
-            enableMomentum={ false }
-            containerCustomStyle={ styles.slider }
-            contentContainerCustomStyle={ styles.sliderContainer }
-            showsHorizontalScrollIndicator={ false }
-            snapOnAndroid={ true }
-            removeClippedSubviews={ false }
-            onSnapToItem={(idx)=>{
-              UtilService.mixpanelEvent("Swiped Trending")
-            }}
-          >
-          { this.getTrendingCarousel(this.state.trendings) }
-        </Carousel>}
-      </View>
-    );
   }
 
   get showMainDailyPollSelectMode() {
@@ -741,26 +458,6 @@ class Home extends Component {
     );
   }
 
-  get showRecentActivity() {
-    return (
-      <View style={ styles.recentActivityContainer }>
-        <Text style={ styles.textTitle }>Recent Activity at { this.state.community.name }</Text>
-        <View style={ styles.recentActivityListViewWrapper }>
-          <ListView
-            enableEmptySections={ true }
-            scrollEnabled={ false }
-            dataSource={ this.dataSourceRecentActivity.cloneWithRows(this.state.recentActivities) }
-            renderRow={ this.renderRecentActivityRow.bind(this) }
-          />
-        </View>
-        <LoadMoreSpinner
-          show={ this.state.activityQuery.more }
-          loading={ this.state.activityQuery.loading }
-          onClick={ ()=> this.loadRecentActivities() }
-        />
-      </View>
-    );
-  }
 
   onNotifications() {
     if (this.hasMounted) {
@@ -775,7 +472,10 @@ class Home extends Component {
   }
 
   onRefresh() {
-    this.hasMounted&&this.setState({ isRefreshing: true });
+    if (this.hasMounted) {
+      this.setState({ isRefreshing: true });
+    }
+
     this.loadAllData();
   }
 
@@ -802,9 +502,7 @@ class Home extends Component {
         >
           { this.showChallenges }
           {this.showVideo}
-          { this.showTrending }
           { this.showDailyPoll }
-          { this.showRecentActivity }
         </ScrollView>
       </View>
     );
@@ -813,15 +511,9 @@ class Home extends Component {
 
 export default connect(state => ({
     status: state.home.status,
-    commonStatus: state.common.status,
-    likeResult: state.common.likeResult,
-    recentActivityId: state.common.recentActivityId,
-    recentActivityLike: state.common.recentActivityLike,
-    activityId: state.common.activityId,
   }),
   (dispatch) => ({
     actions: bindActionCreators(homeActions, dispatch),
-    recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
   })
 ) (Home);
 
@@ -845,30 +537,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 10,
   },
-  recentActivityListViewWrapper: {
-    borderStyle: 'solid',
-    borderTopWidth: 1,
-    borderTopColor: commonColors.line,
-  },
-  trendingContainer: {
+  videoContainer: {
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 10,
   },
-  trendingTitleContainer: {
+  videoTitleContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  imageTrending: {
-    width: 13,
-    height: 8,
-  },
-  recentActivityContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 10,
-  },
+  },  
   dailyPollContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -946,18 +624,7 @@ const styles = StyleSheet.create({
   },
   dailyPollSelectContentContainer: {
 
-  },
-  dailyPollStateModeWrapper: {
-
-  },
-  imageVideoWrapper: {
-    position:'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor:'red',
-  },
+  },    
   imageVideo: {
     flexShrink: 1,
     height: 200,
