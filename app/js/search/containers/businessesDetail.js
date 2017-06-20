@@ -86,7 +86,7 @@ class BusinessesDetail extends Component {
         return o._id == this.props.business._id
       })
 
-      console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+      //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
         pinned:exist?true:false

@@ -53,7 +53,8 @@ class VolunteerDetail extends Component {
 
       currentLocation: null,
       modalVisible: false,
-      hoursNumber: "0"
+      hoursNumber: "0",
+      pinned:false,
     };
     
     this.category = _.find(Cache.categories, (obj)=>{
@@ -66,6 +67,19 @@ class VolunteerDetail extends Component {
   componentDidMount() {
     this.mounted = true
     const { volunteer } = this.props;
+
+    bendService.getPinnedActivities((err, rets)=>{
+      var exist = _.find(rets, (o)=>{
+        return o._id == volunteer._id
+      })
+
+      //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+
+      this.setState({
+        pinned:exist?true:false
+      })
+    })
+
     bendService.checkActivityDid(volunteer._id, 'volunteer_opportunity', (error, result) => {
       
       if (error) {
@@ -192,6 +206,32 @@ class VolunteerDetail extends Component {
     this.mounted && this.setState({ modalVisible: visible });
   }
 
+  onPin() {
+    if(this.state.pinned) {
+      bendService.unpinActivity({
+        type:'volunteer_opportunity',
+        id:this.props.volunteer._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:false
+          })
+        }
+      })
+    } else {
+      bendService.pinActivity({
+        type:'volunteer_opportunity',
+        id:this.props.volunteer._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:true
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const { 
       volunteer,
@@ -204,6 +244,9 @@ class VolunteerDetail extends Component {
           buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title = {volunteer.name}
+          showPin = {true}
+          pinned = {this.state.pinned}
+          onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
           { volunteer._geoloc && <MapView

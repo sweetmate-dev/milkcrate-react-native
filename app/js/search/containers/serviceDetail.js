@@ -37,7 +37,8 @@ class ServiceDetail extends Component {
 
     this.state = {
       didStatus:false,
-      activityId:null
+      activityId:null,
+      pinned:false,
     };
 
     console.log('this.props.service : ', this.props.service);
@@ -52,6 +53,18 @@ class ServiceDetail extends Component {
 
   componentDidMount(){
     const service = this.props.service
+
+    bendService.getPinnedActivities((err, rets)=>{
+      var exist = _.find(rets, (o)=>{
+        return o._id == service._id
+      })
+
+      //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+
+      this.setState({
+        pinned:exist?true:false
+      })
+    })
 
     bendService.checkActivityDid(service._id, 'service', (error, result)=>{
 
@@ -123,6 +136,32 @@ class ServiceDetail extends Component {
     }
   }
 
+  onPin() {
+    if(this.state.pinned) {
+      bendService.unpinActivity({
+        type:'service',
+        id:this.props.service._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:false
+          })
+        }
+      })
+    } else {
+      bendService.pinActivity({
+        type:'service',
+        id:this.props.service._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:true
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const { 
       service,
@@ -142,6 +181,9 @@ class ServiceDetail extends Component {
           buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title ={ service.name }
+          showPin = {true}
+          pinned = {this.state.pinned}
+          onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
           {imageObj && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri: backgroundImage }}/>}

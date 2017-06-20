@@ -42,12 +42,24 @@ class ActionDetail extends Component {
       initialize: true,
       didStatus: false,
       activityId: null,
+      pinned:false,
       // showAnimiation: false,
     };
   }
 
   componentDidMount(){
     const action = this.props.action
+    bendService.getPinnedActivities((err, rets)=>{
+      var exist = _.find(rets, (o)=>{
+        return o._id == this.props.action._id
+      })
+
+      //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+
+      this.setState({
+        pinned:exist?true:false
+      })
+    })
 
     bendService.checkActivityDid(action._id,'action', (error, result) => {
       
@@ -118,6 +130,32 @@ class ActionDetail extends Component {
     }
   }
 
+  onPin() {
+    if(this.state.pinned) {
+      bendService.unpinActivity({
+        type:'action',
+        id:this.props.action._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:false
+          })
+        }
+      })
+    } else {
+      bendService.pinActivity({
+        type:'action',
+        id:this.props.action._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:true
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const { 
       action,
@@ -139,6 +177,9 @@ class ActionDetail extends Component {
           buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title ={action.name}
+          showPin = {true}
+          pinned = {this.state.pinned}
+          onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
           { this.state.initialize && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri:backgroundImage }}/> }

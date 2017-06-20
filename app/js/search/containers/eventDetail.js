@@ -53,6 +53,7 @@ class EventDetail extends Component {
       user: {},
       currentLocation: null,
       showAddToCalendar: true,
+      pinned:false,
     };
 
     this.activityId = null;
@@ -70,6 +71,18 @@ class EventDetail extends Component {
     const {
       event
     } = this.props;
+
+    bendService.getPinnedActivities((err, rets)=>{
+      var exist = _.find(rets, (o)=>{
+        return o._id == event._id
+      })
+
+      //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+
+      this.setState({
+        pinned:exist?true:false
+      })
+    })
 
     bendService.checkActivityDid(event._id, 'event', (error, result)=>{
       if (error) {
@@ -326,6 +339,32 @@ class EventDetail extends Component {
     );
   }
 
+  onPin() {
+    if(this.state.pinned) {
+      bendService.unpinActivity({
+        type:'event',
+        id:this.props.event._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:false
+          })
+        }
+      })
+    } else {
+      bendService.pinActivity({
+        type:'event',
+        id:this.props.event._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:true
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const {
       event,
@@ -343,6 +382,9 @@ class EventDetail extends Component {
           buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title={ event.name }
+          showPin = {true}
+          pinned = {this.state.pinned}
+          onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
           {
