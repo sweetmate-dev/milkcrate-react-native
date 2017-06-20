@@ -18,6 +18,8 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons';
 const back_arrow = require('../../assets/imgs/back_arrow.png');
 const filter = require('../../assets/imgs/filter.png');
 const setting = require('../../assets/imgs/setting.png');
+const pin = require('../../assets/imgs/pin.png');
+const unpin = require('../../assets/imgs/unpin.png');
 
 export default class NavTitleBar extends Component {
 
@@ -27,7 +29,7 @@ export default class NavTitleBar extends Component {
     onSetting: PropTypes.func,
     onSend: PropTypes.func,
     title: PropTypes.string,
-    buttons: PropTypes.number,    
+    buttons: PropTypes.number
   }
 
   static defaultProps = {
@@ -35,8 +37,10 @@ export default class NavTitleBar extends Component {
     onFilter: () => {},
     onSetting: () => {},
     onSend: () => {},
+    onPin:() => {},
     title: 'Title',
     buttons: commonStyles.NavNoneButton,
+    showPin:false
   }
 
   constructor(props) {
@@ -68,6 +72,12 @@ export default class NavTitleBar extends Component {
   onSend() {
     if (this.props.onSend) {
       this.props.onSend();
+    }
+  }
+
+  onPin() {
+    if (this.props.onPin) {
+      this.props.onPin();
     }
   }
 
@@ -119,13 +129,25 @@ export default class NavTitleBar extends Component {
 
   get renderRightButton() {
      const {
-      buttons,
+      buttons,showPin, pinned
     } = this.props;
+
+    if (showPin) {
+      return (
+          <View style={ styles.buttonWrap }>
+            <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPin() }>
+              <View style={ styles.button }>
+                <Image source={ pinned?pin:unpin } style={ styles.image }/>
+              </View>
+            </TouchableOpacity>
+          </View>
+      );
+    }
 
     if (buttons & commonStyles.NavFilterButton) {
       return (
         <View style={ styles.buttonWrap }>
-          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onFilter() }>
+          <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPin() }>
             <View style={ styles.button }>
               <Image source={ filter } style={ styles.image }/>
             </View>

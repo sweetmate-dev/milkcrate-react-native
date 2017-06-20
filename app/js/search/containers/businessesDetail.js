@@ -67,6 +67,7 @@ class BusinessesDetail extends Component {
       trendUserCount: 0,
       lastTrendTime: Date.now() * 1000000,
       trendInit: false,
+      pinned:false
     };
 
     this.category = _.find(Cache.categories, (entry) => {
@@ -79,6 +80,18 @@ class BusinessesDetail extends Component {
   componentDidMount(){
     this.mounted = true;
     const business = this.props.business;
+
+    bendService.getPinnedActivities((err, rets)=>{
+      var exist = _.find(rets, (o)=>{
+        return o._id == this.props.business._id
+      })
+
+      console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
+
+      this.setState({
+        pinned:exist?true:false
+      })
+    })
 
     bendService.checkActivityDid(business._id, 'business', (error, result) => {
       if (error) {
@@ -335,6 +348,32 @@ class BusinessesDetail extends Component {
     });
   }
 
+  onPin() {
+    if(this.state.pinned) {
+      bendService.unpinActivity({
+        type:'business',
+        id:this.props.business._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:false
+          })
+        }
+      })
+    } else {
+      bendService.pinActivity({
+        type:'business',
+        id:this.props.business._id
+      }, (err, ret)=>{
+        if(!err) {
+          this.setState({
+            pinned:true
+          })
+        }
+      })
+    }
+  }
+
   render() {
     const { 
       business,
@@ -368,6 +407,9 @@ class BusinessesDetail extends Component {
           buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
           onBack={ this.onBack }
           title={ business.name }
+          showPin = {true}
+          pinned = {this.state.pinned}
+          onPin = {this.onPin.bind(this)}
         />
         <KeyboardAwareScrollView
           extraHeight={ 120 }

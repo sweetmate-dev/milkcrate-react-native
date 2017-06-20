@@ -883,6 +883,30 @@ module.exports = {
         })
     },
 
+    getPinnedActivities(cb) {
+        Bend.execute('getPinnedActivities', {}).then(function(rets){
+            console.log(rets);
+            cb(null, rets)
+        }, function(err){
+            console.log(err)
+            cb(err)
+        })
+    },
+    pinActivity(param, cb) {
+        Bend.execute('pinActivity', param).then(function(ret){
+            cb(null)
+        }, function(err){
+            cb(err)
+        })
+    },
+    unpinActivity(param, cb) {
+        Bend.execute('unpinActivity', param).then(function(ret){
+            cb(null)
+        }, function(err){
+            cb(err)
+        })
+    },
+
     //get poll question
     getPollQuestion(cb) {
         //check if user answered already today
