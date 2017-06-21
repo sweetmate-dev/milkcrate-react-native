@@ -414,7 +414,8 @@ class BusinessesDetail extends Component {
         <KeyboardAwareScrollView
           extraHeight={ 120 }
         >
-          { business._geoloc &&<MapView
+          { business.coverImage && this.renderCoverImage() }
+          { !business.coverImage && business._geoloc &&<MapView
             style={ styles.map }
             initialRegion={{
               latitude: Number(business._geoloc[1]),
@@ -435,7 +436,7 @@ class BusinessesDetail extends Component {
               />
             }
           </MapView>}
-          { !business._geoloc && this.renderCoverImage() }
+          { !business.coverImage && !business._geoloc && this.renderCoverImage() }
 
           <View style={ styles.mainContentContainer }>
             <View style={ styles.businessInfoContainer }>

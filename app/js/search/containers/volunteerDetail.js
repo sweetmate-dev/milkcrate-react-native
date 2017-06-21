@@ -249,7 +249,8 @@ class VolunteerDetail extends Component {
           onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
-          { volunteer._geoloc && <MapView
+          { volunteer.coverImage && this.renderCoverImage() }
+          { !volunteer.coverImage && volunteer._geoloc && <MapView
             style={ styles.map }
             initialRegion={{
               latitude: Number(volunteer._geoloc[1]),
@@ -271,7 +272,7 @@ class VolunteerDetail extends Component {
               />
             }
           </MapView>}
-          { !volunteer._geoloc && this.renderCoverImage() }
+          { !volunteer.coverImage && !volunteer._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(volunteer) } />

@@ -309,7 +309,7 @@ class EventsView extends Component {
     return (
       <ActivityIndicator
         hidesWhenStopped={ true }
-        animating={ !this.state.isRefreshing && this.state.loading }
+        animating={ !this.state.isRefreshing && this.state.eventsQuery.loading }
         style={ styles.activityIndicator }
       />
     );

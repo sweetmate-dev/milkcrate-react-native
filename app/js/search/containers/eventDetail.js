@@ -387,8 +387,9 @@ class EventDetail extends Component {
           onPin = {this.onPin.bind(this)}
         />
         <ScrollView>
+          { event.coverImage && this.renderCoverImage() }
           {
-            event._geoloc && <MapView
+            !event.coverImage && event._geoloc && <MapView
               style={ styles.map }
               initialRegion={{
                 latitude: Number(event._geoloc[1]),
@@ -411,7 +412,7 @@ class EventDetail extends Component {
             }
             </MapView>
           }
-          { !event._geoloc && this.renderCoverImage() }
+          { !event.coverImage && !event._geoloc && this.renderCoverImage() }
           <View style={ styles.mainContentContainer }>
             <View style={ styles.infoContainer }>
               <Image style={ styles.imageIcon } source={ UtilService.getCategoryIconFromSlug(event) } />
