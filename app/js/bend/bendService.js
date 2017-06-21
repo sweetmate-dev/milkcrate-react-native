@@ -265,6 +265,22 @@ module.exports = {
         })
     },
 
+    getUserWithoutCache(cb) {
+        var userId = this.getActiveUser()._id
+        Bend.User.get(userId, {
+            relations:{
+                avatar:"BendFile",
+                community:"community",
+                coverImage:"BendFile",
+            }
+        }).then((ret)=>{
+            cb(null, ret)
+            Cache.setMapData('user', ret)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
     setUserInfo() {
         //get user full information
         this.getUser((err, user)=>{

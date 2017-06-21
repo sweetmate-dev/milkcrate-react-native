@@ -75,6 +75,7 @@ class Profile extends Component {
 
   componentWillReceiveProps(newProps) {
     const { commonStatus, activityId } = newProps;
+    //console.log("newProps", newProps)
     if(commonStatus === 'capture_activity_success') {
       //console.log("commonStatus", commonStatus, activityId)
 
@@ -95,12 +96,6 @@ class Profile extends Component {
           recentActivities:this.state.recentActivities
         })
       })
-
-      bendService.getUser( (error, result) => {
-        this.hasMounted&&this.setState({
-          currentUser: result,
-        })
-      })
     } else if(commonStatus === 'remove_activity_success') {
       //console.log("commonStatus", commonStatus, activityId)
 
@@ -116,17 +111,13 @@ class Profile extends Component {
           recentActivities:this.state.recentActivities
         })
       }
-
-      bendService.getUser( (error, result) => {
-        this.hasMounted&&this.setState({
-          currentUser: result,
-        })
-      })
-    } else if (newProps.selectedTab == 'profile') {
-      if (!Cache.cacheMap['user']) {
-        this.loadAllData();
-      }
     }
+
+    bendService.getUserWithoutCache( (error, result) => {
+      this.hasMounted&&this.setState({
+        currentUser: result,
+      })
+    })
   }
 
   loadAllData() {
@@ -135,7 +126,6 @@ class Profile extends Component {
         currentUser: result,
       })
     })
-
     this.hasMounted&&this.setState({
       activityQuery: {
         more: true,
@@ -208,7 +198,19 @@ class Profile extends Component {
       }
 
       if (result.length > 0) {
-        this.state.recentActivities = this.state.recentActivities.concat(result)
+        _.map(result, (o)=>{
+          var exist = _.find(this.state.recentActivities, (_o)=>{
+            return _o._id == o._id
+          })
+
+          if(!exist) {
+            this.state.recentActivities.push(o)
+          }
+        })
+        this.state.recentActivities = _.sortBy(this.state.recentActivities, (o)=>{
+          return o._bmd.createdAt * (-1)
+        })
+
         this.activityQuery.createdAt = result[result.length - 1]._bmd.createdAt
         this.hasMounted&&this.setState({
           recentActivities:this.state.recentActivities
