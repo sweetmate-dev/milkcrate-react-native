@@ -156,10 +156,11 @@ class EventsView extends Component {
   }
 
   search(position) {
-    if(position)
+    if (position) {
       this.setState({ currentLocation: position })
+    }
 
-    var param = {
+    let params = {
       type: 'event',
       offset: this.offset,
       limit: this.limit,
@@ -167,17 +168,15 @@ class EventsView extends Component {
       from: UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
     }
 
-    if(position) {
-      param.lat = position.coords.latitude;
-      param.long = position.coords.longitude;
-    } else {
-      if(Cache.community && Cache.community._geoloc) {
-        param.lat = Cache.community._geoloc[1];
-        param.long = Cache.community._geoloc[0];
-      }
+    if (position) {
+      params.lat = position.coords.latitude;
+      params.long = position.coords.longitude;
+    } else if (Cache.community && Cache.community._geoloc) {
+      params.lat = Cache.community._geoloc[1];
+      params.long = Cache.community._geoloc[0];
     }
 
-    bendService.searchActivity(param, (error, result) => {
+    bendService.searchActivity(params, (error, result) => {
 
       this.setState( (state) => {
         state.eventsQuery.loading = false;
@@ -251,9 +250,9 @@ class EventsView extends Component {
   }
 
   renderListRow(rowData, sectionID, rowID) {
-    if( typeof rowData == 'string') 
+    if (typeof rowData == 'string') {
       return null;
-    
+    }
     return (
       <View>
         {

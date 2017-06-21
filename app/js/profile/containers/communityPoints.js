@@ -163,7 +163,7 @@ class CommunityPoints extends Component {
   }
 
   onPressedRecentActivityCell(rowID) {
-    alert("Tapped cell - " + rowID);
+    // alert("Tapped cell - " + rowID);
   }
 
   onLeaderboardCellPressed () {
