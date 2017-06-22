@@ -922,6 +922,63 @@ module.exports = {
             cb(err)
         })
     },
+    getRecentPinnedActivities(cb) {
+        var query = new Bend.Query()
+        query.equalTo('user._id', this.getActiveUser()._id)
+        query.notEqualTo("deleted", true)
+        query.descending("_bmd.createdAt")
+        query.limit(5)
+
+        Bend.DataStore.find('userPinnedActivity', query, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"]
+            }
+        }).then(function(rets){
+            //console.log(rets);
+            cb(null, rets)
+        }, function(err){
+            console.log(err)
+            cb(err)
+        })
+    },
+    getAllPinnedActivities(cb) {
+        var query = new Bend.Query()
+        query.equalTo('user._id', this.getActiveUser()._id)
+        query.notEqualTo("deleted", true)
+
+        Bend.DataStore.find('userPinnedActivity', query, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"]
+            }
+        }).then(function(rets){
+            console.log(rets);
+            var actions = _.filter(rets, (o)=>{
+                return o.type == 'action'
+            })
+            var businesses = _.filter(rets, (o)=>{
+                return o.type == 'business'
+            })
+            var events = _.filter(rets, (o)=>{
+                return o.type == 'event'
+            })
+            var volunteers = _.filter(rets, (o)=>{
+                return o.type == 'volunteer_opportunity'
+            })
+            var services = _.filter(rets, (o)=>{
+                return o.type == 'service'
+            })
+            cb(null, {
+                action:actions,
+                business:businesses,
+                event:events,
+                volunteer_opportunity:volunteers,
+                service:services,
+            })
+        }, function(err){
+            console.log(err)
+            cb(err)
+        })
+    },
 
     //get poll question
     getPollQuestion(cb) {

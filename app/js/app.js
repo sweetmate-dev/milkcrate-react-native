@@ -54,6 +54,7 @@ import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
 import SendFeedbackModal from './profile/containers/sendFeedbackModal';
+import PinListView from './search/containers/pinListView';
 
 
 class App extends Component {
@@ -186,6 +187,7 @@ class App extends Component {
         <Scene key="VolunteerDetailModal" component={ VolunteerDetail } direction='vertical' />
         <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical' />
         <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />
+        <Scene key="PinListView" component={ PinListView } />
       </Scene>
     );
 
