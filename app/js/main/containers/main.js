@@ -419,7 +419,7 @@ export default class Main extends Component {
             />
           </TabNavigator.Item>
 
-          {/* You */}
+          {/* Profile */}
           <TabNavigator.Item
             selected={ this.state.selectedTab === 'profile' }
             title="Profile"

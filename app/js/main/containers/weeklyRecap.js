@@ -102,7 +102,7 @@ export default class WeeklyRecap extends Component {
   }
 
   onWeelyRecapCellPressed (rowID) {
-    alert("Tapped cell - " + rowID);
+    // alert("Tapped cell - " + rowID);
   }
   render() {
     const {       

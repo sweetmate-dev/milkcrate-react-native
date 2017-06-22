@@ -222,11 +222,11 @@ class BusinessesDetail extends Component {
   }
 
   onCertification(key) {
-    alert("Tapped certification button!");
+    // alert("Tapped certification button!");
   }
 
   onRecentActivityCellPressed (rowID) {
-    alert("Tapped cell - " + rowID);
+    // alert("Tapped cell - " + rowID);
   }
 
   onRateBusiness() {
@@ -321,7 +321,7 @@ class BusinessesDetail extends Component {
       return null;
 
     return (
-        <Image style={ [styles.map, { backgroundColor:backgroundColor }] } source={{ uri:coverImage }}/>        
+      <Image style={ [styles.map, { backgroundColor:backgroundColor }] } source={{ uri:coverImage }}/>        
     )
   }
 
