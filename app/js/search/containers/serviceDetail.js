@@ -39,6 +39,7 @@ class ServiceDetail extends Component {
       didStatus:false,
       activityId:null,
       pinned:false,
+      loading:true,
     };
 
     console.log('this.props.service : ', this.props.service);
@@ -62,7 +63,7 @@ class ServiceDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned:exist?true:false,
       })
     })
 
@@ -78,6 +79,7 @@ class ServiceDetail extends Component {
 
       this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
   }
@@ -220,12 +222,12 @@ class ServiceDetail extends Component {
             </View>
           </View> }
         </ScrollView>
-        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>{ service.callToAction || 'I Did This' }</Text>
           </View>
         </TouchableOpacity>}
-        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        { !this.state.loading && this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
             <View style={ styles.buttonGrey }>
               <Text style={ styles.textOrange }>I Didn't Do It</Text>
             </View>

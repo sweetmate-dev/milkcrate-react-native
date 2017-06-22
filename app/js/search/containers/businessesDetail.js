@@ -67,7 +67,8 @@ class BusinessesDetail extends Component {
       trendUserCount: 0,
       lastTrendTime: Date.now() * 1000000,
       trendInit: false,
-      pinned:false
+      pinned:false,
+      loading:true,
     };
 
     this.category = _.find(Cache.categories, (entry) => {
@@ -104,6 +105,7 @@ class BusinessesDetail extends Component {
 
       this.mounted && this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
 
@@ -604,14 +606,14 @@ class BusinessesDetail extends Component {
           </View>
         </KeyboardAwareScrollView>
         { 
-          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
+          !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
               <Text style={ [styles.textButton, { opacity: (distanceMeter && distanceMeter <= CEHCKIN_DISTANCE) ? 1 : 0.6 }] }>I’m Here • Checkin</Text>
             </View>
           </TouchableOpacity>
         }
         {
-          this.state.didStatus && <View style={ styles.buttonGrey }>
+          !this.state.loading && this.state.didStatus && <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>You’ve Checked In!</Text>
           </View>
         }

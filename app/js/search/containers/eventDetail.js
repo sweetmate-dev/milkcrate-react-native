@@ -54,6 +54,7 @@ class EventDetail extends Component {
       currentLocation: null,
       showAddToCalendar: true,
       pinned:false,
+      loading:true,
     };
 
     this.activityId = null;
@@ -109,6 +110,7 @@ class EventDetail extends Component {
 
       this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
 
@@ -486,7 +488,7 @@ class EventDetail extends Component {
           </View> }
         </ScrollView>
         {
-          !this.state.didStatus ?
+          !this.state.loading&&(!this.state.didStatus ?
           <TouchableOpacity onPress={ () => this.onCheckIn() }>
             <View style={ styles.buttonCheckin }>
               <Text style={ styles.textButton }>Register</Text>
@@ -509,7 +511,7 @@ class EventDetail extends Component {
               :
                 null
             }
-          </View>
+          </View>)
         }
       </View>
     );
