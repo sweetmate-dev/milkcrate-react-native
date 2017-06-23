@@ -219,7 +219,7 @@ const deepLinkSearchCategories = [
   { url: '/search/green_space', parameters: { tab: 'search', subOne: 'green space', }},
   { url: '/search/health_wellness', parameters: { tab: 'search', subOne: 'health & wellness', }},
   { url: '/search/home_office', parameters: { tab: 'search', subOne: 'home & office', }},
-  { url: '/search/media_communications', parameters: { tab: 'search', subOne: 'media & communications', }},
+  { url: '/search/media_communications', parameters: { tab: 'search', subOne: 'media', }},
   { url: '/search/products', parameters: { tab: 'search', subOne: 'products', }},
   { url: '/search/services', parameters: { tab: 'search', subOne: 'services', }},
   { url: '/search/special_events', parameters: { tab: 'search', subOne: 'special events', }},

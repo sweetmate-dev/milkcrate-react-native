@@ -98,7 +98,7 @@ const categoryTitles = [
   'Green Space',
   'Health & Wellness',
   'Home & Office',
-  'Media & Communications',
+  'Media',
   'Products',
   'Services',
   'Special Events',
@@ -281,7 +281,7 @@ class MainSearch extends Component {
 
   render() {
     this.caculateCategoryCellMargin();
-    
+
     return (
       <ScrollView>
         <Text style={ styles.textTitle }>Explore Ways to Earn Points</Text>
