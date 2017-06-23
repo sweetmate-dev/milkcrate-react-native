@@ -19,6 +19,7 @@ import * as profileActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonActions from '../../common/actions';
+import * as commonActionTypes from '../../common/actionTypes';
 
 import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
@@ -76,7 +77,7 @@ class Profile extends Component {
   componentWillReceiveProps(newProps) {
     const { commonStatus, activityId } = newProps;
     //console.log("newProps", newProps)
-    if(commonStatus === 'capture_activity_success') {
+    if(commonStatus === commonActionTypes.ACTIVITY_CAPTURE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
 
       var exist = _.find(this.state.recentActivities, (obj) => {
@@ -96,7 +97,7 @@ class Profile extends Component {
           recentActivities:this.state.recentActivities
         })
       })
-    } else if(commonStatus === 'remove_activity_success') {
+    } else if(commonStatus === commonActionTypes.ACTIVITY_REMOVE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
 
       //remove recent activity from list

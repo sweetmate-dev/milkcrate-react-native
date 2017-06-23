@@ -19,6 +19,7 @@ import { bindActionCreators } from 'redux';
 import * as activityActions from '../actions';
 import { connect } from 'react-redux';
 import * as commonActions from '../../common/actions';
+import * as commonActionTypes from '../../common/actionTypes';
 
 import { Actions } from 'react-native-router-flux';
 import Carousel from 'react-native-snap-carousel';
@@ -84,7 +85,7 @@ class Activity extends Component {
     //console.log("home componentWillReceiveProps", newProps)
     const { commonStatus, likeResult, recentActivityId, recentActivityLike, activityId } = newProps;
 
-    if (commonStatus === 'recent_activity_like_success') {
+    if (commonStatus === commonActionTypes.RECENT_ACTIVITY_LIKE_SUCCESS) {
 
       let exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == recentActivityId;
@@ -107,7 +108,7 @@ class Activity extends Component {
           });
         }
       }
-    } else if(commonStatus === 'capture_activity_success') {
+    } else if(commonStatus === commonActionTypes.ACTIVITY_CAPTURE_SUCCESS) {
       let exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
       })
@@ -137,7 +138,7 @@ class Activity extends Component {
           challenges: _.difference(this.state.challenges, exists),
         });
       });
-    } else if (commonStatus === 'remove_activity_success') {
+    } else if (commonStatus === commonActionTypes.ACTIVITY_REMOVE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
 
       //remove recent activity from list

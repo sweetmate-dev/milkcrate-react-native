@@ -10,7 +10,7 @@ export default function common(state = initialState, action = {}) {
     case types.RECENT_ACTIVITY_LIKE_SUCCESS:
       return {
         ...state,
-        status: 'recent_activity_like_success',
+        status: types.RECENT_ACTIVITY_LIKE_SUCCESS,
         likeResult: action.result,
         recentActivityId: action.recentActivityId,
         recentActivityLike: action.recentActivityLike,
@@ -18,20 +18,34 @@ export default function common(state = initialState, action = {}) {
     case types.RECENT_ACTIVITY_LIKE_ERROR:
       return {
         ...state,
-        status: 'recent_activity_like_error',
+        status: types.RECENT_ACTIVITY_LIKE_ERROR,
       };
     case types.ACTIVITY_CAPTURE_SUCCESS:
       return {
         ...state,
-        status: 'capture_activity_success',
+        status: types.ACTIVITY_CAPTURE_SUCCESS,
         activityId: action.activityId,
       };
     case types.ACTIVITY_REMOVE_SUCCESS:
       return {
         ...state,
-        status: 'remove_activity_success',
+        status: types.ACTIVITY_REMOVE_SUCCESS,
         activityId: action.activityId,
       };
+    case types.RECENT_PINNED_ACTIVITIES:
+      return {
+        ...state,
+        status: types.RECENT_PINNED_ACTIVITIES,
+        recentPinnedActivities: action.recentPinnedActivities,
+      };
+    case types.ALL_PINNED_ACTIVITIES:
+      return {
+        ...state,
+        status: types.ALL_PINNED_ACTIVITIES,
+        allPinnedActivities: action.allPinnedActivities,
+      };
+  
+
     default:
       return state;
   }

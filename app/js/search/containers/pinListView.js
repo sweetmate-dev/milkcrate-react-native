@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -16,6 +14,8 @@ import {
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
+import * as commonActions from '../../common/actions';
+import * as commonActionTypes from '../../common/actionTypes';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -38,7 +38,6 @@ class PinListView extends Component {
 
     this.state = {
       isRefreshing: true,
-      loading: true,
       currentLocation: null,
       activities: {
         event: [],
@@ -55,10 +54,27 @@ class PinListView extends Component {
     UtilService.mixpanelEvent("Viewed Pinned Activities")
   }
 
+  componentWillReceiveProps(newProps) {
+    
+    if (newProps.commonStatus === commonActionTypes.ALL_PINNED_ACTIVITIES) {
+      this.setState({ 
+        activities: newProps.allPinnedActivities,
+        isRefreshing: false,
+      });
+    }    
+  }
+
+
   loadAllData() {
     this.setState({
-      loading: true,
-      isRefreshing:true
+      isRefreshing: true,
+      activities: {
+        event: [],
+        service: [],
+        action: [],
+        volunteer_opportunity: [],
+        business: [],
+      },
     });
 
     navigator.geolocation.getCurrentPosition(
@@ -70,34 +86,12 @@ class PinListView extends Component {
         (error) => {
           console.log(JSON.stringify(error));
           // alert(JSON.stringify(error));
-          this.search(null);
         },
         { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
 
-    this.search()
-  }
-
-  search() {
-
-    bendService.getAllPinnedActivities((error, result) => {
-
-      this.setState({ 
-        isRefreshing: false,
-        loading: false,
-      });
-
-      if (error) {
-        console.log("search failed", error)
-        return
-      }
-
-      var activities = result;
-      console.log('activities', activities)
-      this.setState({
-        activities: activities,
-      })
-    })
+    this.props.commonActions.updateAllPinnedActivities();
+    
   }
 
   onBack() {
@@ -306,11 +300,14 @@ class PinListView extends Component {
   }
 }
 
-export default connect(state => ({
-  status: state.search.status
+export default connect(props => ({
+    status: props.search.status,
+    commonStatus: props.common.status,
+    allPinnedActivities: props.common.allPinnedActivities,
   }),
   (dispatch) => ({
-    actions: bindActionCreators(searchActions, dispatch)
+    actions: bindActionCreators(searchActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(PinListView);
 

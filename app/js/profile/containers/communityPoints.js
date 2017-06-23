@@ -21,6 +21,7 @@ import * as communityPointsActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import * as commonActions from '../../common/actions';
+import * as commonActionTypes from '../../common/actionTypes';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -81,7 +82,7 @@ class CommunityPoints extends Component {
   componentWillReceiveProps(newProps) {
     const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
 
-    if (commonStatus === 'recent_activity_like_success') {
+    if (commonStatus === commonActionTypes.RECENT_ACTIVITY_LIKE_SUCCESS) {
 
       var exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == recentActivityId;

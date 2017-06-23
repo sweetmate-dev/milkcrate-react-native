@@ -22,6 +22,7 @@ export function captureActivity(activityId) {
     dispatch({ type: types.ACTIVITY_CAPTURE_SUCCESS, activityId: activityId});
   }
 }
+
 export function removeActivity(activityId) {
   //console.log("captureActivity", activityId, flag)
   return dispatch => {
@@ -29,4 +30,23 @@ export function removeActivity(activityId) {
   }
 }
 
+export function updateRecentPinnedActivities() {
+  return dispatch => {
+    bendService.getRecentPinnedActivities( (error, result) => {
+      if (!error) {
+        dispatch({ type: types.RECENT_PINNED_ACTIVITIES, recentPinnedActivities: result });
+      }
+    });
+  }
+}
 
+
+export function updateAllPinnedActivities() {
+  return dispatch => {
+    bendService.getAllPinnedActivities((error, result) => {
+      if (!error) {
+        dispatch({ type: types.ALL_PINNED_ACTIVITIES, allPinnedActivities: result });
+      }
+    });
+  }
+}

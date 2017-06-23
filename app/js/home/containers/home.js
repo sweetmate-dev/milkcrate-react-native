@@ -21,7 +21,9 @@ import {
 import { bindActionCreators } from 'redux';
 import * as homeActions from '../actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'
+import * as commonActions from '../../common/actions';
+import * as commonActionTypes from '../../common/actionTypes';
 
 import Carousel from 'react-native-snap-carousel';
 import timer from 'react-native-timer';
@@ -93,11 +95,10 @@ class Home extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const {commonStatus} = newProps;
-    console.log("newProps", newProps)
-    if(newProps.selectedTab == 'home') {
-      this.getRecentPinnedActivities()
-    }
+    
+    if (newProps.commonStatus === commonActionTypes.RECENT_PINNED_ACTIVITIES) {
+      this.setState({ recentPines: newProps.recentPines });
+    }    
   }
 
   
@@ -118,7 +119,7 @@ class Home extends Component {
       },
     });
 
-    this.getRecentPinnedActivities()
+    this.props.commonActions.updateRecentPinnedActivities();
 
     bendService.getCategories( (error, result) => {
 
@@ -166,17 +167,19 @@ class Home extends Component {
     }, 1000 * 60 * 10);*/
   }
 
-  getRecentPinnedActivities(){
-    bendService.getRecentPinnedActivities((err, rets)=>{
-      if (!err) {
-        this.hasMounted&&this.setState({
-          recentPines:rets
-        })
-      }
-    })
-  }
+  // getRecentPinnedActivities() {
+  //   bendService.getRecentPinnedActivities((error, result)=>{
+  //     if (!error) {
+  //       if (this.hasMounted) {
+  //         this.setState({
+  //           recentPines: result,
+  //         });
+  //       }
+  //     }
+  //   })
+  // }
 
-  goPinnedActivities() {
+  onViewAllPinnedActivities() {
     Actions.PinListView()
   }
 
@@ -319,37 +322,38 @@ class Home extends Component {
   renderPinesListRow(rowData, sectionID, rowID) {
     const caetgoriIcon = UtilService.getCategoryIconFromSlug(rowData.activity);
     return (
-        <EventsListCell
-            title={ rowData.activity.name }
-            icon={ caetgoriIcon }
-            points={ Math.max(rowData.activity.points || 1, 1) }
-            onClick={ () => this.onRecentActivityCellPressed(rowData) }
-        />
+      <EventsListCell
+        title={ rowData.activity.name }
+        icon={ caetgoriIcon }
+        points={ Math.max(rowData.activity.points || 1, 1) }
+        onClick={ () => this.onRecentActivityCellPressed(rowData) }
+      />
     );
   }
 
   get showRecentPines() {
+    if (this.state.recentPines.length == 0) {
+      return null;
+    }
+
     return (
-        this.state.recentPines.length ?
-            <View>
-              <View style={ styles.sectionHeaderContainer }>
-                <Text style={ styles.textSectionTitle }>My Pinned Activities</Text>
-                <Image style={{width:9,height:14,marginLeft:5,marginTop:5}} resizeMode='contain' source={pinIcon} />
-              </View>
-              <ListView
-                  enableEmptySections={ true }
-                  dataSource={ this.dataSource.cloneWithRows(this.state.recentPines) }
-                  renderRow={ this.renderPinesListRow.bind(this) }
-                  contentContainerStyle={ styles.listViewWrapper }
-              />
-              <TouchableHighlight onPress={ () => this.goPinnedActivities() }>
-                <View style={ styles.pinCellContainer }>
-                  <Text style={ styles.pinTextTitle }>View all...</Text>
-                </View>
-              </TouchableHighlight>
-            </View>
-            :
-            null
+      <View>
+        <View style={ styles.sectionHeaderContainer }>
+          <Text style={ styles.textSectionTitle }>My Pinned Activities</Text>
+          <Image style={ styles.imagePin } resizeMode='contain' source={pinIcon} />
+        </View>
+        <ListView
+          enableEmptySections={ true }
+          dataSource={ this.dataSource.cloneWithRows(this.state.recentPines) }
+          renderRow={ this.renderPinesListRow.bind(this) }
+          contentContainerStyle={ styles.listViewWrapper }
+        />
+        <TouchableHighlight onPress={ () => this.onViewAllPinnedActivities() }>
+          <View style={ styles.pinCellContainer }>
+            <Text style={ styles.pinTextTitle }>View all...</Text>
+          </View>
+        </TouchableHighlight>
+      </View>      
     );
   }
 
@@ -581,9 +585,7 @@ class Home extends Component {
             />
           }
         >
-          {
-            this.showRecentPines
-          }
+          { this.showRecentPines }
           { this.showChallenges }
           {this.showVideo}
           { this.showDailyPoll }
@@ -593,11 +595,15 @@ class Home extends Component {
   }
 }
 
-export default connect(state => ({
-    status: state.home.status,
+export default connect(props => ({
+    status: props.home.status,
+    commonStatus: props.common.status,
+    recentPines: props.common.recentPinnedActivities,
+
   }),
   (dispatch) => ({
     actions: bindActionCreators(homeActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 ) (Home);
 
@@ -747,5 +753,11 @@ const styles = StyleSheet.create({
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
+  },
+  imagePin: {
+    width: 9,
+    height: 13,
+    marginLeft: 5,
+    marginTop: 5
   },
 });

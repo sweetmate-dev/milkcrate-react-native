@@ -19,6 +19,7 @@ Linking,
 import { bindActionCreators } from 'redux';
 import * as volunteerDetailActions from '../actions';
 import { connect } from 'react-redux';
+import * as commonActions from '../../common/actions';
 
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
@@ -54,8 +55,8 @@ class VolunteerDetail extends Component {
       currentLocation: null,
       modalVisible: false,
       hoursNumber: "0",
-      pinned:false,
-      loading:true,
+      pinned: false,
+      loading: true,
     };
     
     this.category = _.find(Cache.categories, (obj)=>{
@@ -77,7 +78,7 @@ class VolunteerDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned: exist ? true: false,
       })
     })
 
@@ -213,30 +214,34 @@ class VolunteerDetail extends Component {
   }
 
   onPin() {
-    if(this.state.pinned) {
+    if (this.state.pinned) {
       bendService.unpinActivity({
-        type:'volunteer_opportunity',
-        id:this.props.volunteer._id,
-        name:this.props.volunteer.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'volunteer_opportunity',
+        id: this.props.volunteer._id,
+        name: this.props.volunteer.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:false
-          })
+            pinned: false,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     } else {
       bendService.pinActivity({
-        type:'volunteer_opportunity',
-        id:this.props.volunteer._id,
-        name:this.props.volunteer.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'volunteer_opportunity',
+        id: this.props.volunteer._id,
+        name: this.props.volunteer.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:true
-          })
+            pinned: true,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     }
   }
 
@@ -249,12 +254,11 @@ class VolunteerDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
+          buttons={ (modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton) | commonStyles.NavPinButton }
           onBack={ this.onBack }
           title = {volunteer.name}
-          showPin = {true}
-          pinned = {this.state.pinned}
-          onPin = {this.onPin.bind(this)}
+          isPin = { this.state.pinned }
+          onPin = { () => this.onPin() }
         />
         <ScrollView>
           { volunteer.coverImage && this.renderCoverImage() }
@@ -391,7 +395,8 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(volunteerDetailActions, dispatch)
+    actions: bindActionCreators(volunteerDetailActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(VolunteerDetail);
 

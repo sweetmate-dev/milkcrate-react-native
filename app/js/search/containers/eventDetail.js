@@ -18,6 +18,7 @@ Linking
 import { bindActionCreators } from 'redux';
 import * as eventDetailActions from '../actions';
 import { connect } from 'react-redux';
+import * as commonActions from '../../common/actions';
 
 import { Actions } from 'react-native-router-flux';
 import MapView from 'react-native-maps';
@@ -53,8 +54,8 @@ class EventDetail extends Component {
       user: {},
       currentLocation: null,
       showAddToCalendar: true,
-      pinned:false,
-      loading:true,
+      pinned: false,
+      loading: true,
     };
 
     this.activityId = null;
@@ -81,7 +82,7 @@ class EventDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned: exist ? true: false,
       })
     })
 
@@ -342,30 +343,34 @@ class EventDetail extends Component {
   }
 
   onPin() {
-    if(this.state.pinned) {
+    if (this.state.pinned) {
       bendService.unpinActivity({
-        type:'event',
-        id:this.props.event._id,
-        name:this.props.event.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'event',
+        id: this.props.event._id,
+        name: this.props.event.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:false
-          })
+            pinned: false,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     } else {
       bendService.pinActivity({
-        type:'event',
-        id:this.props.event._id,
-        name:this.props.event.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'event',
+        id: this.props.event._id,
+        name: this.props.event.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:true
-          })
+            pinned: true,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     }
   }
 
@@ -383,12 +388,11 @@ class EventDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
+          buttons={ (modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton) | commonStyles.NavPinButton }
           onBack={ this.onBack }
           title={ event.name }
-          showPin = {true}
-          pinned = {this.state.pinned}
-          onPin = {this.onPin.bind(this)}
+          isPin = { this.state.pinned }
+          onPin = { () => this.onPin() }
         />
         <ScrollView>
           { event.coverImage && this.renderCoverImage() }
@@ -524,7 +528,8 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(eventDetailActions, dispatch)
+    actions: bindActionCreators(eventDetailActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(EventDetail);
 

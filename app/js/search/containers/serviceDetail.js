@@ -13,12 +13,13 @@ import {
   TouchableOpacity,
   Alert,
   Button,
-    Linking
+  Linking,
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import * as actionDetailActions from '../actions';
 import { connect } from 'react-redux';
+import * as commonActions from '../../common/actions';
 
 import { Actions } from 'react-native-router-flux';
 import NavTitleBar from '../../components/navTitleBar';
@@ -38,8 +39,8 @@ class ServiceDetail extends Component {
     this.state = {
       didStatus:false,
       activityId:null,
-      pinned:false,
-      loading:true,
+      pinned: false,
+      loading: true,
     };
 
     console.log('this.props.service : ', this.props.service);
@@ -63,7 +64,7 @@ class ServiceDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false,
+        pinned: exist ? true: false,
       })
     })
 
@@ -139,30 +140,34 @@ class ServiceDetail extends Component {
   }
 
   onPin() {
-    if(this.state.pinned) {
+    if (this.state.pinned) {
       bendService.unpinActivity({
-        type:'service',
-        id:this.props.service._id,
-        name:this.props.service.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'service',
+        id: this.props.service._id,
+        name: this.props.service.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:false
-          })
+            pinned: false,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     } else {
       bendService.pinActivity({
-        type:'service',
-        id:this.props.service._id,
-        name:this.props.service.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'service',
+        id: this.props.service._id,
+        name: this.props.service.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:true
-          })
+            pinned: true,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     }
   }
 
@@ -182,12 +187,11 @@ class ServiceDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
+          buttons={ (modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton) | commonStyles.NavPinButton }
           onBack={ this.onBack }
           title ={ service.name }
-          showPin = {true}
-          pinned = {this.state.pinned}
-          onPin = {this.onPin.bind(this)}
+          isPin = { this.state.pinned }
+          onPin = { this.onPin.bind(this) }
         />
         <ScrollView>
           {imageObj && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri: backgroundImage }}/>}
@@ -243,7 +247,8 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(actionDetailActions, dispatch)
+    actions: bindActionCreators(actionDetailActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(ServiceDetail);
 

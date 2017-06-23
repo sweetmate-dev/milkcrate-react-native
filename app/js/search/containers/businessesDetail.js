@@ -19,6 +19,7 @@ import { bindActionCreators } from 'redux';
 import * as businessesDetailActions from '../actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import * as commonActions from '../../common/actions';
 
 import MapView from 'react-native-maps';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -67,8 +68,8 @@ class BusinessesDetail extends Component {
       trendUserCount: 0,
       lastTrendTime: Date.now() * 1000000,
       trendInit: false,
-      pinned:false,
-      loading:true,
+      pinned: false,
+      loading: true,
     };
 
     this.category = _.find(Cache.categories, (entry) => {
@@ -90,7 +91,7 @@ class BusinessesDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned: exist ? true: false,
       })
     })
 
@@ -351,30 +352,34 @@ class BusinessesDetail extends Component {
   }
 
   onPin() {
-    if(this.state.pinned) {
+    if (this.state.pinned) {
       bendService.unpinActivity({
-        type:'business',
-        id:this.props.business._id,
-        name:this.props.business.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'business',
+        id: this.props.business._id,
+        name: this.props.business.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:false
-          })
+            pinned: false,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     } else {
       bendService.pinActivity({
-        type:'business',
-        id:this.props.business._id,
-        name:this.props.business.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'business',
+        id: this.props.business._id,
+        name: this.props.business.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:true
-          })
+            pinned: true,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     }
   }
 
@@ -408,12 +413,11 @@ class BusinessesDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
+          buttons={ (modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton) | commonStyles.NavPinButton }
           onBack={ this.onBack }
           title={ business.name }
-          showPin = {true}
-          pinned = {this.state.pinned}
-          onPin = {this.onPin.bind(this)}
+          isPin = { this.state.pinned }
+          onPin = { () => this.onPin() }
         />
         <KeyboardAwareScrollView
           extraHeight={ 120 }
@@ -628,7 +632,8 @@ export default connect(state => ({
   status: state.search.status
   }),
   (dispatch) => ({
-    actions: bindActionCreators(businessesDetailActions, dispatch)
+    actions: bindActionCreators(businessesDetailActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(BusinessesDetail);
 

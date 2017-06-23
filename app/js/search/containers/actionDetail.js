@@ -42,8 +42,8 @@ class ActionDetail extends Component {
       initialize: true,
       didStatus: false,
       activityId: null,
-      pinned:false,
-      loading:true,
+      pinned: false,
+      loading: true,
       // showAnimiation: false,
     };
   }
@@ -58,7 +58,7 @@ class ActionDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned: exist ? true: false,
       })
     })
 
@@ -133,30 +133,34 @@ class ActionDetail extends Component {
   }
 
   onPin() {
-    if(this.state.pinned) {
+    if (this.state.pinned) {
       bendService.unpinActivity({
-        type:'action',
-        id:this.props.action._id,
-        name:this.props.action.name,
-      }, (err, ret)=>{
-        if(!err) {
-          this.setState({
-            pinned:false
-          })
+        type: 'action',
+        id: this.props.action._id,
+        name: this.props.action.name,
+      }, (error, resut) => {
+        if (!error) {
+          this.setState({ 
+            pinned: false,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     } else {
       bendService.pinActivity({
-        type:'action',
-        id:this.props.action._id,
-        name:this.props.action.name,
-      }, (err, ret)=>{
-        if(!err) {
+        type: 'action',
+        id: this.props.action._id,
+        name: this.props.action.name,
+      }, (error, result) => {
+        if (!error) {
           this.setState({
-            pinned:true
-          })
+            pinned: true,
+          });
+          this.props.commonActions.updateRecentPinnedActivities();
+          this.props.commonActions.updateAllPinnedActivities();
         }
-      })
+      });
     }
   }
 
@@ -178,12 +182,11 @@ class ActionDetail extends Component {
     return (
       <View style={ styles.container }>
         <NavTitleBar
-          buttons={ modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton }
+          buttons={ (modal ? commonStyles.NavCloseButton : commonStyles.NavBackButton) | commonStyles.NavPinButton }
           onBack={ this.onBack }
           title ={action.name}
-          showPin = {true}
-          pinned = {this.state.pinned}
-          onPin = {this.onPin.bind(this)}
+          isPin = { this.state.pinned }
+          onPin = { () => this.onPin() }
         />
         <ScrollView>
           { this.state.initialize && <Image style={ [styles.imageTopBackground, { backgroundColor:backgroundColor }] } source={{ uri:backgroundImage }}/> }

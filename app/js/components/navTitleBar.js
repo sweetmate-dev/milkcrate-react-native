@@ -29,7 +29,8 @@ export default class NavTitleBar extends Component {
     onSetting: PropTypes.func,
     onSend: PropTypes.func,
     title: PropTypes.string,
-    buttons: PropTypes.number
+    buttons: PropTypes.number,
+    isPin: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -40,7 +41,7 @@ export default class NavTitleBar extends Component {
     onPin:() => {},
     title: 'Title',
     buttons: commonStyles.NavNoneButton,
-    showPin:false
+    isPin: false
   }
 
   constructor(props) {
@@ -129,15 +130,16 @@ export default class NavTitleBar extends Component {
 
   get renderRightButton() {
      const {
-      buttons,showPin, pinned
+      buttons,
+      isPin,
     } = this.props;
 
-    if (showPin) {
+    if (buttons & commonStyles.NavPinButton) {
       return (
           <View style={ styles.buttonWrap }>
             <TouchableOpacity activeOpacity={ .5 } onPress={ () => this.onPin() }>
               <View style={ styles.button }>
-                <Image source={ pinned?pin:unpin } style={ styles.image }/>
+                <Image source={ isPin ? pin: unpin } style={ isPin ? styles.imagePin: styles.imageUnpin }/>
               </View>
             </TouchableOpacity>
           </View>
@@ -252,4 +254,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
+  imagePin: {
+    width: 13,
+    height: 19,
+  },
+  imageUnpin: {
+    width: 18,
+    height: 18,
+  },
+
 });
