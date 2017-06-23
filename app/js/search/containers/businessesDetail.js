@@ -67,7 +67,8 @@ class BusinessesDetail extends Component {
       trendUserCount: 0,
       lastTrendTime: Date.now() * 1000000,
       trendInit: false,
-      pinned:false
+      pinned:false,
+      loading:true,
     };
 
     this.category = _.find(Cache.categories, (entry) => {
@@ -104,6 +105,7 @@ class BusinessesDetail extends Component {
 
       this.mounted && this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
 
@@ -272,7 +274,7 @@ class BusinessesDetail extends Component {
         didStatus: true,
       })
 
-      UtilService.mixpanelEvent("Checked in at a Business")
+      UtilService.mixpanelEvent("Checked in at a Business", {category:UtilService.getCategoryName(this.props.business.categories)})
     })
   }
 
@@ -352,7 +354,8 @@ class BusinessesDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'business',
-        id:this.props.business._id
+        id:this.props.business._id,
+        name:this.props.business.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -363,7 +366,8 @@ class BusinessesDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'business',
-        id:this.props.business._id
+        id:this.props.business._id,
+        name:this.props.business.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -604,14 +608,14 @@ class BusinessesDetail extends Component {
           </View>
         </KeyboardAwareScrollView>
         { 
-          !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
+          !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
               <Text style={ [styles.textButton, { opacity: (distanceMeter && distanceMeter <= CEHCKIN_DISTANCE) ? 1 : 0.6 }] }>I’m Here • Checkin</Text>
             </View>
           </TouchableOpacity>
         }
         {
-          this.state.didStatus && <View style={ styles.buttonGrey }>
+          !this.state.loading && this.state.didStatus && <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>You’ve Checked In!</Text>
           </View>
         }

@@ -39,6 +39,7 @@ class ServiceDetail extends Component {
       didStatus:false,
       activityId:null,
       pinned:false,
+      loading:true,
     };
 
     console.log('this.props.service : ', this.props.service);
@@ -62,7 +63,7 @@ class ServiceDetail extends Component {
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
       this.setState({
-        pinned:exist?true:false
+        pinned:exist?true:false,
       })
     })
 
@@ -78,6 +79,7 @@ class ServiceDetail extends Component {
 
       this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
   }
@@ -99,7 +101,7 @@ class ServiceDetail extends Component {
         didStatus: true,
       })
 
-      UtilService.mixpanelEvent("Registered for a Service")
+      UtilService.mixpanelEvent("Registered for a Service", {category:UtilService.getCategoryName(this.props.service.categories)})
 
     })
 
@@ -140,7 +142,8 @@ class ServiceDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'service',
-        id:this.props.service._id
+        id:this.props.service._id,
+        name:this.props.service.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -151,7 +154,8 @@ class ServiceDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'service',
-        id:this.props.service._id
+        id:this.props.service._id,
+        name:this.props.service.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -220,12 +224,12 @@ class ServiceDetail extends Component {
             </View>
           </View> }
         </ScrollView>
-        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>{ service.callToAction || 'I Did This' }</Text>
           </View>
         </TouchableOpacity>}
-        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        { !this.state.loading && this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
             <View style={ styles.buttonGrey }>
               <Text style={ styles.textOrange }>I Didn't Do It</Text>
             </View>

@@ -43,6 +43,7 @@ class ActionDetail extends Component {
       didStatus: false,
       activityId: null,
       pinned:false,
+      loading:true,
       // showAnimiation: false,
     };
   }
@@ -74,6 +75,7 @@ class ActionDetail extends Component {
 
       this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       });
     })
   }
@@ -97,7 +99,7 @@ class ActionDetail extends Component {
         didStatus: true
       });
 
-      UtilService.mixpanelEvent("Did an Action");
+      UtilService.mixpanelEvent("Did an Action", {category:UtilService.getCategoryName(this.props.action.categories)});
     })
   }
 
@@ -134,7 +136,8 @@ class ActionDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'action',
-        id:this.props.action._id
+        id:this.props.action._id,
+        name:this.props.action.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -145,7 +148,8 @@ class ActionDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'action',
-        id:this.props.action._id
+        id:this.props.action._id,
+        name:this.props.action.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -215,12 +219,12 @@ class ActionDetail extends Component {
             </View>
           </View>}
         </ScrollView>
-        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I Did This</Text>
           </View>
         </TouchableOpacity>}
-        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        { !this.state.loading && this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
           <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>

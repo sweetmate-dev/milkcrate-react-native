@@ -54,6 +54,7 @@ class EventDetail extends Component {
       currentLocation: null,
       showAddToCalendar: true,
       pinned:false,
+      loading:true,
     };
 
     this.activityId = null;
@@ -109,6 +110,7 @@ class EventDetail extends Component {
 
       this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
 
@@ -178,7 +180,7 @@ class EventDetail extends Component {
         didStatus: true,
       });
 
-      UtilService.mixpanelEvent("Registered for an Event")
+      UtilService.mixpanelEvent("Registered for an Event", {category:UtilService.getCategoryName(this.props.event.categories)})
 
     })
 
@@ -343,7 +345,8 @@ class EventDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'event',
-        id:this.props.event._id
+        id:this.props.event._id,
+        name:this.props.event.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -354,7 +357,8 @@ class EventDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'event',
-        id:this.props.event._id
+        id:this.props.event._id,
+        name:this.props.event.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -486,7 +490,7 @@ class EventDetail extends Component {
           </View> }
         </ScrollView>
         {
-          !this.state.didStatus ?
+          !this.state.loading&&(!this.state.didStatus ?
           <TouchableOpacity onPress={ () => this.onCheckIn() }>
             <View style={ styles.buttonCheckin }>
               <Text style={ styles.textButton }>Register</Text>
@@ -509,7 +513,7 @@ class EventDetail extends Component {
               :
                 null
             }
-          </View>
+          </View>)
         }
       </View>
     );

@@ -55,6 +55,7 @@ class VolunteerDetail extends Component {
       modalVisible: false,
       hoursNumber: "0",
       pinned:false,
+      loading:true,
     };
     
     this.category = _.find(Cache.categories, (obj)=>{
@@ -93,6 +94,7 @@ class VolunteerDetail extends Component {
 
       this.mounted && this.setState({
         didStatus: result == false ? false : true,
+        loading:false
       })
     })
 
@@ -165,7 +167,11 @@ class VolunteerDetail extends Component {
         didStatus: true,
       })
 
-      UtilService.mixpanelEvent("Volunteered", {hours:Number(this.state.hoursNumber || 0 )})
+      UtilService.mixpanelEvent(
+          "Volunteered",
+          {hours:Number(this.state.hoursNumber || 0),
+          category:UtilService.getCategoryName(this.props.volunteer.categories)}
+      )
     })
   }
 
@@ -210,7 +216,8 @@ class VolunteerDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'volunteer_opportunity',
-        id:this.props.volunteer._id
+        id:this.props.volunteer._id,
+        name:this.props.volunteer.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -221,7 +228,8 @@ class VolunteerDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'volunteer_opportunity',
-        id:this.props.volunteer._id
+        id:this.props.volunteer._id,
+        name:this.props.volunteer.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -331,12 +339,12 @@ class VolunteerDetail extends Component {
             </View>
           </View> }
         </ScrollView>
-        { !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
+        { !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn() }>
           <View style={ styles.buttonCheckin }>
             <Text style={ styles.textButton }>I Did It</Text>
           </View>
         </TouchableOpacity> }
-        { this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
+        { !this.state.loading && this.state.didStatus && <TouchableOpacity onPress={ () => this.onUncheckIn() }>
           <View style={ styles.buttonGrey }>
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>

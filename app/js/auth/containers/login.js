@@ -78,7 +78,21 @@ class Login extends Component {
       }
 
       if (!error) {
-        UtilService.mixpanelEvent("Logged In", {"name":user.name})
+        UtilService.mixpanelIdentify(user._id);
+        UtilService.mixpanelSetProperty({
+          'email':user.email,
+          'name':user.name,
+          'totalPoints':user.points
+        });
+
+        bendService.getCommunity((err, ret)=>{
+          if(!err) {
+            UtilService.mixpanelSetProperty({
+              'client':ret.name
+            });
+            UtilService.mixpanelEvent("Logged In", {"name":user.name})
+          }
+        })
         //check community code
         if (!user.name) {
           Actions.SetupProfile();

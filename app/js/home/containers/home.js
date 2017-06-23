@@ -34,6 +34,7 @@ import DailyPollStateCell from '../components/dailyPollStateCell';
 import Point from '../../components/Point';
 import FadeInView from '../components/fadeInView';
 import FadeOutView from '../components/fadeOutView';
+import EventsListCell from '../../search/components/eventsListCell';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -45,10 +46,14 @@ import * as commonColors from '../../styles/commonColors';
 
 const carouselLeftMargin = (commonStyles.carouselerWidth - commonStyles.carouselItemWidth) / 2 - commonStyles.carouselItemHorizontalPadding;
 
+const pinIcon = require('../../../assets/imgs/pin-home.png');
 
 class Home extends Component {
   constructor(props) {
     super(props);
+
+    this.dataSource = new ListView.DataSource(
+        { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.dataSourceRecentActivity = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -72,6 +77,7 @@ class Home extends Component {
       hasNewAlert: false,
       alerts: [],
       lastAlertTime: 0,
+      recentPines:[]
     };
 
   }
@@ -86,9 +92,16 @@ class Home extends Component {
     this.hasMounted = false
   }
 
+  componentWillReceiveProps(newProps) {
+    const {commonStatus} = newProps;
+    console.log("newProps", newProps)
+    if(newProps.selectedTab == 'home') {
+      this.getRecentPinnedActivities()
+    }
+  }
+
   
   loadAllData() {
-
     this.hasMounted&&this.setState({
       selectedDailyPollValue: '',
       selectedDailyPollIndex: -1,
@@ -97,12 +110,15 @@ class Home extends Component {
       challenges: [],
       community: {},
       categories: [],
+      recentPines:[],
       pollQuestion:{
         question: {},
         answers: [],
         myAnswer: null,
       },
     });
+
+    this.getRecentPinnedActivities()
 
     bendService.getCategories( (error, result) => {
 
@@ -148,6 +164,20 @@ class Home extends Component {
         this.loadPollQuestion();
       }
     }, 1000 * 60 * 10);*/
+  }
+
+  getRecentPinnedActivities(){
+    bendService.getRecentPinnedActivities((err, rets)=>{
+      if (!err) {
+        this.hasMounted&&this.setState({
+          recentPines:rets
+        })
+      }
+    })
+  }
+
+  goPinnedActivities() {
+    Actions.PinListView()
   }
 
   loadAlerts() {
@@ -270,6 +300,57 @@ class Home extends Component {
   onPlayIntroVideo() {
     UtilService.mixpanelEvent("Played Intro Video")
     Actions.VideoPlayModal();
+  }
+
+  onRecentActivityCellPressed (activity) {
+    if (activity.type == 'business') {
+      Actions.BusinessesDetail({ business: activity.activity });
+    } else if(activity.type == 'action') {
+      Actions.ActionDetail({ action: activity.activity });
+    } else if(activity.type == 'event') {
+      Actions.EventDetail({ event: activity.activity });
+    } else if(activity.type == 'service') {
+      Actions.ServiceDetail({ service: activity.activity });
+    } else if(activity.type == 'volunteer_opportunity') {
+      Actions.VolunteerDetail({ volunteer: activity.activity });
+    }
+  }
+
+  renderPinesListRow(rowData, sectionID, rowID) {
+    const caetgoriIcon = UtilService.getCategoryIconFromSlug(rowData.activity);
+    return (
+        <EventsListCell
+            title={ rowData.activity.name }
+            icon={ caetgoriIcon }
+            points={ Math.max(rowData.activity.points || 1, 1) }
+            onClick={ () => this.onRecentActivityCellPressed(rowData) }
+        />
+    );
+  }
+
+  get showRecentPines() {
+    return (
+        this.state.recentPines.length ?
+            <View>
+              <View style={ styles.sectionHeaderContainer }>
+                <Text style={ styles.textSectionTitle }>My Pinned Activities</Text>
+                <Image style={{width:9,height:14,marginLeft:5,marginTop:5}} resizeMode='contain' source={pinIcon} />
+              </View>
+              <ListView
+                  enableEmptySections={ true }
+                  dataSource={ this.dataSource.cloneWithRows(this.state.recentPines) }
+                  renderRow={ this.renderPinesListRow.bind(this) }
+                  contentContainerStyle={ styles.listViewWrapper }
+              />
+              <TouchableHighlight onPress={ () => this.goPinnedActivities() }>
+                <View style={ styles.pinCellContainer }>
+                  <Text style={ styles.pinTextTitle }>View all...</Text>
+                </View>
+              </TouchableHighlight>
+            </View>
+            :
+            null
+    );
   }
 
   get showVideo() {
@@ -500,6 +581,9 @@ class Home extends Component {
             />
           }
         >
+          {
+            this.showRecentPines
+          }
           { this.showChallenges }
           {this.showVideo}
           { this.showDailyPoll }
@@ -632,6 +716,36 @@ const styles = StyleSheet.create({
   },
   imageVideoView: {
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
+  },
+  sectionHeaderContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: commonColors.line,
+    paddingTop:10
+  },
+  textSectionTitle: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 14,
+    marginLeft: 10,
+    marginBottom: 8,
+  },
+  pinCellContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingVertical: 15,
+    paddingHorizontal: 22,
+    borderBottomWidth: 1,
+    borderBottomColor: commonColors.line,
+    borderStyle: 'solid',
+    alignItems: 'center',
+  },
+  pinTextTitle: {
+    flex: 1,
+    color: commonColors.title,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
   },
 });

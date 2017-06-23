@@ -113,6 +113,9 @@ export default class Main extends Component {
     setTimeout(()=>{
       Permissions.requestPermission('location', 'always')
           .then(response => {
+            UtilService.mixpanelSetProperty({
+              'locationEnabled':response
+            });
             console.log(JSON.stringify(response));
           });
 
@@ -151,6 +154,12 @@ export default class Main extends Component {
         requestPermissions: true,
       });
     }, 1000)
+
+    PushNotification.checkPermissions((response)=>{
+      UtilService.mixpanelSetProperty({
+        'pushEnabled':response
+      });
+    })
   }
 
   componentWillUnmount() {
@@ -199,6 +208,9 @@ export default class Main extends Component {
       }
     } else {
       //background notification
+      UtilService.mixpanelEvent('App Launched from Push', {
+        notification:notification
+      })
       if (url)
         Linking.openURL(url.toLowerCase())
     }

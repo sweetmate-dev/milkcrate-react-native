@@ -54,6 +54,7 @@ import VolunteerView from './search/containers/volunteerView';
 import VolunteerDetail from './search/containers/volunteerDetail';
 import VideoPlayModal from './components/videoPlayModal';
 import SendFeedbackModal from './profile/containers/sendFeedbackModal';
+import PinListView from './search/containers/pinListView';
 
 
 class App extends Component {
@@ -81,9 +82,22 @@ class App extends Component {
       this.setState({ initialize: true });
 
       if (loggedInUser == true) {
-            UtilService.deepLinks();
+          UtilService.deepLinks();
+          UtilService.mixpanelIdentify(activeUser._id);
+          UtilService.mixpanelSetProperty({
+              'email':activeUser.email,
+              'name':activeUser.name,
+              'totalPoints':activeUser.points
+          });
 
-          UtilService.mixpanelEvent("Logged In", {"name":activeUser.name})
+          bendService.getCommunity((err, ret)=>{
+              if(!err) {
+                  UtilService.mixpanelSetProperty({
+                      'client':ret.name
+                  });
+                  UtilService.mixpanelEvent("Logged In", {"name":activeUser.name})
+              }
+          })
       }
     });
 
@@ -186,6 +200,7 @@ class App extends Component {
         <Scene key="VolunteerDetailModal" component={ VolunteerDetail } direction='vertical' />
         <Scene key="VideoPlayModal" component={ VideoPlayModal } direction='vertical' />
         <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />
+        <Scene key="PinListView" component={ PinListView } />
       </Scene>
     );
 
