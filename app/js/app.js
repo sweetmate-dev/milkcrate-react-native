@@ -82,9 +82,22 @@ class App extends Component {
       this.setState({ initialize: true });
 
       if (loggedInUser == true) {
-            UtilService.deepLinks();
+          UtilService.deepLinks();
+          UtilService.mixpanelIdentify(activeUser._id);
+          UtilService.mixpanelSetProperty({
+              'email':activeUser.email,
+              'name':activeUser.name,
+              'totalPoints':activeUser.points
+          });
 
-          UtilService.mixpanelEvent("Logged In", {"name":activeUser.name})
+          bendService.getCommunity((err, ret)=>{
+              if(!err) {
+                  UtilService.mixpanelSetProperty({
+                      'client':ret.name
+                  });
+                  UtilService.mixpanelEvent("Logged In", {"name":activeUser.name})
+              }
+          })
       }
     });
 

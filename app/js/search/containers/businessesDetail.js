@@ -274,7 +274,7 @@ class BusinessesDetail extends Component {
         didStatus: true,
       })
 
-      UtilService.mixpanelEvent("Checked in at a Business")
+      UtilService.mixpanelEvent("Checked in at a Business", {category:UtilService.getCategoryName(this.props.business.categories)})
     })
   }
 
@@ -354,7 +354,8 @@ class BusinessesDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'business',
-        id:this.props.business._id
+        id:this.props.business._id,
+        name:this.props.business.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -365,7 +366,8 @@ class BusinessesDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'business',
-        id:this.props.business._id
+        id:this.props.business._id,
+        name:this.props.business.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({

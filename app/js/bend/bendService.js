@@ -281,6 +281,17 @@ module.exports = {
         })
     },
 
+    resetUserCache(cb){
+      async.parallel([
+          (callback)=>{
+              this.getUserWithoutCache(callback)
+          },
+          (callback)=>{
+              this.getCommunityWithoutCache(callback)
+          }
+      ], cb)
+    },
+
     setUserInfo() {
         //get user full information
         this.getUser((err, user)=>{
@@ -313,8 +324,16 @@ module.exports = {
             return;
         }
 
+        if(!this.getActiveUser()) {
+            cb(null, null)
+            return;
+        }
+
         var communityId = this.getActiveUser().community._id;
-        if(!communityId) return null
+        if(!communityId) {
+            cb(null, null)
+            return;
+        }
 
         Bend.DataStore.get("community", communityId, {
             relations:{
@@ -323,6 +342,20 @@ module.exports = {
         }).then((ret)=>{
             cb(null, ret)
             Cache.setCommunity(ret);
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getCommunityWithoutCache(cb) {
+        var communityId = this.getActiveUser().community._id;
+        Bend.DataStore.get("community", communityId, {
+            relations:{
+                logo:"BendFile"
+            }
+        }).then((ret)=>{
+            Cache.setCommunity(ret);
+            cb(null, ret)
         }, (err)=>{
             cb(err)
         })
@@ -909,6 +942,7 @@ module.exports = {
         })
     },
     pinActivity(param, cb) {
+        UtilService.mixpanelEvent("Pinned Activity", {type:param.type, id:param.id, name:param.name})
         Bend.execute('pinActivity', param).then(function(ret){
             cb(null)
         }, function(err){
@@ -916,6 +950,7 @@ module.exports = {
         })
     },
     unpinActivity(param, cb) {
+        UtilService.mixpanelEvent("Unpinned Activity", {type:param.type, id:param.id, name:param.name})
         Bend.execute('unpinActivity', param).then(function(ret){
             cb(null)
         }, function(err){
@@ -1097,9 +1132,10 @@ module.exports = {
         Bend.execute("removeActivity", {
             id:id
         }).then((ret)=>{
-            cb(null, ret.result);
-            Cache.removeMapData("user");
-            Cache.setCommunity(null);
+            this.resetUserCache((_e, _r)=>{
+                UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
+                cb(null, ret.result);
+            })
         }, (err)=>{
             cb(err);
         })
@@ -1110,9 +1146,10 @@ module.exports = {
             type:type,
             id:id
         }).then((ret)=>{
-            cb(null, ret);
-            Cache.removeMapData("user");
-            Cache.setCommunity(null);
+            this.resetUserCache((_e, _r)=>{
+                UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
+                cb(null, ret);
+            })
         }, (err)=>{
             cb(err);
         })
@@ -1123,9 +1160,10 @@ module.exports = {
             id:id,
             hours:hours
         }).then((ret)=>{
-            cb(null, ret);
-            Cache.removeMapData("user");
-            Cache.setCommunity(null);
+            this.resetUserCache((_e, _r)=>{
+                UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
+                cb(null, ret);
+            })
         }, (err)=>{
             cb(err);
         })
@@ -1147,9 +1185,10 @@ module.exports = {
             id:id,
             points:points
         }).then((ret)=>{
-            cb(null, ret);
-            Cache.removeMapData("user");
-            Cache.setCommunity(null);
+            this.resetUserCache((_e, _r)=>{
+                UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
+                cb(null, ret);
+            })
         }, (err)=>{
             cb(err);
         })

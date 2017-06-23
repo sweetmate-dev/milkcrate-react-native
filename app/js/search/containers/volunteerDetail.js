@@ -167,7 +167,11 @@ class VolunteerDetail extends Component {
         didStatus: true,
       })
 
-      UtilService.mixpanelEvent("Volunteered", {hours:Number(this.state.hoursNumber || 0 )})
+      UtilService.mixpanelEvent(
+          "Volunteered",
+          {hours:Number(this.state.hoursNumber || 0),
+          category:UtilService.getCategoryName(this.props.volunteer.categories)}
+      )
     })
   }
 
@@ -212,7 +216,8 @@ class VolunteerDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'volunteer_opportunity',
-        id:this.props.volunteer._id
+        id:this.props.volunteer._id,
+        name:this.props.volunteer.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -223,7 +228,8 @@ class VolunteerDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'volunteer_opportunity',
-        id:this.props.volunteer._id
+        id:this.props.volunteer._id,
+        name:this.props.volunteer.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({

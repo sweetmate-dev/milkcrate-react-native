@@ -16,7 +16,7 @@ const MIX_TOKEN = '20e6d2c2b6c431dfecfdfaa100ec0a11' // Production
 const UNIQUE_ID = DeviceInfo.getUniqueID()
 
 Mixpanel.sharedInstanceWithToken(MIX_TOKEN);
-Mixpanel.identify(UNIQUE_ID)
+//Mixpanel.identify(UNIQUE_ID)
 
 
 const categoryButtons = {
@@ -505,6 +505,19 @@ class UtilService {
     })
   }
 
+  static getCategoryName(categories) {
+    if(categories && categories.length > 0) {
+      var cat = _.find(Cache.categories, (o)=>{
+        return o._id == categories[0]
+      })
+
+      if(cat)
+        return cat.name
+    }
+
+    return ""
+  }
+
   static getRandomDefaultAvatar() {
     var idx = _.random(0, animals.length-1)
 
@@ -585,11 +598,30 @@ class UtilService {
   }
 
   static mixpanelEvent(name, data) {
+    if(data) {
+      if(Cache.community) {
+        Mixpanel.trackWithProperties(name, Object.assign({client:Cache.community.name}, data));
+      } else
+        Mixpanel.trackWithProperties(name, data);
+    }
+    else {
+      if(Cache.community) {
+        Mixpanel.trackWithProperties(name, {client:Cache.community.name});
+      } else {
+        Mixpanel.track(name);
+      }
+    }
+
+  }
+
+  static mixpanelSetProperty(property) {
     //console.log("captureActivity", activityId, flag)
-    if(data)
-      Mixpanel.trackWithProperties(name, data);
-    else
-      Mixpanel.track(name);
+    Mixpanel.registerSuperProperties(property);
+  }
+
+  static mixpanelIdentify(id) {
+    //console.log("captureActivity", activityId, flag)
+    Mixpanel.identify(id);
   }
 }
 

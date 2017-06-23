@@ -52,7 +52,7 @@ class PinListView extends Component {
 
   componentDidMount() {
     this.loadAllData();
-    UtilService.mixpanelEvent("Browsed Pin List", {"name":'Pin list view'})
+    UtilService.mixpanelEvent("Viewed Pinned Activities")
   }
 
   loadAllData() {

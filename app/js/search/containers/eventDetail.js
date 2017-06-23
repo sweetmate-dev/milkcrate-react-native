@@ -180,7 +180,7 @@ class EventDetail extends Component {
         didStatus: true,
       });
 
-      UtilService.mixpanelEvent("Registered for an Event")
+      UtilService.mixpanelEvent("Registered for an Event", {category:UtilService.getCategoryName(this.props.event.categories)})
 
     })
 
@@ -345,7 +345,8 @@ class EventDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'event',
-        id:this.props.event._id
+        id:this.props.event._id,
+        name:this.props.event.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -356,7 +357,8 @@ class EventDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'event',
-        id:this.props.event._id
+        id:this.props.event._id,
+        name:this.props.event.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({

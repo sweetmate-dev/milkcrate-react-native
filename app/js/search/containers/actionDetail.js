@@ -99,7 +99,7 @@ class ActionDetail extends Component {
         didStatus: true
       });
 
-      UtilService.mixpanelEvent("Did an Action");
+      UtilService.mixpanelEvent("Did an Action", {category:UtilService.getCategoryName(this.props.action.categories)});
     })
   }
 
@@ -136,7 +136,8 @@ class ActionDetail extends Component {
     if(this.state.pinned) {
       bendService.unpinActivity({
         type:'action',
-        id:this.props.action._id
+        id:this.props.action._id,
+        name:this.props.action.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
@@ -147,7 +148,8 @@ class ActionDetail extends Component {
     } else {
       bendService.pinActivity({
         type:'action',
-        id:this.props.action._id
+        id:this.props.action._id,
+        name:this.props.action.name,
       }, (err, ret)=>{
         if(!err) {
           this.setState({
