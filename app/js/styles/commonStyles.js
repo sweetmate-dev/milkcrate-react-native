@@ -45,7 +45,7 @@ export const NavPinButton = 128;
 
 
 export const geoLocation = {
-  enableHighAccuracy: false,
+  enableHighAccuracy: Platform.OS !== 'android',
   timeout: 10000,
   maximumAge: 1000,
 };

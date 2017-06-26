@@ -50,3 +50,15 @@ export function updateAllPinnedActivities() {
     });
   }
 }
+
+
+export function getCurrentUserProfile() {
+
+  return dispatch => {
+    bendService.getUser( (error, result) => {
+      if (!error) {
+        dispatch({ type: types.CURRENT_USER_PROFILE, currentUser: result });
+      }
+    });
+  }
+}

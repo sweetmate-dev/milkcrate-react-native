@@ -341,11 +341,11 @@ class BusinessesDetail extends Component {
 
       if (entry.avatar) {
         return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={{ uri:UtilService.getSmallImage(entry.avatar) }}/>
+          <Image key={ index} style={ styles.imageUserAvatar } source={{ uri:UtilService.getSmallImage(entry.avatar) }}/>
         );
       } else {
         return (
-            <Image key={ index} style={ styles.imageUserAvatar } source={ UtilService.getDefaultAvatar(entry.defaultAvatar) }/>
+          <Image key={ index} style={ styles.imageUserAvatar } source={ UtilService.getDefaultAvatar(entry.defaultAvatar) }/>
         );
       }
     });

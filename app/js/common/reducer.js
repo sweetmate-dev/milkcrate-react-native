@@ -45,6 +45,13 @@ export default function common(state = initialState, action = {}) {
         allPinnedActivities: action.allPinnedActivities,
       };
   
+    case types.CURRENT_USER_PROFILE:
+
+      return {
+        ...state,
+        status: types.CURRENT_USER_PROFILE,
+        currentUser: action.currentUser,
+      };
 
     default:
       return state;

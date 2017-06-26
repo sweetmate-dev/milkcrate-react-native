@@ -56,8 +56,6 @@ export default class BusinessesListCell extends Component {
       mode,
     } = this.props;
 
-    console.log('business : ', this.props);
-  
     let dollars = '';
 
     for (i = 1 ; i <= price ; i++)

@@ -160,6 +160,7 @@ class VolunteerDetail extends Component {
         console.log(error);
         return;
       }
+      this.props.commonActions.getCurrentUserProfile();
 
       this.mounted && (this.state.activityId = result.activity._id);
 
@@ -182,6 +183,7 @@ class VolunteerDetail extends Component {
         console.log(error);
         return;
       }
+      this.props.commonActions.getCurrentUserProfile();
 
       this.mounted && (this.state.activityId = null);
 
@@ -198,7 +200,7 @@ class VolunteerDetail extends Component {
 
     let coverImage, backgroundColor;
     let imageObj = volunteer.coverImage ? volunteer.coverImage : this.category.coverImage;
-    coverImage = UtilService.getMiddleImage(imageObj);
+    coverImage = UtilService.getLargeImage(imageObj);
     backgroundColor = UtilService.getBackColor(imageObj);
 
     if (coverImage == null) 

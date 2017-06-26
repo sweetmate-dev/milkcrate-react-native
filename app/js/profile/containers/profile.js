@@ -1,6 +1,4 @@
-'use strict';
-
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -33,6 +31,16 @@ import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
 
 class Profile extends Component {
+
+  static propTypes = {
+    currentUser: PropTypes.object,
+  }
+
+  static defaultProps = {
+    currentUser: {},
+  }
+
+
   constructor(props) {
     super(props);
 
@@ -49,7 +57,7 @@ class Profile extends Component {
       currentLocation: null,
       categories: [],
       recentActivities: [],
-      currentUser: {}
+      // currentUser: {}
     };
 
     this.activityQuery = { 
@@ -75,8 +83,8 @@ class Profile extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { commonStatus, activityId } = newProps;
-    //console.log("newProps", newProps)
+    const { commonStatus, activityId, } = newProps;
+
     if(commonStatus === commonActionTypes.ACTIVITY_CAPTURE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
 
@@ -112,21 +120,14 @@ class Profile extends Component {
           recentActivities:this.state.recentActivities
         })
       }
-    }
+    } else if (commonStatus === commonActionTypes.CURRENT_USER_PROFILE) {
 
-    bendService.getUserWithoutCache( (error, result) => {
-      this.hasMounted&&this.setState({
-        currentUser: result,
-      })
-    })
+    }
   }
 
   loadAllData() {
-    bendService.getUser( (error, result) => {
-      this.hasMounted&&this.setState({
-        currentUser: result,
-      })
-    })
+    this.props.commonActions.getCurrentUserProfile();
+
     this.hasMounted&&this.setState({
       activityQuery: {
         more: true,
@@ -307,11 +308,11 @@ class Profile extends Component {
 
   onRefresh() {
     this.hasMounted&&this.setState({ isRefreshing: true });
-    this.loadAllData();    
+    this.loadAllData();
   }
 
   render() {
-    const currentUser = this.state.currentUser;
+    const currentUser = this.props.currentUser;
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -378,10 +379,11 @@ export default connect(state => ({
   status: state.profile.status,
   commonStatus: state.common.status,
   activityId: state.common.activityId,
+  currentUser: state.common.currentUser,
   }),
   (dispatch) => ({
     actions: bindActionCreators(profileActions, dispatch),
-    recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
+    commonActions: bindActionCreators(commonActions, dispatch),
   })
 )(Profile);
 
