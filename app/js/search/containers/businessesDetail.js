@@ -39,7 +39,7 @@ const ASPECT_RATIO = commonStyles.screenHeight / commonStyles.screenHeight;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const CEHCKIN_DISTANCE = 300;
+const CHECKIN_DISTANCE = 300;
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -255,10 +255,10 @@ class BusinessesDetail extends Component {
   }
 
   onCheckIn(distanceMeter) {
-    if(distanceMeter == null) {
+    if(this.state.currentLocation == null) {
       Alert.alert('Location Access is Required', 'To check in, you must give MilkCrate access to your location. You can do this from your phone\'s privacy settings.');
       return;
-    } else if(distanceMeter > CEHCKIN_DISTANCE) {
+    } else if(distanceMeter==null || distanceMeter > CHECKIN_DISTANCE) {
       Alert.alert('Invalid Location', 'You must be near this business to check in. Your current location is too far way.');
       return;
     }
@@ -614,7 +614,7 @@ class BusinessesDetail extends Component {
         { 
           !this.state.loading && !this.state.didStatus && <TouchableOpacity onPress={ () => this.onCheckIn(distanceMeter) }>
             <View style={ styles.buttonCheckin }>
-              <Text style={ [styles.textButton, { opacity: (distanceMeter && distanceMeter <= CEHCKIN_DISTANCE) ? 1 : 0.6 }] }>I’m Here • Checkin</Text>
+              <Text style={ [styles.textButton, { opacity: (distanceMeter && distanceMeter <= CHECKIN_DISTANCE) ? 1 : 0.6 }] }>I’m Here • Checkin</Text>
             </View>
           </TouchableOpacity>
         }

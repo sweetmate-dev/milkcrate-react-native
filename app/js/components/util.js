@@ -293,14 +293,16 @@ class UtilService {
     if (!pos)
       return "—"
 
-    if (pos == 1) {
+    return this.ordinal_suffix_of(pos);
+
+    /*if (pos == 1) {
       return '1st'
     } else if(pos == 2) {
       return '2nd'
     } else if(pos == 3) {
       return '3rd'
     } else
-      return pos + 'th'
+      return pos + 'th'*/
   }
 
   static deg2rad(angle) {
@@ -595,6 +597,21 @@ class UtilService {
         Actions.Main( link.parameters );
       });
     });
+  }
+
+  static ordinal_suffix_of(i) {
+    var j = i % 10,
+        k = i % 100;
+    if (j == 1 && k != 11) {
+      return i + "st";
+    }
+    if (j == 2 && k != 12) {
+      return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+      return i + "rd";
+    }
+    return i + "th";
   }
 
   static mixpanelEvent(name, data) {

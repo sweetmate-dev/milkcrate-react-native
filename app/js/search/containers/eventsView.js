@@ -178,6 +178,8 @@ class EventsView extends Component {
 
     bendService.searchActivity(params, (error, result) => {
 
+      console.log("search events", params, error, result)
+
       this.setState( (state) => {
         state.eventsQuery.loading = false;
         return state;
