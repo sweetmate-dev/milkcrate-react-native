@@ -12,7 +12,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-Linking
+  Linking,
+  Platform
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -122,7 +123,7 @@ class EventDetail extends Component {
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
 
     bendService.getUser( (error, result) => {

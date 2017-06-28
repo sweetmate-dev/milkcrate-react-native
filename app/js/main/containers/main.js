@@ -113,6 +113,9 @@ export default class Main extends Component {
     setTimeout(()=>{
       Permissions.requestPermission('location', 'always')
           .then(response => {
+
+            console.log("requestPermission-location", response);
+
             UtilService.mixpanelSetProperty({
               'locationEnabled':response
             });

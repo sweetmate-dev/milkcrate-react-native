@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Alert,
   Linking,
+  Platform
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -139,7 +140,7 @@ class BusinessesDetail extends Component {
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
 
     bendService.getUser( (error, result) => {

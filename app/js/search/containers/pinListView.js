@@ -9,6 +9,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Alert,
+  Platform
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -87,7 +88,7 @@ class PinListView extends Component {
           console.log(JSON.stringify(error));
           // alert(JSON.stringify(error));
         },
-        { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
 
     this.props.commonActions.updateAllPinnedActivities();

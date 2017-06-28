@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     Keyboard,
     Alert,
+    Platform
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -102,12 +103,13 @@ class BusinessesView extends Component {
   onCurrentLocation() {
     navigator.geolocation.getCurrentPosition( 
       (position) => {
+        console.log("current location business view", position)
         this.setState({ currentLocation: position });
       },
       (error) => {
         console.log(JSON.stringify(error));
       },
-      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
   }
 
@@ -122,13 +124,15 @@ class BusinessesView extends Component {
 
     navigator.geolocation.getCurrentPosition( 
       (position) => {
+        console.log("current location business view", position)
         this.search(position);
       },
       (error) => {
-        console.log(JSON.stringify(error));
+        console.log("current location business view error", JSON.stringify(error));
         this.search(null);
-      },
-      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+      }
+        ,
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
   }
 

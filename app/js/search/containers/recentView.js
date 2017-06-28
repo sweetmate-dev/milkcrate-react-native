@@ -11,6 +11,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Alert,
+  Platform
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -75,7 +76,7 @@ class RecentView extends Component {
         console.log(JSON.stringify(error));
         this.search(null)
       },
-      { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
+        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
   }
 
