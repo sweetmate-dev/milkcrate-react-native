@@ -26,6 +26,7 @@ import  * as commonStyles from '../../styles/commonStyles';
 
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
+import Cache from '../../components/Cache'
 
 class RecentView extends Component {
   constructor(props) {
@@ -68,36 +69,52 @@ class RecentView extends Component {
 
     navigator.geolocation.getCurrentPosition( 
       (position) => {
-        this.setState({ currentLocation: position })
-
-        bendService.searchRecentActivity({
-          offset: 0,
-          limit: 1000,
-          lat: position.coords.latitude,
-          long: position.coords.longitude
-        }, (error, result) => {
-
-          this.setState({ 
-            isRefreshing: false,
-            loading: false,
-          });
-
-          if (error) {
-            console.log("search failed", error)
-            return
-          }
-
-          var activities = result.data;
-          this.setState({
-            activities: activities,
-          })
-        })
+        this.search(position)
       },
       (error) => {
         console.log(JSON.stringify(error));
+        this.search(null)
       },
       { enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }
     );
+  }
+
+  search(position) {
+    if(position) {
+      this.setState({ currentLocation: position })
+    }
+
+    var param = {
+      offset: 0,
+      limit: 1000
+    }
+
+    if(position) {
+      param.lat = position.coords.latitude;
+      param.long = position.coords.longitude;
+    } else {
+      if(Cache.community && Cache.community._geoloc) {
+        param.lat = Cache.community._geoloc[1];
+        param.long = Cache.community._geoloc[0];
+      }
+    }
+    bendService.searchRecentActivity(param, (error, result) => {
+      console.log("searchRecentActivity", result)
+      this.setState({
+        isRefreshing: false,
+        loading: false,
+      });
+
+      if (error) {
+        console.log("search failed", error)
+        return
+      }
+
+      var activities = result.data;
+      this.setState({
+        activities: activities,
+      })
+    })
   }
 
   onBack() {
