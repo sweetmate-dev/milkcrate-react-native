@@ -156,6 +156,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-maps')
     compile project(':react-native-mixpanel')
     compile project(':react-native-orientation')
     compile project(':react-native-mauron85-background-geolocation')
@@ -168,7 +169,6 @@ dependencies {
     compile project(':react-native-calendar-events')
     compile project(':react-native-mail')
     compile project(':react-native-fetch-blob')
-    compile project(':react-native-maps')
     compile project(':react-native-code-push')
     compile project(':react-native-image-picker')
     compile project(':react-native-vector-icons')
