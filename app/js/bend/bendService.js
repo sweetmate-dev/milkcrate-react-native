@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import * as async from 'async'
 import * as _ from 'underscore'
+import moment from 'moment'
 import Cache from '../components/Cache'
 import UtilService from '../components/util'
 
@@ -1311,6 +1312,22 @@ module.exports = {
 
     saveGeoLocation(param, cb) {
         Bend.execute("save-geo-location", param).then(function(result){
+            cb(null, result);
+        },function(error) {
+            cb(error)
+        })
+    },
+
+    getChartData(cb) {
+        Bend.execute("get-chart-data", {}).then(function(result){
+            cb(null, result);
+        },function(error) {
+            cb(error)
+        })
+    },
+
+    getCurrentSprint(cb) {
+        Bend.execute("getCurrentSprint", {}).then(function(result){
             cb(null, result);
         },function(error) {
             cb(error)

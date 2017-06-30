@@ -88,7 +88,7 @@ class PinListView extends Component {
           console.log(JSON.stringify(error));
           // alert(JSON.stringify(error));
         },
-        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
+        Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
 
     this.props.commonActions.updateAllPinnedActivities();

@@ -24,6 +24,8 @@ import NavSearchBar from '../../components/navSearchBar';
 import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 import RecentActivityListCell from '../components/recentActivityListCell';
+import TeamListCell from '../components/teamListCell';
+import PieChart from '../components/PieChart';
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
 import bendService from '../../bend/bendService'
@@ -58,6 +60,13 @@ class Profile extends Component {
       currentLocation: null,
       categories: [],
       recentActivities: [],
+      community:{},
+      chartData:{
+        "HOME": 0, "COMMUNITY": 0, "DIET": 0, "TRANSIT": 0, "SHOPPING": 0, "WASTE": 0
+      },
+      sprint:{
+
+      }
       // currentUser: {}
     };
 
@@ -145,9 +154,45 @@ class Profile extends Component {
       limit: 20 
     };
 
+    bendService.getCommunity( (error, result) => {
+      if (!error) {
+        this.hasMounted && this.setState({
+          community: result,
+        })
+      }
+    })
+
     bendService.getCategories((error, result)=>{
       this.hasMounted&&this.setState({
         categories: result,
+      })
+    })
+
+    bendService.getCurrentSprint((err, ret)=>{
+      if(err) {
+        console.log(err);return
+      }
+
+      console.log("sprint", ret)
+
+      if(ret) {
+        this.setState({
+          sprint:ret
+        })
+      }
+    })
+
+    bendService.getChartData((error, result)=>{
+      if(error) {
+        console.log(error);
+        return;
+      }
+
+      this.state.chartData = Object.assign(this.state.chartData, result)
+
+      console.log("this.state.chartData", this.state.chartData)
+      this.hasMounted&&this.setState({
+        chartData: this.state.chartData
       })
     })
 
@@ -161,7 +206,7 @@ class Profile extends Component {
         (error) => {
           console.log(JSON.stringify(error));
         },
-        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
+        Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
   }
 
@@ -314,6 +359,7 @@ class Profile extends Component {
 
   render() {
     const currentUser = this.props.currentUser;
+    const {community, sprint} = this.state
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -335,26 +381,42 @@ class Profile extends Component {
             <Text style={ styles.textName }>{ currentUser.name }</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ currentUser.points || 0 }</Text>
+                <Text style={ styles.textValue }>{ currentUser.sprintPoints || 0 }</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ UtilService.getPositionString(currentUser.rank) }</Text>
+                <Text style={ styles.textValue }>{ UtilService.getPositionString(currentUser.sprintRank) }</Text>
                 <Text style={ styles.textSmall }>Leaderboard</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ currentUser.volunteerHours || 0 }</Text>
+                <Text style={ styles.textValue }>{ currentUser.sprintVolunteerHours || 0 }</Text>
                 <Text style={ styles.textSmall }>Volunteer Hours</Text>
               </View>
             </View>
           </View>
-
-          <View style={ styles.buttonContainer }>
+          {community._id && <TeamListCell
+              icon={ community.logo._downloadURL}
+              average={Math.round(community.sprintPoints/community.userCount)}
+              me={currentUser.sprintPoints - Math.round(community.sprintPoints/community.userCount)}
+              onClick={ () => this.onSeeCommunityPoints()}
+          />}
+          {/*<View style={ styles.buttonContainer }>
             <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
               <View style={ styles.buttonWrapper }>
                 <Text style={ styles.textButton }>See Community Points</Text>
               </View>
             </TouchableOpacity>
+          </View>*/}
+          {<PieChart
+              avatar={ currentUser.avatar ? UtilService.getSmallImage(currentUser.avatar) : '' }
+              avatarBackColor={ UtilService.getBackColor(currentUser.avatar) }
+              defaultAvatar={ UtilService.getDefaultAvatar(currentUser.defaultAvatar) }
+              chartData={this.state.chartData}
+          ></PieChart>}
+          <Text style={ styles.textTotalPoints }>{(currentUser.points||0) + ' Total Points'}</Text>
+          <Text style={ styles.textVolunteerHours }>{(currentUser.volunteerHours||0) + ' Total Volunteer Hours'}</Text>
+          <View style={styles.textArea}>
+            <Text style={styles.textSmall}>Current Sprint is {UtilService.formatDateWithFormat2(sprint.startDate, 'MMMM Do')} to {UtilService.formatDateWithFormat2(sprint.endDate, 'MMMM Do')}</Text>
           </View>
 
           <Text style={ styles.textSectionTitle }>Recent Activity</Text>
@@ -429,6 +491,30 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 12,
     backgroundColor: 'transparent',
+  },
+  textTotalPoints: {
+    color: '#5E8AA3',
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 16,
+    fontWeight: 'bold',
+    flex:1,
+    backgroundColor: 'transparent',
+    textAlign:'center'
+  },
+  textVolunteerHours: {
+    color: '#5E8AA3',
+    fontFamily: 'OpenSans-Semibold',
+    fontSize: 12,
+    fontWeight: 'bold',
+    flex:1,
+    backgroundColor: 'transparent',
+    textAlign:'center'
+  },
+  textArea: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop:5
   },
   textSectionTitle: {
     color: commonColors.grayMoreText,

@@ -139,7 +139,7 @@ class EventsView extends Component {
     if (this.more == false)
       return;
 
-    this.setState( (state) => {  
+    this.setState( (state) => {
       state.eventsQuery.loading = true;
       return state;
     });
@@ -152,7 +152,7 @@ class EventsView extends Component {
         console.log(JSON.stringify(error));
         this.search(null)
       },
-        Platform.OS === 'iOS'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
+        Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
   }
 
