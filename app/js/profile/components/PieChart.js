@@ -126,7 +126,9 @@ export default class PieChart extends Component {
   updateChart=(oldData, newData)=>{
     //get new Scale Data
     var total = newData.HOME + newData.COMMUNITY + newData.DIET + newData.TRANSIT + newData.SHOPPING + newData.WASTE
-    var unitScale = total < 20 ? 1 : total / 20;
+    var maxValue = _.max([newData.HOME, newData.COMMUNITY, newData.DIET, newData.TRANSIT, newData.SHOPPING, newData.WASTE])
+    if(maxValue == 0) return;
+    var unitScale = maxValue/5;//total < 20 ? 1 : total / 20;
     var newScaleData = [
       this.getScaleValue(newData.HOME/unitScale),
       this.getScaleValue(newData.COMMUNITY/unitScale),
