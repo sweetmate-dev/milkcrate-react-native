@@ -66,7 +66,7 @@ export default class TeamListCell extends Component {
             <View style={ styles.valCol }>
               <Text style={styles.textName}>Me</Text>
               <Text style={[styles.textValue, {color:(me<0?'#F59174':'#6BA496')}]}>
-                {me>0?'+' + me:'-' + me}
+                {me>0?'+' + me:me}
               </Text>
             </View>
             <EntypoIcon style={ styles.rightIcon } name="chevron-thin-right" size={ 16 } color={ commonColors.grayMoreText }/>

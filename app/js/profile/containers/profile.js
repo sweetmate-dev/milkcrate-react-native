@@ -382,7 +382,7 @@ class Profile extends Component {
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>{ currentUser.sprintPoints || 0 }</Text>
-                <Text style={ styles.textSmall }>Total Points</Text>
+                <Text style={ styles.textSmall }>Sprint Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
                 <Text style={ styles.textValue }>{ UtilService.getPositionString(currentUser.sprintRank) }</Text>
