@@ -281,7 +281,7 @@ class FilterSearch extends Component {
         title={ rowData.name }
         icon={ this.state.icons.volunteer_opportunity[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
-        onClick={ () => this.onPressedActionsCell(rowData) }
+        onClick={ () => this.onPressedVolunteerCell(rowData) }
       />
     );
   }
