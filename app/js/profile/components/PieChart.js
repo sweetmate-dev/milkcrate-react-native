@@ -110,8 +110,8 @@ export default class PieChart extends Component {
   componentWillUnmount() {
     this.hasMounted = false
     for(var i = 0 ; i < 6 ; i++) {
-      if(this.animationHandler[idx])
-        clearInterval(this.animationHandler[idx]);
+      if(this.animationHandler[i])
+        clearInterval(this.animationHandler[i]);
     }
   }
 
