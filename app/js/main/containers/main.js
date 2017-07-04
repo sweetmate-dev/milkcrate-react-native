@@ -199,7 +199,7 @@ export default class Main extends Component {
               console.log("Canceled")
             }},
             { text: notification.actionButton || 'View Now', onPress: () => {
-              Linking.openURL(url.toLowerCase())
+              Linking.openURL(url)
             }},
           ]
         );
@@ -215,7 +215,7 @@ export default class Main extends Component {
         notification:notification
       })
       if (url)
-        Linking.openURL(url.toLowerCase())
+        Linking.openURL(url)
     }
   }
 
