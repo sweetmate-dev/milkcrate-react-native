@@ -108,7 +108,12 @@ export default class CalendarStrip extends Component {
 
   //Animate showing of CalendarDay elements
   componentDidMount() {
+    this.hasMounted = true
     this.animate();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   //Receiving props and set selected date
@@ -150,7 +155,7 @@ export default class CalendarStrip extends Component {
   //Set startingDate to the previous week
   getPreviousWeek() {
     const previousWeekStartDate = this.state.startingDate.subtract(1, 'w');
-    this.setState({startingDate: previousWeekStartDate});
+    this.hasMounted && this.setState({startingDate: previousWeekStartDate});
     if (this.props.onWeekChanged) {
       this.props.onWeekChanged(previousWeekStartDate.clone().startOf(this.props.useIsoWeekday ? 'isoweek' : 'week'));
     }
@@ -159,7 +164,7 @@ export default class CalendarStrip extends Component {
   //Set startingDate to the next week
   getNextWeek() {
     const nextWeekStartDate = this.state.startingDate.add(1, 'w');
-    this.setState({startingDate: nextWeekStartDate});
+    this.hasMounted && this.setState({startingDate: nextWeekStartDate});
     if (this.props.onWeekChanged) {
       this.props.onWeekChanged(nextWeekStartDate.clone().startOf(this.props.useIsoWeekday ? 'isoweek' : 'week'));
     }
@@ -187,7 +192,7 @@ export default class CalendarStrip extends Component {
 
   //Handling press on date/selecting date
   onDateSelected(date) {
-    this.setState({selectedDate: date});
+    this.hasMounted && this.setState({selectedDate: date});
     if (this.props.onDateSelected) {
       this.props.onDateSelected(date);
     }

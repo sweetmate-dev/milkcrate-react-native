@@ -49,6 +49,7 @@ class ActionDetail extends Component {
   }
 
   componentDidMount(){
+    this.hasMounted = true
     const action = this.props.action
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
@@ -57,7 +58,7 @@ class ActionDetail extends Component {
 
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
-      this.setState({
+      this.hasMounted && this.setState({
         pinned: exist ? true: false,
       })
     })
@@ -73,11 +74,15 @@ class ActionDetail extends Component {
           this.state.activityId = result;
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: result == false ? false : true,
         loading:false
       });
     })
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack () {
@@ -95,7 +100,7 @@ class ActionDetail extends Component {
       this.state.activityId = result.activity._id;
       this.props.commonActions.captureActivity(result.activity._id);
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: true
       });
 
@@ -113,7 +118,7 @@ class ActionDetail extends Component {
       this.props.commonActions.removeActivity(this.state.activityId);
       this.state.activityId = null;
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: false
       })
     })
@@ -140,7 +145,7 @@ class ActionDetail extends Component {
         name: this.props.action.name,
       }, (error, resut) => {
         if (!error) {
-          this.setState({ 
+          this.hasMounted && this.setState({
             pinned: false,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -154,7 +159,7 @@ class ActionDetail extends Component {
         name: this.props.action.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.hasMounted && this.setState({
             pinned: true,
           });
           this.props.commonActions.updateRecentPinnedActivities();

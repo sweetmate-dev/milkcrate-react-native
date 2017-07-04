@@ -61,7 +61,7 @@ class Leaderboard extends Component {
     this.hasMounted = true
     bendService.getCommunity((error, result)=>{
       if (!error)
-        this.setState({
+        this.hasMounted && this.setState({
           community: result,
         })
     })

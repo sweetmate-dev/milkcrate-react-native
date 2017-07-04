@@ -43,7 +43,7 @@ class ServiceDetail extends Component {
       loading: true,
     };
 
-    console.log('this.props.service : ', this.props.service);
+    //console.log('this.props.service : ', this.props.service);
     this.category = null;
 
     if (this.props.service != null && this.props.service.categories) {
@@ -54,6 +54,7 @@ class ServiceDetail extends Component {
   }
 
   componentDidMount(){
+    this.hasMounted = true
     const service = this.props.service
 
     bendService.getPinnedActivities((err, rets)=>{
@@ -63,7 +64,7 @@ class ServiceDetail extends Component {
 
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
-      this.setState({
+      this.hasMounted && this.setState({
         pinned: exist ? true: false,
       })
     })
@@ -78,11 +79,15 @@ class ServiceDetail extends Component {
       if (result)
         this.state.activityId = result;
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: result == false ? false : true,
         loading:false
       })
     })
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack () {
@@ -98,7 +103,7 @@ class ServiceDetail extends Component {
 
       this.state.activityId = result.activity._id;
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: true,
       })
 
@@ -120,7 +125,7 @@ class ServiceDetail extends Component {
 
       this.state.activityId = null;
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: false,
       })
     })
@@ -147,7 +152,7 @@ class ServiceDetail extends Component {
         name: this.props.service.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.hasMounted && this.setState({
             pinned: false,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -161,7 +166,7 @@ class ServiceDetail extends Component {
         name: this.props.service.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.hasMounted && this.setState({
             pinned: true,
           });
           this.props.commonActions.updateRecentPinnedActivities();

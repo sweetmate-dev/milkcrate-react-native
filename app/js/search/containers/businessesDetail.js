@@ -91,14 +91,14 @@ class BusinessesDetail extends Component {
 
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
-      this.setState({
+      this.mounted && this.setState({
         pinned: exist ? true: false,
       })
     })
 
     bendService.checkActivityDid(business._id, 'business', (error, result) => {
       if (error) {
-        console.log(err);
+        console.log(error);
         return;
       }
 
@@ -145,7 +145,7 @@ class BusinessesDetail extends Component {
 
     bendService.getUser( (error, result) => {
       if (error) {
-        console.log(err);
+        console.log(error);
         return;
       }
 
@@ -160,7 +160,7 @@ class BusinessesDetail extends Component {
         return;
       }
 
-      this.setState({
+      this.mounted && this.setState({
         trendUsers: result.trendUsers,
         trendUserCount: result.trendUserCount,
         lastTrendTime: result.lastTrendTime,
@@ -246,7 +246,7 @@ class BusinessesDetail extends Component {
 
         this.state.comments.unshift(result);
 
-        this.setState({
+        this.mounted && this.setState({
           businessRate: 0,
           businessComment: "",
           comments: this.state.comments,
@@ -360,7 +360,7 @@ class BusinessesDetail extends Component {
         name: this.props.business.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.mounted && this.setState({
             pinned: false,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -374,7 +374,7 @@ class BusinessesDetail extends Component {
         name: this.props.business.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.mounted && this.setState({
             pinned: true,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -583,8 +583,8 @@ class BusinessesDetail extends Component {
                   rate={ this.state.businessRate }
                   size={ 25 }
                   onStarPress={ (rating) => {
-                    console.log(rating)
-                    this.setState({ businessRate: rating })
+                    //console.log(rating)
+                    this.mounted && this.setState({ businessRate: rating })
                   }}
                 />
               </View>
@@ -599,7 +599,7 @@ class BusinessesDetail extends Component {
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'done' }
                 value={this.state.businessComment}
-                onChangeText={ (text) => this.setState({ businessComment: text }) }
+                onChangeText={ (text) => this.mounted && this.setState({ businessComment: text }) }
                 onSubmitEditing={ () => this.onRateBusiness() }
               />              
             </View>

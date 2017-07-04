@@ -62,8 +62,13 @@ class ServiceView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Services")
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   loadAllData() {
@@ -72,7 +77,7 @@ class ServiceView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState({
+    this.hasMounted && this.setState({
       currentLocation: null,
       services: [],
       categoryIcons: [],
@@ -99,7 +104,7 @@ class ServiceView extends Component {
     if (this.more == false)
       return;
 
-    this.setState( (state) => {  
+    this.hasMounted && this.setState( (state) => {
       state.serviceQuery.loading = true;
       return state;
     });
@@ -118,7 +123,7 @@ class ServiceView extends Component {
 
   search(position) {
     if(position)
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
 
     var param = {
       type: 'service',
@@ -139,12 +144,12 @@ class ServiceView extends Component {
 
     bendService.searchActivity(param, (error, result) => {
       if(param.query != this.searchText) return;
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.serviceQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log("search failed", error)
@@ -153,20 +158,20 @@ class ServiceView extends Component {
 
       if (result.data.service.length < this.limit) {
         this.more = false;
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.serviceQuery.more = false;
           return state;
         });
       }
 
       this.state.services = this.state.services.concat(result.data.service);
-      this.setState({ services: this.state.services });
+      this.hasMounted && this.setState({ services: this.state.services });
 
       const imageOffset = this.offset;
       this.offset += this.limit;
 
       result.data.service.map( (service, index) => {
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.categoryIcons[imageOffset + index] =  UtilService.getCategoryIconFromSlug(service);
           return state;
         });
@@ -194,7 +199,7 @@ class ServiceView extends Component {
         this.limit = 20;
         this.more = true;
 
-        this.setState({
+        this.hasMounted && this.setState({
           currentLocation: null,
           services: this.state.services,
           categoryIcons: [],
@@ -228,7 +233,7 @@ class ServiceView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.serviceQuery.more = true;
       state.services = [];
       state.categoryIcons = [];
@@ -239,7 +244,7 @@ class ServiceView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

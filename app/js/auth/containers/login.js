@@ -43,6 +43,14 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   onLogin() {
 
     Keyboard.dismiss();
@@ -57,20 +65,20 @@ class Login extends Component {
       return;
     }
 
-    this.setState({ loggingIn: true });
+    this.hasMounted && this.setState({ loggingIn: true });
 
     bendService.login(this.state.email, this.state.password, (error, user)=>{
 
-      this.setState({ loggingIn: false });
+      this.hasMounted && this.setState({ loggingIn: false });
 
       if (error || !user.enabled) {
 
-        this.setState({
+        this.hasMounted && this.setState({
           password: '',
         });
 
         timer.setTimeout( this, 'LoginFailed', () => {
-          timer.clearInterval(this, 'LoginFailed');
+          timer.clearTimeout(this, 'LoginFailed');
           Alert.alert("Invalid credentials. Please check your email and password and try again.")
         }, 200);
 
@@ -112,7 +120,7 @@ class Login extends Component {
   }
 
   onToggleConfirmPassword() {
-    this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
+    this.hasMounted && this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
   }
 
   render() {
@@ -139,7 +147,7 @@ class Login extends Component {
               returnKeyType={ 'next' }
               keyboardType="email-address"
               value={ this.state.email }
-              onChangeText={ (text) => this.setState({ email: text }) }
+              onChangeText={ (text) => this.hasMounted && this.setState({ email: text }) }
               onSubmitEditing={ () => this.refs.password.focus() }
             />
             <View style={ styles.inputWrapper }>
@@ -155,7 +163,7 @@ class Login extends Component {
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'go' }
                 value={ this.state.password }
-                onChangeText={ (text) => this.setState({ password: text }) }
+                onChangeText={ (text) => this.hasMounted && this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }
               />
               <TouchableOpacity

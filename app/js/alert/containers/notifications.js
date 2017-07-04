@@ -44,17 +44,22 @@ class Notifications extends Component {
   componentDidMount(){
     UtilService.mixpanelEvent("Viewed Alerts")
     // this.loadAllData();
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   loadAllData() {
 
-    this.setState({
+    this.hasMounted && this.setState({
       alerts: []
     });
 
     bendService.getUserAlerts( (error, result)=>{
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if(error) {
         console.log(error);
@@ -63,7 +68,7 @@ class Notifications extends Component {
 
       //console.log("alerts", result)
 
-      this.setState({
+      this.hasMounted && this.setState({
         alerts: result
       })
     })

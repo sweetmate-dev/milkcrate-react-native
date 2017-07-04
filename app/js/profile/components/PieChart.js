@@ -96,7 +96,7 @@ export default class PieChart extends Component {
   }
 
   componentDidMount(){
-    //this.updateChartData(this.props.chartData)
+    this.hasMounted = true
   }
 
   componentWillReceiveProps(newProps) {
@@ -107,18 +107,26 @@ export default class PieChart extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+    for(var i = 0 ; i < 6 ; i++) {
+      if(this.animationHandler[idx])
+        clearInterval(this.animationHandler[idx]);
+    }
+  }
+
   updateChartData=(data)=>{
     this.updateChart(this.oldChartData, data)
   }
 
   updateChartMode=(mode)=>{
-    this.setState({
+    this.hasMounted && this.setState({
       chartMode:mode
     })
   }
 
   updateLogoMode=(mode)=>{
-    this.setState({
+    this.hasMounted && this.setState({
       logoMode:mode
     })
   }
@@ -148,7 +156,7 @@ export default class PieChart extends Component {
   updateChartSliceValue=(idx)=>{
     var itemValue = this.props.chartData[itemKeys[idx]]
     this.state.chartValue[idx] = itemValue
-    this.setState({
+    this.hasMounted && this.setState({
       chartValue:this.state.chartValue
     })
   }
@@ -162,8 +170,8 @@ export default class PieChart extends Component {
       {
         var chartValue = this.state.showChartValue
         chartValue[idx] = false;
-        console.log("showChartValue", this.state.showChartValue)
-        this.setState({
+        //console.log("showChartValue", this.state.showChartValue)
+        this.hasMounted && this.setState({
           showChartValue:chartValue
         })
 
@@ -179,7 +187,7 @@ export default class PieChart extends Component {
             var chartValue = this.state.showChartValue
             chartValue[idx] = true;
             //console.log("showChartValue", this.state.showChartValue)
-            this.setState({
+            this.hasMounted && this.setState({
               showChartValue:chartValue
             })
             this.updateChartSliceValue(idx);
@@ -189,7 +197,7 @@ export default class PieChart extends Component {
           } else {
             var animIndex = this.state.animIndex
             animIndex[idx] = Math.round((animIndex[idx] + rateIndex) * 100)/100
-            this.setState({
+            this.hasMounted && this.setState({
               animIndex:animIndex
             })
           }
@@ -259,7 +267,7 @@ export default class PieChart extends Component {
   }
 
   changeViewMode(mode) {
-    this.setState({
+    this.hasMounted && this.setState({
       viewMode:mode
     })
   }

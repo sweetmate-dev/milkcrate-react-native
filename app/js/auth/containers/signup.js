@@ -48,6 +48,14 @@ class Signup extends Component {
     };
   }
 
+  componentDidMount() {
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   onSignUp() {
 
     Keyboard.dismiss();
@@ -70,7 +78,7 @@ class Signup extends Component {
       return;
     }
 
-    this.setState({ signingUp: true });
+    this.hasMounted && this.setState({ signingUp: true });
 
     bendService.signup({
       username:this.state.email,
@@ -80,11 +88,11 @@ class Signup extends Component {
       defaultAvatar:UtilService.getRandomDefaultAvatar()
     }, (error, user)=>{
 
-      this.setState({ signingUp: false });
+      this.hasMounted && this.setState({ signingUp: false });
 
       if (error) {
         timer.setTimeout( this, 'SignupFailed', () => {
-          timer.clearInterval(this, 'SignupFailed');
+          timer.clearTimeout(this, 'SignupFailed');
           if (error.name.code == 'milkcrate-app.error.common.missingInput') {
             alert("Please fill in all the required fields");
           } else if (error.name.code == 'milkcrate-app.error.signup.invalidateEmailFormat') {
@@ -126,7 +134,7 @@ class Signup extends Component {
   }
 
   onToggleConfirmPassword() {
-    this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
+    this.hasMounted && this.setState({ bShowConfirmPassword: !this.state.bShowConfirmPassword });
   }
 
   onLogIn() {
@@ -167,7 +175,7 @@ class Signup extends Component {
                   returnKeyType={ 'next' }
                   keyboardType="email-address"
                   value={ this.state.email }
-                  onChangeText={ (text) => this.setState({ email: text }) }
+                  onChangeText={ (text) => this.hasMounted && this.setState({ email: text }) }
                   onSubmitEditing={ () => this.refs.password.focus() }
                 />
                 <View style={ styles.inputWrapper }>
@@ -183,7 +191,7 @@ class Signup extends Component {
                     underlineColorAndroid="transparent"
                     returnKeyType={ 'next' }
                     value={ this.state.password }
-                    onChangeText={ (text) => this.setState({ password: text }) }
+                    onChangeText={ (text) => this.hasMounted && this.setState({ password: text }) }
                     onSubmitEditing={ () => this.refs.confirmPassword.focus() }
                   />
                 </View>
@@ -201,7 +209,7 @@ class Signup extends Component {
                     returnKeyType={ 'next' }
                     value={ this.state.confirmPassword }
                     onSubmitEditing={ () => this.refs.communityCode.focus() }
-                    onChangeText={ (text) => this.setState({ confirmPassword: text }) }
+                    onChangeText={ (text) => this.hasMounted && this.setState({ confirmPassword: text }) }
                   />
                   <TouchableOpacity
                     activeOpacity={ .5 }
@@ -222,7 +230,7 @@ class Signup extends Component {
                   underlineColorAndroid="transparent"
                   returnKeyType={ 'go' }
                   value={ this.state.communityCode }
-                  onChangeText={ (text) => this.setState({ communityCode: text }) }
+                  onChangeText={ (text) => this.hasMounted && this.setState({ communityCode: text }) }
                   onSubmitEditing={ () => this.onSignUp() }
                 />
               </View>

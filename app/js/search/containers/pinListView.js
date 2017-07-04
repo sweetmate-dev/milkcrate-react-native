@@ -51,14 +51,19 @@ class PinListView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Viewed Pinned Activities")
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(newProps) {
     
     if (newProps.commonStatus === commonActionTypes.ALL_PINNED_ACTIVITIES) {
-      this.setState({ 
+      this.hasMounted && this.setState({
         activities: newProps.allPinnedActivities,
         isRefreshing: false,
       });
@@ -67,7 +72,7 @@ class PinListView extends Component {
 
 
   loadAllData() {
-    this.setState({
+    this.hasMounted && this.setState({
       isRefreshing: true,
       activities: {
         event: [],
@@ -81,7 +86,7 @@ class PinListView extends Component {
     navigator.geolocation.getCurrentPosition(
         (position) => {
           if (position) {
-            this.setState({ currentLocation: position })
+            this.hasMounted && this.setState({ currentLocation: position })
           }
         },
         (error) => {
@@ -269,7 +274,7 @@ class PinListView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

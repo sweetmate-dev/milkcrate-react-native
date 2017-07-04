@@ -33,31 +33,36 @@ class Search extends Component {
   componentWillReceiveProps(newProps) {
     if(newProps.selectedTab == 'search') {
       if(this.state.searchText == "") {
-        this.setState({
+        this.hasMounted && this.setState({
           mainSearchPage: true
         });
       }
     } else {
       if (newProps.searchAutoFocus == true){
-        this.setState({ searchAutoFocus: true });
+        this.hasMounted && this.setState({ searchAutoFocus: true });
       }
     }
   }
 
   componentDidMount() {
+    this.hasMounted = true
     if (this.props.searchAutoFocus == true){
-      this.setState({ searchAutoFocus: true });
+      this.hasMounted && this.setState({ searchAutoFocus: true });
     }
 
     UtilService.mixpanelEvent("Viewed Search Screen")
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   onSearchChange(text) {
-    this.setState({ searchText: text });
+    this.hasMounted && this.setState({ searchText: text });
   }
 
   onSearchFocus() {
-    this.setState({ 
+    this.hasMounted && this.setState({
       mainSearchPage: false,
       searchAutoFocus: false,
       searchText: '',
@@ -65,7 +70,7 @@ class Search extends Component {
   }
 
   onSearchCancel() {
-    this.setState({ 
+    this.hasMounted && this.setState({
       searchAutoFocus: false,
       mainSearchPage: true 
     });

@@ -69,12 +69,17 @@ class EventsView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Events")
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   loadAllData() {
-    this.setState({
+    this.hasMounted && this.setState({
       arrayValidDate: [],
       eventDays: [],
 
@@ -113,7 +118,7 @@ class EventsView extends Component {
 
   onSelectDate(selectedDate) {
     let newEvents = [];
-    this.setState({ selectedDate });
+    this.hasMounted && this.setState({ selectedDate });
 
     _.each(this.events, (event) => {
 
@@ -123,7 +128,7 @@ class EventsView extends Component {
       newEvents.push(event);
     })
 
-    this.setState({ events: newEvents });
+    this.hasMounted && this.setState({ events: newEvents });
   }
 
   compareDates( firstDate, secondDate) {
@@ -139,7 +144,7 @@ class EventsView extends Component {
     if (this.more == false)
       return;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.eventsQuery.loading = true;
       return state;
     });
@@ -158,7 +163,7 @@ class EventsView extends Component {
 
   search(position) {
     if (position) {
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
     }
 
     let params = {
@@ -181,12 +186,12 @@ class EventsView extends Component {
 
       console.log("search events", params, error, result)
 
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.eventsQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log("search failed", error)
@@ -195,7 +200,7 @@ class EventsView extends Component {
 
       if (result.data.event.length < this.limit) {
         this.more = false;
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.eventsQuery.more = false;
           return state;
         });
@@ -212,7 +217,7 @@ class EventsView extends Component {
     //group by with date
     this.events = [];
     this.eventDays= [];
-    this.setState({ selectedDate: undefined });
+    this.hasMounted && this.setState({ selectedDate: undefined });
     
     _.map(initialEvents, (event) => {
       event.date = UtilService.formatDateWithFormat(event.startsAt, "YYYY-MM-DD");
@@ -236,16 +241,16 @@ class EventsView extends Component {
       }
     })
 
-    this.setState({ events: this.events });
+    this.hasMounted && this.setState({ events: this.events });
 
     this.events.map( (entry) => {
       this.eventDays.push( entry.date );
     });
 
-    this.setState({ eventDays: this.eventDays });
+    this.hasMounted && this.setState({ eventDays: this.eventDays });
 
     initialEvents.map((event, index) => {
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
         return state;
       });
@@ -318,7 +323,7 @@ class EventsView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

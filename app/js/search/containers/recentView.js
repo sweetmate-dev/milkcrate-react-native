@@ -51,12 +51,17 @@ class RecentView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Recent Activity")
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   loadAllData() {
-    this.setState({
+    this.hasMounted && this.setState({
       currentLocation: null,
       loading: true,
       activities: {
@@ -82,7 +87,7 @@ class RecentView extends Component {
 
   search(position) {
     if(position) {
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
     }
 
     var param = {
@@ -100,8 +105,8 @@ class RecentView extends Component {
       }
     }
     bendService.searchRecentActivity(param, (error, result) => {
-      console.log("searchRecentActivity", result)
-      this.setState({
+      //console.log("searchRecentActivity", result)
+      this.hasMounted && this.setState({
         isRefreshing: false,
         loading: false,
       });
@@ -112,7 +117,7 @@ class RecentView extends Component {
       }
 
       var activities = result.data;
-      this.setState({
+      this.hasMounted && this.setState({
         activities: activities,
       })
     })
@@ -336,7 +341,7 @@ class RecentView extends Component {
 
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

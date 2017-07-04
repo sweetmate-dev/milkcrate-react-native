@@ -134,7 +134,7 @@ class Activity extends Component {
           return object.activity._id == activity.activity._id;
         });
 
-        this.setState({
+        this.hasMounted && this.setState({
           challenges: _.difference(this.state.challenges, exists),
         });
       });
@@ -165,7 +165,7 @@ class Activity extends Component {
       return;
     }
 
-    this.setState({
+    this.hasMounted && this.setState({
       categories: [],
       trendings: [],
       community: {},
@@ -437,7 +437,7 @@ class Activity extends Component {
 
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();
   }
 

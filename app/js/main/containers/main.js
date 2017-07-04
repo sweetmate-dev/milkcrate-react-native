@@ -322,11 +322,11 @@ export default class Main extends Component {
       id,
     } = this.props;
 
-    this.setState({ showingModal: true });
+    this.hasMounted && this.setState({ showingModal: true });
 
     bendService.getActivityWithId(subOne, id, (error, result) => {
 
-      this.setState({ showingModal: false });
+      this.hasMounted && this.setState({ showingModal: false });
 
       if (error) {
         console.log(error);

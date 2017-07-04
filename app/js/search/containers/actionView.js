@@ -57,8 +57,13 @@ class ActionView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Actions")
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack() {
@@ -77,7 +82,7 @@ class ActionView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState({
+    this.hasMounted && this.setState({
       currentLocation: null,
       actions: [],
       categoryIcons: [],
@@ -94,7 +99,7 @@ class ActionView extends Component {
     if (this.more == false)
       return;
 
-    this.setState( (state) => {  
+    this.hasMounted && this.setState( (state) => {
       state.actionsQuery.loading = true;
       return state;
     });
@@ -120,12 +125,12 @@ class ActionView extends Component {
         return;
       }
 
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.actionsQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log("search failed", error)
@@ -134,21 +139,21 @@ class ActionView extends Component {
 
       if (result.data.action.length < this.limit) {
         this.more = false;
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.actionsQuery.more = false;
           return state;
         });
       }
 
       this.state.actions = this.state.actions.concat(result.data.action);
-      this.setState({ actions: this.state.actions });
+      this.hasMounted && this.setState({ actions: this.state.actions });
 
       const imageOffset = this.offset;
       this.offset += this.limit;
 
       result.data.action.map( (action, index) => {
 
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(action);
           return state;
         });
@@ -177,7 +182,7 @@ class ActionView extends Component {
         this.limit = 20;
         this.more = true;
 
-        this.setState({
+        this.hasMounted && this.setState({
           currentLocation: null,
           actions: this.state.actions,
           categoryIcons: [],
@@ -198,7 +203,7 @@ class ActionView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.actionsQuery.more = true;
       state.actions = [];
       state.categoryIcons = [];
@@ -209,7 +214,7 @@ class ActionView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

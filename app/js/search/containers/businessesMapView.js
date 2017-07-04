@@ -48,7 +48,8 @@ class BusinessesMapView extends Component {
   }  
 
   componentDidMount() {
-    this.setState( ( state) => {
+    this.hasMounted = true
+    this.hasMounted && this.setState( ( state) => {
       this.props.businesses.map( (business, index) => {
         state.markers[index] = {
           pin: map_pin,
@@ -65,19 +66,23 @@ class BusinessesMapView extends Component {
     UtilService.mixpanelEvent("Viewed Business Map View")
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   componentWillReceiveProps(nextProps) {
 
-    this.setState({ currentLocation: nextProps.currentLocation });
+    this.hasMounted && this.setState({ currentLocation: nextProps.currentLocation });
   }
 
   onPressPin (index) {
-    this.setState( ( state) => {
+    this.hasMounted && this.setState( ( state) => {
       state.markers[this.state.tappedPin].pin = map_pin;
       state.markers[index].pin = map_selected_pin;
       return state;
     });
 
-    this.setState({ 
+    this.hasMounted && this.setState({
       tappedPin: index,
       currentLocation: null 
     });

@@ -71,6 +71,7 @@ class EventDetail extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     const {
       event
     } = this.props;
@@ -82,7 +83,7 @@ class EventDetail extends Component {
 
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
-      this.setState({
+      this.hasMounted && this.setState({
         pinned: exist ? true: false,
       })
     })
@@ -101,16 +102,16 @@ class EventDetail extends Component {
           id: this.activityId
         }).then( (data) => {
 
-          console.log( 'Calendar event : ', data);
-          this.setState({ showAddToCalendar: false });
+          //console.log( 'Calendar event : ', data);
+              this.hasMounted && this.setState({ showAddToCalendar: false });
         })
         .catch( (error) => {
-          console.log('local storage error : ', error.message);
-          this.setState({ showAddToCalendar: true });
+          //console.log('local storage error : ', error.message);
+          this.hasMounted && this.setState({ showAddToCalendar: true });
         });
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: result == false ? false : true,
         loading:false
       })
@@ -118,7 +119,7 @@ class EventDetail extends Component {
 
     navigator.geolocation.getCurrentPosition( 
       (position) => {
-       this.setState({ currentLocation: position })
+        this.hasMounted && this.setState({ currentLocation: position })
       },
       (error) => {
         console.log(JSON.stringify(error));
@@ -132,10 +133,14 @@ class EventDetail extends Component {
         return;
       }
 
-      this.setState({
+      this.hasMounted && this.setState({
         user: result,
       })
     })
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onBack () {
@@ -178,7 +183,7 @@ class EventDetail extends Component {
 
       this.activityId = result.activity._id;
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: true,
       });
 
@@ -260,7 +265,7 @@ class EventDetail extends Component {
                   });
 
                   Alert.alert('Event Added', 'This event has been added to your calendar.');
-                  this.setState({ showAddToCalendar: false });
+                  this.hasMounted && this.setState({ showAddToCalendar: false });
                 })
                 .catch( error => {
                   console.log('error : ', error);
@@ -316,7 +321,7 @@ class EventDetail extends Component {
 
       this.removeEventFromCalendar();
 
-      this.setState({
+      this.hasMounted && this.setState({
         didStatus: false,
       });
     })
@@ -351,7 +356,7 @@ class EventDetail extends Component {
         name: this.props.event.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.hasMounted && this.setState({
             pinned: false,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -365,7 +370,7 @@ class EventDetail extends Component {
         name: this.props.event.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.hasMounted && this.setState({
             pinned: true,
           });
           this.props.commonActions.updateRecentPinnedActivities();

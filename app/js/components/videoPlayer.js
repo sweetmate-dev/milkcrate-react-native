@@ -147,13 +147,13 @@ export default class VideoPlayer extends Component {
 
   onLayout(event) {
     const { width } = event.nativeEvent.layout;
-    this.setState({
+    this._isMounted && this.setState({
       width,
     });
   }
 
   onStartPress() {
-    this.setState({
+    this._isMounted && this.setState({
       isPlaying: true,
       isStarted: true,
     });
@@ -169,7 +169,7 @@ export default class VideoPlayer extends Component {
     if (this.props.onProgress) {
       this.props.onProgress(event);
     }
-    this.setState({
+    this._isMounted && this.setState({
       progress: event.currentTime / (this.props.duration || this.state.duration),
     });
   }
@@ -180,12 +180,12 @@ export default class VideoPlayer extends Component {
     }
 
     if (this.props.endWithThumbnail) {
-      this.setState({ isStarted: false });
+      this._isMounted && this.setState({ isStarted: false });
     }
 
     this.player.seek(0);
     if (!this.props.loop) {
-      this.setState({
+      this._isMounted && this.setState({
         isPlaying: false,
       });
     }
@@ -197,18 +197,18 @@ export default class VideoPlayer extends Component {
     }
 
     const { duration } = event;
-    this.setState({ duration });
+    this._isMounted && this.setState({ duration });
   }
 
   onPlayPress() {
-    this.setState({
+    this._isMounted && this.setState({
       isPlaying: !this.state.isPlaying,
     });
     this.showControls();
   }
 
   onMutePress() {
-    this.setState({
+    this._isMounted && this.setState({
       isMuted: !this.state.isMuted,
     });
     this.showControls();
@@ -219,7 +219,7 @@ export default class VideoPlayer extends Component {
   }
 
   onClose() {
-    this.setState({ 
+    this._isMounted && this.setState({
       isStarted: false,
       isPlaying: false,
     });
@@ -238,7 +238,7 @@ export default class VideoPlayer extends Component {
       if (this.player === null)
         return;
 
-      timer.clearInterval(this, 'FullScreenVideoPlayer');
+      timer.clearTimeout(this, 'FullScreenVideoPlayer');
 
       this.onToggleFullScreen();
     }, 100);
@@ -272,14 +272,14 @@ export default class VideoPlayer extends Component {
     this.seekTouchStart = e.nativeEvent.pageX;
     this.seekProgressStart = this.state.progress;
     this.wasPlayingBeforeSeek = this.state.isPlaying;
-    this.setState({
+    this._isMounted && this.setState({
       isSeeking: true,
       isPlaying: false,
     });
   }
 
   onSeekRelease() {
-    this.setState({
+    this._isMounted && this.setState({
       isSeeking: false,
       isPlaying: this.wasPlayingBeforeSeek,
     });
@@ -291,7 +291,7 @@ export default class VideoPlayer extends Component {
     const ratio = 100 / this.seekBarWidth;
     const progress = this.seekProgressStart + ((ratio * diff) / 100);
 
-    this.setState({
+    this._isMounted && this.setState({
       progress,
     });
 
@@ -303,7 +303,7 @@ export default class VideoPlayer extends Component {
       this.props.onFullscreenPlayerWillDismiss(event);
     }
 
-    this.setState({ isStarted: false });
+    this._isMounted && this.setState({ isStarted: false });
   }
 
   getSizeStyles() {
@@ -338,7 +338,7 @@ export default class VideoPlayer extends Component {
   }
 
   showControls() {
-    this.setState({
+    this._isMounted && this.setState({
       isControlsVisible: true,
     });
     this.hideControls();

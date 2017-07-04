@@ -41,6 +41,8 @@ export default class EarnedPoint extends Component {
   
   componentWillUnmount() {
     this._isMounted = false;
+    if(this.timer)
+      clearInterval(this.timer);
   }
 
 
@@ -61,7 +63,7 @@ export default class EarnedPoint extends Component {
       this.timer = setInterval(() => {
         clearInterval(this.timer);
         this.timer = 0;
-        this.setState({ show: false });
+        this._isMounted && this.setState({ show: false });
       }, 2500)
     }
 

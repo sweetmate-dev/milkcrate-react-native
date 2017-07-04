@@ -65,19 +65,23 @@ class BusinessesView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Businesses")
   }
 
-  loadAllData() {
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
 
+  loadAllData() {
     this.businesses = [];
     this.offset = 0;
     this.limit = 20;
     this.searchText = '';
     this.more = true;
 
-    this.setState({
+    this.hasMounted && this.setState({
       selectedIndex: 'List',
       currentLocation: null,
       businesses: [],
@@ -104,7 +108,7 @@ class BusinessesView extends Component {
     navigator.geolocation.getCurrentPosition( 
       (position) => {
         console.log("current location business view", position)
-        this.setState({ currentLocation: position });
+        this.hasMounted && this.setState({ currentLocation: position });
       },
       (error) => {
         console.log(JSON.stringify(error));
@@ -117,7 +121,7 @@ class BusinessesView extends Component {
     if (this.more === false)
       return;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.businessesQuery.loading = true;
       return state;
     });
@@ -138,7 +142,7 @@ class BusinessesView extends Component {
 
   search(position) {
     if (position)
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
 
     var param = {
       type: 'business',
@@ -162,12 +166,12 @@ class BusinessesView extends Component {
       if (param.query != this.searchText) 
         return;
 
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.businessesQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log("search failed", error)
@@ -176,7 +180,7 @@ class BusinessesView extends Component {
 
       if (result.data.business.length < this.limit) {
         this.more = false;
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.businessesQuery.more = false;
           return state;
         });
@@ -184,7 +188,7 @@ class BusinessesView extends Component {
 
       this.businesses = this.businesses.concat(result.data.business);
 
-      this.setState({
+      this.hasMounted && this.setState({
         businesses: this.businesses,
       });
 
@@ -192,7 +196,7 @@ class BusinessesView extends Component {
       this.offset += this.limit;
 
       result.data.business.map( (business, index) => {
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(business);
           return state;
         })
@@ -210,7 +214,7 @@ class BusinessesView extends Component {
         this.limit = 20;
         this.more = true;
 
-        this.setState({
+        this.hasMounted && this.setState({
           currentLocation: null,
           businesses: this.state.businesses,
           categoryIcons: [],
@@ -229,7 +233,7 @@ class BusinessesView extends Component {
   onSearchCancel() {
 
     if (this.state.selectedIndex ===  'Map') {
-      this.setState({ selectedIndex: 'List' });
+      this.hasMounted && this.setState({ selectedIndex: 'List' });
     }
 
     this.offset = 0;
@@ -238,7 +242,7 @@ class BusinessesView extends Component {
     this.businesses = [];
     this.state.businesses = [];
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.businessesQuery.more = true;
       state.businesses = [];
       state.categoryIcons = [];
@@ -250,7 +254,7 @@ class BusinessesView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();
   }
 
@@ -259,11 +263,11 @@ class BusinessesView extends Component {
     Keyboard.dismiss();
 
     if (this.businesses.length === 0) {
-      this.setState({ selectedIndex: 'List' });
+      this.hasMounted && this.setState({ selectedIndex: 'List' });
       return;
     }
 
-    this.setState({
+    this.hasMounted && this.setState({
       selectedIndex: option,
     });
 
@@ -273,7 +277,7 @@ class BusinessesView extends Component {
       searchMode = true;
     }
 
-    this.setState({
+    this.hasMounted && this.setState({
       searchMode: searchMode,
       searchAutoFocus: false,
     });
@@ -283,13 +287,13 @@ class BusinessesView extends Component {
 
     this.onSelectSegment('List');
 
-    this.setState({
+    this.hasMounted && this.setState({
       searchAutoFocus: true,
     });
   }
 
   onSearchFocus() {
-    this.setState({
+    this.hasMounted && this.setState({
       searchAutoFocus: false,
     });
   }

@@ -104,7 +104,7 @@ class EditProfile extends Component {
       UtilService.mixpanelEvent("Edited Profile")
 
       timer.setTimeout( this, 'UpdateUser', () => {
-        timer.clearInterval(this, 'UpdateUser');
+        timer.clearTimeout(this, 'UpdateUser');
         Alert.alert("Profile Updated", "Your changes have been saved.");
       }, 200);
     })
@@ -125,13 +125,13 @@ class EditProfile extends Component {
           this.hasMounted && this.setState({ activityStatus: false });
 
           timer.setTimeout( this, 'UpdateUser', () => {
-            timer.clearInterval(this, 'UpdateUser');
+            timer.clearTimeout(this, 'UpdateUser');
             alert("Failed to upload file. Please try again later");
           }, 200);
 
           return;
         }
-        console.log( 'uploaded file : ', file);
+        //console.log( 'uploaded file : ', file);
 
         this.updateUserInfo(file);
       }, 
@@ -155,7 +155,7 @@ class EditProfile extends Component {
     const age = today.diff(birthday, 'years');
     if (Number(age) < 13) {
       timer.setTimeout( this, 'AgeRequirementTimer', () => {
-        timer.clearInterval(this, 'AgeRequirementTimer');
+        timer.clearTimeout(this, 'AgeRequirementTimer');
         Alert.alert('Age Requirement Not Met', 'You must be at least 13 years of age to use this app.');
       }, 500);
       return;

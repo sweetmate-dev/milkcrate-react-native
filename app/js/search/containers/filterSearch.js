@@ -59,9 +59,10 @@ class FilterSearch extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     navigator.geolocation.getCurrentPosition( 
       (position) => {
-        this.setState({ currentLocation: position })
+        this.hasMounted && this.setState({ currentLocation: position })
       },
       (error) => {
         console.log(JSON.stringify(error));
@@ -70,19 +71,23 @@ class FilterSearch extends Component {
     );
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   componentWillReceiveProps(newProps) {
     this.searchText = newProps.searchText
     setTimeout((searchText)=>{
       if (searchText == this.searchText) {
         this.getActivities(searchText);
         this.searchText = "";
-        this.setState({ totalCount: 1 });
+        this.hasMounted && this.setState({ totalCount: 1 });
       }
     }, 300, newProps.searchText)
   }
 
   getActivityIcons(activities) {
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.icons.event = [];
       state.icons.service = [];
       state.icons.action = [];
@@ -101,7 +106,7 @@ class FilterSearch extends Component {
             return;
           }
 
-          this.setState( (state) => {
+          this.hasMounted && this.setState( (state) => {
             state.icons.event[index] = UtilService.getCategoryIcon(result.slug);
             return state;
           });
@@ -118,7 +123,7 @@ class FilterSearch extends Component {
             console.log(error);
             return;
           }
-          this.setState( (state) => {
+          this.hasMounted && this.setState( (state) => {
             state.icons.service[index] = UtilService.getCategoryIcon(result.slug);
             return state;
           });
@@ -135,7 +140,7 @@ class FilterSearch extends Component {
             console.log(error);
             return;
           }
-          this.setState( (state) => {
+          this.hasMounted && this.setState( (state) => {
             state.icons.action[index] = UtilService.getCategoryIcon(result.slug);
             return state;
           });
@@ -153,7 +158,7 @@ class FilterSearch extends Component {
             return;
           }
 
-          this.setState( (state) => {
+          this.hasMounted && this.setState( (state) => {
             state.icons.volunteer_opportunity[index] = UtilService.getCategoryIcon(result.slug);
             return state;
           });
@@ -170,7 +175,7 @@ class FilterSearch extends Component {
             console.log(error);
             return;
           }
-          this.setState( (state) => {
+          this.hasMounted && this.setState( (state) => {
             state.icons.business[index] = UtilService.getCategoryIcon(result.slug);
             return state;
           });
@@ -201,7 +206,7 @@ class FilterSearch extends Component {
       }
 
       var activities = result.data;
-      this.setState({
+      this.hasMounted && this.setState({
         activities: activities,
         totalCount: result.count
       });

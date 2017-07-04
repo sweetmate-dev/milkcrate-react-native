@@ -72,6 +72,14 @@ export default class NavSearchBar extends Component {
     };
   }
 
+  componentDidMount() {
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   onSearchChange(text) {
     if (this.props.onSearchChange) {
       this.props.onSearchChange(text);
@@ -82,7 +90,7 @@ export default class NavSearchBar extends Component {
     if (this.props.onFocus) {
       this.props.onFocus();
     }
-    this.setState({ 
+    this.hasMounted && this.setState({
       isShowCancelButton: true,
      });
   }
@@ -97,7 +105,7 @@ export default class NavSearchBar extends Component {
     if (this.props.onCancel) {
       this.props.onCancel();
     }
-    this.setState({ 
+    this.hasMounted && this.setState({
       isShowCancelButton: false,
     });
   }

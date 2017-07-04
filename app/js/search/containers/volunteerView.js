@@ -58,8 +58,13 @@ class VolunteerView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Volunteer Opportunities")
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   loadAllData() {
@@ -68,7 +73,7 @@ class VolunteerView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState({
+    this.hasMounted && this.setState({
       currentLocation: null,
       volunteeres: [],
       categoryIcons: [],
@@ -95,7 +100,7 @@ class VolunteerView extends Component {
     if (this.more == false)
       return;
 
-    this.setState( (state) => {  
+    this.hasMounted && this.setState( (state) => {
       state.volunteeresQuery.loading = true;
       return state;
     });
@@ -125,7 +130,7 @@ class VolunteerView extends Component {
 
   search(position) {
     if(position)
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
 
     var param = {
       type: 'volunteer_opportunity',
@@ -147,12 +152,12 @@ class VolunteerView extends Component {
     bendService.searchActivity(param, (error, result) => {
       if(param.query != this.searchText) return;
 
-      this.setState( (state) => {
+      this.hasMounted && this.setState( (state) => {
         state.volunteeresQuery.loading = false;
         return state;
       });
 
-      this.setState({ isRefreshing: false });
+      this.hasMounted && this.setState({ isRefreshing: false });
 
       if (error) {
         console.log("search failed", error)
@@ -161,20 +166,20 @@ class VolunteerView extends Component {
 
       if (result.data.volunteer_opportunity.length < this.limit) {
         this.more = false;
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.volunteeresQuery.more = false;
           return state;
         });
       }
 
       this.state.volunteeres = this.state.volunteeres.concat(result.data.volunteer_opportunity);
-      this.setState({ volunteeres: this.state.volunteeres });
+      this.hasMounted && this.setState({ volunteeres: this.state.volunteeres });
 
       const imageOffset = this.offset;
       this.offset += this.limit;
 
       result.data.volunteer_opportunity.map((item, index) => {
-        this.setState( (state) => {
+        this.hasMounted && this.setState( (state) => {
           state.categoryIcons[imageOffset + index] = UtilService.getCategoryIconFromSlug(item);
           return state;
         });
@@ -191,7 +196,7 @@ class VolunteerView extends Component {
         this.limit = 20;
         this.more = true;
 
-        this.setState({
+        this.hasMounted && this.setState({
           currentLocation: null,
           volunteeres: this.state.volunteeres,
           categoryIcons: [],
@@ -212,7 +217,7 @@ class VolunteerView extends Component {
     this.searchText = '';
     this.more = true;
 
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.volunteeresQuery.more = true;
       state.volunteeres = [];
       state.categoryIcons = [];
@@ -223,7 +228,7 @@ class VolunteerView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
+    this.hasMounted && this.setState({ isRefreshing: true });
     this.loadAllData();    
   }
 

@@ -31,6 +31,14 @@ export default class SendFeedbackModal extends Component {
     }
   }
 
+  componentDidMount() {
+    this.hasMounted = true
+  }
+
+  componentDidMount() {
+    this.hasMounted = false
+  }
+
   onClose() {
     Keyboard.dismiss();
     Actions.pop();
@@ -42,11 +50,11 @@ export default class SendFeedbackModal extends Component {
     }
     
     Keyboard.dismiss();
-    
-    this.setState({ sending: true });
+
+    this.hasMounted && this.setState({ sending: true });
     bendService.sendFeedback( this.state.textFeedback, (error, result) => {
 
-      this.setState({ sending: false });
+      this.hasMounted && this.setState({ sending: false });
       if (error) {
         console.log(error);
         return;
@@ -79,7 +87,7 @@ export default class SendFeedbackModal extends Component {
             textAlign="left"
             style={ styles.input }
             underlineColorAndroid="transparent"
-            onChangeText={ (text) => this.setState({ textFeedback: text }) }              
+            onChangeText={ (text) => this.hasMounted && this.setState({ textFeedback: text }) }
           />
         </KeyboardAvoidingView>
       </View>

@@ -36,7 +36,12 @@ export default class Introduce extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     Orientation.lockToPortrait();
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   onGoLogin() {

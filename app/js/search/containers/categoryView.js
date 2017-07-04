@@ -52,12 +52,17 @@ class CategoryView extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     this.loadAllData();
     UtilService.mixpanelEvent("Browsed Category", {"name":this.props.title})
   }
 
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   loadAllData() {
-    this.setState({
+    this.hasMounted && this.setState({
       loading: true,
       currentLocation: null,
       activities: {
@@ -86,7 +91,7 @@ class CategoryView extends Component {
   search(position) {
 
     if (position) {
-      this.setState({ currentLocation: position })
+      this.hasMounted && this.setState({ currentLocation: position })
     }
     const title = this.props.title;
     const  index = this.props.index;
@@ -107,7 +112,7 @@ class CategoryView extends Component {
 
     bendService.searchActivity(param, (error, result) => {
 
-      this.setState({ 
+      this.hasMounted && this.setState({
         isRefreshing: false,
         loading: false,
       });
@@ -126,7 +131,7 @@ class CategoryView extends Component {
       // activities = activities.concat(result.data.volunteer_opportunity);
 
       var activities = result.data;
-      this.setState({
+      this.hasMounted && this.setState({
         activities: activities,
       })
     })
@@ -332,8 +337,8 @@ class CategoryView extends Component {
   }
 
   onRefresh() {
-    this.setState({ isRefreshing: true });
-    this.loadAllData();    
+    this.hasMounted && this.setState({ isRefreshing: true });
+    this.loadAllData();
   }
 
   render() {

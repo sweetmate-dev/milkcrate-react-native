@@ -66,10 +66,15 @@ export default class SearchBar extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true
     if (this.props.searchAutoFocus == true){
       this._textInput.focus();
       this.launchKeyboard();
     }
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
   }
 
   componentWillReceiveProps(nextProps) {
@@ -85,7 +90,7 @@ export default class SearchBar extends Component {
 
   launchKeyboard() {
     timer.setTimeout( this, 'LaunchKeyboard', () => {
-      timer.clearInterval(this, 'LaunchKeyboard');
+      timer.clearTimeout(this, 'LaunchKeyboard');
       this._textInput.focus();
     }, 300);
   }
@@ -93,7 +98,7 @@ export default class SearchBar extends Component {
   _onClose() {
     this._textInput.setNativeProps({ text: '' });
     this.props.onSearchChange('');
-    this.setState({ textSearch: '' });
+    this.hasMounted && this.setState({ textSearch: '' });
 
     if (this.props.onClose) {
       this.props.onClose();
@@ -102,22 +107,22 @@ export default class SearchBar extends Component {
 
   _onFocus() {
     // this._textInput.setNativeProps({ text: '' });
-    this.setState({ isOnFocus: true });
+    this.hasMounted && this.setState({ isOnFocus: true });
     if (this.props.onFocus) {
       this.props.onFocus();
     }
   }
 
   _onBlur() {
-    this.setState({ isOnFocus: false });
+    this.hasMounted && this.setState({ isOnFocus: false });
     if (this.props.onBlur) {
       this.props.onBlur();
     }
     this._dismissKeyboard();
   }
 
-  _onSearchChange(text) {    
-    this.setState({ textSearch: text });
+  _onSearchChange(text) {
+    this.hasMounted && this.setState({ textSearch: text });
     if (this.props.onSearchChange) {
       this.props.onSearchChange(text);
     }
@@ -126,7 +131,7 @@ export default class SearchBar extends Component {
   _onCancel() {
     this._textInput.setNativeProps({ text: '' });
     // this.props.onSearchChange('');
-    this.setState({ textSearch: '' });
+    this.hasMounted && this.setState({ textSearch: '' });
     this._dismissKeyboard();
   }
 

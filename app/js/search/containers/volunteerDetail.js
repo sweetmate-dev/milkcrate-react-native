@@ -78,7 +78,7 @@ class VolunteerDetail extends Component {
 
       //console.log("getPinnedActivities", rets.length, rets, this.props.business._id, exist)
 
-      this.setState({
+      this.mounted && this.setState({
         pinned: exist ? true: false,
       })
     })
@@ -149,7 +149,7 @@ class VolunteerDetail extends Component {
   }
 
   onCheckIn() {
-    this.setState({
+    this.mounted && this.setState({
       hoursNumber: "0",
       modalVisible: true,
     })
@@ -224,7 +224,7 @@ class VolunteerDetail extends Component {
         name: this.props.volunteer.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.mounted && this.setState({
             pinned: false,
           });
           this.props.commonActions.updateRecentPinnedActivities();
@@ -238,7 +238,7 @@ class VolunteerDetail extends Component {
         name: this.props.volunteer.name,
       }, (error, result) => {
         if (!error) {
-          this.setState({
+          this.mounted && this.setState({
             pinned: true,
           });
           this.props.commonActions.updateRecentPinnedActivities();

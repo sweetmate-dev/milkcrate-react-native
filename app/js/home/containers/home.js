@@ -439,7 +439,7 @@ class Home extends Component {
                 })
 
                 timer.setTimeout( this, 'DailyPollTimer', () => {
-                  timer.clearInterval(this, 'DailyPollTimer');
+                  timer.clearTimeout(this, 'DailyPollTimer');
                   this.state.pollQuestion.myAnswer = this.state.pollQuestion.answers[index]
                   this.hasMounted&&this.setState({ selectedDailyPollStateMode: true });
                 }, 500);

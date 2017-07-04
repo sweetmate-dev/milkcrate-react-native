@@ -176,7 +176,7 @@ class Profile extends Component {
       console.log("sprint", ret)
 
       if(ret) {
-        this.setState({
+        this.hasMounted && this.setState({
           sprint:ret
         })
       }

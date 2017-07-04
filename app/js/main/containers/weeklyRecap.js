@@ -77,6 +77,14 @@ export default class WeeklyRecap extends Component {
     };
   }
 
+  componentDidMount() {
+    this.hasMounted = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   renderRecentActivityRow(rowData, sectionID, rowID) {
     return (
       <WeeklyRecapListCell
@@ -95,7 +103,7 @@ export default class WeeklyRecap extends Component {
   }
 
   onDay( index ) {
-    this.setState( (state) => {
+    this.hasMounted && this.setState( (state) => {
       state.seledtedDays[index] = !state.seledtedDays[index];
       return state;
     });

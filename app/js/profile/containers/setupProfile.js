@@ -88,12 +88,12 @@ class SetupProfile extends Component {
     const age = today.diff(birthday, 'years');
     if (Number(age) < 13) {
       timer.setTimeout( this, 'AgeRequirementTimer', () => {
-        timer.clearInterval(this, 'AgeRequirementTimer');
+        timer.clearTimeout(this, 'AgeRequirementTimer');
         Alert.alert('Age Requirement Not Met', 'You must be at least 13 years of age to use this app.');
       }, 500);
       return;
     }
-    this.setState({ birthday: date });    
+    this.hasMounted && this.setState({ birthday: date });
   }
 
   onCompleteProfile() {
@@ -241,7 +241,7 @@ class SetupProfile extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
-              onChangeText={ (text) => this.setState({ name: text }) }
+              onChangeText={ (text) => this.hasMounted && this.setState({ name: text }) }
             />
             <View style={ styles.inputRowContainer }>
               <DatePicker

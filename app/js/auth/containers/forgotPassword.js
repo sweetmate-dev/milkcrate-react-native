@@ -40,6 +40,14 @@ class ForgotPassword extends Component {
     };
   }
 
+  componentDidMount() {
+    this.hasMounted  = true
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false
+  }
+
   onReset() {
 
     Keyboard.dismiss();
@@ -54,7 +62,7 @@ class ForgotPassword extends Component {
       if(error) {
         return;
       }
-      this.setState({ resetPassword: true });
+      this.hasMounted && this.setState({ resetPassword: true });
       UtilService.mixpanelEvent("Reset Password")
     })
   }
@@ -88,7 +96,7 @@ class ForgotPassword extends Component {
               returnKeyType={ 'next' }
               keyboardType="email-address"
               value={ this.state.email }
-              onChangeText={ (text) => this.setState({ email: text }) }
+              onChangeText={ (text) => this.hasMounted && this.setState({ email: text }) }
               onSubmitEditing={ () => this.onReset() }
             />
 
