@@ -189,6 +189,7 @@ class MainSearch extends Component {
       exploreWays: _.clone(exploreWays),
       dataSourceCategories: dataSourceCategories.cloneWithRows(categoryImages),
       loading:true,
+      community:{}
     };
 
     this.categoryCellMargin = 0;
@@ -243,7 +244,8 @@ class MainSearch extends Component {
 
       this.setState({
         exploreWays:exploreWays,
-        loading:false
+        loading:false,
+        community:ret
       })
     })
   }
@@ -339,14 +341,14 @@ class MainSearch extends Component {
           contentContainerStyle={ styles.listViewExploreWays }
         />
 
-        <Text style={ styles.textTitle }>Browse by Category</Text>
+        {this.state.community.showCategoriesInSearch !== false && <Text style={ styles.textTitle }>Browse by Category</Text>}
 
-        <ListView
+        {this.state.community.showCategoriesInSearch !== false && <ListView
           pageSize = { categoryImages.length }
           dataSource={ this.state.dataSourceCategories }
           renderRow={ this.renderCategoriesRow.bind(this) }
           contentContainerStyle={ styles.listViewCategories }
-        />
+        />}
       </ScrollView>
     );
   }
