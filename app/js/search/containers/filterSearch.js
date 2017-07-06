@@ -54,6 +54,7 @@ class FilterSearch extends Component {
         business: [],
       },
       totalCount: 1,
+      community:{}
     };
     this.searchText = ""
   }
@@ -69,6 +70,17 @@ class FilterSearch extends Component {
       },
         Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
+
+    bendService.getCommunity((err, ret)=>{
+      if(err) {
+        console.log(err);
+        return
+      }
+
+      this.setState({
+        community:ret
+      })
+    })
   }
 
   componentWillUnmount() {
@@ -193,9 +205,9 @@ class FilterSearch extends Component {
       param.lat = this.state.currentLocation.coords.latitude;
       param.long = this.state.currentLocation.coords.longitude;
     } else {
-      if (Cache.community && Cache.community._geoloc) {
-        param.lat = Cache.community._geoloc[1];
-        param.long = Cache.community._geoloc[0];
+      if (this.state.community && this.state.community._geoloc) {
+        param.lat = this.state.community._geoloc[1];
+        param.long = this.state.community._geoloc[0];
       }
     }
 
@@ -304,11 +316,12 @@ class FilterSearch extends Component {
 
 
   get showActions() {
+    if(this.state.community.actionsEnabled === false) return null;
     return(
       this.state.activities.action.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Actions</Text>
+            <Text style={ styles.textSectionTitle }>{this.state.community.actionsTitle||'Actions'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -323,11 +336,12 @@ class FilterSearch extends Component {
   }
 
   get showBusinesses() {
+    if(this.state.community.placesEnabled === false) return null;
     return (
       this.state.activities.business.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Businesses</Text>
+            <Text style={ styles.textSectionTitle }>{this.state.community.placesTitle||'Businesses'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -341,11 +355,12 @@ class FilterSearch extends Component {
   }
 
   get showEvents() {
+    if(this.state.community.eventsEnabled === false) return null;
     return (
       this.state.activities.event.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Events</Text>
+            <Text style={ styles.textSectionTitle }>{this.state.community.eventsTitle||'Events'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -360,11 +375,12 @@ class FilterSearch extends Component {
   }
 
   get showVolunteer() {
+    if(this.state.community.volunteerOpportunitiesEnabled === false) return null;
     return (
       this.state.activities.volunteer_opportunity.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Volunteer Opportunities</Text>
+            <Text style={ styles.textSectionTitle }>{this.state.community.volunteerOpportunitiesTitle||'Volunteer Opportunities'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -379,11 +395,12 @@ class FilterSearch extends Component {
   }
 
   get showServices() {
+    if(this.state.community.servicesEnabled === false) return null;
     return (
       this.state.activities.service.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Services</Text>
+            <Text style={ styles.textSectionTitle }>{this.state.community.servicesTitle||'Services'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }

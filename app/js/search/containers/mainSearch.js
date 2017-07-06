@@ -26,6 +26,10 @@ import CategoryButton from '../components/categoryButton';
 import ExploreWaysListCell from '../components/exploreWaysListCell';
 import { screenWidth, activityCellSize, categoryCellSize } from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
+import Cache from '../../components/Cache'
+import UtilService from '../../components/util'
+import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
 
 const exploreWays = [
   {
@@ -35,6 +39,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/recent.png'),
     iconWidth: 21,
     iconHeight: 21,
+    enabled:true,
   },
   {
     key: 'actions',
@@ -43,6 +48,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/actions.png'),
     iconWidth: 22,
     iconHeight: 22,
+    enabled:true,
   },
   {
     key: 'businesses',
@@ -51,6 +57,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/businesses.png'),
     iconWidth: 14,
     iconHeight: 21,
+    enabled:true,
   },
   {
     key: 'events',
@@ -59,6 +66,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/events.png'),
     iconWidth: 23,
     iconHeight: 25,
+    enabled:true,
   },
   {
     key: 'services',
@@ -67,6 +75,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/services.png'),
     iconWidth: 23,
     iconHeight: 20,
+    enabled:true,
   },
   {
     key: 'volunteer_opportunities',
@@ -75,6 +84,7 @@ const exploreWays = [
     icon: require('../../../assets/imgs/volunteer.png'),
     iconWidth: 26,
     iconHeight: 25,
+    enabled:true,
   },
 ];
 
@@ -169,15 +179,16 @@ class MainSearch extends Component {
   constructor(props) {
     super(props);
 
-    var dataSourceExploreWays = new ListView.DataSource(
+    this.dataSourceExploreWays = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     var dataSourceCategories = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
-      dataSourceExploreWays: dataSourceExploreWays.cloneWithRows(exploreWays),
+      exploreWays: _.clone(exploreWays),
       dataSourceCategories: dataSourceCategories.cloneWithRows(categoryImages),
+      loading:true,
     };
 
     this.categoryCellMargin = 0;
@@ -203,6 +214,38 @@ class MainSearch extends Component {
         }
       }
     }
+
+    bendService.getCommunity((err, ret)=>{
+      if(err) {
+        console.log(err);
+        this.setState({
+          loading:false
+        })
+        return
+      }
+
+      var exploreWays = this.state.exploreWays
+      exploreWays[1].title = ret.actionsTitle||exploreWays[1].title
+      exploreWays[1].description = ret.actionsDescription||exploreWays[1].description
+      exploreWays[1].enabled = ret.actionsEnabled
+      exploreWays[2].title = ret.placesTitle||exploreWays[2].title
+      exploreWays[2].description = ret.placesDescription||exploreWays[2].description
+      exploreWays[2].enabled = ret.placesEnabled
+      exploreWays[3].title = ret.eventsTitle||exploreWays[3].title
+      exploreWays[3].description = ret.eventsDescription||exploreWays[3].description
+      exploreWays[3].enabled = ret.eventsEnabled
+      exploreWays[4].title = ret.servicesTitle||exploreWays[4].title
+      exploreWays[4].description = ret.servicesDescription||exploreWays[4].description
+      exploreWays[4].enabled = ret.servicesEnabled
+      exploreWays[5].title = ret.volunteerOpportunitiesTitle||exploreWays[5].title
+      exploreWays[5].description = ret.volunteerOpportunitiesDescription||exploreWays[5].description
+      exploreWays[5].enabled = ret.volunteerOpportunitiesEnabled
+
+      this.setState({
+        exploreWays:exploreWays,
+        loading:false
+      })
+    })
   }
 
   onSelectExploreWays (index, query) {
@@ -241,6 +284,8 @@ class MainSearch extends Component {
   }
 
   renderExploreWaysRow(rowData, sectionID, rowID) {
+    if(rowData.enabled === false)
+        return null;
     return (
       <ExploreWaysListCell
         key={ rowID }
@@ -282,11 +327,14 @@ class MainSearch extends Component {
   render() {
     this.caculateCategoryCellMargin();
 
+    if(this.state.loading)
+        return null;
+
     return (
       <ScrollView>
         <Text style={ styles.textTitle }>Explore Ways to Earn Points</Text>
         <ListView
-          dataSource={ this.state.dataSourceExploreWays }
+          dataSource={ this.dataSourceExploreWays.cloneWithRows(this.state.exploreWays) }
           renderRow={ this.renderExploreWaysRow.bind(this) }
           contentContainerStyle={ styles.listViewExploreWays }
         />

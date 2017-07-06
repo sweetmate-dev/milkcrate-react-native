@@ -237,11 +237,12 @@ class RecentView extends Component {
   }
 
   get showActions() {
+    if(Cache.community.actionsEnabled === false) return null;
     return(
       this.state.activities.action.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Actions</Text>
+            <Text style={ styles.textSectionTitle }>{Cache.community.actionsTitle||'Actions'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -255,11 +256,12 @@ class RecentView extends Component {
   }
 
   get showBusinesses() {
+    if(Cache.community.placesEnabled === false) return null;
     return (
       this.state.activities.business.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Businesses</Text>
+            <Text style={ styles.textSectionTitle }>{Cache.community.placesTitle||'Businesses'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -273,11 +275,12 @@ class RecentView extends Component {
   }
 
   get showEvents() {
+    if(Cache.community.eventsEnabled === false) return null;
     return (
       this.state.activities.event.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Events</Text>
+            <Text style={ styles.textSectionTitle }>{Cache.community.eventsTitle||'Events'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -292,11 +295,12 @@ class RecentView extends Component {
   }
 
   get showVolunteer() {
+    if(Cache.community.volunteerOpportunitiesEnabled === false) return null;
     return (
       this.state.activities.volunteer_opportunity.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Volunteer Opportunities</Text>
+            <Text style={ styles.textSectionTitle }>{Cache.community.volunteerOpportunitiesTitle||'Volunteer Opportunities'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
@@ -311,11 +315,12 @@ class RecentView extends Component {
   }
 
   get showServices() {
+    if(Cache.community.servicesEnabled === false) return null;
     return (
       this.state.activities.service.length ?
         <View>
           <View style={ styles.sectionHeaderContainer }>
-            <Text style={ styles.textSectionTitle }>Services</Text>
+            <Text style={ styles.textSectionTitle }>{Cache.community.servicesTitle||'Services'}</Text>
           </View>
           <ListView
             enableEmptySections={ true }
