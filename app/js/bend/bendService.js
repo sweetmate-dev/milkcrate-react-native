@@ -500,6 +500,8 @@ module.exports = {
             })
         }, (err, ret)=>{
 
+            //console.log("trends", trends)
+
             if(trends.length > 0) {
                 //get users
                 async.map(trends,
@@ -512,7 +514,7 @@ module.exports = {
                                 q.notEqualTo("deleted", true)
                                 q.equalTo("community._id", communityId);
                                 q.exists('user._id', true)
-                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 14 * 24 * 3600 * 1000000000)
                                 q.limit(6)
                                 Bend.DataStore.find("activity", q, {
                                     relations:{
@@ -539,7 +541,7 @@ module.exports = {
                                 q.exists('user._id', true)
                                 q.equalTo("community._id", communityId);
                                 q.equalTo("activity._id", t._id);
-                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 7 * 24 * 3600 * 1000000000)
+                                q.greaterThan("_bmd.createdAt", Date.now() * 1000000 - 14 * 24 * 3600 * 1000000000)
                                 var aggregation = Bend.Group.count('user._id');
                                 //aggregation.by('activity._id')
                                 aggregation.query(q);
@@ -562,7 +564,7 @@ module.exports = {
                         trends = _.filter(trends, (o)=>{
                             return (o.users && o.users.length > 0)
                         })
-                        //console.log("trends", trends)
+                        console.log("trends", trends)
                         cb(null, trends)
                     })
             } else {
