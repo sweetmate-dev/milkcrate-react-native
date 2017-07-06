@@ -167,7 +167,18 @@ export default class PieChart extends Component {
       //only replace label Text
       this.updateChartSliceValue(idx);
     } else {
-      {
+      var chartValue = this.state.showChartValue
+      chartValue[idx] = true;
+      this.state.animIndex[idx] = newScale
+      //console.log("showChartValue", this.state.showChartValue)
+      this.hasMounted && this.setState({
+        showChartValue:chartValue,
+        animIndex:this.state.animIndex
+      })
+      this.updateChartSliceValue(idx);
+      this.oldScaleData[idx] = newScale;
+
+      /*{
         var chartValue = this.state.showChartValue
         chartValue[idx] = false;
         //console.log("showChartValue", this.state.showChartValue)
@@ -192,7 +203,6 @@ export default class PieChart extends Component {
             })
             this.updateChartSliceValue(idx);
             this.oldScaleData[idx] = newScale;
-            //this.showLabelAnimation();
             return;
           } else {
             var animIndex = this.state.animIndex
@@ -202,7 +212,7 @@ export default class PieChart extends Component {
             })
           }
         }, 40);
-      }
+      }*/
 
     }
   }
@@ -434,8 +444,8 @@ export default class PieChart extends Component {
     css['alignItems'] = 'center';
     css['position'] = 'absolute';
     if(radius > (chartRadius - chartInnerRadius)/2){
-      css['left'] = chartRadius + (radius + 5) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 40;
-      css['top'] = chartRadius + (radius + 5) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 40;
+      css['left'] = chartRadius + (radius + 5) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 45;
+      css['top'] = chartRadius + (radius + 5) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 45;
     } else {
       css['left'] = chartRadius + (chartRadius-40) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 40;
       css['top'] = chartRadius + (chartRadius-40) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 40;
