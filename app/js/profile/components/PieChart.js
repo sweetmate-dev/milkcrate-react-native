@@ -444,11 +444,11 @@ export default class PieChart extends Component {
     css['alignItems'] = 'center';
     css['position'] = 'absolute';
     if(radius > (chartRadius - chartInnerRadius)/2){
-      css['left'] = chartRadius + (radius + 5) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 45;
-      css['top'] = chartRadius + (radius + 5) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 45;
+      css['left'] = chartRadius + (radius - 5) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 40;
+      css['top'] = chartRadius + (radius - 5) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 40;
     } else {
-      css['left'] = chartRadius + (chartRadius-40) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 40;
-      css['top'] = chartRadius + (chartRadius-40) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 40;
+      css['left'] = chartRadius + (chartRadius-45) * Math.cos(Math.PI / 3 + Math.PI / 3 * index) - 40;
+      css['top'] = chartRadius + (chartRadius-45) * Math.sin(Math.PI / 3 + Math.PI / 3 * index) - 40;
     }
     //css['opacity'] = this.state.labelOpacity
 

@@ -36,7 +36,7 @@ import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
 
-class CommunityPoints extends Component {
+class TeamPoints extends Component {
   constructor(props) {
     super(props);
 
@@ -57,7 +57,7 @@ class CommunityPoints extends Component {
         loading: false,
       },
       currentUser: {},
-      community: {}
+      sortedUsers:[]
     };
 
     this.activityQuery = { 
@@ -65,14 +65,12 @@ class CommunityPoints extends Component {
       createdAt: 0, 
       limit: 20 
     };
-
-    this.totalUsers = 0;
   }
 
   componentDidMount() {
     this.hasMounted = true
     this.loadAllData();
-    UtilService.mixpanelEvent("Viewed Community Points")
+    UtilService.mixpanelEvent("Viewed Team Points")
   }
 
   componentWillUnmount() {
@@ -80,6 +78,7 @@ class CommunityPoints extends Component {
   }
 
   componentWillReceiveProps(newProps) {
+    console.log("newProps", newProps)
     const { commonStatus, likeResult, recentActivityId, recentActivityLike } = newProps;
 
     if (commonStatus === commonActionTypes.RECENT_ACTIVITY_LIKE_SUCCESS) {
@@ -108,19 +107,10 @@ class CommunityPoints extends Component {
   }
 
   loadAllData() {
-
     bendService.getUser( (error, result) => {
       this.hasMounted && this.setState({
         currentUser: result,
       })
-    })
-
-    bendService.getCommunity( (error, result) => {
-      if (!error) {
-        this.hasMounted && this.setState({
-          community: result,
-        })
-      }
     })
 
     this.hasMounted && this.setState({
@@ -140,27 +130,34 @@ class CommunityPoints extends Component {
     };
 
     this.totalUsers = 0;
+    
+    bendService.getTeamUsers(this.props.team._id, (err, rets)=>{
+      this.teamUsers = rets;
+      console.log("team users", rets)
 
-    bendService.getLeaderBoardSimpleList( (error, userList, allUsers) => {
-      // console.log("getLeaderBoardSimpleList : ", userList)
-      if (error) {
-        console.log(error);
-        return;
-      }
+      bendService.getTeamLeaderBoardSimpleList(this.teamUsers, (error, userList, allSortedUsers) => {
+        console.log("getTeamLeaderBoardSimpleList : ", userList, allSortedUsers)
+        if (error) {
+          console.log(error);
+          return;
+        }
 
-      var currentUserIndex = _.find(userList, (obj)=>{
-        return obj._id == bendService.getActiveUser()._id;
+        var currentUserIndex = _.find(userList, (obj)=>{
+          return obj._id == bendService.getActiveUser()._id;
+        })
+
+        this.totalUsers = allSortedUsers.length
+        this.state.sortedUsers = allSortedUsers
+
+        this.hasMounted && this.setState({
+          currentUserIndex: currentUserIndex,
+          userList: userList,
+          sortedUsers:this.state.sortedUsers
+        })
       })
 
-      this.totalUsers = allUsers.length
-
-      this.hasMounted && this.setState({
-        currentUserIndex: currentUserIndex,
-        userList: userList,
-      })
+      this.loadRecentActivities(this.teamUsers);
     })
-
-    this.loadRecentActivities();
   }
 
   onPressedRecentActivityCell(rowID) {
@@ -168,8 +165,8 @@ class CommunityPoints extends Component {
   }
 
   onLeaderboardCellPressed () {
-    if(this.state.currentUserIndex)
-      Actions.Leaderboard({ total: this.totalUsers });
+    /*if(this.state.currentUserIndex)
+      Actions.Leaderboard({ users: this.state.sortedUsers });*/
   }
 
   loadRecentActivities() {
@@ -181,8 +178,8 @@ class CommunityPoints extends Component {
       return state;
     });
 
-    bendService.getRecentActivities(this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
-      //console.log("getRecentActivities", error, result)
+    bendService.getTeamRecentActivities(this.teamUsers, this.activityQuery.createdAt, this.activityQuery.limit + 1, (error, result) => {
+      console.log("getTeamRecentActivities", error, result.length)
       this.hasMounted && this.setState( (state) => {
         state.activityQuery.loading = false;
         return state;
@@ -259,7 +256,6 @@ class CommunityPoints extends Component {
   }
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
-    var previousRank = rowData.previousSprintRank, currentRank = rowData.sprintRank
     let name = rowData.name;
     if (name === undefined) {
       name = rowData.username;
@@ -267,14 +263,14 @@ class CommunityPoints extends Component {
 
     return (
       <SimpleLeaderboardListCell
-        status={ previousRank == -1 ? 0 : (previousRank < currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
-        index={ rowData.sprintRank }
+        status={ 0 }
+        index={ this.getPosition(rowData._id) }
         name={ name }
         points={ rowData.sprintPoints }
         avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
         avatarBackColor={ UtilService.getBackColor(rowData.avatar) }
         defaultAvatar={ UtilService.getDefaultAvatar(rowData.defaultAvatar) }
-        currentUserIndex={ this.state.currentUser.sprintRank }
+        currentUserIndex={ this.getPosition(this.state.currentUser._id) }
       />
     );
   }
@@ -288,9 +284,14 @@ class CommunityPoints extends Component {
     this.loadAllData();    
   }
 
+  getPosition(id) {
+    var idx = this.state.sortedUsers.indexOf(id);
+    return (idx + 1)
+  }
+
   render() {
     const currentUser = this.state.currentUser
-    const community = this.state.community
+    const {team} = this.props
 
     return (
       <View style={ styles.container }>
@@ -310,24 +311,26 @@ class CommunityPoints extends Component {
         >
           <View style={ styles.topContainer }>
             <View style={ styles.logoContainer }>
-              { community.logo && <Image source={{ uri: community.logo._downloadURL }} style={ styles.imageComcast } resizeMode="contain"/> }
-              { !community.logo && <Text style={ styles.textName }>{ community.name }</Text> }
+              <View style={[styles.imageText, {backgroundColor:team.color}]}>
+                <Text style={styles.textInitial}>{team.initials}</Text>
+              </View>
+              { <Text style={ styles.textName }>{ team.name }</Text> }
             </View>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ community.points || 0 }</Text>
+                <Text style={ styles.textValue }>{ team.totalPoints || 0 }</Text>
                 <Text style={ styles.textSmall }>Total Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ community.hours || 0 }</Text>
+                <Text style={ styles.textValue }>{ team.volunteerHours || 0 }</Text>
                 <Text style={ styles.textSmall }>Hours Volunteered</Text>
               </View>
             </View>
           </View>
 
           { (this.state.userList.length > 0) && <View style={ styles.leaderboardContainer }>
-            {this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard • You are in { UtilService.getPositionString(currentUser.sprintRank) } place</Text>}
-            {!this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ community.name } Leaderboard</Text>}
+            {this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ team.name } Leaderboard • You are in { UtilService.getPositionString(this.getPosition(currentUser._id)) } place</Text>}
+            {!this.state.currentUserIndex && <Text style={ styles.textSectionTitle }>{ team.name } Leaderboard</Text>}
             <TouchableOpacity
               onPress={ () => this.onLeaderboardCellPressed() }
               activeOpacity={ this.state.currentUserIndex?0.5:1 }
@@ -377,7 +380,7 @@ export default connect(state => ({
     actions: bindActionCreators(communityPointsActions, dispatch),
     recentActivityLikeActions: bindActionCreators(commonActions, dispatch),
   })
-) (CommunityPoints);
+) (TeamPoints);
 
 const styles = StyleSheet.create({
   container: {
@@ -396,6 +399,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   logoContainer: {
+    flex:1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -414,6 +419,31 @@ const styles = StyleSheet.create({
   pointSubContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  imageText: {
+    margin:10,
+    marginTop:20,
+    marginBottom:20,
+    width: 40,
+    height: 40,
+    borderRadius:5,
+  },
+  textInitial: {
+    color: '#ffffff',
+    fontFamily: 'Open Sans',
+    fontSize: 24,
+    paddingTop:5,
+    backgroundColor: 'transparent',
+    textAlign:'center'
+  },
+  textTeamName: {
+    flex:1,
+    paddingTop:10,
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 24,
+    backgroundColor: 'transparent',
+    textAlign:'left'
   },
   textValue: {
     color: commonColors.bottomButton,

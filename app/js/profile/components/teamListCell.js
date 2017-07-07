@@ -19,15 +19,20 @@ const imageRedHeart = require('../../../assets/imgs/heart_red.png');
 export default class TeamListCell extends Component {
 
   static propTypes = {
-    icon: PropTypes.string.isRequired,
+    icon: PropTypes.string,
+    initial: PropTypes.string,
+    name: PropTypes.string,
+    color: PropTypes.string,
     average: PropTypes.number,
     me: PropTypes.number,
     onClick: PropTypes.func,
+    mode:PropTypes.string
   }
 
   static defaultProps = {
     me: 0,
     average: 0,
+    mode:'icon',
     onClick: () => {}
   }
 
@@ -50,14 +55,24 @@ export default class TeamListCell extends Component {
       average,
       me,
       onClick,
+        mode,
+        initial,
+        name,
+        color
     } = this.props;
 
     return (
       <TouchableHighlight onPress={ () => onClick() }>
-        <View style={ styles.cellContainer }>
-          <View style={ styles.avatarContainer }>
-            {icon&&<Image style={ styles.imageComcast } source={{ uri: icon }} resizeMode="contain"/>}
-          </View>
+        <View style={ [styles.cellContainer, {borderTopWidth:mode=='icon'?1:0} ]}>
+          {mode=='icon'&&<View style={ styles.avatarContainer }>
+            <Image style={ styles.imageComcast } source={{ uri: icon }} resizeMode="contain"/>
+          </View>}
+          {mode=='text'&&<View style={ styles.avatarContainer }>
+              <View style={[styles.imageText, {backgroundColor:color}]}>
+                <Text style={styles.textInitial}>{initial}</Text>
+              </View>
+              <Text style={styles.textTeamName}>{name}</Text>
+            </View>}
           <View style={ styles.mainContainer }>
             <View style={ styles.valCol }>
               <Text style={styles.textName}>Avg.</Text>
@@ -105,6 +120,30 @@ const styles = StyleSheet.create({
   imageComcast: {
     width: 100,
     height: 38,
+  },
+  imageText: {
+    margin:5,
+    width: 28,
+    height: 28,
+    borderRadius:5,
+  },
+  textInitial: {
+    color: '#ffffff',
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+    paddingTop:5,
+    backgroundColor: 'transparent',
+    textAlign:'center'
+  },
+  textTeamName: {
+    flex:1,
+    paddingTop:10,
+    paddingLeft:5,
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    textAlign:'left'
   },
   textName: {
     flex:1,

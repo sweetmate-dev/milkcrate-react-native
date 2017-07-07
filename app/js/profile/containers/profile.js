@@ -66,8 +66,9 @@ class Profile extends Component {
       },
       sprint:{
 
-      }
-      // currentUser: {}
+      },
+      teams:[],
+      currentUser: {}
     };
 
     this.activityQuery = { 
@@ -75,6 +76,9 @@ class Profile extends Component {
       createdAt: 0, 
       limit: 20 
     };
+
+    this.teams = null
+    this.loadTeams.bind(this)
   }
 
   componentDidMount() {
@@ -136,7 +140,7 @@ class Profile extends Component {
   }
 
   loadAllData() {
-    this.props.commonActions.getCurrentUserProfile();
+    //this.props.commonActions.getCurrentUserProfile();
 
     this.hasMounted&&this.setState({
       activityQuery: {
@@ -153,6 +157,18 @@ class Profile extends Component {
       createdAt: 0, 
       limit: 20 
     };
+
+    bendService.getUser((err, ret)=>{
+      this.state.currentUser = ret
+      this.setState({
+        currentUser:ret
+      })
+      var teams = this.state.currentUser.teams
+      if(teams && !_.isEqual(this.teams, teams)) {
+        this.teams = teams
+        this.loadTeams(this.teams);
+      }
+    })
 
     bendService.getCommunity( (error, result) => {
       if (!error) {
@@ -208,6 +224,20 @@ class Profile extends Component {
         },
         Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
+  }
+
+  loadTeams(teamIds) {
+    bendService.getTeams(teamIds, (err, rets)=>{
+      if(err) {
+        console.log(err);
+        return;
+      }
+
+      console.log("teams", rets)
+      this.setState({
+        teams:rets
+      })
+    })
   }
 
   loadRecentActivities() {
@@ -348,6 +378,12 @@ class Profile extends Component {
     Actions.CommunityPoints();
   }
 
+  onSeeTeamPoints(team) {
+    Actions.TeamPoints({
+      team:team
+    });
+  }
+
   onGoSearchScreen() {
     this.props.onSearch();
   }
@@ -358,8 +394,8 @@ class Profile extends Component {
   }
 
   render() {
-    const currentUser = this.props.currentUser;
-    const {community, sprint} = this.state
+    const currentUser = this.state.currentUser;
+    const {community, sprint, teams} = this.state
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -399,7 +435,24 @@ class Profile extends Component {
               average={Math.round(community.sprintPoints/community.userCount)}
               me={currentUser.sprintPoints - Math.round(community.sprintPoints/community.userCount)}
               onClick={ () => this.onSeeCommunityPoints()}
+              mode={'icon'}
           />}
+          {
+              teams.map((team, index)=>{
+                return (
+                    <TeamListCell
+                        key={index}
+                        initial={ team.initials}
+                        name={ team.name}
+                        color={ team.color}
+                        average={Math.round(team.sprintPoints/(team.userCount||1))}
+                        me={currentUser.sprintPoints - Math.round(team.sprintPoints/(team.userCount||1))}
+                        onClick={ () => this.onSeeTeamPoints(team)}
+                        mode={'text'}
+                    />
+                )
+              })
+          }
           {/*<View style={ styles.buttonContainer }>
             <TouchableOpacity onPress={ () => this.onSeeCommunityPoints() }>
               <View style={ styles.buttonWrapper }>

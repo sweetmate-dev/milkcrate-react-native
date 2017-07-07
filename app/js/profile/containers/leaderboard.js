@@ -116,18 +116,18 @@ class Leaderboard extends Component {
   }
 
   renderLeaderboardRow(rowData, sectionID, rowID) {
-    var previousRank = rowData.previousRank, currentRank = rowData.rank
+    var previousRank = rowData.previousSprintRank, currentRank = rowData.sprintRank
     
     return (
       <LeaderboardListCell
         status={ previousRank == -1?0 : (previousRank < currentRank ? 2 : (previousRank > currentRank ? 1 : 0)) }
-        index={ rowData.rank }
+        index={ rowData.sprintRank }
         name={ rowData.name||rowData.username }
-        points={ rowData.points }
+        points={ rowData.sprintPoints }
         avatar={ rowData.avatar ? UtilService.getSmallImage(rowData.avatar) : '' }
         avatarBackColor={ UtilService.getBackColor(rowData.avatar) }
         defaultAvatar={ UtilService.getDefaultAvatar(rowData.defaultAvatar) }
-        currentUser={ bendService.getActiveUser().rank==rowData.rank }
+        currentUser={ bendService.getActiveUser().sprintRank==rowData.sprintRank }
       />
     );
   }
@@ -156,7 +156,7 @@ class Leaderboard extends Component {
         />
         <View style={ styles.orderContainer }>
           { community.logo && <Image source={{ uri : community.logo._downloadURL }} style={ styles.imageComcast } resizeMode="contain"/> }
-          <Text style={ styles.textOrder }>{ UtilService.getPositionString(currentUser.rank) } out of { total } people</Text>
+          <Text style={ styles.textOrder }>{ UtilService.getPositionString(currentUser.sprintRank) } out of { total } people</Text>
           <Text style={ styles.textUpdate }>Updated every 15 mins</Text>
         </View>
 

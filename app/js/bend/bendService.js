@@ -687,6 +687,63 @@ module.exports = {
             cb(err)
         })
     },
+    getTeamRecentActivities(teamUsers, createdAt, limit, cb) {
+        //get community of current user
+        var communityId = this.getActiveUser().community._id;
+        if(!communityId) return cb(null, [])
+
+        var query = new Bend.Query();
+        query.equalTo("community._id", communityId)
+        query.contains("user._id", teamUsers)
+        query.notEqualTo("deleted", true)
+        query.notEqualTo("hidden", true)
+        if(createdAt > 0)
+            query.lessThan("_bmd.createdAt", createdAt)
+        query.descending("_bmd.createdAt")
+        query.limit(limit)
+
+        Bend.DataStore.find("activity", query, {
+            relations:{
+                activity:["action", "business", "event", "volunteer_opportunity", "service"],
+                community:"community",
+                user:"user",
+                "user.avatar":"BendFile",
+                "activity.certification":'certification'
+            }
+        }).then((rets)=>{
+
+            //consider likes
+            var activityIds = []
+            _.map(rets, (o)=>{
+                activityIds.push(o._id)
+            })
+
+            query = new Bend.Query();
+            query.equalTo("user._id", this.getActiveUser()._id)
+            query.notEqualTo("deleted", true)
+            query.contains("activity._id", activityIds)
+            Bend.DataStore.find("activityLike", query).then(function(likes){
+                var likedActivityIds = []
+                _.map(likes, (_o)=>{
+                    likedActivityIds.push(_o.activity._id)
+                })
+                if(likedActivityIds.length > 0) {
+                    likedActivityIds = _.uniq(likedActivityIds)
+
+                    _.map(rets, (o)=> {
+                        if(likedActivityIds.indexOf(o._id) != -1)
+                            o.likedByMe = true
+                    })
+                }
+
+                cb(null, rets)
+            }, function(err){
+                cb(err)
+            })
+        }, (err)=>{
+            cb(err)
+        })
+    },
 
     /**
      *
@@ -1228,7 +1285,70 @@ module.exports = {
 
                 var q = new Bend.Query()
                 q.contains('_id', userIdx);
-                q.ascending('rank')
+                q.ascending('sprintRank')
+                Bend.User.find(q, {
+                    relations:{
+                        avatar:"BendFile"
+                    }
+                }).then((userList)=>{
+                    cb(null, userList, users)
+                }, (err)=>{
+                    cb(err)
+                })
+            } else {
+                cb(null, null)
+            }
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
+    getTeamUsers(teamId, cb) {
+        var query = new Bend.Query()
+        query.containsAll("teams", [teamId])
+        query.notEqualTo("deleted", true)
+        query.fields(["_id"])
+        Bend.User.find(query).then(function(teamUsers){
+            var result = []
+            _.map(teamUsers, (o)=>{
+                result.push(o._id)
+            })
+            cb(null, result)
+        })
+    },
+
+    getTeamLeaderBoardSimpleList(teamUsers, cb) {
+        var query = new Bend.Query()
+        query.equalTo("community._id", this.getActiveUser().community._id)
+        Bend.DataStore.find("leaderboard", query).then((ret)=>{
+            if(ret.length > 0) {
+                var users = ret[0].data;
+                users = _.intersection(users, teamUsers)
+                var currentUserId = this.getActiveUser()._id
+                var idx = users.indexOf(currentUserId);
+                var startIdx = 0;
+                var endIdx = 2;
+                if(idx != -1) {
+                    startIdx = idx -1;
+                    endIdx = idx + 1;
+                }
+
+                if(startIdx < 0) {
+                    startIdx++;endIdx++;
+                } else if(endIdx > users.length - 1) {
+                    startIdx--;endIdx--;
+                }
+
+                startIdx = Math.max(startIdx, 0);
+                endIdx = Math.min(endIdx, users.length - 1);
+
+                var userIdx = []
+                for(var i = startIdx; i <= endIdx ; i++)
+                    userIdx.push(users[i]);
+
+                var q = new Bend.Query()
+                q.contains('_id', userIdx);
+                q.ascending('sprintRank')
                 Bend.User.find(q, {
                     relations:{
                         avatar:"BendFile"
@@ -1251,8 +1371,8 @@ module.exports = {
         query.equalTo("community._id", this.getActiveUser().community._id)
         query.equalTo("enabled", true)
         query.notEqualTo("deleted", true)
-        query.ascending('rank')
-        query.greaterThan('rank', 0)
+        query.ascending('sprintRank')
+        query.greaterThan('sprintRank', 0)
         query.skip(offset)
         query.limit(limit)
         Bend.User.find(query, {
@@ -1333,6 +1453,17 @@ module.exports = {
             cb(null, result);
         },function(error) {
             cb(error)
+        })
+    },
+
+    getTeams(teamIds, cb) {
+        var query = new Bend.Query()
+        query.contains("_id", teamIds)
+        query.notEqualTo("deleted", true)
+        Bend.DataStore.find("team", query).then((rets)=>{
+            cb(null, rets)
+        }, (err)=>{
+            cb(err)
         })
     },
 
