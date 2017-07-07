@@ -56,6 +56,7 @@ import VideoPlayModal from './components/videoPlayModal';
 import SendFeedbackModal from './profile/containers/sendFeedbackModal';
 import PinListView from './search/containers/pinListView';
 import TeamPoints from './profile/containers/teamPoints';
+import TeamLeaderBoard from './profile/containers/teamLeaderboard';
 
 
 class App extends Component {
@@ -203,6 +204,7 @@ class App extends Component {
         <Scene key="SendFeedbackModal" component={ SendFeedbackModal } direction='vertical' />
         <Scene key="PinListView" component={ PinListView } />
         <Scene key="TeamPoints" component={ TeamPoints } />
+        <Scene key="TeamLeaderBoard" component={ TeamLeaderBoard } />
       </Scene>
     );
 

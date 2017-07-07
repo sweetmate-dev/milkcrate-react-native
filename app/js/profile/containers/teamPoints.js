@@ -165,8 +165,8 @@ class TeamPoints extends Component {
   }
 
   onLeaderboardCellPressed () {
-    /*if(this.state.currentUserIndex)
-      Actions.Leaderboard({ users: this.state.sortedUsers });*/
+    if(this.state.currentUserIndex)
+      Actions.TeamLeaderBoard({ team:this.props.team, users: this.state.sortedUsers, currentUser:this.state.currentUser });
   }
 
   loadRecentActivities() {
@@ -298,7 +298,7 @@ class TeamPoints extends Component {
         <NavTitleBar
           buttons={ commonStyles.NavBackButton }
           onBack={ this.onBack }
-          title ='Your Community'
+          title ='Your Team'
         />
         <ScrollView
           refreshControl={

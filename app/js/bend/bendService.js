@@ -1386,6 +1386,27 @@ module.exports = {
         })
     },
 
+    getTeamLeaderBoardPage(teamUsers, offset, limit, cb) {
+        var query = new Bend.Query()
+        query.equalTo("community._id", this.getActiveUser().community._id)
+        query.equalTo("enabled", true)
+        query.contains("_id", teamUsers)
+        query.notEqualTo("deleted", true)
+        query.ascending('sprintRank')
+        query.greaterThan('sprintRank', 0)
+        query.skip(offset)
+        query.limit(limit)
+        Bend.User.find(query, {
+            relations:{
+                avatar:"BendFile"
+            }
+        }).then((rets)=>{
+            cb(null, rets)
+        }, (err)=>{
+            cb(err)
+        })
+    },
+
     getBusinessRating(id, cb) {
         var query = new Bend.Query()
         query.equalTo("business._id", id)
