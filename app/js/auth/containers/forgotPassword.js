@@ -96,7 +96,7 @@ class ForgotPassword extends Component {
               returnKeyType={ 'next' }
               keyboardType="email-address"
               value={ this.state.email }
-              onChangeText={ (text) => this.hasMounted && this.setState({ email: text }) }
+              onChangeText={ (text) => this.setState({ email: text }) }
               onSubmitEditing={ () => this.onReset() }
             />
 

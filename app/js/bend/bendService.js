@@ -1229,10 +1229,8 @@ module.exports = {
         })
     },
 
-    sendFeedback(text, cb) {
-        Bend.execute("send-feedback", {
-            feedback: text,
-        }).then((ret)=>{
+    sendFeedback(data, cb) {
+        Bend.execute("send-feedback", data).then((ret)=>{
             cb(null, ret);
         }, (err)=>{
             cb(err);

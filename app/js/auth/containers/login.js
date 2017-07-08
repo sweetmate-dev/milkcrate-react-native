@@ -147,7 +147,7 @@ class Login extends Component {
               returnKeyType={ 'next' }
               keyboardType="email-address"
               value={ this.state.email }
-              onChangeText={ (text) => this.hasMounted && this.setState({ email: text }) }
+              onChangeText={ (text) => this.setState({ email: text }) }
               onSubmitEditing={ () => this.refs.password.focus() }
             />
             <View style={ styles.inputWrapper }>
@@ -163,7 +163,7 @@ class Login extends Component {
                 underlineColorAndroid="transparent"
                 returnKeyType={ 'go' }
                 value={ this.state.password }
-                onChangeText={ (text) => this.hasMounted && this.setState({ password: text }) }
+                onChangeText={ (text) => this.setState({ password: text }) }
                 onSubmitEditing={ () => this.onLogin() }
               />
               <TouchableOpacity

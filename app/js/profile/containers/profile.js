@@ -101,6 +101,7 @@ class Profile extends Component {
 
     if(commonStatus === commonActionTypes.ACTIVITY_CAPTURE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
+      this.loadChartData();
 
       var exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
@@ -121,7 +122,8 @@ class Profile extends Component {
       })
     } else if(commonStatus === commonActionTypes.ACTIVITY_REMOVE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
-
+      this.loadChartData();
+      
       //remove recent activity from list
       var exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
@@ -198,20 +200,7 @@ class Profile extends Component {
       }
     })
 
-    bendService.getChartData((error, result)=>{
-      if(error) {
-        console.log(error);
-        return;
-      }
-
-      this.state.chartData = Object.assign(this.state.chartData, result)
-
-      console.log("this.state.chartData", this.state.chartData)
-      this.hasMounted&&this.setState({
-        chartData: this.state.chartData
-      })
-    })
-
+    this.loadChartData()
     this.loadRecentActivities()
 
     navigator.geolocation.getCurrentPosition( 
@@ -224,6 +213,22 @@ class Profile extends Component {
         },
         Platform.OS === 'ios'?{ enableHighAccuracy: commonStyles.geoLocation.enableHighAccuracy, timeout: commonStyles.geoLocation.timeout, maximumAge: commonStyles.geoLocation.maximumAge }:null
     );
+  }
+
+  loadChartData() {
+    bendService.getChartData((error, result)=>{
+      if(error) {
+        console.log(error);
+        return;
+      }
+
+      this.state.chartData = Object.assign(this.state.chartData, result)
+
+      //console.log("this.state.chartData", this.state.chartData)
+      this.hasMounted&&this.setState({
+        chartData: this.state.chartData
+      })
+    })
   }
 
   loadTeams(teamIds) {

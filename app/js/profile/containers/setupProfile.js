@@ -241,7 +241,7 @@ class SetupProfile extends Component {
               style={ styles.input }
               underlineColorAndroid="transparent"
               returnKeyType={ 'next' }
-              onChangeText={ (text) => this.hasMounted && this.setState({ name: text }) }
+              onChangeText={ (text) => this.setState({ name: text }) }
             />
             <View style={ styles.inputRowContainer }>
               <DatePicker

@@ -15,6 +15,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import { Actions } from 'react-native-router-flux';
 import bendService from '../../bend/bendService'
+import Cache from '../../components/Cache'
+import DeviceInfo from 'react-native-device-info';
 
 import NavTitleBar from '../../components/navTitleBar';
 import * as commonColors from '../../styles/commonColors';
@@ -45,6 +47,7 @@ export default class SendFeedbackModal extends Component {
   }
 
   onSendUsYourFeedback() {
+    console.log("here")
     if (this.state.textFeedback === '') {
       return;
     }
@@ -52,8 +55,17 @@ export default class SendFeedbackModal extends Component {
     Keyboard.dismiss();
 
     this.hasMounted && this.setState({ sending: true });
-    bendService.sendFeedback( this.state.textFeedback, (error, result) => {
-
+    bendService.sendFeedback( {
+      feedback:this.state.textFeedback,
+      deviceName: DeviceInfo.getDeviceName(),
+      deviceModel: DeviceInfo.getModel(),
+      systemName: DeviceInfo.getSystemName(),
+      systemVersion: DeviceInfo.getSystemVersion(),
+      appVersion: DeviceInfo.getVersion(),
+      deviceVersion: DeviceInfo.getDeviceId(),
+      client:Cache.community.name,
+    }, (error, result) => {
+      console.log("sendFeedback", error, result)
       this.hasMounted && this.setState({ sending: false });
       if (error) {
         console.log(error);
@@ -87,7 +99,7 @@ export default class SendFeedbackModal extends Component {
             textAlign="left"
             style={ styles.input }
             underlineColorAndroid="transparent"
-            onChangeText={ (text) => this.hasMounted && this.setState({ textFeedback: text }) }
+            onChangeText={ (text) => this.setState({ textFeedback: text }) }
           />
         </KeyboardAvoidingView>
       </View>
