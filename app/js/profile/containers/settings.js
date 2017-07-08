@@ -54,6 +54,12 @@ class Settings extends Component {
       this.hasMounted && this.setState({ label: metadata.label });
     });
 
+    if (this.props.subTwo === 'feedback') {
+      this.onSendUsYourFeedback();
+    } else if (this.props.subTwo === 'suggest') {
+      this.onSuggestBusinessOrEvent();
+    }
+
     UtilService.mixpanelEvent("Viewed Settings")
   }
 

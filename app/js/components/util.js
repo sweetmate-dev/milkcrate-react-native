@@ -171,6 +171,10 @@ const deepLinkGeneral = [
   { url: '/alerts', parameters: { tab: 'alerts', }},
   { url: '/profile', parameters: { tab: 'profile', }},
   { url: '/community', parameters: { tab: 'profile', subOne: 'community',}},
+  { url: '/feedback', parameters: { tab: 'profile', subOne: 'community',}},
+  { url: '/settings', parameters: { tab: 'profile', subOne: 'settings'}},
+  { url: '/settings/feedback', parameters: { tab: 'profile', subOne: 'settings', subTwo:'feedback'}},
+  { url: '/settings/suggest', parameters: { tab: 'profile', subOne: 'settings', subTwo:'suggest'}},
 ];
 
 const deepLinkActivitiesDetail = [

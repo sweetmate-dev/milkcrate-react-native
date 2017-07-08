@@ -87,6 +87,10 @@ class Profile extends Component {
 
     if (this.props.subOne === 'community') {
       this.onSeeCommunityPoints();
+    } else if (this.props.subOne === 'settings') {
+      this.onSettings({
+        subTwo:this.props.subTwo
+      });
     }
 
     UtilService.mixpanelEvent("Viewed Profile")
@@ -123,7 +127,7 @@ class Profile extends Component {
     } else if(commonStatus === commonActionTypes.ACTIVITY_REMOVE_SUCCESS) {
       //console.log("commonStatus", commonStatus, activityId)
       this.loadChartData();
-      
+
       //remove recent activity from list
       var exist = _.find(this.state.recentActivities, (obj) => {
         return obj._id == activityId;
@@ -375,8 +379,8 @@ class Profile extends Component {
     })
   }
 
-  onSettings() {
-    Actions.Settings();
+  onSettings(param) {
+    Actions.Settings(param);
   }
 
   onSeeCommunityPoints() {

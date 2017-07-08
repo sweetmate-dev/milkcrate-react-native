@@ -378,6 +378,7 @@ export default class Main extends Component {
   render() {
     const {
       subOne,
+        subTwo
     } = this.props;
 
     return (
@@ -445,6 +446,7 @@ export default class Main extends Component {
             onPress={ () => this.onSelectTab('profile') }>
             <Profile
               subOne={ subOne }
+              subTwo={ subTwo }
               selectedTab={ this.state.selectedTab }
               onSearch={ () => this.onSelectSearch() }
             />
