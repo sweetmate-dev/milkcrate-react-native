@@ -419,7 +419,7 @@ class FilterSearch extends Component {
 
     if (this.state.totalCount > 0) {
       return (
-        <ScrollView>
+        <ScrollView ref='filterScrollView'>
           { this.showActions }
           { this.showBusinesses }
           { this.showEvents }

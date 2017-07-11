@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
   },
   buttonWrap: {
     flex: 1,
+    paddingLeft:10,
     justifyContent: 'flex-end',
     alignItems: 'center',
     backgroundColor: 'transparent',
