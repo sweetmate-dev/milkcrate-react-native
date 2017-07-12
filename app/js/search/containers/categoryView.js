@@ -94,7 +94,6 @@ class CategoryView extends Component {
       this.hasMounted && this.setState({ currentLocation: position })
     }
     const title = this.props.title;
-    const  index = this.props.index;
 
     var param = {
       category: UtilService.convertToSlug(title),
@@ -176,7 +175,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ UtilService.getCategoryIcon(this.props.category.slug)}
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -187,7 +186,7 @@ class CategoryView extends Component {
     return (
       <BusinessesListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ UtilService.getCategoryIcon(this.props.category.slug) }
         description={ rowData.description }
         distance={ rowData._geoloc&&this.state.currentLocation ? UtilService.getDistanceFromLatLonInMile(rowData._geoloc[1], rowData._geoloc[0],
         this.state.currentLocation.coords.latitude, this.state.currentLocation.coords.longitude) : null }
@@ -202,7 +201,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ UtilService.getCategoryIcon(this.props.category.slug) }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
       />
@@ -213,7 +212,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ UtilService.getCategoryIcon(this.props.category.slug) }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
       />
@@ -224,7 +223,7 @@ class CategoryView extends Component {
     return (
       <EventsListCell
         title={ rowData.name }
-        icon={ commonStyles.categoryIcons[this.props.index] }
+        icon={ UtilService.getCategoryIcon(this.props.category.slug)}
         points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedServiceCell(rowData) }
       />

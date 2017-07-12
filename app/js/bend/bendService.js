@@ -372,7 +372,10 @@ module.exports = {
             return;
         }
 
-        Bend.DataStore.find("category", new Bend.Query(), {
+        var query = new Bend.Query()
+        query.notEqualTo("deleted", true)
+        query.equalTo("enabled", true)
+        Bend.DataStore.find("category", query, {
             relations:{
                 coverImage:"BendFile"
             }
@@ -1483,6 +1486,16 @@ module.exports = {
             cb(null, rets)
         }, (err)=>{
             cb(err)
+        })
+    },
+
+    getCommunityActivityCountByCategory(cb) {
+        Bend.execute("getCommunityActivityCountByCategory", {}).then((result)=>{
+            console.log("getCommunityActivityCountByCategory", result)
+            cb(null, result);
+        },(error)=> {
+            console.log("getCommunityActivityCountByCategory error", error)
+            cb(error)
         })
     },
 

@@ -64,6 +64,7 @@ export default class Main extends Component {
       badge: 0,
       searchAutoFocus: false,
       showingModal: false,
+      countByCategory:{}
     };
 
     this.last = null;
@@ -162,6 +163,17 @@ export default class Main extends Component {
       UtilService.mixpanelSetProperty({
         'pushEnabled':response
       });
+    })
+
+    bendService.getCommunityActivityCountByCategory((err, ret)=>{
+      if(err){
+        console.log(err);
+        return;
+      }
+      
+      this.setState({
+        countByCategory:ret
+      })
     })
   }
 
@@ -413,6 +425,7 @@ export default class Main extends Component {
             renderSelectedIcon={ () => <Image source={ searchSelectedIcon } style={ styles.iconTabbar2 }/> }
             onPress={ () => this.onSelectTab('search') }>
             <Search
+                countByCategory={this.state.countByCategory}
               selectedTab={ this.state.selectedTab }
               subOne={ subOne }
               searchAutoFocus={ this.state.searchAutoFocus }

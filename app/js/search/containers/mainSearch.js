@@ -117,7 +117,7 @@ const categoryTitles = [
   'Waste'
 ];
 
-const categoryImages = [
+/*const categoryImages = [
   require('../../../assets/imgs/category-buttons/animals.png'),
   require('../../../assets/imgs/category-buttons/baby.png'),
   require('../../../assets/imgs/category-buttons/beauty.png'),
@@ -173,7 +173,7 @@ const categoryActiveImages = [
   require('../../../assets/imgs/category-buttons/tourism-hospitality_active.png'),
   require('../../../assets/imgs/category-buttons/transit_active.png'),
   require('../../../assets/imgs/category-buttons/waste_active.png'),
-];
+];*/
 
 class MainSearch extends Component {
   constructor(props) {
@@ -182,14 +182,14 @@ class MainSearch extends Component {
     this.dataSourceExploreWays = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
-    var dataSourceCategories = new ListView.DataSource(
+    this.dataSourceCategories = new ListView.DataSource(
       { rowHasChanged: (r1, r2) => r1 !== r2 });
 
     this.state = {
       exploreWays: _.clone(exploreWays),
-      dataSourceCategories: dataSourceCategories.cloneWithRows(categoryImages),
       loading:true,
-      community:{}
+      community:{},
+      categories:[]
     };
 
     this.categoryCellMargin = 0;
@@ -248,6 +248,18 @@ class MainSearch extends Component {
         community:ret
       })
     })
+
+    bendService.getCategories((err, rets)=>{
+      if(err) {
+        console.log(err);
+        return;
+      }
+      this.setState({
+        categories:_.sortBy(rets, (o)=>{
+          return o.name
+        })
+      })
+    })
   }
 
   onSelectExploreWays (index, query) {
@@ -280,9 +292,9 @@ class MainSearch extends Component {
     }
   }
 
-  onSelectCategory (rowID) {
+  onSelectCategory (cat) {
 
-    Actions.CategoryView({ title: categoryTitles[rowID], index: rowID });
+    Actions.CategoryView({ title: cat.name, category: cat });
   }
 
   renderExploreWaysRow(rowData, sectionID, rowID) {
@@ -302,19 +314,22 @@ class MainSearch extends Component {
   }
 
   renderCategoriesRow(rowData, sectionID, rowID) {
+    if(!this.props.countByCategory[rowData._id])
+        return null;
+    
     return (
       <View style={ [styles.categoryCellWrap, { marginHorizontal: this.categoryCellMargin },] }>
         <View style={ styles.categoryCellButtonWrapper }>
           <ImageButton
             style={ styles.categoryCellImage }
             appearance={{
-              normal: categoryImages[rowID],
-              highlight: categoryActiveImages[rowID]
+              normal: UtilService.getCategoryButton(rowData.slug),// categoryImages[rowID],
+              highlight: UtilService.getCategoryButton(rowData.slug + '_active')
             }}
-            onPress={ () => this.onSelectCategory(rowID) }
+            onPress={ () => this.onSelectCategory(rowData) }
           />
           <Text style={ styles.cagegoryCellText }>
-            { categoryTitles[rowID] }
+            { rowData.name }
           </Text>
         </View>
       </View>
@@ -344,8 +359,9 @@ class MainSearch extends Component {
         {this.state.community.showCategoriesInSearch !== false && <Text style={ styles.textTitle }>Browse by Category</Text>}
 
         {this.state.community.showCategoriesInSearch !== false && <ListView
-          pageSize = { categoryImages.length }
-          dataSource={ this.state.dataSourceCategories }
+          pageSize = { this.state.categories.length }
+          enableEmptySections={ true }
+          dataSource={ this.dataSourceCategories.cloneWithRows(this.state.categories) }
           renderRow={ this.renderCategoriesRow.bind(this) }
           contentContainerStyle={ styles.listViewCategories }
         />}

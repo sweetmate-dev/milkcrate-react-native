@@ -149,6 +149,7 @@ class Search extends Component {
           this.state.mainSearchPage ?
           <MainSearch
             subOne={ this.props.subOne }
+            countByCategory={this.props.countByCategory}
           />
           :
           <FilterSearch 
