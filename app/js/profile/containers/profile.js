@@ -405,6 +405,7 @@ class Profile extends Component {
   render() {
     const currentUser = this.state.currentUser;
     const {community, sprint, teams} = this.state
+    let sprintPoints = isNaN(currentUser.sprintPoints)?0:currentUser.sprintPoints
     return (
       <View style={ styles.container }>
         <NavSearchBar
@@ -426,7 +427,7 @@ class Profile extends Component {
             <Text style={ styles.textName }>{ currentUser.name }</Text>
             <View style={ styles.pointContainer }>
               <View style={ styles.pointSubContainer }>
-                <Text style={ styles.textValue }>{ currentUser.sprintPoints || 0 }</Text>
+                <Text style={ styles.textValue }>{ sprintPoints || 0 }</Text>
                 <Text style={ styles.textSmall }>Sprint Points</Text>
               </View>
               <View style={ styles.pointSubContainer }>
@@ -442,7 +443,7 @@ class Profile extends Component {
           {community._id && <TeamListCell
               icon={ community.logo._downloadURL}
               average={Math.round(community.sprintPoints/community.userCount)}
-              me={currentUser.sprintPoints - Math.round(community.sprintPoints/community.userCount)}
+              me={sprintPoints - Math.round(community.sprintPoints/community.userCount)}
               onClick={ () => this.onSeeCommunityPoints()}
               mode={'icon'}
           />}
@@ -455,7 +456,7 @@ class Profile extends Component {
                         name={ team.name}
                         color={ team.color}
                         average={Math.round(team.sprintPoints/(team.userCount||1))}
-                        me={currentUser.sprintPoints - Math.round(team.sprintPoints/(team.userCount||1))}
+                        me={sprintPoints - Math.round(team.sprintPoints/(team.userCount||1))}
                         onClick={ () => this.onSeeTeamPoints(team)}
                         mode={'text'}
                     />

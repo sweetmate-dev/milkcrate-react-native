@@ -16,6 +16,8 @@ import {
   Platform
 } from 'react-native';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { bindActionCreators } from 'redux';
 import * as searchActions from '../actions';
 import { connect } from 'react-redux';
@@ -197,6 +199,7 @@ class FilterSearch extends Component {
   }
 
   getActivities(searchText) {
+    console.log("getActivities", searchText)
     var param = {
       query: searchText
     }
@@ -419,13 +422,13 @@ class FilterSearch extends Component {
 
     if (this.state.totalCount > 0) {
       return (
-        <ScrollView ref='filterScrollView'>
+        <KeyboardAwareScrollView>
           { this.showActions }
           { this.showBusinesses }
           { this.showEvents }
           { this.showVolunteer }
           { this.showServices }
-        </ScrollView>
+        </KeyboardAwareScrollView>
       )
     } else {
       return (

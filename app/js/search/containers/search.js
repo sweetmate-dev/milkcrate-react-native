@@ -74,8 +74,7 @@ class Search extends Component {
   onSearchFocus() {
     this.hasMounted && this.setState({
       mainSearchPage: false,
-      searchAutoFocus: false,
-      searchText: '',
+      searchAutoFocus: false
     });
   }
 
