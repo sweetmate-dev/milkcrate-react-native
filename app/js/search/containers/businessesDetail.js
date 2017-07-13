@@ -46,6 +46,7 @@ import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
+import EarnedPoint from '../../components/earnedPoint';
 
 
 class BusinessesDetail extends Component {
@@ -71,6 +72,7 @@ class BusinessesDetail extends Component {
       trendInit: false,
       pinned: false,
       loading: true,
+      showAnimiation: false,
     };
 
     this.category = _.find(Cache.categories, (entry) => {
@@ -274,6 +276,7 @@ class BusinessesDetail extends Component {
       this.mounted && this.setState({
         everDidStatus: true,
         didStatus: true,
+        showAnimiation: true
       })
 
       UtilService.mixpanelEvent("Checked in at a Business", {category:UtilService.getCategoryName(this.props.business.categories)})
@@ -291,6 +294,7 @@ class BusinessesDetail extends Component {
 
       this.mounted && this.setState({
         didStatus: false,
+        showAnimiation: false,
       })
     })
   }
@@ -624,6 +628,7 @@ class BusinessesDetail extends Component {
             <Text style={ styles.textOrange }>You’ve Checked In!</Text>
           </View>
         }
+        {<EarnedPoint show={ this.state.showAnimiation } point={Math.max(business.points || 1, 1)}/>}
       </View>
     );
   }

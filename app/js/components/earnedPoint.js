@@ -8,7 +8,19 @@ import {
 
 import { screenWidth, screenHeight } from '../styles/commonStyles';
 
-const diamond = require('../../assets/imgs/diamond_solo.gif');
+const diamond = [
+  require('../../assets/imgs/diamond_solo.gif'),
+  require('../../assets/imgs/diamond1.gif'),
+  require('../../assets/imgs/diamond2.gif'),
+  require('../../assets/imgs/diamond3.gif'),
+  require('../../assets/imgs/diamond4.gif'),
+  require('../../assets/imgs/diamond5.gif'),
+  require('../../assets/imgs/diamond6.gif'),
+  require('../../assets/imgs/diamond7.gif'),
+  require('../../assets/imgs/diamond8.gif'),
+  require('../../assets/imgs/diamond9.gif'),
+  require('../../assets/imgs/diamond10.gif'),
+]
 
 
 export default class EarnedPoint extends Component {
@@ -16,11 +28,13 @@ export default class EarnedPoint extends Component {
 
   static propTypes = {
     show: PropTypes.bool,
+    point: PropTypes.number,
   }
 
 
   static defaultProps = {
     show: false,
+    point:1
   }
 
 
@@ -55,6 +69,8 @@ export default class EarnedPoint extends Component {
 
 
   render() {
+    const {point}=this.props;
+
     if ((this._isMounted === false) || (this.state.show === false)) {
       return null;
     }
@@ -67,8 +83,15 @@ export default class EarnedPoint extends Component {
       }, 2500)
     }
 
+    var pointImage;
+    if(point <= 10) {
+      pointImage = diamond[point]
+    } else {
+      pointImage = diamond[0]
+    }
+
     return (
-      <Image source={ diamond } style={ styles.imageAnimation } resizeMode="cover"/>
+      <Image source={ pointImage } style={ styles.imageAnimation } resizeMode="cover"/>
     );
   }
 }

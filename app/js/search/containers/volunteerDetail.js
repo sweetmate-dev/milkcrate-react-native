@@ -34,6 +34,7 @@ import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
+import EarnedPoint from '../../components/earnedPoint';
 
 const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
@@ -58,6 +59,7 @@ class VolunteerDetail extends Component {
       hoursNumber: "0",
       pinned: false,
       loading: true,
+      showAnimiation: false,
     };
     
     this.category = _.find(Cache.categories, (obj)=>{
@@ -168,6 +170,7 @@ class VolunteerDetail extends Component {
       this.mounted && this.setState({
         modalVisible: false,
         didStatus: true,
+        showAnimiation: true
       })
 
       UtilService.mixpanelEvent(
@@ -190,6 +193,7 @@ class VolunteerDetail extends Component {
 
       this.mounted && this.setState({
         didStatus: false,
+        showAnimiation: false,
       })
     })
   }
@@ -356,6 +360,7 @@ class VolunteerDetail extends Component {
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>
         </TouchableOpacity> }
+        {<EarnedPoint show={ this.state.showAnimiation } point={Math.max(volunteer.points || 1, 1)}/>}
         <Modal
           animationType={ "slide" }
           transparent={ false }

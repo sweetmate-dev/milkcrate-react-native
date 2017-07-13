@@ -34,6 +34,7 @@ import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
+import EarnedPoint from '../../components/earnedPoint';
 
 const icon =   require('../../../assets/imgs/category-stickers/bicycles.png');
 const map_pin = require('../../../assets/imgs/map_marker.png');
@@ -57,6 +58,7 @@ class EventDetail extends Component {
       showAddToCalendar: true,
       pinned: false,
       loading: true,
+      showAnimiation: false,
     };
 
     this.activityId = null;
@@ -185,6 +187,7 @@ class EventDetail extends Component {
 
       this.hasMounted && this.setState({
         didStatus: true,
+        showAnimiation: true,
       });
 
       UtilService.mixpanelEvent("Registered for an Event", {category:UtilService.getCategoryName(this.props.event.categories)})
@@ -323,6 +326,7 @@ class EventDetail extends Component {
 
       this.hasMounted && this.setState({
         didStatus: false,
+        showAnimiation: false
       });
     })
   }
@@ -525,6 +529,7 @@ class EventDetail extends Component {
             }
           </View>)
         }
+        {<EarnedPoint show={ this.state.showAnimiation } point={Math.max(event.points || 1, 1)}/>}
       </View>
     );
   }

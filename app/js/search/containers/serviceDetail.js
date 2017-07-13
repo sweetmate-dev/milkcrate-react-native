@@ -31,6 +31,7 @@ import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
 import UtilService from '../../components/util'
 import Cache from '../../components/Cache'
+import EarnedPoint from '../../components/earnedPoint';
 
 class ServiceDetail extends Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class ServiceDetail extends Component {
       activityId:null,
       pinned: false,
       loading: true,
+      showAnimiation: false,
     };
 
     //console.log('this.props.service : ', this.props.service);
@@ -105,6 +107,7 @@ class ServiceDetail extends Component {
 
       this.hasMounted && this.setState({
         didStatus: true,
+        showAnimiation: true
       })
 
       UtilService.mixpanelEvent("Registered for a Service", {category:UtilService.getCategoryName(this.props.service.categories)})
@@ -127,6 +130,7 @@ class ServiceDetail extends Component {
 
       this.hasMounted && this.setState({
         didStatus: false,
+        showAnimiation: false,
       })
     })
   }
@@ -243,6 +247,7 @@ class ServiceDetail extends Component {
               <Text style={ styles.textOrange }>I Didn't Do It</Text>
             </View>
           </TouchableOpacity> }
+        {<EarnedPoint show={ this.state.showAnimiation } point={Math.max(service.points || 1, 1)}/>}
       </View>
     );
   }

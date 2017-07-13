@@ -27,7 +27,7 @@ import * as commonColors from '../../styles/commonColors';
 import * as commonStyles from '../../styles/commonStyles';
 
 import Point from '../../components/Point';
-// import EarnedPoint from '../../components/earnedPoint';
+import EarnedPoint from '../../components/earnedPoint';
 
 import bendService from '../../bend/bendService'
 import * as _ from 'underscore'
@@ -44,7 +44,7 @@ class ActionDetail extends Component {
       activityId: null,
       pinned: false,
       loading: true,
-      // showAnimiation: false,
+      showAnimiation: false,
     };
   }
 
@@ -95,13 +95,13 @@ class ActionDetail extends Component {
         console.log(error);
         return;
       }
-      // this.setState({ showAnimiation: true });
-
+      
       this.state.activityId = result.activity._id;
       this.props.commonActions.captureActivity(result.activity._id);
 
       this.hasMounted && this.setState({
-        didStatus: true
+        didStatus: true,
+        showAnimiation: true
       });
 
       UtilService.mixpanelEvent("Did an Action", {category:UtilService.getCategoryName(this.props.action.categories)});
@@ -119,7 +119,8 @@ class ActionDetail extends Component {
       this.state.activityId = null;
 
       this.hasMounted && this.setState({
-        didStatus: false
+        didStatus: false,
+        showAnimiation:false
       })
     })
   }
@@ -237,7 +238,7 @@ class ActionDetail extends Component {
             <Text style={ styles.textOrange }>I Didn't Do It</Text>
           </View>
         </TouchableOpacity> }
-        {/*<EarnedPoint show={ this.state.showAnimiation }/>*/}
+        {<EarnedPoint show={ this.state.showAnimiation } point={Math.max(action.points || 1, 1)}/>}
       </View>
     );
   }
