@@ -73,6 +73,8 @@ class VolunteerDetail extends Component {
     this.mounted = true
     const { volunteer } = this.props;
 
+    bendService.logActivityView(volunteer._id, 'volunteer_opportunity', 'view');
+
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == volunteer._id
@@ -172,6 +174,8 @@ class VolunteerDetail extends Component {
         didStatus: true,
         showAnimiation: true
       })
+
+      bendService.logActivityView(this.props.volunteer._id, 'volunteer_opportunity', 'did');
 
       UtilService.mixpanelEvent(
           "Volunteered",

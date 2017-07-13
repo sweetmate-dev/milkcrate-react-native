@@ -124,6 +124,7 @@ class VolunteerView extends Component {
         icon={ this.state.categoryIcons[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

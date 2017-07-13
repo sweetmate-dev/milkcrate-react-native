@@ -51,6 +51,7 @@ class ActionDetail extends Component {
   componentDidMount(){
     this.hasMounted = true
     const action = this.props.action
+    bendService.logActivityView(action._id, 'action', 'view');
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == this.props.action._id
@@ -95,7 +96,7 @@ class ActionDetail extends Component {
         console.log(error);
         return;
       }
-      
+
       this.state.activityId = result.activity._id;
       this.props.commonActions.captureActivity(result.activity._id);
 
@@ -103,6 +104,8 @@ class ActionDetail extends Component {
         didStatus: true,
         showAnimiation: true
       });
+
+      bendService.logActivityView(this.props.action._id, 'action', 'did');
 
       UtilService.mixpanelEvent("Did an Action", {category:UtilService.getCategoryName(this.props.action.categories)});
     })

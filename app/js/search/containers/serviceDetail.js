@@ -59,6 +59,8 @@ class ServiceDetail extends Component {
     this.hasMounted = true
     const service = this.props.service
 
+    bendService.logActivityView(service._id, 'service', 'view');
+
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == service._id
@@ -109,6 +111,8 @@ class ServiceDetail extends Component {
         didStatus: true,
         showAnimiation: true
       })
+
+      bendService.logActivityView(this.props.service._id, 'service', 'did');
 
       UtilService.mixpanelEvent("Registered for a Service", {category:UtilService.getCategoryName(this.props.service.categories)})
 

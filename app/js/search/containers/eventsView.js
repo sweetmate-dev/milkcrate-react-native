@@ -272,6 +272,7 @@ class EventsView extends Component {
                 icon={ this.state.categoryIcons[entry._id] }
                 points={ Number(entry.points || 1) }
                 onClick={ () => this.onCellPressed(entry) }
+                userActivity={entry.userActivity}
               />
             );
           })

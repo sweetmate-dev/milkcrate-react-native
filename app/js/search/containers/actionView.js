@@ -169,6 +169,7 @@ class ActionView extends Component {
         icon={ this.state.categoryIcons[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

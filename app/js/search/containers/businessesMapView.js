@@ -166,6 +166,7 @@ class BusinessesMapView extends Component {
             price={ Number(businesses[this.state.tappedPin].priceTier) }
             rating={ Number(businesses[this.state.tappedPin].rating || 0) }
             onClick={ () => this.onPressedCell(businesses[this.state.tappedPin]) }
+            userActivity={businesses[this.state.tappedPin].userActivity}
             mode={ 1 }
           />
         </View>

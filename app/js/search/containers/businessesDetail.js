@@ -85,7 +85,7 @@ class BusinessesDetail extends Component {
   componentDidMount(){
     this.mounted = true;
     const business = this.props.business;
-
+    bendService.logActivityView(business._id, 'business', 'view');
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == this.props.business._id
@@ -278,6 +278,8 @@ class BusinessesDetail extends Component {
         didStatus: true,
         showAnimiation: true
       })
+
+      bendService.logActivityView(this.props.business._id, 'business', 'did');
 
       UtilService.mixpanelEvent("Checked in at a Business", {category:UtilService.getCategoryName(this.props.business.categories)})
     })

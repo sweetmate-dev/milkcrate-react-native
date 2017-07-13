@@ -78,6 +78,8 @@ class EventDetail extends Component {
       event
     } = this.props;
 
+    bendService.logActivityView(event._id, 'event', 'view');
+
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == event._id
@@ -189,6 +191,8 @@ class EventDetail extends Component {
         didStatus: true,
         showAnimiation: true,
       });
+
+      bendService.logActivityView(this.props.event._id, 'event', 'did');
 
       UtilService.mixpanelEvent("Registered for an Event", {category:UtilService.getCategoryName(this.props.event.categories)})
 

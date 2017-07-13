@@ -105,7 +105,7 @@ class RecentView extends Component {
       }
     }
     bendService.searchRecentActivity(param, (error, result) => {
-      //console.log("searchRecentActivity", result)
+      console.log("searchRecentActivity", result)
       this.hasMounted && this.setState({
         isRefreshing: false,
         loading: false,
@@ -168,6 +168,7 @@ class RecentView extends Component {
         icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -187,6 +188,7 @@ class RecentView extends Component {
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedBusinessesCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -202,6 +204,7 @@ class RecentView extends Component {
         icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -217,6 +220,7 @@ class RecentView extends Component {
         icon={ icon }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -232,6 +236,7 @@ class RecentView extends Component {
         icon={ icon }
         points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedE(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

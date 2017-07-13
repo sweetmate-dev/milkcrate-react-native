@@ -265,6 +265,7 @@ class FilterSearch extends Component {
         icon={ this.state.icons.action[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -280,6 +281,7 @@ class FilterSearch extends Component {
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.rating || 0)}
         onClick={ () => this.onPressedBusinessesCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -291,6 +293,7 @@ class FilterSearch extends Component {
         icon={ this.state.icons.event[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -302,6 +305,7 @@ class FilterSearch extends Component {
         icon={ this.state.icons.volunteer_opportunity[rowID] }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedVolunteerCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -313,6 +317,7 @@ class FilterSearch extends Component {
         icon={ this.state.icons.service[rowID] }
         points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedServiceCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

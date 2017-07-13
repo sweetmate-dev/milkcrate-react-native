@@ -1491,11 +1491,27 @@ module.exports = {
 
     getCommunityActivityCountByCategory(cb) {
         Bend.execute("getCommunityActivityCountByCategory", {}).then((result)=>{
-            console.log("getCommunityActivityCountByCategory", result)
+            //console.log("getCommunityActivityCountByCategory", result)
             cb(null, result);
         },(error)=> {
             console.log("getCommunityActivityCountByCategory error", error)
             cb(error)
+        })
+    },
+
+    logActivityView(activityId, activityType, type, cb) {
+        Bend.execute("logActivityView", {
+            activityId:activityId,
+            activityType:activityType,
+            type:type
+        }).then((result)=>{
+            //console.log("logActivityView", result)
+            if(cb)
+                cb(null, result);
+        },(error)=> {
+            console.log("logActivityView error", error)
+            if(cb)
+                cb(error)
         })
     },
 

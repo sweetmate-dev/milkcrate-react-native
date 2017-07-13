@@ -178,6 +178,7 @@ class CategoryView extends Component {
         icon={ UtilService.getCategoryIcon(this.props.category.slug)}
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -193,6 +194,7 @@ class CategoryView extends Component {
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedBusinessesCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -204,6 +206,7 @@ class CategoryView extends Component {
         icon={ UtilService.getCategoryIcon(this.props.category.slug) }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedEventCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -215,6 +218,7 @@ class CategoryView extends Component {
         icon={ UtilService.getCategoryIcon(this.props.category.slug) }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedActionsCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }
@@ -226,6 +230,7 @@ class CategoryView extends Component {
         icon={ UtilService.getCategoryIcon(this.props.category.slug)}
         points={ Math.max(Number(rowData.points || 1), 1) }
         onClick={ () => this.onPressedServiceCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

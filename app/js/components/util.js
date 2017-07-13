@@ -161,6 +161,9 @@ const activityImages={
 const animals = ["cat", "corgi", "fish", "frog", "koala", "lion", "otter", "owl", "penguin", "pig",
   "raccoon", "rhino", "squirrel", "turtle", "whale"];
 
+const checkMarkIcon = require('../../assets/imgs/checkMark.png');
+const seenIcon = require('../../assets/imgs/seenIcon.png');
+
 //Deep Links
 const deepLinkGeneral = [
   // { url: '/introduce', action: Actions.Introduce },
@@ -257,7 +260,7 @@ class UtilService {
 
     var mins = Math.floor((Date.now() / 1000 - ts / 1000000000) / 60);
 
-    if (mins < 0) {
+    if (mins <= 0) {
       return "just now";
     } else if (mins < 60) {
 
@@ -549,6 +552,13 @@ class UtilService {
 
   static getActivityIcon(type) {
     return activityImages[type]
+  }
+
+  static getActivityViewIcon(type) {
+    if(type == 'view') {
+      return seenIcon
+    } else
+        return checkMarkIcon
   }
 
   static getCategoryIconFromSlug(activity) {

@@ -11,6 +11,7 @@ import {
 import * as commonStyles from '../../styles/commonStyles';
 import * as commonColors from '../../styles/commonColors';
 import Point from '../../components/Point';
+import UtilService from '../../components/util';
 
 export default class EventsListCell extends Component {
 
@@ -44,6 +45,7 @@ export default class EventsListCell extends Component {
       icon,
       points,
       onClick,
+        userActivity
     } = this.props;
 
     return (
@@ -51,7 +53,16 @@ export default class EventsListCell extends Component {
         <View style={ styles.cellContainer }>
           <View style={ styles.mainContainer }>
             <Image style={ styles.icon } source={ icon }/>
-            <Text numberOfLines={2} style={ styles.textTitle }>{ title }</Text>
+            {userActivity&&<View style={ styles.cellTopTextContainer }>
+              <Text numberOfLines={2} style={ styles.textTitle }>{ title }</Text>
+              <View style={ styles.cellBottomContainer }>
+                <Image style={ styles.activityViewIcon } source={ UtilService.getActivityViewIcon(userActivity.type) }/>
+                <Text style={ styles.text }>{ UtilService.getPastDateTime(userActivity._bmd.updatedAt) } </Text>
+              </View>
+            </View>}
+            {
+              !userActivity&&<Text numberOfLines={2} style={ [styles.textTitle, {paddingLeft:5}] }>{ title }</Text>
+            }
           </View>
           <Point point={ points }/>
         </View>
@@ -83,9 +94,30 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     flex: 1,
-    paddingLeft: 5,
     color: commonColors.title,
     fontFamily: 'Open Sans',
     fontSize: 14,
+  },
+  cellTopTextContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingLeft:5
+  },
+  cellBottomContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  text: {
+    color: commonColors.grayMoreText,
+    fontFamily: 'Open Sans',
+    fontSize: 12,
+  },
+  activityViewIcon: {
+    width: 16,
+    height: 8,
+    resizeMode:'contain',
+    marginRight:5,
+    marginTop:5
   },
 });

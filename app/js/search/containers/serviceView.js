@@ -186,6 +186,7 @@ class ServiceView extends Component {
         icon={ this.state.categoryIcons[rowID]||UtilService.getMilkCrateLogo() }
         points={ Math.max(rowData.points || 1, 1) }
         onClick={ () => this.onPressedCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

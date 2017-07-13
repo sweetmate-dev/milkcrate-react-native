@@ -54,6 +54,7 @@ class BusinessesListView extends Component {
         price={ Number(rowData.priceTier) }
         rating={ Number(rowData.rating || 0) }
         onClick={ () => this.onPressedCell(rowData) }
+        userActivity={rowData.userActivity}
       />
     );
   }

@@ -10,6 +10,7 @@ import {
 
 import * as commonColors from '../../styles/commonColors';
 import { screenWidth } from '../../styles/commonStyles';
+import UtilService from '../../components/util';
 
 const star = require('../../../assets/imgs/star.png');
 
@@ -54,6 +55,7 @@ export default class BusinessesListCell extends Component {
       rating,
       onClick,
       mode,
+        userActivity
     } = this.props;
 
     let dollars = '';
@@ -79,7 +81,11 @@ export default class BusinessesListCell extends Component {
                   <Image style={ styles.star } source={ star } />
                 </View> }
               </View>
-              <Text style={ styles.text }>{ (distance > 0) ? distance.toFixed(1) : 0 } Miles  { dollars }</Text>
+              <View style={ styles.cellBottomContainer }>
+                <Text style={ styles.text }>{ (distance > 0) ? distance.toFixed(1) : 0 } Miles  { dollars }</Text>
+                {userActivity&&<Image style={ styles.activityViewIcon } source={ UtilService.getActivityViewIcon(userActivity.type) }/>}
+                {userActivity&&<Text style={ styles.text }>{ UtilService.getPastDateTime(userActivity._bmd.updatedAt) } </Text>}
+              </View>
             </View>
           </View>
           {/*<View style={ styles.cellBottomContainer }>
@@ -166,5 +172,13 @@ const styles = StyleSheet.create({
     color: commonColors.grayMoreText,
     fontFamily: 'Open Sans',
     fontSize: 12,
+  },
+  activityViewIcon: {
+    width: 16,
+    height: 8,
+    resizeMode:'contain',
+    marginRight:5,
+    marginTop:2,
+    marginLeft:10
   },
 });
