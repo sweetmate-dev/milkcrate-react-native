@@ -169,10 +169,13 @@ class Profile extends Component {
       this.setState({
         currentUser:ret
       })
-      var teams = this.state.currentUser.teams
-      if(teams && !_.isEqual(this.teams, teams)) {
-        this.teams = teams
-        this.loadTeams(this.teams);
+
+      if(Cache.community.teamsEnabled) {
+        var teams = this.state.currentUser.teams
+        if(teams && !_.isEqual(this.teams, teams)) {
+          this.teams = teams
+          this.loadTeams(this.teams);
+        }
       }
     })
 

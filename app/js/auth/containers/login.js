@@ -85,29 +85,52 @@ class Login extends Component {
         return
       }
 
-      if (!error) {
-        UtilService.mixpanelIdentify(user._id);
-        UtilService.mixpanelSetProperty({
-          'email':user.email,
-          'name':user.name,
-          'totalPoints':user.points
-        });
+      bendService.getCommunity((err, ret)=>{
+        if(!err) {
+          if(ret.enableDomainRestrictions) {
+            var domains = ret.whitelistedDomains||[]
+            var userDomain = user.email.substr(user.email.indexOf('@') + 1);
+            userDomain = userDomain.toLowerCase()
 
-        bendService.getCommunity((err, ret)=>{
-          if(!err) {
-            UtilService.mixpanelSetProperty({
-              'client':ret.name
-            });
-            UtilService.mixpanelEvent("Logged In", {"name":user.name})
+            //console.log("domains", domains, userDomain)
+            if(domains.indexOf(userDomain) == -1) {
+              //doesnot exist in whitelist so that logout
+              bendService.logout()
+
+              timer.setTimeout( this, 'LoginFailed', () => {
+                timer.clearTimeout(this, 'LoginFailed');
+                Alert.alert("Your email address is not authorized for this community.")
+              }, 200);
+
+              return;
+            }
           }
-        })
-        //check community code
-        if (!user.name) {
-          Actions.SetupProfile();
+          UtilService.mixpanelIdentify(user._id);
+          UtilService.mixpanelSetProperty({
+            'email':user.email,
+            'name':user.name,
+            'totalPoints':user.points
+          });
+
+          UtilService.mixpanelSetProperty({
+            'client':ret.name
+          });
+          UtilService.mixpanelEvent("Logged In", {"name":user.name})
+          //check community code
+          if (!user.name) {
+            Actions.SetupProfile();
+          } else {
+            Actions.Main();
+          }
         } else {
-          Actions.Main();
+          bendService.logout()
+          
+          timer.setTimeout( this, 'LoginFailed', () => {
+            timer.clearTimeout(this, 'LoginFailed');
+            Alert.alert("Invalid community.")
+          }, 200);
         }
-      }
+      })
     })
   }
 

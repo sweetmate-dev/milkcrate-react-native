@@ -74,26 +74,49 @@ class App extends Component {
       let loggedInUser;
 
       if (activeUser && activeUser._id) {
-        this.setState({ loggedIn: true });
         loggedInUser = true;
       } else {
-        this.setState({ loggedIn: false });
         loggedInUser = false;
+          this.setState({
+              initialize: true,
+              loggedIn: false
+          });
       }
 
-      this.setState({ initialize: true });
 
       if (loggedInUser == true) {
-          UtilService.deepLinks();
-          UtilService.mixpanelIdentify(activeUser._id);
-          UtilService.mixpanelSetProperty({
-              'email':activeUser.email,
-              'name':activeUser.name,
-              'totalPoints':activeUser.points
-          });
-
           bendService.getCommunity((err, ret)=>{
               if(!err) {
+                  if(ret.enableDomainRestrictions) {
+                      var domains = ret.whitelistedDomains||[]
+                      var userDomain = activeUser.username.substr(activeUser.username.indexOf('@') + 1);
+                      userDomain = userDomain.toLowerCase()
+
+                      //console.log("domains", domains, userDomain)
+                      if(domains.indexOf(userDomain) == -1) {
+                          //doesnot exist in whitelist so that logout
+                          bendService.logout()
+                          this.setState({
+                              loggedIn: false,
+                              initialize: true
+                          });
+                          loggedInUser = false;
+                          return;
+                      }
+                  }
+                  this.setState({
+                      loggedIn: true,
+                      initialize: true
+                  });
+
+                  UtilService.deepLinks();
+                  UtilService.mixpanelIdentify(activeUser._id);
+                  UtilService.mixpanelSetProperty({
+                      'email':activeUser.email,
+                      'name':activeUser.name,
+                      'totalPoints':activeUser.points
+                  });
+
                   UtilService.mixpanelSetProperty({
                       'client':ret.name
                   });
