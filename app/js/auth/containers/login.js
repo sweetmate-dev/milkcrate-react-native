@@ -112,7 +112,7 @@ class Login extends Component {
             'totalPoints':user.points
           });
 
-          Cache.setMapData("points", activeUser.points)
+          //Cache.setMapData("points", activeUser.points)
 
           UtilService.mixpanelSetProperty({
             'client':ret.name

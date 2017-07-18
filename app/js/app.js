@@ -117,7 +117,7 @@ class App extends Component {
                       'totalPoints':activeUser.points
                   });
 
-                  Cache.setMapData("points", activeUser.points)
+                  //Cache.setMapData("points", activeUser.points)
 
                   UtilService.mixpanelSetProperty({
                       'client':ret.name
