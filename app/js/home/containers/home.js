@@ -139,6 +139,8 @@ class Home extends Component {
       }
 
       this.hasMounted&&this.setState({ challenges: result });
+
+      Cache.setMapData('challenges', result)
     })
 
     bendService.getCommunity( (error, result) => {

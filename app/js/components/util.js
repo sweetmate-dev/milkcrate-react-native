@@ -647,7 +647,7 @@ class UtilService {
 
   static mixpanelSetProperty(property) {
     //console.log("captureActivity", activityId, flag)
-    Mixpanel.registerSuperProperties(property);
+    Mixpanel.set(property);
   }
 
   static mixpanelIdentify(id) {

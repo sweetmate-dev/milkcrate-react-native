@@ -112,6 +112,8 @@ class Login extends Component {
             'totalPoints':user.points
           });
 
+          Cache.setMapData("points", activeUser.points)
+
           UtilService.mixpanelSetProperty({
             'client':ret.name
           });
@@ -124,7 +126,7 @@ class Login extends Component {
           }
         } else {
           bendService.logout()
-          
+
           timer.setTimeout( this, 'LoginFailed', () => {
             timer.clearTimeout(this, 'LoginFailed');
             Alert.alert("Invalid community.")

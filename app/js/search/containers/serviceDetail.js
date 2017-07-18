@@ -59,6 +59,16 @@ class ServiceDetail extends Component {
     this.hasMounted = true
     const service = this.props.service
 
+    var challenges = Cache.getMapData('challenges');
+    this.existChallenge = _.find(challenges, (o)=>{
+      return o.activity._id == service._id
+    })
+    UtilService.mixpanelEvent("Viewed an Activity", {
+      "type":"service",
+      challenge:(this.existChallenge?true:false),
+      points:Math.max(service.points || 1, 1),
+    })
+
     bendService.logActivityView(service._id, 'service', 'view');
 
     bendService.getPinnedActivities((err, rets)=>{
@@ -114,7 +124,11 @@ class ServiceDetail extends Component {
 
       bendService.logActivityView(this.props.service._id, 'service', 'did');
 
-      UtilService.mixpanelEvent("Registered for a Service", {category:UtilService.getCategoryName(this.props.service.categories)})
+      UtilService.mixpanelEvent("Registered for a Service", {
+        category:UtilService.getCategoryName(this.props.service.categories),
+        challenge:(this.existChallenge?true:false),
+        points:Math.max(this.props.service.points || 1, 1)
+      })
 
     })
 

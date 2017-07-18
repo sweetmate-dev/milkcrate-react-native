@@ -78,6 +78,16 @@ class EventDetail extends Component {
       event
     } = this.props;
 
+    var challenges = Cache.getMapData('challenges');
+    var existChallenge = _.find(challenges, (o)=>{
+      return o.activity._id == event._id
+    })
+    UtilService.mixpanelEvent("Viewed an Activity", {
+      "type":"event",
+      challenge:(this.existChallenge?true:false),
+      points:Math.max(event.points || 1, 1)
+    })
+
     bendService.logActivityView(event._id, 'event', 'view');
 
     bendService.getPinnedActivities((err, rets)=>{
@@ -194,7 +204,11 @@ class EventDetail extends Component {
 
       bendService.logActivityView(this.props.event._id, 'event', 'did');
 
-      UtilService.mixpanelEvent("Registered for an Event", {category:UtilService.getCategoryName(this.props.event.categories)})
+      UtilService.mixpanelEvent("Registered for an Event", {
+        category:UtilService.getCategoryName(this.props.event.categories),
+        points:Math.max(this.props.event.points || 1, 1),
+        challenge:(this.existChallenge?true:false)
+      })
 
     })
 

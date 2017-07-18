@@ -73,6 +73,16 @@ class VolunteerDetail extends Component {
     this.mounted = true
     const { volunteer } = this.props;
 
+    var challenges = Cache.getMapData('challenges');
+    this.existChallenge = _.find(challenges, (o)=>{
+      return o.activity._id == volunteer._id
+    })
+    UtilService.mixpanelEvent("Viewed an Activity", {
+      "type":"volunteer",
+      challenge:(this.existChallenge?true:false),
+      points:Math.max(volunteer.points || 1, 1)
+    })
+
     bendService.logActivityView(volunteer._id, 'volunteer_opportunity', 'view');
 
     bendService.getPinnedActivities((err, rets)=>{
@@ -179,8 +189,12 @@ class VolunteerDetail extends Component {
 
       UtilService.mixpanelEvent(
           "Volunteered",
-          {hours:Number(this.state.hoursNumber || 0),
-          category:UtilService.getCategoryName(this.props.volunteer.categories)}
+          {
+            hours:Number(this.state.hoursNumber || 0),
+            category:UtilService.getCategoryName(this.props.volunteer.categories),
+            challenge:(this.existChallenge?true:false),
+            points:Math.max(this.props.volunteer.points || 1, 1)
+          }
       )
     })
   }

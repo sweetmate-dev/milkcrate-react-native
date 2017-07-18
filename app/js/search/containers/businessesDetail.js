@@ -85,6 +85,17 @@ class BusinessesDetail extends Component {
   componentDidMount(){
     this.mounted = true;
     const business = this.props.business;
+
+    var challenges = Cache.getMapData('challenges');
+    this.existChallenge = _.find(challenges, (o)=>{
+      return o.activity._id == business._id
+    })
+    UtilService.mixpanelEvent("Viewed an Activity", {
+      "type":"business",
+      challenge:(this.existChallenge?true:false),
+      points:Math.max(business.points || 1, 1)
+    })
+
     bendService.logActivityView(business._id, 'business', 'view');
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
@@ -281,7 +292,12 @@ class BusinessesDetail extends Component {
 
       bendService.logActivityView(this.props.business._id, 'business', 'did');
 
-      UtilService.mixpanelEvent("Checked in at a Business", {category:UtilService.getCategoryName(this.props.business.categories)})
+      UtilService.mixpanelEvent("Checked in at a Business",
+          {
+            category:UtilService.getCategoryName(this.props.business.categories),
+            challenge:(this.existChallenge?true:false),
+            points:Math.max(this.props.business.points || 1, 1)
+          })
     })
   }
 

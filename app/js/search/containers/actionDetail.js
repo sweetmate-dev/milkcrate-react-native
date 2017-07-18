@@ -51,7 +51,18 @@ class ActionDetail extends Component {
   componentDidMount(){
     this.hasMounted = true
     const action = this.props.action
+    var challenges = Cache.getMapData('challenges');
+    this.existChallenge = _.find(challenges, (o)=>{
+      return o.activity._id == action._id
+    })
+    UtilService.mixpanelEvent("Viewed an Activity", {
+      "type":"action",
+      challenge:(this.existChallenge?true:false),
+      points:Math.max(action.points || 1, 1)
+    })
+
     bendService.logActivityView(action._id, 'action', 'view');
+
     bendService.getPinnedActivities((err, rets)=>{
       var exist = _.find(rets, (o)=>{
         return o._id == this.props.action._id
@@ -107,7 +118,13 @@ class ActionDetail extends Component {
 
       bendService.logActivityView(this.props.action._id, 'action', 'did');
 
-      UtilService.mixpanelEvent("Did an Action", {category:UtilService.getCategoryName(this.props.action.categories)});
+      UtilService.mixpanelEvent("Did an Action",
+          {
+            category:UtilService.getCategoryName(this.props.action.categories),
+            challenge:(this.existChallenge?true:false),
+            points:Math.max(this.props.action.points || 1, 1)
+          }
+      );
     })
   }
 
