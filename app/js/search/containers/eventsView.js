@@ -174,6 +174,12 @@ class EventsView extends Component {
       from: UtilService.formatDateWithFormat(Date.now() * 1000000, "YYYY-MM-DD")
     }
 
+    if(_.isEqual(params, this.oldParam)) {
+      return;
+    }
+
+    this.oldParam = params
+
     if (position) {
       params.lat = position.coords.latitude;
       params.long = position.coords.longitude;

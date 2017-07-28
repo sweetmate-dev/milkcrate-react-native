@@ -33,6 +33,7 @@ import EventsListCell from '../components/eventsListCell';
 
 import * as commonColors from '../../styles/commonColors';
 import  * as commonStyles from '../../styles/commonStyles';
+import * as _ from 'underscore'
 
 import LoadMoreSpinner from '../../components/loadMoreSpinner';
 
@@ -131,6 +132,12 @@ class ServiceView extends Component {
       limit: this.limit,
       query: this.searchText
     }
+
+    if(_.isEqual(param, this.oldParam)) {
+      return;
+    }
+
+    this.oldParam = param
 
     if(position) {
       param.lat = position.coords.latitude;

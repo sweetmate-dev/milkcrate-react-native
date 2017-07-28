@@ -151,6 +151,12 @@ class BusinessesView extends Component {
       query: this.searchText,
     }
 
+    if(_.isEqual(param, this.oldParam)) {
+      return;
+    }
+
+    this.oldParam = param
+
     if(position) {
       param.lat = position.coords.latitude;
       param.long = position.coords.longitude;
@@ -162,9 +168,10 @@ class BusinessesView extends Component {
     }
 
     bendService.searchActivity(param, (error, result) => {
-      
-      if (param.query != this.searchText) 
+      if (param.query != this.searchText)
         return;
+
+      console.log("searchActivity", result.data.business.length)
 
       this.hasMounted && this.setState( (state) => {
         state.businessesQuery.loading = false;
@@ -186,7 +193,11 @@ class BusinessesView extends Component {
         });
       }
 
-      this.businesses = this.businesses.concat(result.data.business);
+      if(this.offset == 0)
+        this.businesses = result.data.business;
+      else {
+        this.businesses = this.businesses.concat(result.data.business);
+      }
 
       this.hasMounted && this.setState({
         businesses: this.businesses,

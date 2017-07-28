@@ -31,6 +31,7 @@ import LoadMoreSpinner from '../../components/loadMoreSpinner';
 import Cache from '../../components/Cache'
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
 
 class VolunteerView extends Component {
   constructor(props) {
@@ -139,6 +140,12 @@ class VolunteerView extends Component {
       limit: this.limit,
       query: this.searchText
     }
+
+    if(_.isEqual(param, this.oldParam)) {
+      return;
+    }
+
+    this.oldParam = param
 
     if(position) {
       param.lat = position.coords.latitude;

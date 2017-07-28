@@ -78,7 +78,7 @@ const exploreWays = [
     enabled:true,
   },
   {
-    key: 'volunteer_opportunities',
+    key: 'volunteer_opportunities', 
     title: 'Volunteer Opportunities',
     description: 'Find one that’s right for you',
     icon: require('../../../assets/imgs/volunteer.png'),

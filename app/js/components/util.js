@@ -430,13 +430,19 @@ class UtilService {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  static convertWithAMPM(d) {
+  static convertWithAMPM(hour) {
+    var d = hour
+    var endPart = ""
+    if(d.indexOf(':') != -1) {
+      endPart = d.substr(d.indexOf(':'))
+      d = d.substr(0, d.indexOf(':'))
+    }
     if (d == 0) {
-      return '12pm'
+      return '12' + endPart + 'pm'
     } else if(d <= 12) {
-      return d + 'am'
+      return d + endPart + 'am'
     } else {
-      return (d-12) + 'pm'
+      return (d-12) + endPart + 'pm'
     }
   }
 

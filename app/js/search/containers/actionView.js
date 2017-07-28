@@ -29,6 +29,7 @@ import  * as commonStyles from '../../styles/commonStyles';
 
 import UtilService from '../../components/util'
 import bendService from '../../bend/bendService'
+import * as _ from 'underscore'
 
 class ActionView extends Component {
   constructor(props) {
@@ -115,12 +116,20 @@ class ActionView extends Component {
     );*/
 
     var searchText = this.searchText
-    bendService.searchActivity({
+    var param = {
       type: 'action',
       offset: this.offset,
       limit: this.limit,
       query: this.searchText
-    }, (error, result) => {
+    }
+
+    if(_.isEqual(param, this.oldParam)) {
+      return;
+    }
+
+    this.oldParam = param
+
+    bendService.searchActivity(param, (error, result) => {
       if(searchText != this.searchText) {
         return;
       }
