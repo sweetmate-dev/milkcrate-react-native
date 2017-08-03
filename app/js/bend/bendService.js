@@ -1096,6 +1096,7 @@ module.exports = {
                 query = new Bend.Query();
                 query.equalTo("question._id", rets[0].question._id)
                 query.notEqualTo('deleted', true)
+                query.ascending("position")
                 Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
                     cb(null, rets[0].question, answers, rets[0].answer);
                 }, (err)=>{
