@@ -503,7 +503,7 @@ module.exports = {
             })
         }, (err, ret)=>{
 
-            //console.log("trends", trends)
+            console.log("trends count", trends.length )
 
             if(trends.length > 0) {
                 //get users
@@ -525,6 +525,7 @@ module.exports = {
                                         "user.avatar":"BendFile"
                                     }
                                 }).then((rets)=>{
+                                    console.log("activity count", rets.length)
                                     var users = []
                                     _.map(rets, (o)=>{
                                         if(o.user && o.user.defaultAvatar)
@@ -567,7 +568,7 @@ module.exports = {
                         trends = _.filter(trends, (o)=>{
                             return (o.users && o.users.length > 0)
                         })
-                        console.log("trends", trends)
+                        console.log("trends counts-2", trends.length)
                         cb(null, trends)
                     })
             } else {

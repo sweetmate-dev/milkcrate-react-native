@@ -98,7 +98,10 @@ class Home extends Component {
     
     if (newProps.commonStatus === commonActionTypes.RECENT_PINNED_ACTIVITIES) {
       this.setState({ recentPines: newProps.recentPines });
-    }    
+    }
+
+      if(!this.state.pollQuestion.question._id || this.state.pollQuestion.myAnswer)
+        this.loadPollQuestion()
   }
 
   
@@ -228,6 +231,8 @@ class Home extends Component {
 
 
   loadPollQuestion() {
+    console.log("loadPollQuestion")
+
     bendService.getPollQuestion( (error, question, answers, myAnswer) => {
 
       if (this.hasMounted) {
@@ -236,6 +241,16 @@ class Home extends Component {
 
       if (error) {
         console.log('poll questions erroror', error);
+          this.setState({
+              selectedDailyPollValue: '',
+              selectedDailyPollIndex: -1,
+              selectedDailyPollStateMode: false,
+              pollQuestion:{
+                  question: {},
+                  answers: [],
+                  myAnswer: null,
+              },
+          });
         return;
       }
 
@@ -443,7 +458,7 @@ class Home extends Component {
                 timer.setTimeout( this, 'DailyPollTimer', () => {
                   timer.clearTimeout(this, 'DailyPollTimer');
                   this.state.pollQuestion.myAnswer = this.state.pollQuestion.answers[index]
-                  this.hasMounted&&this.setState({ selectedDailyPollStateMode: true });
+                  this.hasMounted&&this.setState({ selectedDailyPollStateMode: true, myAnswer: this.state.pollQuestion.myAnswer});
                 }, 500);
               }
 
