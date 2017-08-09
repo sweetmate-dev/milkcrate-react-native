@@ -1213,7 +1213,8 @@ module.exports = {
         }).then((ret)=>{
             this.resetUserCache((_e, _r)=>{
                 UtilService.mixpanelEvent("Earned Points", {
-                    points: Cache.cacheMap["user"].points,
+                    points: ret.activity.points,
+                    totalPoints:Cache.cacheMap["user"].points,
                     from:type
                 });
                 UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
@@ -1231,7 +1232,8 @@ module.exports = {
         }).then((ret)=>{
             this.resetUserCache((_e, _r)=>{
                 UtilService.mixpanelEvent("Earned Points", {
-                    points: Cache.cacheMap["user"].points,
+                    points: ret.activity.points,
+                    totalPoints:Cache.cacheMap["user"].points,
                     from:type
                 });
                 UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
@@ -1258,7 +1260,8 @@ module.exports = {
         }).then((ret)=>{
             this.resetUserCache((_e, _r)=>{
                 UtilService.mixpanelEvent("Earned Points", {
-                    points: Cache.cacheMap["user"].points,
+                    points: ret.activity.points,
+                    totalPoints:Cache.cacheMap["user"].points,
                     from:type
                 });
                 UtilService.mixpanelSetProperty({totalPoints:Cache.cacheMap["user"].points})
