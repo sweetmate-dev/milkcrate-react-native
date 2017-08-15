@@ -253,6 +253,9 @@ class UtilService {
   static formatSimpleDateTime = function(ts) {
     return moment.unix(ts/1000000000).format("MM-DD h:mm a");
   };
+  static getToday = function() {
+    return moment().format('YYYY-MM-DD')
+  }
 
   static getPastDateTime(ts) {
     if (ts == null || ts == "")

@@ -1120,18 +1120,39 @@ module.exports = {
                     query.notContainedIn("_id", questions)
                     query.and(new Bend.Query().containsAll("communities", [this.getActiveUser().community._id])
                         .or().exists("communities", false));
+                    query.and(new Bend.Query().equalTo("pollDate", UtilService.getToday())
+                        .or().exists("pollDate", false));
                     Bend.DataStore.find("pollQuestion", query).then((rets)=>{
                         if(rets.length > 0) {
-                            //get related answers
-                            query = new Bend.Query();
-                            query.equalTo("question._id", rets[0]._id)
-                            query.ascending("position")
-                            query.notEqualTo("deleted", true)
-                            Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
-                                cb(null, rets[0], answers, null);
-                            }, (err)=>{
-                                cb(err)
+                            //first check if there is poll date specified
+                            var exist = _.find(rets, (o)=>{
+                                return o.pollDate == UtilService.getToday()
                             })
+
+                            if(exist) {
+                                //get related answers
+                                query = new Bend.Query();
+                                query.equalTo("question._id", exist._id)
+                                query.ascending("position")
+                                query.notEqualTo("deleted", true)
+                                Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
+                                    cb(null, exist, answers, null);
+                                }, (err)=>{
+                                    cb(err)
+                                })
+                            } else {
+                                //get related answers
+                                query = new Bend.Query();
+                                query.equalTo("question._id", rets[0]._id)
+                                query.ascending("position")
+                                query.notEqualTo("deleted", true)
+                                Bend.DataStore.find("pollQuestionAnswer", query).then((answers)=>{
+                                    cb(null, rets[0], answers, null);
+                                }, (err)=>{
+                                    cb(err)
+                                })
+                            }
+
                         } else {
                             cb("no data");
                         }
