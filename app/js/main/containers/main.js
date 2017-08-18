@@ -49,6 +49,8 @@ import UtilService from '../../components/util'
 import PushNotification from 'react-native-push-notification';
 import DeepLinking from 'react-native-deep-linking';
 
+Text.defaultProps.allowFontScaling=false
+
 export default class Main extends Component {
   constructor(props) {
     super(props);

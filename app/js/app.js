@@ -3,6 +3,7 @@ import {
   Linking,
   Alert,
   Platform,
+  Text
 } from 'react-native';
 
 import DeepLinking from 'react-native-deep-linking';
@@ -67,6 +68,8 @@ class App extends Component {
       initialize: false,
       loggedIn: false,
     };
+
+    Text.defaultProps.allowFontScaling=false;
 
     bendService.init((err, activeUser)=>{
       console.log("bend init", err, activeUser)

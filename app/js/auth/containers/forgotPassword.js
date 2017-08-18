@@ -13,6 +13,7 @@ import {
   Alert,
   Keyboard,
   findNodeHandle,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -73,6 +74,7 @@ class ForgotPassword extends Component {
 
   render() {
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={ styles.container } >
         <Image source={ background } style={ styles.background } resizeMode="cover">
           <TouchableOpacity
@@ -125,6 +127,7 @@ class ForgotPassword extends Component {
           </View>}
         </Image>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

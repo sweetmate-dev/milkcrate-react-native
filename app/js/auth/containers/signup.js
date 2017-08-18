@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Alert,
   Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -143,6 +144,7 @@ class Signup extends Component {
 
   render() {
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={ styles.container }>
         <Spinner visible={ this.state.signingUp }/>
         <Image source={ background } style={ styles.background } resizeMode="cover">
@@ -255,6 +257,7 @@ class Signup extends Component {
           </KeyboardAwareScrollView>
         </Image>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

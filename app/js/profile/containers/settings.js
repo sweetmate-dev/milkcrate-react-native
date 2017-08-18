@@ -46,13 +46,13 @@ class Settings extends Component {
 
   componentDidMount() {
     this.hasMounted = true
-    codePush.getUpdateMetadata().then( (metadata) => {
+    /*codePush.getUpdateMetadata().then( (metadata) => {
       if (metadata === undefined) {
         return;
       }
 
       this.hasMounted && this.setState({ label: metadata.label });
-    });
+    });*/
 
     if (this.props.subTwo === 'feedback') {
       this.onSendUsYourFeedback();

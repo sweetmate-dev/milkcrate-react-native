@@ -13,6 +13,7 @@ import {
   Alert,
   Keyboard,
   findNodeHandle,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -150,6 +151,7 @@ class Login extends Component {
 
   render() {
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={ styles.container } >
         <Spinner visible={ this.state.loggingIn }/>
         <Image source={ background } style={ styles.background } resizeMode="cover">
@@ -231,6 +233,7 @@ class Login extends Component {
           <View style={ styles.bottomContainer }/>
         </Image>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

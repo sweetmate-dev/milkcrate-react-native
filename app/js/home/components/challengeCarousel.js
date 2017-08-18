@@ -17,6 +17,8 @@ import * as commonColors from '../../styles/commonColors';
 
 const entryBorderRadius = 5;
 
+Text.defaultProps.allowFontScaling=false
+
 export default class ChallengeCarousel extends Component {
 
   static propTypes = {
@@ -61,11 +63,13 @@ export default class ChallengeCarousel extends Component {
       >
         <View style={ styles.contentContainer }>
           <View style={ styles.topContainer }>
-            <Text style={ styles.textTitle }>{ title }</Text>
+            <Text numberOfLines={2} style={ styles.textTitle }>{ title }</Text>
           </View>
-          <View style={ styles.centerContainer }>
-            <Image style={ styles.icon } source={ icon } />
-            <Text style={ styles.description }>{ subtitle } </Text>
+          <View style={{paddingHorizontal:10}}>
+            <View style={styles.centerContainer}>
+              <Image style={ styles.icon } source={ icon } />
+              <Text numberOfLines={2} style={ styles.description }>{ subtitle } </Text>
+            </View>
           </View>
           <View style={ styles.bottomContainer }>
             { points > 0 && <Point point={ points }/> }
@@ -93,28 +97,30 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: entryBorderRadius,
     backgroundColor: '#fff',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   topContainer: {
-    flex: 1,
     borderTopLeftRadius: entryBorderRadius,
     borderTopRightRadius: entryBorderRadius,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 15,
+    paddingTop:5
   },
   centerContainer: {
-    flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   bottomContainer: {
-    flex: 1,
     borderBottomLeftRadius: entryBorderRadius,
     borderBottomRightRadius: entryBorderRadius,
     alignItems: 'flex-end',
     justifyContent: 'center',
     paddingHorizontal: 15,
+    height:40,
     paddingBottom: 5,
   },
   textTitle: {
@@ -122,6 +128,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Blanch',
     fontSize: 28,
     textAlign: 'center',
+    backgroundColor:'transparent'
   },
   icon: {
     width: 44,
@@ -132,5 +139,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Open Sans',
     fontSize: 14,
     paddingHorizontal: 5,
+    backgroundColor:'transparent',
   },
 });
