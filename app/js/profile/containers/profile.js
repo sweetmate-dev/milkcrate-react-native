@@ -452,6 +452,8 @@ class Profile extends Component {
           />}
           {
               teams.map((team, index)=>{
+                team.sprintPoints = isNaN(team.sprintPoints)?0:team.sprintPoints
+                team.userCount = isNaN(team.userCount)?1:team.userCount
                 return (
                     <TeamListCell
                         key={index}
