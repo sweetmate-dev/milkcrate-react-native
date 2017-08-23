@@ -80,7 +80,8 @@ class VolunteerDetail extends Component {
     UtilService.mixpanelEvent("Viewed an Activity", {
       "type":"volunteer",
       challenge:(this.existChallenge?true:false),
-      points:Math.max(volunteer.points || 1, 1)
+      points:Math.max(volunteer.points || 1, 1),
+      client:Cache.community.name
     })
 
     bendService.logActivityView(volunteer._id, 'volunteer_opportunity', 'view');

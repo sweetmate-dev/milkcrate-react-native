@@ -85,7 +85,8 @@ class EventDetail extends Component {
     UtilService.mixpanelEvent("Viewed an Activity", {
       "type":"event",
       challenge:(this.existChallenge?true:false),
-      points:Math.max(event.points || 1, 1)
+      points:Math.max(event.points || 1, 1),
+      client:Cache.community.name
     })
 
     bendService.logActivityView(event._id, 'event', 'view');

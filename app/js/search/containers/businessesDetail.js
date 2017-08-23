@@ -93,7 +93,8 @@ class BusinessesDetail extends Component {
     UtilService.mixpanelEvent("Viewed an Activity", {
       "type":"business",
       challenge:(this.existChallenge?true:false),
-      points:Math.max(business.points || 1, 1)
+      points:Math.max(business.points || 1, 1),
+      client:Cache.community.name
     })
 
     bendService.logActivityView(business._id, 'business', 'view');

@@ -1541,7 +1541,7 @@ module.exports = {
         Bend.execute("logActivityView", {
             activityId:activityId,
             activityType:activityType,
-            type:type
+            type:type,
         }).then((result)=>{
             //console.log("logActivityView", result)
             if(cb)
