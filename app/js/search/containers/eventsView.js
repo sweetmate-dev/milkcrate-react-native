@@ -190,7 +190,7 @@ class EventsView extends Component {
 
     bendService.searchActivity(params, (error, result) => {
 
-      console.log("search events", params, error, result)
+      //console.log("search events", params, error, result)
 
       this.hasMounted && this.setState( (state) => {
         state.eventsQuery.loading = false;
@@ -249,18 +249,20 @@ class EventsView extends Component {
 
     this.hasMounted && this.setState({ events: this.events });
 
+    console.log("events", this.events)
+
     this.events.map( (entry) => {
       this.eventDays.push( entry.date );
     });
 
     this.hasMounted && this.setState({ eventDays: this.eventDays });
 
-    initialEvents.map((event, index) => {
+    /*initialEvents.map((event, index) => {
       this.hasMounted && this.setState( (state) => {
         state.categoryIcons[event._id] = UtilService.getCategoryIconFromSlug(event);
         return state;
       });
-    });
+    });*/
   }
 
   renderListRow(rowData, sectionID, rowID) {
@@ -275,7 +277,7 @@ class EventsView extends Component {
               <EventsListCell
                 key={ index }
                 title={ entry.name }
-                icon={ this.state.categoryIcons[entry._id] }
+                icon={ UtilService.getCategoryIconFromSlug(entry) }
                 points={ Number(entry.points || 1) }
                 onClick={ () => this.onCellPressed(entry) }
                 userActivity={entry.userActivity}
@@ -371,7 +373,7 @@ class EventsView extends Component {
               tintColor={ commonColors.theme }
             />
           }
-        >          
+        >
           <ListView
             enableEmptySections={ true }
             dataSource={ dataSource.cloneWithRowsAndSections(this.state.events)}
