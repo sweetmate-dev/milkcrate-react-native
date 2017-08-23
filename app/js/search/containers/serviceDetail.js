@@ -67,7 +67,8 @@ class ServiceDetail extends Component {
       "type":"service",
       challenge:(this.existChallenge?true:false),
       points:Math.max(service.points || 1, 1),
-      client:Cache.community.name
+      client:Cache.community.name,
+      activity:service.name
     })
 
     bendService.logActivityView(service._id, 'service', 'view');

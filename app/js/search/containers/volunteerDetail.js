@@ -81,7 +81,8 @@ class VolunteerDetail extends Component {
       "type":"volunteer",
       challenge:(this.existChallenge?true:false),
       points:Math.max(volunteer.points || 1, 1),
-      client:Cache.community.name
+      client:Cache.community.name,
+      activity:volunteer.name
     })
 
     bendService.logActivityView(volunteer._id, 'volunteer_opportunity', 'view');

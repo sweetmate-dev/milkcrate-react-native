@@ -86,7 +86,8 @@ class EventDetail extends Component {
       "type":"event",
       challenge:(this.existChallenge?true:false),
       points:Math.max(event.points || 1, 1),
-      client:Cache.community.name
+      client:Cache.community.name,
+      activity:event.name
     })
 
     bendService.logActivityView(event._id, 'event', 'view');

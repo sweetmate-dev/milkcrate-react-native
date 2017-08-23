@@ -94,7 +94,8 @@ class BusinessesDetail extends Component {
       "type":"business",
       challenge:(this.existChallenge?true:false),
       points:Math.max(business.points || 1, 1),
-      client:Cache.community.name
+      client:Cache.community.name,
+      activity:business.name
     })
 
     bendService.logActivityView(business._id, 'business', 'view');

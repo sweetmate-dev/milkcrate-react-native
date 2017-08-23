@@ -59,7 +59,8 @@ class ActionDetail extends Component {
       "type":"action",
       challenge:(this.existChallenge?true:false),
       points:Math.max(action.points || 1, 1),
-      client:Cache.community.name
+      client:Cache.community.name,
+      activity:action.name
     })
 
     bendService.logActivityView(action._id, 'action', 'view');
